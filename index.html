@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Original Scores Music — Catalogue</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #0d0d0d; color: #f0f0f0; min-height: 100vh; }
+
+  header { background: #111; border-bottom: 1px solid #222; padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 18px; font-weight: 600; letter-spacing: 0.5px; color: #fff; }
+  header p { font-size: 12px; color: #888; margin-top: 2px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 20px 16px 120px; }
+
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .filters input, .filters select {
+    padding: 9px 13px; border: 1px solid #2a2a2a; border-radius: 8px;
+    background: #1a1a1a; color: #f0f0f0; font-size: 13px; outline: none;
+  }
+  .filters input { flex: 1; min-width: 200px; }
+  .filters input:focus, .filters select:focus { border-color: #555; }
+
+  .stats { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .stat { background: #1a1a1a; border-radius: 8px; padding: 6px 14px; font-size: 12px; color: #888; }
+  .stat span { color: #fff; font-weight: 500; }
+
+  .track-list { display: flex; flex-direction: column; gap: 5px; }
+
+  .track {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: #1a1a1a; border: 1px solid #222;
+    border-radius: 8px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  }
+  .track:hover { border-color: #444; background: #202020; }
+  .track.active { border-color: #4a90d9; background: #0d1f35; }
+
+  .play-btn {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #2a2a2a; border: 1px solid #333;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0; color: #aaa;
+  }
+  .track.active .play-btn { background: #4a90d9; color: #fff; border-color: #4a90d9; }
+
+  .track-info { flex: 1; min-width: 0; }
+  .track-title { font-size: 13px; font-weight: 500; color: #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-meta { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; }
+
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 11px; background: #2a2a2a; color: #aaa; border: 1px solid #333;
+  }
+  .tag.playlist { background: #1a2a1a; color: #6db86d; border-color: #2a3a2a; }
+  .tag.format { background: #1a1a2a; color: #6d9bd8; border-color: #2a2a3a; }
+
+  .dl-btn {
+    font-size: 11px; padding: 5px 11px; border: 1px solid #333;
+    border-radius: 8px; background: transparent; color: #aaa;
+    cursor: pointer; flex-shrink: 0; text-decoration: none; white-space: nowrap;
+  }
+  .dl-btn:hover { background: #2a2a2a; color: #fff; }
+
+  .player-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #111; border-top: 1px solid #222;
+    padding: 10px 20px; display: none; z-index: 100;
+  }
+  .player-title { font-size: 12px; color: #888; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-title span { color: #fff; font-weight: 500; }
+  audio { width: 100%; height: 36px; }
+
+  .loading, .empty { text-align: center; padding: 3rem; color: #555; font-size: 14px; }
+  .limit-note { text-align: center; padding: 12px; color: #555; font-size: 12px; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #111; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Original Scores Music</h1>
+    <p>Catalogue musical — Monteurs &amp; Réalisateurs</p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="filters">
+    <input type="text" id="search" placeholder="Rechercher titre, tag, mood, ambiance..." oninput="filterTracks()" />
+    <select id="filterPlaylist" onchange="filterTracks()"><option value="">Toutes les playlists</option></select>
+    <select id="filterFormat" onchange="filterTracks()"><option value="">Tous les formats</option></select>
+  </div>
+
+  <div class="stats">
+    <div class="stat">Total : <span id="totalCount">—</span> morceaux</div>
+    <div class="stat">Affichés : <span id="visibleCount">—</span></div>
+    <div class="stat">Playlists : <span id="playlistCount">—</span></div>
+  </div>
+
+  <div class="track-list" id="trackList">
+    <div class="loading">Chargement du catalogue...</div>
+  </div>
+</div>
+
+<div class="player-bar" id="playerBar">
+  <div class="player-title">En lecture : <span id="playerTitle">—</span></div>
+  <audio id="audioPlayer" controls></audio>
+</div>
+
+<script>
+const SHEET_ID = "1If8xgv6Ua8kh6N_nZuML06yhxr_dtMPyPpTn9tikx9s";
+const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+let allTracks = [];
+let currentUrl = null;
+
+async function loadCatalogue() {
+  try {
+    const res = await fetch(API_URL);
+    const text = await res.text();
+    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
+    const rows = json.table.rows;
+
+    allTracks = rows.map(row => {
+      const v = row.c.map(c => c ? (c.v || c.f || "") : "");
+      return { titre: v[0]||"", playlist: v[1]||"Divers", format: v[2]||"", tags: v[3]||"", lienEcoute: v[4]||"", lienDl: v[5]||"" };
+    }).filter(t => t.titre);
+
+    populateFilters();
+    filterTracks();
+    document.getElementById("totalCount").textContent = allTracks.length;
+    document.getElementById("playlistCount").textContent = [...new Set(allTracks.map(t => t.playlist))].length;
+  } catch(e) {
+    document.getElementById("trackList").innerHTML = '<div class="loading">Erreur de chargement. Vérifie que le Sheet est public.</div>';
+  }
+}
+
+function populateFilters() {
+  const playlists = [...new Set(allTracks.map(t => t.playlist))].sort();
+  const formats = [...new Set(allTracks.map(t => t.format))].filter(Boolean).sort();
+  const pSel = document.getElementById("filterPlaylist");
+  const fSel = document.getElementById("filterFormat");
+  playlists.forEach(p => { const o = document.createElement("option"); o.value = p; o.textContent = p; pSel.appendChild(o); });
+  formats.forEach(f => { const o = document.createElement("option"); o.value = f; o.textContent = f; fSel.appendChild(o); });
+}
+
+function filterTracks() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const pl = document.getElementById("filterPlaylist").value;
+  const fmt = document.getElementById("filterFormat").value;
+
+  const filtered = allTracks.filter(t => {
+    const matchQ = !q || t.titre.toLowerCase().includes(q) || t.tags.toLowerCase().includes(q) || t.playlist.toLowerCase().includes(q);
+    return matchQ && (!pl || t.playlist === pl) && (!fmt || t.format === fmt);
+  });
+
+  document.getElementById("visibleCount").textContent = filtered.length;
+  renderTracks(filtered);
+}
+
+function renderTracks(tracks) {
+  const list = document.getElementById("trackList");
+  if (!tracks.length) { list.innerHTML = '<div class="empty">Aucun morceau trouvé.</div>'; return; }
+
+  const shown = tracks.slice(0, 300);
+  list.innerHTML = shown.map(t => `
+    <div class="track ${currentUrl === t.lienEcoute ? 'active' : ''}" onclick="playTrack('${esc(t.lienEcoute)}','${esc(t.titre)}','${esc(t.playlist)}',this)">
+      <div class="play-btn">${currentUrl === t.lienEcoute ? '▶' : '▷'}</div>
+      <div class="track-info">
+        <div class="track-title">${esc(t.titre)}</div>
+        <div class="track-meta">
+          <span class="tag playlist">${esc(t.playlist)}</span>
+          ${t.format ? `<span class="tag format">${esc(t.format)}</span>` : ""}
+          ${t.tags ? t.tags.split(",").map(tg => `<span class="tag">${esc(tg.trim())}</span>`).join("") : ""}
+        </div>
+      </div>
+      ${t.lienDl ? `<a class="dl-btn" href="${esc(t.lienDl)}" target="_blank" onclick="event.stopPropagation()">⬇ Télécharger</a>` : ""}
+    </div>
+  `).join("");
+
+  if (tracks.length > 300) {
+    list.innerHTML += `<div class="limit-note">Affichage limité à 300 résultats — affinez votre recherche.</div>`;
+  }
+}
+
+function playTrack(url, titre, playlist, el) {
+  currentUrl = url;
+  document.querySelectorAll(".track").forEach(t => { t.classList.remove("active"); t.querySelector(".play-btn").textContent = "▷"; });
+  el.classList.add("active");
+  el.querySelector(".play-btn").textContent = "▶";
+  const audio = document.getElementById("audioPlayer");
+  document.getElementById("playerTitle").textContent = `${titre} — ${playlist}`;
+  audio.src = url;
+  audio.play();
+  document.getElementById("playerBar").style.display = "block";
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+loadCatalogue();
+</script>
+</body>
+</html>
