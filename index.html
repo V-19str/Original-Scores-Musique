@@ -4,180 +4,161 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Original Scores Music — Catalogue</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+:root {
+  --bg: #0d0d0d;
+  --surface: #141414;
+  --surface2: #1c1c1c;
+  --border: #2a2a2a;
+  --accent: #c8a96e;
+  --accent2: #e8c98e;
+  --text: #e8e8e8;
+  --text-dim: #666;
+  --text-mid: #999;
+  --green: #4caf7d;
+  --red: #e05a5a;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
-
-#loginScreen {
-  position: fixed; inset: 0; background: #fff;
-  display: flex; align-items: center; justify-content: center; z-index: 999;
-}
-.login-box {
-  background: #fff; border: 1px solid #e0e0e0; border-radius: 16px;
-  padding: 40px 32px; width: 90%; max-width: 380px; text-align: center;
-}
-.login-box h1 { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
-.login-box p { font-size: 13px; color: #888; margin-bottom: 24px; }
-.login-box input {
-  width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 10px;
-  font-size: 14px; margin-bottom: 12px; outline: none; text-align: center;
-  letter-spacing: 4px; background: #fafafa;
-}
-.login-box input:focus { border-color: #1a1a1a; }
-.login-box button {
-  width: 100%; padding: 12px; background: #1a1a1a; color: #fff;
-  border: none; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer;
-}
-.login-box button:hover { background: #333; }
-.login-error { font-size: 12px; color: #e24b4a; margin-top: 8px; display: none; }
-
-header {
-  background: #fff; border-bottom: 1px solid #e8e8e8;
-  padding: 14px 20px; position: sticky; top: 0; z-index: 100;
-}
-.header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
-.logo-circle {
-  width: 38px; height: 38px; border-radius: 50%; background: #1a1a1a;
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 15px; font-weight: 700; flex-shrink: 0;
-}
-.header-text h1 { font-size: 16px; font-weight: 600; }
-.header-text p { font-size: 11px; color: #999; }
-
-.container { max-width: 900px; margin: 0 auto; padding: 16px 12px 200px; }
-
-.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-.filters input, .filters select {
-  padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 10px;
-  background: #fff; color: #1a1a1a; font-size: 13px; outline: none;
-}
-.filters input { flex: 1; min-width: 180px; }
-.filters input:focus, .filters select:focus { border-color: #1a1a1a; }
-
-.stats { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-.stat {
-  background: #fff; border: 1px solid #e8e8e8; border-radius: 8px;
-  padding: 6px 14px; font-size: 12px; color: #888;
-}
-.stat span { color: #1a1a1a; font-weight: 600; }
-
-.track-list { display: flex; flex-direction: column; gap: 6px; }
-
-.track {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 14px; background: #fff; border: 1px solid #e8e8e8;
-  border-radius: 12px; cursor: pointer; transition: all 0.15s;
-}
-.track:hover { border-color: #ccc; }
-.track.active { border-color: #1a1a1a; background: #fafafa; }
-
-.play-btn {
-  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-  background: #f0f0f0; border: 1px solid #e0e0e0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; color: #555;
-}
-.track.active .play-btn { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-
+body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; background-image: radial-gradient(ellipse at 20% 0%, #1a1508 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, #0a1520 0%, transparent 60%); }
+#loginScreen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 999; background-image: radial-gradient(ellipse at 30% 30%, #1a1508 0%, transparent 60%); }
+.login-box { text-align: center; width: 90%; max-width: 360px; }
+.login-logo { width: 64px; height: 64px; border-radius: 50%; border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-family: 'Playfair Display', serif; font-size: 22px; color: var(--accent); box-shadow: 0 0 40px rgba(200,169,110,0.15); }
+.login-box h1 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 6px; letter-spacing: 0.02em; }
+.login-box p { font-size: 11px; color: var(--text-dim); margin-bottom: 32px; letter-spacing: 0.1em; text-transform: uppercase; }
+.login-box input { width: 100%; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 18px; letter-spacing: 8px; text-align: center; outline: none; margin-bottom: 12px; transition: border-color 0.2s; }
+.login-box input:focus { border-color: var(--accent); }
+.login-box button { width: 100%; padding: 13px; background: var(--accent); color: #0d0d0d; border: none; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+.login-box button:hover { background: var(--accent2); }
+.login-error { font-size: 11px; color: var(--red); margin-top: 10px; display: none; letter-spacing: 0.05em; }
+header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; position: sticky; top: 0; z-index: 100; }
+.header-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo-sm { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 14px; color: var(--accent); flex-shrink: 0; }
+.header-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: var(--text); }
+.header-sub { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+.header-stats { font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em; }
+.header-stats span { color: var(--accent); }
+.container { max-width: 1000px; margin: 0 auto; padding: 20px 16px 200px; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.filters input, .filters select { padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; outline: none; transition: border-color 0.2s; letter-spacing: 0.03em; }
+.filters input { flex: 1; min-width: 200px; }
+.filters input::placeholder { color: var(--text-dim); }
+.filters input:focus, .filters select:focus { border-color: var(--accent); }
+.filters select { cursor: pointer; }
+.filters select option { background: var(--surface2); }
+.track-list { display: flex; flex-direction: column; gap: 4px; }
+.track { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; transition: all 0.15s; position: relative; overflow: hidden; }
+.track::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); opacity: 0; transition: opacity 0.2s; }
+.track:hover { border-color: #3a3a3a; background: var(--surface2); }
+.track:hover::before { opacity: 0.5; }
+.track.active { border-color: var(--accent); background: var(--surface2); }
+.track.active::before { opacity: 1; }
+.track-num { font-size: 10px; color: var(--text-dim); width: 24px; text-align: right; flex-shrink: 0; letter-spacing: 0.05em; }
+.track.active .track-num { color: var(--accent); }
+.play-btn { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; background: transparent; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-dim); transition: all 0.15s; }
+.track:hover .play-btn { border-color: var(--accent); color: var(--accent); }
+.track.active .play-btn { background: var(--accent); color: #0d0d0d; border-color: var(--accent); }
 .track-info { flex: 1; min-width: 0; }
-.track-title {
-  font-size: 13px; font-weight: 500; color: #1a1a1a;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px;
-}
+.track-title { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; letter-spacing: 0.02em; }
+.track.active .track-title { color: var(--accent2); }
 .track-meta { display: flex; flex-wrap: wrap; gap: 4px; }
-.tag {
-  display: inline-block; padding: 2px 9px; border-radius: 20px;
-  font-size: 11px; border: 1px solid #e8e8e8; background: #f5f5f5; color: #666;
-}
-.tag.playlist { background: #f0f4ff; color: #3366cc; border-color: #d0deff; }
-.tag.format { background: #f0faf4; color: #2d7a50; border-color: #c0e8d0; }
-
-.dl-btn {
-  font-size: 12px; padding: 7px 13px; border: 1px solid #e0e0e0;
-  border-radius: 8px; background: #fff; color: #555;
-  cursor: pointer; flex-shrink: 0; text-decoration: none; white-space: nowrap;
-}
-.dl-btn:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-
-/* PLAYER BAR avec iframe */
-.player-bar {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: #fff; border-top: 1px solid #e8e8e8;
-  padding: 10px 16px; display: none; z-index: 100;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-}
-.player-inner { max-width: 900px; margin: 0 auto; }
-.player-title { font-size: 12px; color: #888; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.player-title strong { color: #1a1a1a; }
-#playerIframe { width: 100%; height: 80px; border: none; border-radius: 8px; }
-
-.loading, .empty {
-  text-align: center; padding: 3rem; color: #aaa; font-size: 14px;
-  background: #fff; border-radius: 12px; border: 1px solid #e8e8e8;
-}
-.limit-note { text-align: center; padding: 12px; color: #bbb; font-size: 12px; }
-
-@media (max-width: 600px) {
-  .container { padding: 12px 10px 200px; }
-  .filters input, .filters select { font-size: 16px; }
-  .track { padding: 10px 10px; gap: 8px; }
-  .dl-btn { padding: 6px 9px; font-size: 11px; }
-}
+.tag { display: inline-block; padding: 2px 8px; border-radius: 2px; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; border: 1px solid var(--border); background: transparent; color: var(--text-dim); }
+.tag.playlist { color: var(--accent); border-color: rgba(200,169,110,0.3); background: rgba(200,169,110,0.05); }
+.track-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.dl-btn { font-size: 10px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 2px; background: transparent; color: var(--text-dim); cursor: pointer; text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.15s; white-space: nowrap; }
+.dl-btn:hover { border-color: var(--accent); color: var(--accent); }
+.player-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--accent); padding: 12px 20px 16px; display: none; z-index: 100; box-shadow: 0 -20px 60px rgba(0,0,0,0.5); }
+.player-inner { max-width: 1000px; margin: 0 auto; }
+.player-label { font-size: 9px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 3px; }
+.player-name { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--accent2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px; }
+.player-playlist { font-size: 10px; color: var(--text-dim); margin-bottom: 8px; letter-spacing: 0.05em; }
+audio { width: 100%; height: 36px; border-radius: 2px; outline: none; }
+.playlist-header { display: flex; align-items: center; gap: 12px; padding: 20px 0 8px; }
+.playlist-header h2 { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.playlist-header-line { flex: 1; height: 1px; background: var(--border); }
+.playlist-count { font-size: 10px; color: var(--text-dim); white-space: nowrap; }
+.loading, .empty { text-align: center; padding: 3rem; color: var(--text-dim); font-size: 12px; background: var(--surface); border-radius: 4px; border: 1px solid var(--border); letter-spacing: 0.05em; }
+@media (max-width: 600px) { .header-stats { display: none; } .track { padding: 10px 12px; gap: 8px; } .track-num { display: none; } .dl-btn { font-size: 9px; padding: 5px 8px; } }
 </style>
 </head>
 <body>
-
 <div id="loginScreen">
   <div class="login-box">
-    <div style="width:52px;height:52px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:700;margin:0 auto 16px;">O</div>
+    <div class="login-logo">O</div>
     <h1>Original Scores Music</h1>
-    <p>Catalogue professionnel — Accès réservé</p>
-    <input type="password" id="passwordInput" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkPassword()"/>
+    <p>Catalogue — Accès réservé</p>
+    <input type="password" id="passwordInput" placeholder="• • • • • • • •" onkeydown="if(event.key==='Enter')checkPassword()"/>
     <button onclick="checkPassword()">Accéder au catalogue</button>
     <div class="login-error" id="loginError">Mot de passe incorrect</div>
   </div>
 </div>
-
 <header>
   <div class="header-inner">
-    <div class="logo-circle">O</div>
-    <div class="header-text">
-      <h1>Original Scores Music</h1>
-      <p>Catalogue musical — Monteurs &amp; Réalisateurs</p>
+    <div class="header-left">
+      <div class="logo-sm">O</div>
+      <div>
+        <div class="header-title">Original Scores Music</div>
+        <div class="header-sub">Catalogue — Monteurs &amp; Réalisateurs</div>
+      </div>
+    </div>
+    <div class="header-stats">
+      <span id="visibleCount">—</span> / <span id="totalCount">—</span> morceaux &nbsp;·&nbsp; <span id="playlistCount">—</span> playlists
     </div>
   </div>
 </header>
-
 <div class="container">
   <div class="filters">
-    <input type="text" id="search" placeholder="Rechercher un titre, tag, ambiance..." oninput="filterTracks()"/>
+    <input type="text" id="search" placeholder="Rechercher un titre, ambiance..." oninput="filterTracks()"/>
     <select id="filterPlaylist" onchange="filterTracks()"><option value="">Toutes les playlists</option></select>
-    <select id="filterFormat" onchange="filterTracks()"><option value="">Tous les formats</option></select>
-  </div>
-  <div class="stats">
-    <div class="stat">Total : <span id="totalCount">—</span> morceaux</div>
-    <div class="stat">Affichés : <span id="visibleCount">—</span></div>
-    <div class="stat">Playlists : <span id="playlistCount">—</span></div>
   </div>
   <div class="track-list" id="trackList">
     <div class="loading">Chargement du catalogue...</div>
   </div>
 </div>
-
 <div class="player-bar" id="playerBar">
   <div class="player-inner">
-    <div class="player-title">En lecture : <strong id="playerTitle">—</strong></div>
-    <iframe id="playerIframe" src="" allow="autoplay"></iframe>
+    <div class="player-label">En lecture</div>
+    <div class="player-name" id="playerTitle">—</div>
+    <div class="player-playlist" id="playerPlaylist">—</div>
+    <audio id="audioPlayer" controls></audio>
   </div>
 </div>
-
 <script>
 const PASSWORD = "osm2026";
-const SHEET_ID = const SHEET_ID = "1TvQC-kuK9pkwe_El08dniW70Frpe-SweJuGPNU8q16Y";
-const API_URL = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:json";
-
+const CLOUD_NAME = "dqfogw7sg";
+const PLAYLISTS = [
+  "ACTION - POURSUITE - COMBAT - CHAOS - SPORT - EXTREME – URGENT",
+  "ATMOSPHERE - GRANDS ESPACES - AERIEN - COSMIQUE – ABYSSAL",
+  "BURLESQUE - HUMOUR - COMIQUE - THEATRAL - LEGER – COCASSE",
+  "COUNTRY BLUES - DOBRO - BOOGIE-WOOGIE - GUITARE – USA",
+  "ELECTRO - ELECTRONIQUE - BEAT - CLUBBING - DEEJAYING – PARTY",
+  "ELECTRO - POP - ACTUEL - URBAIN - ARTY - ENERGIQUE – CORPORATE",
+  "FOLK ACOUSTIQUE - ELECTRO ACOUSTIQUE - RELAX - GUITARE – HARMONY",
+  "GROOVY - FUNKY - DISCO - RYTHMIQUE - GIMMICK - VIF – EVEILLE",
+  "HARD ROCK - METAL - URGENT - RAGE - EXTREME - AGITATION – RAPIDE",
+  "LATINO - AUSTRAL - MEXICAN - AMERIQUE DU SUD - CULTURE – WESTERN",
+  "LOOPS - BOUCLE - LOOPING - BPM - METRONOME – ADAPTIVE",
+  "LUDIQUE - ENFANTIN - DIVERTISSANT - THEATRAL - DROLE – AMUSANT",
+  "NEUTRE - POSITIF – HAPPY",
+  "NEUTRE- MELANCOLIE – TRISTESSE",
+  "ORCHESTRAL - EPIQUE - SYMPHONIQUE - HARMONIE – HEROIQUE",
+  "PANAME - PARIS - RETRO - ACCORDEON - PIGALLE – MONTMARTRE",
+  "PARANORMAL - EXPERIMENTAL – HYPNOTIQUE",
+  "PIANO - CLASSIQUE - INTIMISTE - CALME - MELANCOLIQUE - COSY – DOUX",
+  "PIZZICATO - STACCATO - DRAMEDY - BETISIER - CARTOON – ANIMATION",
+  "POP ACOUSTIQUE - SOFT - BALLADE - ACTUEL - ROAD – CHALEUREUX",
+  "REGGAE - REGGATON - SKA - FUSION – JAMAICA",
+  "ROCK - RIFFS - GUITARE - ELECTRIQUE - GARAGE - LIVE - ROCK N ROLL",
+  "ROMANCE - MELANCOLIQUE - AMOUR - NOSTALGIE - TRISTESSE – DRAME",
+  "SUSPENSE - INVESTIGATION - ENQUETE - ANGOISSE - ESPIONNAGE – POLICIER",
+  "SWING - JAZZ - RYTHME - BIG BAND - JIVE – MANOUCHE",
+  "TRANSITION - JINGLE - VIRGULE - PONCTUATION - RISE – WHOOSH",
+  "URBAN - R&B - HIP HOP - STREET - ART - RAP – BEAT",
+  "WORLD MUSIC - ETHNIQUE - CULTURE - METISSAGE - TRADITIONNEL"
+];
 let allTracks = [];
-let currentUrl = null;
+let currentTrack = null;
 
 function checkPassword() {
   if (document.getElementById("passwordInput").value === PASSWORD) {
@@ -190,39 +171,39 @@ function checkPassword() {
 }
 
 async function loadCatalogue() {
-  try {
-    const res = await fetch(API_URL);
-    const text = await res.text();
-    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
-
-    allTracks = json.table.rows.map(row => {
-      const v = row.c.map(c => c ? String(c.v !== undefined && c.v !== null ? c.v : (c.f || "")).trim() : "");
-      return { titre: v[0], playlist: v[1]||"Divers", format: v[2], tags: v[3], lienEcoute: v[4], lienDl: v[5] };
-    }).filter(t => t.titre && t.titre !== "Titre" && t.titre !== "undefined");
-
-    const playlists = [...new Set(allTracks.map(t => t.playlist))].sort();
-    const formats = [...new Set(allTracks.map(t => t.format))].filter(Boolean).sort();
-    const pSel = document.getElementById("filterPlaylist");
-    const fSel = document.getElementById("filterFormat");
-    playlists.forEach(p => { const o = document.createElement("option"); o.value = p; o.textContent = p; pSel.appendChild(o); });
-    formats.forEach(f => { const o = document.createElement("option"); o.value = f; o.textContent = f; fSel.appendChild(o); });
-
-    document.getElementById("totalCount").textContent = allTracks.length;
-    document.getElementById("playlistCount").textContent = playlists.length;
-    filterTracks();
-  } catch(e) {
-    document.getElementById("trackList").innerHTML = '<div class="loading">Erreur de chargement.</div>';
+  document.getElementById("trackList").innerHTML = '<div class="loading">Chargement...</div>';
+  const tracks = [];
+  for (const pl of PLAYLISTS) {
+    try {
+      const res = await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/video/list/${encodeURIComponent(pl)}.json`);
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (data.resources) {
+        data.resources.forEach(r => {
+          const fileName = r.public_id.split('/').pop();
+          const titre = fileName.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          tracks.push({
+            titre,
+            playlist: pl,
+            audioUrl: `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/${r.public_id}.${r.format || 'mp3'}`
+          });
+        });
+      }
+    } catch(e) { console.warn('Erreur dossier:', pl); }
   }
+  allTracks = tracks;
+  const playlists = [...new Set(tracks.map(t => t.playlist))];
+  const pSel = document.getElementById("filterPlaylist");
+  playlists.forEach(p => { const o = document.createElement("option"); o.value = p; o.textContent = p; pSel.appendChild(o); });
+  document.getElementById("totalCount").textContent = tracks.length;
+  document.getElementById("playlistCount").textContent = playlists.length;
+  filterTracks();
 }
 
 function filterTracks() {
   const q = document.getElementById("search").value.toLowerCase();
   const pl = document.getElementById("filterPlaylist").value;
-  const fmt = document.getElementById("filterFormat").value;
-  const filtered = allTracks.filter(t =>
-    (!q || t.titre.toLowerCase().includes(q) || t.tags.toLowerCase().includes(q) || t.playlist.toLowerCase().includes(q)) &&
-    (!pl || t.playlist === pl) && (!fmt || t.format === fmt)
-  );
+  const filtered = allTracks.filter(t => (!q || t.titre.toLowerCase().includes(q) || t.playlist.toLowerCase().includes(q)) && (!pl || t.playlist === pl));
   document.getElementById("visibleCount").textContent = filtered.length;
   renderTracks(filtered);
 }
@@ -231,73 +212,41 @@ function renderTracks(tracks) {
   const list = document.getElementById("trackList");
   if (!tracks.length) { list.innerHTML = '<div class="empty">Aucun morceau trouvé.</div>'; return; }
   list.innerHTML = "";
-  tracks.slice(0, 300).forEach(t => {
-    const div = document.createElement("div");
-    div.className = "track" + (currentUrl === t.lienEcoute ? " active" : "");
-
-    const btn = document.createElement("div");
-    btn.className = "play-btn";
-    btn.textContent = currentUrl === t.lienEcoute ? "▶" : "▷";
-
-    const info = document.createElement("div");
-    info.className = "track-info";
-
-    const titleEl = document.createElement("div");
-    titleEl.className = "track-title";
-    titleEl.textContent = t.titre;
-
-    const meta = document.createElement("div");
-    meta.className = "track-meta";
-
-    [{ text: t.playlist, cls: "tag playlist" }, { text: t.format, cls: "tag format" }].forEach(({ text, cls }) => {
-      if (!text) return;
-      const s = document.createElement("span");
-      s.className = cls; s.textContent = text; meta.appendChild(s);
+  const byPlaylist = {};
+  tracks.forEach(t => { if (!byPlaylist[t.playlist]) byPlaylist[t.playlist] = []; byPlaylist[t.playlist].push(t); });
+  let i = 0;
+  Object.entries(byPlaylist).forEach(([pl, pTracks]) => {
+    const h = document.createElement("div"); h.className = "playlist-header";
+    h.innerHTML = `<h2>${pl}</h2><div class="playlist-header-line"></div><div class="playlist-count">${pTracks.length} titre${pTracks.length>1?'s':''}</div>`;
+    list.appendChild(h);
+    pTracks.forEach(t => {
+      i++;
+      const div = document.createElement("div");
+      div.className = "track" + (currentTrack && currentTrack.audioUrl === t.audioUrl ? " active" : "");
+      div.innerHTML = `
+        <div class="track-num">${String(i).padStart(2,'0')}</div>
+        <div class="play-btn">${currentTrack && currentTrack.audioUrl === t.audioUrl ? '▶' : '▷'}</div>
+        <div class="track-info">
+          <div class="track-title">${t.titre}</div>
+          <div class="track-meta"><span class="tag playlist">${pl.split(' – ')[0].split(' - ')[0]}</span></div>
+        </div>
+        <div class="track-actions">
+          <a class="dl-btn" href="${t.audioUrl}" download="${t.titre}" target="_blank" onclick="event.stopPropagation()">↓ DL</a>
+        </div>`;
+      div.onclick = () => {
+        currentTrack = t;
+        document.querySelectorAll(".track").forEach(tr => { tr.classList.remove("active"); tr.querySelector(".play-btn").innerHTML = "▷"; });
+        div.classList.add("active"); div.querySelector(".play-btn").innerHTML = "▶";
+        document.getElementById("playerTitle").textContent = t.titre;
+        document.getElementById("playerPlaylist").textContent = t.playlist;
+        const audio = document.getElementById("audioPlayer");
+        audio.src = t.audioUrl; audio.play();
+        document.getElementById("playerBar").style.display = "block";
+      };
+      list.appendChild(div);
     });
-
-    if (t.tags) t.tags.split(",").forEach(tg => {
-      if (!tg.trim()) return;
-      const s = document.createElement("span");
-      s.className = "tag"; s.textContent = tg.trim(); meta.appendChild(s);
-    });
-
-    info.appendChild(titleEl);
-    info.appendChild(meta);
-    div.appendChild(btn);
-    div.appendChild(info);
-
-    if (t.lienDl) {
-      const dl = document.createElement("a");
-      dl.className = "dl-btn"; dl.href = t.lienDl; dl.target = "_blank";
-      dl.textContent = "⬇ DL"; dl.onclick = e => e.stopPropagation();
-      div.appendChild(dl);
-    }
-
-    div.onclick = () => {
-      currentUrl = t.lienEcoute;
-      document.querySelectorAll(".track").forEach(tr => { tr.classList.remove("active"); tr.querySelector(".play-btn").textContent = "▷"; });
-      div.classList.add("active"); btn.textContent = "▶";
-      document.getElementById("playerTitle").textContent = t.titre + " — " + t.playlist;
-
-      // Extraire l'ID du fichier et utiliser l'iframe Google Drive preview
-      const m = t.lienEcoute.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      const fileId = m ? m[1] : "";
-      const previewUrl = "https://drive.google.com/file/d/" + fileId + "/preview";
-      document.getElementById("playerIframe").src = previewUrl;
-      document.getElementById("playerBar").style.display = "block";
-    };
-
-    list.appendChild(div);
   });
-
-  if (tracks.length > 300) {
-    const note = document.createElement("div");
-    note.className = "limit-note";
-    note.textContent = "Affichage limité à 300 résultats — affinez votre recherche.";
-    list.appendChild(note);
-  }
 }
-
 document.getElementById("passwordInput").focus();
 </script>
 </body>
