@@ -175,7 +175,7 @@ async function loadCatalogue() {
   const tracks = [];
   for (const pl of PLAYLISTS) {
     try {
-      const res = await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/video/list/${encodeURIComponent(pl)}.json`);
+      const res = await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/video/list/${encodeURIComponent('ORIGINAL SCORES MUSIC - COLLECTIONS - LQ - MP3/' + pl)}.json`);
       if (!res.ok) continue;
       const data = await res.json();
       if (data.resources) {
