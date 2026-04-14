@@ -8,14 +8,14 @@
 <style>
 :root {
   --red: #E50914;
-  --bg: #242424;
-  --bg2: #2e2e2e;
-  --bg3: #393939;
-  --bg4: #454545;
+  --bg: #1c1c1c;
+  --bg2: #262626;
+  --bg3: #303030;
+  --bg4: #3d3d3d;
   --text: #ffffff;
-  --text2: #e8e8e8;
-  --muted: #bbb;
-  --border: rgba(255,255,255,0.18);
+  --text2: #e0e0e0;
+  --muted: #aaa;
+  --border: rgba(255,255,255,0.14);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; overflow-x: hidden; }
@@ -107,22 +107,20 @@ header {
 
 .home-section { padding: 32px 48px 200px; }
 .home-section-title { font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; color: var(--text2); }
-.playlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.playlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
 .playlist-card {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 22px 18px; cursor: pointer;
-  transition: all 0.2s; position: relative; overflow: hidden;
+  border-radius: 8px; cursor: pointer; overflow: hidden;
+  transition: all 0.2s; position: relative;
 }
-.playlist-card:hover { background: var(--bg3); border-color: #555; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-.playlist-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-  background: var(--card-color, var(--red));
-}
-.card-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-.card-count { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
-.card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-.card-tag { font-size: 10px; color: var(--text2); background: var(--bg3); padding: 3px 8px; border-radius: 8px; }
-.card-arrow { position: absolute; top: 18px; right: 18px; color: var(--muted); font-size: 16px; }
+.playlist-card:hover { border-color: #555; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+.card-cover { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-bottom: 1px solid var(--border); }
+.card-cover svg { width: 100%; height: 100%; display: block; }
+.card-body { padding: 14px 14px 12px; }
+.card-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+.card-count { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.card-tag { font-size: 10px; color: var(--text2); background: var(--bg3); padding: 2px 7px; border-radius: 8px; }
 
 /* CATALOGUE VIEW */
 .playlists-nav { padding: 20px 48px 0; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -277,7 +275,7 @@ audio { display: none; }
       <span class="queue-badge" id="queue-badge">0</span>
     </button>
     <a class="btn-phone" href="tel:+33682985752">📞 06 82 98 57 52</a>
-    <a class="btn-contact" href="mailto:vladimirstreiff@gmail.com">✉ Email</a>
+    <a class="btn-contact" href="/cdn-cgi/l/email-protection#9aecf6fbfef3f7f3e8e9eee8fff3fcfcdafdf7fbf3f6b4f9f5f7">✉ Email</a>
   </div>
 </header>
 
@@ -361,7 +359,7 @@ audio { display: none; }
 </div><!-- /main -->
 <audio id="audio"></audio>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // PASSWORD
 const PASSWORD = 'osm2026';
 function checkPw() {
@@ -413,6 +411,37 @@ const PLAYLIST_TAGS = {
   "Transition": ["jingle","virgule","rise","whoosh","ponctuation","court"],
   "Urban": ["hip-hop","rap","r&b","street","beat","moderne"],
   "World Music": ["ethnique","traditionnel","métissage","culture","monde"]
+};
+
+const CARD_COVERS = {
+  "Action": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#1a0000"/><polygon points="0,120 60,0 120,120" fill="#E50914" opacity="0.9"/><polygon points="80,120 140,20 200,120" fill="#c0392b" opacity="0.7"/><polygon points="40,120 90,40 140,120" fill="#ff4444" opacity="0.4"/><line x1="0" y1="60" x2="200" y2="60" stroke="#E50914" stroke-width="0.5" opacity="0.3"/></svg>`,
+  "Atmosphère": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#000a1a"/><circle cx="100" cy="140" r="90" fill="none" stroke="#4a90d9" stroke-width="1" opacity="0.4"/><circle cx="100" cy="140" r="70" fill="none" stroke="#4a90d9" stroke-width="1" opacity="0.3"/><circle cx="100" cy="140" r="50" fill="none" stroke="#7bb8f0" stroke-width="1.5" opacity="0.5"/><circle cx="100" cy="140" r="30" fill="none" stroke="#7bb8f0" stroke-width="1" opacity="0.4"/><circle cx="30" cy="25" r="2" fill="white" opacity="0.8"/><circle cx="80" cy="15" r="1.5" fill="white" opacity="0.6"/><circle cx="150" cy="30" r="1" fill="white" opacity="0.9"/><circle cx="170" cy="10" r="2" fill="white" opacity="0.5"/><circle cx="55" cy="45" r="1" fill="white" opacity="0.7"/></svg>`,
+  "Burlesque": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#1a0e00"/><circle cx="50" cy="60" r="35" fill="#f5a623" opacity="0.6"/><circle cx="100" cy="40" r="25" fill="#ffd700" opacity="0.5"/><circle cx="150" cy="70" r="30" fill="#f5a623" opacity="0.7"/><circle cx="180" cy="30" r="15" fill="#ffd700" opacity="0.4"/><text x="100" y="75" text-anchor="middle" font-size="32" fill="#ffd700" opacity="0.8" font-family="serif">★</text></svg>`,
+  "Country Blues": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0800"/><line x1="0" y1="20" x2="200" y2="20" stroke="#8b6914" stroke-width="1" opacity="0.4"/><line x1="0" y1="40" x2="200" y2="40" stroke="#8b6914" stroke-width="1" opacity="0.3"/><line x1="0" y1="60" x2="200" y2="60" stroke="#c49a2a" stroke-width="1.5" opacity="0.6"/><line x1="0" y1="80" x2="200" y2="80" stroke="#8b6914" stroke-width="1" opacity="0.3"/><line x1="0" y1="100" x2="200" y2="100" stroke="#8b6914" stroke-width="1" opacity="0.4"/><ellipse cx="100" cy="60" rx="50" ry="12" fill="#c49a2a" opacity="0.15"/><circle cx="100" cy="60" r="6" fill="#c49a2a" opacity="0.8"/></svg>`,
+  "Électro": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#000d1a"/><rect x="10" y="50" width="8" height="60" fill="#00c2ff" opacity="0.8"/><rect x="25" y="30" width="8" height="80" fill="#00c2ff" opacity="0.6"/><rect x="40" y="40" width="8" height="70" fill="#00c2ff" opacity="0.9"/><rect x="55" y="20" width="8" height="90" fill="#00c2ff" opacity="0.7"/><rect x="70" y="35" width="8" height="75" fill="#00c2ff" opacity="0.8"/><rect x="85" y="10" width="8" height="100" fill="#00eeff" opacity="1"/><rect x="100" y="30" width="8" height="80" fill="#00c2ff" opacity="0.7"/><rect x="115" y="45" width="8" height="65" fill="#00c2ff" opacity="0.6"/><rect x="130" y="25" width="8" height="85" fill="#00c2ff" opacity="0.8"/><rect x="145" y="40" width="8" height="70" fill="#00c2ff" opacity="0.7"/><rect x="160" y="50" width="8" height="60" fill="#00c2ff" opacity="0.5"/><rect x="175" y="35" width="8" height="75" fill="#00c2ff" opacity="0.6"/></svg>`,
+  "Électro-Pop": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d001a"/><circle cx="60" cy="60" r="45" fill="#9b59b6" opacity="0.3"/><circle cx="140" cy="60" r="45" fill="#e91e8c" opacity="0.3"/><circle cx="100" cy="60" r="30" fill="#c2185b" opacity="0.5"/><line x1="0" y1="60" x2="200" y2="60" stroke="white" stroke-width="0.5" opacity="0.2"/><line x1="100" y1="0" x2="100" y2="120" stroke="white" stroke-width="0.5" opacity="0.2"/></svg>`,
+  "Folk Acoustique": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#060d02"/><path d="M0,80 Q25,60 50,70 Q75,80 100,65 Q125,50 150,60 Q175,70 200,55" stroke="#6db33f" stroke-width="2" fill="none" opacity="0.8"/><path d="M0,90 Q30,75 60,82 Q90,89 120,75 Q150,61 180,70 L200,65" stroke="#4a7a28" stroke-width="1.5" fill="none" opacity="0.5"/><circle cx="30" cy="30" r="3" fill="#6db33f" opacity="0.6"/><circle cx="80" cy="20" r="2" fill="#8bc34a" opacity="0.5"/><circle cx="130" cy="35" r="2.5" fill="#6db33f" opacity="0.7"/><circle cx="170" cy="25" r="2" fill="#8bc34a" opacity="0.4"/></svg>`,
+  "Groovy": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0800"/><circle cx="100" cy="60" r="50" fill="none" stroke="#f39c12" stroke-width="2" opacity="0.6"/><circle cx="100" cy="60" r="35" fill="none" stroke="#f39c12" stroke-width="1.5" opacity="0.5"/><circle cx="100" cy="60" r="20" fill="none" stroke="#ffd700" stroke-width="2" opacity="0.7"/><circle cx="100" cy="60" r="8" fill="#f39c12" opacity="0.9"/><line x1="100" y1="10" x2="100" y2="110" stroke="#f39c12" stroke-width="0.5" opacity="0.2"/><line x1="50" y1="60" x2="150" y2="60" stroke="#f39c12" stroke-width="0.5" opacity="0.2"/></svg>`,
+  "Hard Rock": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0000"/><path d="M0,60 L40,20 L55,50 L80,5 L100,40 L120,10 L140,45 L160,15 L180,50 L200,20" stroke="#e74c3c" stroke-width="3" fill="none" opacity="0.9"/><path d="M0,80 L30,55 L50,70 L70,45 L90,65 L110,40 L130,60 L150,35 L170,55 L200,40" stroke="#c0392b" stroke-width="1.5" fill="none" opacity="0.5"/></svg>`,
+  "Latino": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0500"/><circle cx="40" cy="60" r="25" fill="#e67e22" opacity="0.7"/><circle cx="100" cy="40" r="30" fill="#f39c12" opacity="0.6"/><circle cx="160" cy="65" r="22" fill="#e74c3c" opacity="0.7"/><circle cx="130" cy="85" r="18" fill="#e67e22" opacity="0.5"/><circle cx="70" cy="80" r="20" fill="#f1c40f" opacity="0.4"/></svg>`,
+  "Loops": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#001a14"/><path d="M20,60 Q60,20 100,60 Q140,100 180,60" stroke="#1abc9c" stroke-width="2" fill="none" opacity="0.9"/><path d="M20,60 Q60,100 100,60 Q140,20 180,60" stroke="#16a085" stroke-width="1.5" fill="none" opacity="0.6"/><circle cx="20" cy="60" r="4" fill="#1abc9c"/><circle cx="100" cy="60" r="4" fill="#1abc9c"/><circle cx="180" cy="60" r="4" fill="#1abc9c"/></svg>`,
+  "Ludique": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0d00"/><circle cx="40" cy="40" r="20" fill="#f1c40f" opacity="0.8"/><rect x="80" y="20" width="30" height="30" rx="5" fill="#e91e8c" opacity="0.7"/><polygon points="140,20 160,50 120,50" fill="#00c2ff" opacity="0.8"/><circle cx="170" cy="80" r="15" fill="#f1c40f" opacity="0.6"/><rect x="20" y="70" width="25" height="25" rx="4" fill="#6db33f" opacity="0.7"/><polygon points="90,75 110,100 70,100" fill="#e67e22" opacity="0.7"/></svg>`,
+  "Neutre Positif": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#001a08"/><path d="M0,70 Q50,30 100,60 Q150,90 200,50" stroke="#2ecc71" stroke-width="2.5" fill="none" opacity="0.8"/><path d="M0,80 Q50,50 100,70 Q150,90 200,65" stroke="#27ae60" stroke-width="1.5" fill="none" opacity="0.5"/><circle cx="100" cy="60" r="15" fill="#2ecc71" opacity="0.2"/><circle cx="100" cy="60" r="5" fill="#2ecc71" opacity="0.6"/></svg>`,
+  "Mélancolie": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#030508"/><line x1="0" y1="0" x2="200" y2="120" stroke="#5d6d7e" stroke-width="1" opacity="0.3"/><line x1="200" y1="0" x2="0" y2="120" stroke="#5d6d7e" stroke-width="1" opacity="0.3"/><rect x="50" y="20" width="100" height="80" fill="none" stroke="#7f8c8d" stroke-width="1" opacity="0.4"/><rect x="65" y="35" width="70" height="50" fill="none" stroke="#95a5a6" stroke-width="0.5" opacity="0.3"/><circle cx="100" cy="60" r="20" fill="#5d6d7e" opacity="0.3"/></svg>`,
+  "Orchestral": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0014"/><polygon points="100,5 190,115 10,115" fill="none" stroke="#8e44ad" stroke-width="1.5" opacity="0.7"/><polygon points="100,20 175,115 25,115" fill="none" stroke="#9b59b6" stroke-width="1" opacity="0.5"/><polygon points="100,35 160,115 40,115" fill="none" stroke="#a569bd" stroke-width="1" opacity="0.4"/><polygon points="100,50 145,115 55,115" fill="#8e44ad" opacity="0.15"/><circle cx="100" cy="85" r="10" fill="#8e44ad" opacity="0.5"/></svg>`,
+  "Paname": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0500"/><path d="M20,100 Q40,60 60,80 Q80,100 100,70 Q120,40 140,60 Q160,80 180,50" stroke="#d35400" stroke-width="2" fill="none" opacity="0.8"/><circle cx="50" cy="40" r="15" fill="#e67e22" opacity="0.4"/><circle cx="150" cy="35" r="12" fill="#d35400" opacity="0.5"/><line x1="0" y1="110" x2="200" y2="110" stroke="#d35400" stroke-width="1" opacity="0.3"/></svg>`,
+  "Paranormal": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#000005"/><circle cx="100" cy="60" r="40" fill="none" stroke="#4a0080" stroke-width="1" opacity="0.6"/><circle cx="100" cy="60" r="25" fill="none" stroke="#6a0dad" stroke-width="1" opacity="0.5"/><circle cx="100" cy="60" r="10" fill="#4a0080" opacity="0.7"/><line x1="100" y1="20" x2="100" y2="100" stroke="#6a0dad" stroke-width="0.5" opacity="0.4"/><line x1="60" y1="60" x2="140" y2="60" stroke="#6a0dad" stroke-width="0.5" opacity="0.4"/><line x1="72" y1="32" x2="128" y2="88" stroke="#6a0dad" stroke-width="0.5" opacity="0.3"/><line x1="128" y1="32" x2="72" y2="88" stroke="#6a0dad" stroke-width="0.5" opacity="0.3"/></svg>`,
+  "Piano": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#080808"/><rect x="10" y="40" width="22" height="60" rx="2" fill="white" opacity="0.9"/><rect x="35" y="40" width="22" height="60" rx="2" fill="white" opacity="0.9"/><rect x="60" y="40" width="22" height="60" rx="2" fill="white" opacity="0.9"/><rect x="85" y="40" width="22" height="60" rx="2" fill="white" opacity="0.9"/><rect x="110" y="40" width="22" height="60" rx="2" fill="white" opacity="0.9"/><rect x="135" y="40" width="22" height="60" rx="2" fill="white" opacity="0.9"/><rect x="160" y="40" width="22" height="60" rx="2" fill="white" opacity="0.9"/><rect x="26" y="40" width="14" height="38" rx="2" fill="#1a1a1a"/><rect x="51" y="40" width="14" height="38" rx="2" fill="#1a1a1a"/><rect x="88" y="40" width="14" height="38" rx="2" fill="#1a1a1a"/><rect x="113" y="40" width="14" height="38" rx="2" fill="#1a1a1a"/><rect x="138" y="40" width="14" height="38" rx="2" fill="#1a1a1a"/></svg>`,
+  "Pizzicato": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0008"/><circle cx="40" cy="40" r="12" fill="#e91e8c" opacity="0.8"/><circle cx="80" cy="70" r="10" fill="#e91e8c" opacity="0.6"/><circle cx="120" cy="35" r="14" fill="#e91e8c" opacity="0.7"/><circle cx="160" cy="65" r="11" fill="#e91e8c" opacity="0.8"/><circle cx="60" cy="90" r="8" fill="#f06292" opacity="0.6"/><circle cx="140" cy="90" r="9" fill="#f06292" opacity="0.5"/><line x1="40" y1="40" x2="80" y2="70" stroke="#e91e8c" stroke-width="1" opacity="0.4"/><line x1="80" y1="70" x2="120" y2="35" stroke="#e91e8c" stroke-width="1" opacity="0.4"/><line x1="120" y1="35" x2="160" y2="65" stroke="#e91e8c" stroke-width="1" opacity="0.4"/></svg>`,
+  "Pop Acoustique": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#011a06"/><path d="M0,90 Q30,50 60,70 Q90,90 120,60 Q150,30 180,50 L200,45" stroke="#27ae60" stroke-width="2.5" fill="none" opacity="0.8"/><circle cx="60" cy="70" r="5" fill="#2ecc71" opacity="0.7"/><circle cx="120" cy="60" r="5" fill="#2ecc71" opacity="0.7"/><circle cx="180" cy="50" r="5" fill="#2ecc71" opacity="0.7"/></svg>`,
+  "Reggae": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#001a0a"/><rect x="0" y="0" width="200" height="40" fill="#e74c3c" opacity="0.6"/><rect x="0" y="40" width="200" height="40" fill="#f1c40f" opacity="0.6"/><rect x="0" y="80" width="200" height="40" fill="#27ae60" opacity="0.6"/><circle cx="100" cy="60" r="25" fill="#1a0d00" opacity="0.7"/><circle cx="100" cy="60" r="8" fill="#e67e22" opacity="0.8"/></svg>`,
+  "Rock": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0000"/><path d="M0,60 L25,20 L35,50 L55,10 L70,45 L85,25 L100,55 L115,15 L130,50 L150,20 L165,55 L180,30 L200,60" stroke="#e74c3c" stroke-width="2.5" fill="none" opacity="0.9"/><path d="M0,80 L20,55 L40,70 L60,50 L80,65 L100,45 L120,65 L140,48 L160,62 L180,50 L200,65" stroke="#c0392b" stroke-width="1" fill="none" opacity="0.4"/></svg>`,
+  "Romance": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0008"/><path d="M100,80 Q70,55 60,45 Q45,30 60,20 Q75,10 100,35 Q125,10 140,20 Q155,30 140,45 Q130,55 100,80Z" fill="#e91e63" opacity="0.6"/><path d="M100,70 Q78,50 70,42 Q58,30 70,22 Q82,14 100,36 Q118,14 130,22 Q142,30 130,42 Q122,50 100,70Z" fill="#e91e63" opacity="0.3"/></svg>`,
+  "Suspense": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#000810"/><line x1="0" y1="60" x2="200" y2="60" stroke="#2980b9" stroke-width="0.5" opacity="0.3"/><path d="M0,60 L10,58 L20,62 L30,55 L40,65 L50,52 L60,68 L70,48 L80,72 L90,42 L100,78 L110,40 L120,75 L130,45 L140,68 L150,52 L160,65 L170,55 L180,62 L190,58 L200,60" stroke="#2980b9" stroke-width="2" fill="none" opacity="0.9"/></svg>`,
+  "Swing Jazz": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#0d0800"/><path d="M10,90 Q30,50 50,70 Q70,90 90,55 Q110,20 130,50 Q150,80 170,45 Q185,25 200,40" stroke="#f39c12" stroke-width="2.5" fill="none" opacity="0.8"/><circle cx="50" cy="70" r="4" fill="#ffd700" opacity="0.7"/><circle cx="90" cy="55" r="4" fill="#ffd700" opacity="0.7"/><circle cx="130" cy="50" r="4" fill="#ffd700" opacity="0.7"/><circle cx="170" cy="45" r="4" fill="#ffd700" opacity="0.7"/></svg>`,
+  "Transition": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#080808"/><line x1="0" y1="60" x2="200" y2="60" stroke="#7f8c8d" stroke-width="1" opacity="0.4"/><circle cx="20" cy="60" r="2" fill="#7f8c8d" opacity="0.4"/><circle cx="60" cy="60" r="3" fill="#95a5a6" opacity="0.6"/><circle cx="100" cy="60" r="5" fill="#bdc3c7" opacity="0.9"/><circle cx="140" cy="60" r="3" fill="#95a5a6" opacity="0.6"/><circle cx="180" cy="60" r="2" fill="#7f8c8d" opacity="0.4"/><path d="M85,60 L100,45 L115,60 L100,75 Z" fill="#bdc3c7" opacity="0.5"/></svg>`,
+  "Urban": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#080010"/><rect x="0" y="60" width="200" height="60" fill="#1a0030" opacity="0.5"/><rect x="20" y="40" width="18" height="80" fill="#8e44ad" opacity="0.7"/><rect x="50" y="55" width="15" height="65" fill="#6c3483" opacity="0.6"/><rect x="75" y="30" width="20" height="90" fill="#9b59b6" opacity="0.8"/><rect x="110" y="45" width="16" height="75" fill="#8e44ad" opacity="0.7"/><rect x="140" y="35" width="18" height="85" fill="#7d3c98" opacity="0.6"/><rect x="170" y="50" width="15" height="70" fill="#9b59b6" opacity="0.5"/></svg>`,
+  "World Music": `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="120" fill="#001a10"/><circle cx="100" cy="60" r="50" fill="none" stroke="#16a085" stroke-width="1" opacity="0.5"/><ellipse cx="100" cy="60" rx="25" ry="50" fill="none" stroke="#1abc9c" stroke-width="1" opacity="0.4"/><ellipse cx="100" cy="60" rx="50" ry="20" fill="none" stroke="#16a085" stroke-width="1" opacity="0.4"/><line x1="50" y1="60" x2="150" y2="60" stroke="#1abc9c" stroke-width="0.5" opacity="0.3"/><line x1="100" y1="10" x2="100" y2="110" stroke="#1abc9c" stroke-width="0.5" opacity="0.3"/><circle cx="100" cy="60" r="5" fill="#1abc9c" opacity="0.8"/></svg>`
 };
 
 const CARD_COLORS = {
@@ -467,14 +496,17 @@ function renderHome() {
   const playlists = Object.keys(counts).sort();
 
   grid.innerHTML = playlists.map(p => {
-    const tags = (PLAYLIST_TAGS[p] || []).slice(0,4);
+    const tags = (PLAYLIST_TAGS[p] || []).slice(0,3);
     const color = CARD_COLORS[p] || '#E50914';
+    const cover = CARD_COVERS[p] || '';
     return `
       <div class="playlist-card" style="--card-color:${color}" onclick="openPlaylist('${p.replace(/'/g,"\\'")}')">
-        <div class="card-arrow">›</div>
-        <div class="card-name">${p}</div>
-        <div class="card-count">${counts[p]} morceaux</div>
-        <div class="card-tags">${tags.map(t => `<span class="card-tag">${t}</span>`).join('')}</div>
+        <div class="card-cover">${cover}</div>
+        <div class="card-body">
+          <div class="card-name">${p}</div>
+          <div class="card-count">${counts[p]} morceaux</div>
+          <div class="card-tags">${tags.map(t => `<span class="card-tag">${t}</span>`).join('')}</div>
+        </div>
       </div>`;
   }).join('');
 
@@ -705,11 +737,4 @@ function downloadCurrent() {
   if (playingFromQueue && queueIndex >= 0) {
     const t = queue[queueIndex];
     const a = document.createElement('a'); a.href = t.url; a.download = t.title + '.mp3'; a.target = '_blank'; a.click();
-  } else if (currentIndex >= 0) downloadTrack(currentIndex);
-}
-
-// Init si déjà auth
-if (sessionStorage.getItem('osm_auth') === '1') loadCatalogue();
-</script>
-</body>
-</html>
+  } else if (currentIn
