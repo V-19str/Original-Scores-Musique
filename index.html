@@ -7,15 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Cinzel:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --gold: #C9A84C;
-  --gold-light: #E8C97A;
-  --gold-dim: rgba(201,168,76,0.15);
-  --bg: #0a0a0a;
-  --bg2: #111;
-  --bg3: #181818;
-  --text: #e8e0d0;
-  --muted: #666;
-  --border: rgba(201,168,76,0.2);
+  --gold: #1a1a2e;
+  --gold-light: #16213e;
+  --gold-dim: rgba(26,26,46,0.08);
+  --bg: #f5f3ef;
+  --bg2: #ffffff;
+  --bg3: #ede9e3;
+  --text: #1a1a2e;
+  --muted: #888;
+  --border: rgba(26,26,46,0.12);
+}
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
@@ -65,7 +66,7 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .player-btns { display: flex; align-items: center; gap: 20px; }
 .btn-prev, .btn-next { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; transition: color 0.2s; }
 .btn-prev:hover, .btn-next:hover { color: var(--text); }
-.btn-play { width: 40px; height: 40px; border-radius: 50%; background: var(--gold); border: none; color: #000; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.btn-play { width: 40px; height: 40px; border-radius: 50%; background: var(--gold); border: none; color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
 .btn-play:hover { background: var(--gold-light); }
 .progress-wrap { display: flex; align-items: center; gap: 10px; width: 100%; }
 .progress-bar { flex: 1; height: 3px; background: #333; border-radius: 2px; cursor: pointer; position: relative; }
