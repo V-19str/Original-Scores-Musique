@@ -6,6 +6,68 @@ API_KEY    = "975546688173615"
 API_SECRET = "Bgs1ukB5izJ9ilIxgIbt55F9eng"
 auth = HTTPBasicAuth(API_KEY, API_SECRET)
 
+PLAYLISTS = [
+    "ACTION - POURSUITE - COMBAT - CHAOS - SPORT - EXTREME \u2013 URGENT",
+    "ATMOSPHERE - GRANDS ESPACES - AERIEN - COSMIQUE \u2013 ABYSSAL",
+    "BURLESQUE - HUMOUR - COMIQUE - THEATRAL - LEGER \u2013 COCASSE",
+    "COUNTRY BLUES - DOBRO - BOOGIE-WOOGIE - GUITARE \u2013 USA",
+    "ELECTRO - ELECTRONIQUE - BEAT - CLUBBING - DEEJAYING \u2013 PARTY",
+    "ELECTRO - POP - ACTUEL - URBAIN - ARTY - ENERGIQUE \u2013 CORPORATE",
+    "FOLK ACOUSTIQUE - ELECTRO ACOUSTIQUE - RELAX - GUITARE \u2013 HARMONY",
+    "GROOVY - FUNKY - DISCO - RYTHMIQUE - GIMMICK - VIF \u2013 EVEILLE",
+    "HARD ROCK - METAL - URGENT - RAGE - EXTREME - AGITATION \u2013 RAPIDE",
+    "LATINO - AUSTRAL - MEXICAN - AMERIQUE DU SUD - CULTURE \u2013 WESTERN",
+    "LOOPS - BOUCLE - LOOPING - BPM - METRONOME \u2013 ADAPTIVE",
+    "LUDIQUE - ENFANTIN - DIVERTISSANT - THEATRAL - DROLE \u2013 AMUSANT",
+    "NEUTRE - POSITIF \u2013 HAPPY",
+    "NEUTRE- MELANCOLIE \u2013 TRISTESSE",
+    "ORCHESTRAL - EPIQUE - SYMPHONIQUE - HARMONIE \u2013 HEROIQUE",
+    "PANAME - PARIS - RETRO - ACCORDEON - PIGALLE \u2013 MONTMARTRE",
+    "PARANORMAL - EXPERIMENTAL \u2013 HYPNOTIQUE",
+    "PIANO - CLASSIQUE - INTIMISTE - CALME - MELANCOLIQUE - COSY \u2013 DOUX",
+    "PIZZICATO - STACCATO - DRAMEDY - BETISIER - CARTOON \u2013 ANIMATION",
+    "POP ACOUSTIQUE - SOFT - BALLADE - ACTUEL - ROAD \u2013 CHALEUREUX",
+    "REGGAE - REGGATON - SKA - FUSION \u2013 JAMAICA",
+    "ROCK - RIFFS - GUITARE - ELECTRIQUE - GARAGE - LIVE - ROCK N ROLL",
+    "ROMANCE - MELANCOLIQUE - AMOUR - NOSTALGIE - TRISTESSE \u2013 DRAME",
+    "SUSPENSE - INVESTIGATION - ENQUETE - ANGOISSE - ESPIONNAGE \u2013 POLICIER",
+    "SWING - JAZZ - RYTHME - BIG BAND - JIVE \u2013 MANOUCHE",
+    "TRANSITION - JINGLE - VIRGULE - PONCTUATION - RISE \u2013 WHOOSH",
+    "URBAN - R&B - HIP HOP - STREET - ART - RAP \u2013 BEAT",
+    "WORLD MUSIC - ETHNIQUE - CULTURE - METISSAGE - TRADITIONNEL",
+]
+
+LABELS = {
+    "ACTION - POURSUITE - COMBAT - CHAOS - SPORT - EXTREME \u2013 URGENT": "Action",
+    "ATMOSPHERE - GRANDS ESPACES - AERIEN - COSMIQUE \u2013 ABYSSAL": "Atmosph\u00e8re",
+    "BURLESQUE - HUMOUR - COMIQUE - THEATRAL - LEGER \u2013 COCASSE": "Burlesque",
+    "COUNTRY BLUES - DOBRO - BOOGIE-WOOGIE - GUITARE \u2013 USA": "Country Blues",
+    "ELECTRO - ELECTRONIQUE - BEAT - CLUBBING - DEEJAYING \u2013 PARTY": "\u00c9lectro",
+    "ELECTRO - POP - ACTUEL - URBAIN - ARTY - ENERGIQUE \u2013 CORPORATE": "\u00c9lectro-Pop",
+    "FOLK ACOUSTIQUE - ELECTRO ACOUSTIQUE - RELAX - GUITARE \u2013 HARMONY": "Folk Acoustique",
+    "GROOVY - FUNKY - DISCO - RYTHMIQUE - GIMMICK - VIF \u2013 EVEILLE": "Groovy",
+    "HARD ROCK - METAL - URGENT - RAGE - EXTREME - AGITATION \u2013 RAPIDE": "Hard Rock",
+    "LATINO - AUSTRAL - MEXICAN - AMERIQUE DU SUD - CULTURE \u2013 WESTERN": "Latino",
+    "LOOPS - BOUCLE - LOOPING - BPM - METRONOME \u2013 ADAPTIVE": "Loops",
+    "LUDIQUE - ENFANTIN - DIVERTISSANT - THEATRAL - DROLE \u2013 AMUSANT": "Ludique",
+    "NEUTRE - POSITIF \u2013 HAPPY": "Neutre Positif",
+    "NEUTRE- MELANCOLIE \u2013 TRISTESSE": "M\u00e9lancolie",
+    "ORCHESTRAL - EPIQUE - SYMPHONIQUE - HARMONIE \u2013 HEROIQUE": "Orchestral",
+    "PANAME - PARIS - RETRO - ACCORDEON - PIGALLE \u2013 MONTMARTRE": "Paname",
+    "PARANORMAL - EXPERIMENTAL \u2013 HYPNOTIQUE": "Paranormal",
+    "PIANO - CLASSIQUE - INTIMISTE - CALME - MELANCOLIQUE - COSY \u2013 DOUX": "Piano",
+    "PIZZICATO - STACCATO - DRAMEDY - BETISIER - CARTOON \u2013 ANIMATION": "Pizzicato",
+    "POP ACOUSTIQUE - SOFT - BALLADE - ACTUEL - ROAD \u2013 CHALEUREUX": "Pop Acoustique",
+    "REGGAE - REGGATON - SKA - FUSION \u2013 JAMAICA": "Reggae",
+    "ROCK - RIFFS - GUITARE - ELECTRIQUE - GARAGE - LIVE - ROCK N ROLL": "Rock",
+    "ROMANCE - MELANCOLIQUE - AMOUR - NOSTALGIE - TRISTESSE \u2013 DRAME": "Romance",
+    "SUSPENSE - INVESTIGATION - ENQUETE - ANGOISSE - ESPIONNAGE \u2013 POLICIER": "Suspense",
+    "SWING - JAZZ - RYTHME - BIG BAND - JIVE \u2013 MANOUCHE": "Swing Jazz",
+    "TRANSITION - JINGLE - VIRGULE - PONCTUATION - RISE \u2013 WHOOSH": "Transition",
+    "URBAN - R&B - HIP HOP - STREET - ART - RAP \u2013 BEAT": "Urban",
+    "WORLD MUSIC - ETHNIQUE - CULTURE - METISSAGE - TRADITIONNEL": "World Music",
+}
+
 # Récupérer tous les assets
 all_resources = []
 next_cursor = None
@@ -24,28 +86,24 @@ while True:
     if not next_cursor:
         break
 
-# Récupérer les dossiers et leur contenu
+# Mapper chaque morceau à sa playlist
 folder_map = {}
-r2 = requests.get(f"https://api.cloudinary.com/v1_1/{CLOUD_NAME}/folders", auth=auth)
-folders = r2.json().get("folders", [])
-print(f"Dossiers: {[f['name'] for f in folders]}")
-
-for folder in folders:
-    path = folder["path"]
-    name = folder["name"]
+for playlist_name in PLAYLISTS:
     nc = None
+    count = 0
     while True:
-        params2 = {"resource_type": "video", "type": "upload", "max_results": 500, "prefix": path + "/"}
+        params2 = {"resource_type": "video", "type": "upload", "max_results": 500, "prefix": playlist_name + "/"}
         if nc:
             params2["next_cursor"] = nc
         r3 = requests.get(f"https://api.cloudinary.com/v1_1/{CLOUD_NAME}/resources/video", params=params2, auth=auth)
         d3 = r3.json()
         for res in d3.get("resources", []):
-            folder_map[res["public_id"]] = name
+            folder_map[res["public_id"]] = LABELS.get(playlist_name, playlist_name)
+            count += 1
         nc = d3.get("next_cursor")
         if not nc:
             break
-    print(f"  {name}: {len([v for v in folder_map.values() if v == name])} morceaux")
+    print(f"  {LABELS.get(playlist_name, playlist_name)}: {count} morceaux")
 
 # Construire le catalogue
 tracks = []
