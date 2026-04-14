@@ -1,0 +1,80 @@
+name: Generate Catalogue
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch Cloudinary catalogue
+        run: |
+          python3 << 'EOF'
+          import requests, json
+          from requests.auth import HTTPBasicAuth
+
+          CLOUD_NAME = "dqfogw7sg"
+          API_KEY    = "975546688173615"
+          API_SECRET = "Bgs1ukB5izJ9ilIxgIbt55F9eng"
+
+          all_resources = []
+          next_cursor = None
+          page = 1
+
+          while True:
+              params = {"resource_type": "video", "type": "upload", "max_results": 500, "tags": True, "context": True}
+              if next_cursor:
+                  params["next_cursor"] = next_cursor
+              r = requests.get(
+                  f"https://api.cloudinary.com/v1_1/{CLOUD_NAME}/resources/video",
+                  params=params,
+                  auth=HTTPBasicAuth(API_KEY, API_SECRET)
+              )
+              data = r.json()
+              resources = data.get("resources", [])
+              all_resources.extend(resources)
+              print(f"Page {page} : {len(resources)} morceaux (total : {len(all_resources)})")
+              next_cursor = data.get("next_cursor")
+              page += 1
+              if not next_cursor:
+                  break
+
+          tracks = []
+          playlists = {}
+          for r in all_resources:
+              public_id = r.get("public_id", "")
+              url       = r.get("secure_url", "")
+              duration  = round(r.get("duration", 0))
+              tags      = r.get("tags", [])
+              context   = r.get("context", {}).get("custom", {}) if r.get("context") else {}
+              filename  = public_id.split("/")[-1]
+              title     = context.get("caption") or filename.replace("-", " ").replace("_", " ").title()
+              playlist  = tags[0] if tags else (public_id.split("/")[0] if "/" in public_id else "Divers")
+              mins, secs = divmod(duration, 60)
+              tracks.append({"id": public_id, "title": title, "playlist": playlist, "duration": f"{mins}:{secs:02d}", "url": url, "tags": tags})
+              playlists[playlist] = playlists.get(playlist, 0) + 1
+
+          tracks.sort(key=lambda t: (t["playlist"], t["title"]))
+          output = {"total": len(tracks), "playlists": sorted(playlists.keys()), "tracks": tracks}
+          with open("catalogue.json", "w", encoding="utf-8") as f:
+              json.dump(output, f, ensure_ascii=False, indent=2)
+          print(f"✅ {len(tracks)} morceaux, {len(playlists)} playlists")
+          EOF
+
+      - name: Commit catalogue.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add catalogue.json
+          git commit -m "Update catalogue.json" || echo "Rien à commiter"
+          git push
