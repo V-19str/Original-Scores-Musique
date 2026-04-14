@@ -20,17 +20,29 @@ jobs:
       - name: Fetch Cloudinary catalogue
         run: |
           python3 << 'EOF'
-          import requests, json
+          import requests, json, re
           from requests.auth import HTTPBasicAuth
 
           CLOUD_NAME = "dqfogw7sg"
           API_KEY    = "975546688173615"
           API_SECRET = "Bgs1ukB5izJ9ilIxgIbt55F9eng"
+          auth = HTTPBasicAuth(API_KEY, API_SECRET)
 
+          # 1. Lister tous les sous-dossiers
+          r = requests.get(
+              f"https://api.cloudinary.com/v1_1/{CLOUD_NAME}/folders",
+              auth=auth
+          )
+          data = r.json()
+          print("Dossiers trouvés:")
+          folders = data.get("folders", [])
+          for f in folders:
+              print(f" - {f['path']}")
+
+          # 2. Récupérer tous les assets avec leur folder
           all_resources = []
           next_cursor = None
           page = 1
-
           while True:
               params = {
                   "resource_type": "video",
@@ -38,38 +50,60 @@ jobs:
                   "max_results": 500,
                   "tags": True,
                   "context": True,
-                  "prefix": "ORIGINAL SCORES MUSIC - COLLECTIONS - LQ MP3/"
               }
               if next_cursor:
                   params["next_cursor"] = next_cursor
               r = requests.get(
                   f"https://api.cloudinary.com/v1_1/{CLOUD_NAME}/resources/video",
                   params=params,
-                  auth=HTTPBasicAuth(API_KEY, API_SECRET)
+                  auth=auth
               )
               data = r.json()
               resources = data.get("resources", [])
               all_resources.extend(resources)
-              print(f"Page {page} : {len(resources)} morceaux (total : {len(all_resources)})")
+              print(f"Page {page}: {len(resources)} morceaux (total: {len(all_resources)})")
               next_cursor = data.get("next_cursor")
               page += 1
               if not next_cursor:
                   break
 
+          # 3. Lister les assets par dossier via l'API folders
+          folder_assets = {}
+          for f in folders:
+              path = f['path']
+              fc = None
+              folder_resources = []
+              while True:
+                  params = {"max_results": 500}
+                  if fc:
+                      params["next_cursor"] = fc
+                  r2 = requests.get(
+                      f"https://api.cloudinary.com/v1_1/{CLOUD_NAME}/folders/{requests.utils.quote(path, safe='')}/resources",
+                      params=params,
+                      auth=auth
+                  )
+                  d2 = r2.json()
+                  folder_resources.extend(d2.get("resources", []))
+                  fc = d2.get("next_cursor")
+                  if not fc:
+                      break
+              for res in folder_resources:
+                  folder_assets[res.get("public_id")] = path
+              print(f"Dossier '{path}': {len(folder_resources)} morceaux")
+
+          # 4. Construire le catalogue
           tracks = []
           playlists = {}
           for r in all_resources:
               public_id = r.get("public_id", "")
               url       = r.get("secure_url", "")
               duration  = round(r.get("duration", 0))
-              parts     = public_id.split("/")
-              # Structure: ORIGINAL SCORES MUSIC.../PLAYLIST/fichier
-              playlist  = parts[-2] if len(parts) >= 3 else (parts[-2] if len(parts) >= 2 else "Divers")
-              filename  = parts[-1]
+              filename  = public_id.split("/")[-1]
               title     = filename.replace("-", " ").replace("_", " ").title()
-              # Nettoyer le code Cloudinary à la fin (ex: _eqzr9z)
-              import re
-              title = re.sub(r'\s+[A-Za-z0-9]{6}$', '', title).strip()
+              title     = re.sub(r'\s+[A-Za-z0-9]{6}$', '', title).strip()
+              playlist  = folder_assets.get(public_id, "Divers")
+              # Raccourcir le nom de playlist
+              playlist  = playlist.split("/")[-1] if "/" in playlist else playlist
               mins, secs = divmod(duration, 60)
               tracks.append({
                   "id": public_id,
@@ -77,7 +111,6 @@ jobs:
                   "playlist": playlist,
                   "duration": f"{mins}:{secs:02d}",
                   "url": url,
-                  "tags": r.get("tags", [])
               })
               playlists[playlist] = playlists.get(playlist, 0) + 1
 
@@ -85,7 +118,7 @@ jobs:
           output = {"total": len(tracks), "playlists": sorted(playlists.keys()), "tracks": tracks}
           with open("catalogue.json", "w", encoding="utf-8") as f:
               json.dump(output, f, ensure_ascii=False, indent=2)
-          print(f"✅ {len(tracks)} morceaux, {len(playlists)} playlists")
+          print(f"\n✅ {len(tracks)} morceaux, {len(playlists)} playlists")
           for p, c in sorted(playlists.items()):
               print(f"  {p}: {c}")
           EOF
