@@ -86,13 +86,13 @@ while True:
     if not next_cursor:
         break
 
-# Mapper chaque morceau à sa playlist
+# Mapper chaque morceau a sa playlist via asset_folder
 folder_map = {}
 for playlist_name in PLAYLISTS:
     nc = None
     count = 0
     while True:
-        params2 = {"resource_type": "video", "type": "upload", "max_results": 500, "prefix": playlist_name + "/"}
+        params2 = {"resource_type": "video", "type": "upload", "max_results": 500, "asset_folder": playlist_name}
         if nc:
             params2["next_cursor"] = nc
         r3 = requests.get(f"https://api.cloudinary.com/v1_1/{CLOUD_NAME}/resources/video", params=params2, auth=auth)
@@ -124,6 +124,6 @@ tracks.sort(key=lambda t: (t["playlist"], t["title"]))
 output = {"total": len(tracks), "playlists": sorted(playlists.keys()), "tracks": tracks}
 with open("catalogue.json", "w", encoding="utf-8") as f:
     json.dump(output, f, ensure_ascii=False, indent=2)
-print(f"\n✅ {len(tracks)} morceaux, {len(playlists)} playlists")
+print(f"\n Termine: {len(tracks)} morceaux, {len(playlists)} playlists")
 for p, c in sorted(playlists.items()):
     print(f"  {p}: {c}")
