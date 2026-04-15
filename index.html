@@ -826,9 +826,17 @@ audio.addEventListener('timeupdate', () => {
 });
 function formatDur2(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
 function seekTo(e) {
+  if (!audio.src) return;
   const bar = document.getElementById('progress-bar');
   const rect = bar.getBoundingClientRect();
-  if (audio.duration) audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  if (audio.readyState >= 2) {
+    audio.currentTime = pct * audio.duration;
+  } else {
+    audio.addEventListener('loadedmetadata', () => {
+      audio.currentTime = pct * audio.duration;
+    }, { once: true });
+  }
 }
 function copyLink(url) {
   navigator.clipboard.writeText(url).then(() => {
