@@ -829,6 +829,10 @@ function seekTo(e) {
   const rect = bar.getBoundingClientRect();
   if (audio.duration) audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
 }
+  const bar = document.getElementById('progress-bar');
+  const rect = bar.getBoundingClientRect();
+  if (audio.duration) audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+}
 function copyLink(url) {
   navigator.clipboard.writeText(url).then(() => {
     const toast = document.getElementById('copy-toast');
