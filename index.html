@@ -277,7 +277,9 @@ function checkPw() {
     document.getElementById('pw-error').style.display = 'block';
   }
 }
-if (sessionStorage.getItem('osm_ok') === '1') {
+if (sessionStorage.getItem('osm_ok') !== '1') {
+  window.location.href = 'inscription.html';
+} else {
   document.getElementById('pw-screen').style.display = 'none';
   document.getElementById('main').classList.add('visible');
 }
