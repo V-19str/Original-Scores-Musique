@@ -43,7 +43,7 @@ all_resources = []
 next_cursor = None
 page = 1
 while True:
-    params = {"resource_type": "video", "type": "upload", "max_results": 500, "image_metadata": True}
+    params = {"resource_type": "video", "type": "upload", "max_results": 500, "fields": "duration,secure_url,public_id,asset_folder,display_name"}
     if next_cursor:
         params["next_cursor"] = next_cursor
     r = requests.get(f"https://api.cloudinary.com/v1_1/{CLOUD_NAME}/resources/video", params=params, auth=auth)
