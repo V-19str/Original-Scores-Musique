@@ -61,7 +61,8 @@ playlists = {}
 for res in all_resources:
     public_id = res.get("public_id", "")
     url = res.get("secure_url", "")
-    duration = round(res.get("duration", 0))
+    duration  = res.get("duration") or 0
+duration  = round(float(duration)) if duration else 0
     asset_folder = res.get("asset_folder", "")
     display_name = res.get("display_name", "")
     
@@ -79,7 +80,7 @@ for res in all_resources:
     title = title.replace("-", " ").replace("_", " ").title().strip()
     
     mins, secs = divmod(duration, 60)
-    tracks.append({"id": public_id, "title": title, "playlist": playlist, "duration": f"{mins}:{secs:02d}", "url": url})
+    tracks.append({"id": public_id, "title": title, "playlist": playlist, "duration": f"{mins}:{secs:02d}" if duration > 0 else "", "url": url})
     playlists[playlist] = playlists.get(playlist, 0) + 1
 
 tracks.sort(key=lambda t: (t["playlist"], t["title"]))
