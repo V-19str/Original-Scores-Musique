@@ -83,6 +83,14 @@ for res in all_resources:
     tracks.append({"id": public_id, "title": title, "playlist": playlist, "duration": f"{mins}:{secs:02d}" if duration > 0 else "", "url": url})
     playlists[playlist] = playlists.get(playlist, 0) + 1
 
+seen_titles = set()
+unique_tracks = []
+for t in tracks:
+    key = t["title"].lower().strip()
+    if key not in seen_titles:
+        seen_titles.add(key)
+        unique_tracks.append(t)
+tracks = unique_tracks
 tracks.sort(key=lambda t: (t["playlist"], t["title"]))
 output = {"total": len(tracks), "playlists": sorted(playlists.keys()), "tracks": tracks}
 with open("catalogue.json", "w", encoding="utf-8") as f:
