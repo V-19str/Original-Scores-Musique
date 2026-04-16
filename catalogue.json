@@ -1,5 +1,5 @@
 {
-  "total": 1169,
+  "total": 1166,
   "playlists": [
     "Action",
     "Atmosphère",
@@ -7103,32 +7103,11 @@
       "url": "https://res.cloudinary.com/dqfogw7sg/video/upload/v1776324619/WAIAN_MVC_ivmlok.mp3"
     },
     {
-      "id": "samples/cld-sample-video",
-      "title": "Cld Sample Video",
-      "playlist": "samples",
-      "duration": "",
-      "url": "https://res.cloudinary.com/dqfogw7sg/video/upload/v1775653488/samples/cld-sample-video.mp4"
-    },
-    {
-      "id": "samples/dance-2",
-      "title": "Dance 2",
-      "playlist": "samples",
-      "duration": "",
-      "url": "https://res.cloudinary.com/dqfogw7sg/video/upload/v1775653489/samples/dance-2.mp4"
-    },
-    {
       "id": "samples/elephants",
       "title": "Elephants",
       "playlist": "samples",
       "duration": "",
       "url": "https://res.cloudinary.com/dqfogw7sg/video/upload/v1775653488/samples/elephants.mp4"
-    },
-    {
-      "id": "samples/sea-turtle",
-      "title": "Sea",
-      "playlist": "samples",
-      "duration": "",
-      "url": "https://res.cloudinary.com/dqfogw7sg/video/upload/v1775653487/samples/sea-turtle.mp4"
     },
     {
       "id": "BACK_IN_THE_HOOD_MSVC_huazyg",
