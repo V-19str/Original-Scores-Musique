@@ -2,8 +2,8 @@ import requests, json, re
 from requests.auth import HTTPBasicAuth
 
 CLOUD_NAME = "dqfogw7sg"
-API_KEY    = "975546688173615"
-API_SECRET = "Bgs1ukB5izJ9ilIxgIbt55F9eng"
+API_KEY    = "968571581867276"
+API_SECRET = "4O-X2gHhbCCud7Yppkpe38TxhTc"
 auth = HTTPBasicAuth(API_KEY, API_SECRET)
 
 LABELS = {
