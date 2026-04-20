@@ -156,7 +156,7 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .pl-info { padding: 16px 18px 18px; }
 .pl-genres { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
 .pl-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.2; }
-.pl-desc { font-size: 11px; color: #666; line-height: 1.7; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.pl-desc { font-size: 12px; color: #999; line-height: 1.8; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .pl-meta { display: flex; align-items: center; justify-content: space-between; }
 .pl-count-badge { font-size: 10px; color: #555; font-weight: 500; }
 .pl-tags-row { display: flex; gap: 4px; flex-wrap: wrap; }
@@ -269,7 +269,7 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .vol-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 11px; height: 11px; background: #fff; border-radius: 50%; cursor: pointer; }
 .player-dl { background: none; border: 1px solid var(--border); color: var(--text2); padding: 6px 14px; font-size: 10px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; font-family: 'Montserrat', sans-serif; border-radius: 4px; }
 .player-dl:hover { border-color: #666; color: var(--text); }
-.waveform { display: flex; align-items: center; justify-content: center; gap: 2px; height: 22px; width: 100%; }
+.waveform { display: flex; align-items: center; justify-content: center; gap: 2px; height: 32px; width: 100%; }
 .wb { width: 3px; background: rgba(229,9,20,0.3); border-radius: 2px; height: 4px; }
 .waveform.playing .wb { background: #E50914; }
 .waveform.playing .wb:nth-child(1){animation:wb .8s ease-in-out infinite 0s}
@@ -282,8 +282,59 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .waveform.playing .wb:nth-child(8){animation:wb .8s ease-in-out infinite .1s}
 .waveform.playing .wb:nth-child(9){animation:wb .8s ease-in-out infinite .2s}
 .waveform.playing .wb:nth-child(10){animation:wb .8s ease-in-out infinite .05s}
-@keyframes wb{0%,100%{height:4px}50%{height:20px}}
+@keyframes wb{0%,100%{height:4px}50%{height:24px}}
+#oscillator-canvas { width: 100%; height: 32px; display: none; }
+#oscillator-canvas.active { display: block; }
 audio{display:none}
+
+/* OSCILLATEUR */
+let audioCtx=null,analyser=null,source=null,oscRaf=null;
+function initAudioCtx(){
+  if(audioCtx)return;
+  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  analyser=audioCtx.createAnalyser();
+  analyser.fftSize=256;
+  source=audioCtx.createMediaElementSource(audio);
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+}
+function startOscillator(){
+  initAudioCtx();
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  const canvas=document.getElementById('oscillator-canvas');
+  const wf=document.getElementById('waveform');
+  wf.style.display='none';
+  canvas.classList.add('active');
+  const ctx=canvas.getContext('2d');
+  const buf=new Uint8Array(analyser.frequencyBinCount);
+  function draw(){
+    oscRaf=requestAnimationFrame(draw);
+    canvas.width=canvas.offsetWidth;
+    canvas.height=canvas.offsetHeight||32;
+    analyser.getByteTimeDomainData(buf);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle='#E50914';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    const sw=canvas.width/buf.length;
+    let x=0;
+    for(let i=0;i<buf.length;i++){
+      const v=buf[i]/128;
+      const y=(v*canvas.height)/2;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      x+=sw;
+    }
+    ctx.stroke();
+  }
+  draw();
+}
+function stopOscillator(){
+  if(oscRaf)cancelAnimationFrame(oscRaf);
+  const canvas=document.getElementById('oscillator-canvas');
+  const wf=document.getElementById('waveform');
+  canvas.classList.remove('active');
+  wf.style.display='flex';
+}
 
 /* QUEUE */
 .queue-badge { position: absolute; top: -6px; right: -6px; background: var(--red); color: #fff; font-size: 9px; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: none; align-items: center; justify-content: center; }
@@ -576,6 +627,7 @@ audio{display:none}
         <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
         <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
       </div>
+      <canvas id="oscillator-canvas"></canvas>
       <div class="progress-wrap">
         <span class="time" id="time-cur">0:00</span>
         <div class="progress-bar-outer" id="progress-bar-outer">
@@ -921,12 +973,13 @@ function playTrack(i){
   audio.src=t.url;audio.play();
   document.getElementById('btn-play').textContent='⏸';
   document.getElementById('waveform').classList.add('playing');
+  startOscillator();
   renderTracks();
 }
 
 function togglePlay(){
-  if(audio.paused){audio.play();document.getElementById('btn-play').textContent='⏸';document.getElementById('waveform').classList.add('playing');}
-  else{audio.pause();document.getElementById('btn-play').textContent='▶';document.getElementById('waveform').classList.remove('playing');}
+  if(audio.paused){audio.play();document.getElementById('btn-play').textContent='⏸';document.getElementById('waveform').classList.add('playing');startOscillator();}
+  else{audio.pause();document.getElementById('btn-play').textContent='▶';document.getElementById('waveform').classList.remove('playing');stopOscillator();}
 }
 function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('btn-shuffle').classList.toggle('active',shuffleOn);}
 function toggleRepeat(){repeatOn=!repeatOn;document.getElementById('btn-repeat').classList.toggle('active',repeatOn);}
@@ -946,7 +999,7 @@ function nextTrack(){
   }
 }
 
-audio.addEventListener('ended',()=>{document.getElementById('waveform').classList.remove('playing');nextTrack();});
+audio.addEventListener('ended',()=>{document.getElementById('waveform').classList.remove('playing');stopOscillator();nextTrack();});
 audio.addEventListener('loadedmetadata',()=>{
   const dur=audio.duration;
   if(dur&&currentIndex>=0&&filteredTracks[currentIndex]){
