@@ -34,7 +34,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Montserrat', san
 .pw-btn { width: 100%; background: var(--red); color: #fff; border: none; padding: 12px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; border-radius: 4px; text-transform: uppercase; }
 .pw-btn:hover { background: #c4070f; }
 .pw-error { font-size: 11px; color: var(--red); margin-top: 10px; display: none; }
-
 #main { display: none; }
 #main.visible { display: block; }
 
@@ -43,17 +42,14 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
 .logo-mark { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 5px 8px; border-radius: 3px; }
 .logo-name { font-size: 13px; font-weight: 600; letter-spacing: 2px; }
-
-/* NAV TABS */
 .nav-tabs { display: flex; align-items: center; gap: 4px; }
 .nav-tab { background: none; border: none; color: var(--muted); font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1px; padding: 8px 16px; cursor: pointer; border-radius: 4px; transition: all 0.15s; text-transform: uppercase; position: relative; }
 .nav-tab:hover { color: var(--text); background: var(--bg3); }
 .nav-tab.active { color: var(--text); }
 .nav-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 16px; right: 16px; height: 2px; background: var(--red); border-radius: 2px 2px 0 0; }
-
 .header-right { display: flex; align-items: center; gap: 10px; }
 .search-wrap { position: relative; }
-.search-wrap input { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 8px 14px 8px 32px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 12px; outline: none; width: 240px; transition: border-color 0.2s; }
+.search-wrap input { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 8px 14px 8px 32px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 12px; outline: none; width: 240px; transition: all 0.2s; }
 .search-wrap input:focus { border-color: #555; width: 300px; }
 .search-wrap input::placeholder { color: var(--muted); }
 .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 13px; pointer-events: none; }
@@ -71,7 +67,7 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .view { display: none; padding-top: 64px; }
 .view.active { display: block; }
 
-/* === ACCUEIL === */
+/* ===== ACCUEIL ===== */
 .hero { position: relative; height: 88vh; min-height: 520px; display: flex; align-items: flex-end; overflow: hidden; }
 .hero-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1800&q=80') center/cover no-repeat; animation: heroZoom 12s ease-in-out infinite alternate; }
 @keyframes heroZoom { from{transform:scale(1.0)} to{transform:scale(1.07)} }
@@ -92,14 +88,27 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
 .hero-scroll-line { width: 1px; height: 28px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.35)); }
 
-.ticker-wrap { overflow: hidden; padding: 12px 0; background: #0a0a0a; border-top: 1px solid rgba(255,255,255,0.07); border-bottom: 1px solid rgba(255,255,255,0.07); }
-.ticker-track { display: flex; gap: 48px; white-space: nowrap; animation: ticker 22s linear infinite; }
+/* TICKER */
+.ticker-wrap { overflow: hidden; padding: 14px 0; background: #080808; border-top: 1px solid rgba(255,255,255,0.07); border-bottom: 1px solid rgba(255,255,255,0.07); }
+.ticker-track { display: flex; gap: 56px; white-space: nowrap; animation: ticker 28s linear infinite; }
 @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-.ticker-item { font-weight: 900; flex-shrink: 0; }
+.ticker-item { font-weight: 900; flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+.ticker-dot { display: inline-block; width: 4px; height: 4px; background: var(--red); border-radius: 50%; opacity: 0.5; }
 
+/* LOGOS CHAINES ANIMES */
+.channels-section { padding: 64px; background: #0a0a0a; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.channels-inner { max-width: 1280px; margin: 0 auto; }
+.channels-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 5px; color: #444; text-transform: uppercase; margin-bottom: 40px; text-align: center; }
+.channels-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 16px; margin-bottom: 48px; }
+.channel-card { background: #111; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 20px 12px; text-align: center; transition: all 0.3s; cursor: default; }
+.channel-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); background: #1a1a1a; }
+.channel-name { font-size: 13px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; }
+.channel-shows { font-size: 9px; color: #555; line-height: 1.6; font-weight: 300; }
+
+/* STATS */
 .stats-section { padding: 80px 64px; background: #0a0a0a; }
 .stats-inner { max-width: 1280px; margin: 0 auto; }
-.stats-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 5px; color: #444; text-transform: uppercase; margin-bottom: 12px; text-align: center; }
+.stats-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 5px; color: #666; text-transform: uppercase; margin-bottom: 12px; text-align: center; }
 .stats-title { font-size: clamp(24px,3vw,40px); font-weight: 900; letter-spacing: -1px; text-align: center; margin-bottom: 48px; }
 .stats-title span { color: var(--red); }
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 64px; }
@@ -108,50 +117,91 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .stat-card:hover { border-color: rgba(229,9,20,0.25); transform: translateY(-4px); }
 .stat-card:hover::before { transform:scaleX(1); }
 .stat-num { font-size: 52px; font-weight: 900; color: var(--red); line-height: 1; margin-bottom: 8px; }
-.stat-label { font-size: 10px; color: #555; letter-spacing: 2px; text-transform: uppercase; }
-.stat-sub { font-size: 11px; color: #444; margin-top: 6px; font-weight: 300; }
-
-.refs-section-title { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+.stat-label { font-size: 10px; color: #aaa; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+.stat-sub { font-size: 13px; color: #777; margin-top: 6px; font-weight: 400; line-height: 1.5; }
+.refs-section-title { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #555; margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+.refs-section-title strong { color: #fff; font-size: 18px; letter-spacing: -0.5px; font-weight: 900; text-transform: none; }
 .refs-section-title::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.06); }
-
 .refs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 12px; }
-.refs-block { background: #111; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 20px 22px; transition: all 0.25s; cursor: default; }
+.refs-block { background: #111; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 20px 22px; transition: all 0.25s; }
 .refs-block:hover { border-color: rgba(229,9,20,0.25); background: #161616; transform: translateY(-2px); }
-.refs-channel { font-size: 10px; font-weight: 700; color: var(--red); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.refs-channel { font-size: 11px; font-weight: 700; color: var(--red); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 .refs-channel::before { content:''; display:block; width:4px; height:4px; background:var(--red); border-radius:50%; }
-.refs-shows { font-size: 12px; color: #666; line-height: 2; font-weight: 300; }
-.refs-shows strong { color: #999; font-weight: 500; }
+.refs-shows { font-size: 13px; color: #777; line-height: 2.4; font-weight: 300; }
+.refs-shows strong { color: #bbb; font-weight: 600; }
 
-/* === PLAYLISTS === */
-.playlists-page { padding: 48px 64px 120px; }
-.page-header { margin-bottom: 36px; }
-.page-title { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text2); margin-bottom: 6px; }
-.page-sub { font-size: 13px; color: var(--muted); }
+/* ===== PLAYLISTS PAGE ===== */
+#view-playlists { background: var(--bg); }
+.pl-page-header { padding: 40px 64px 24px; }
+.pl-page-title { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text2); margin-bottom: 6px; }
+.pl-page-sub { font-size: 13px; color: var(--muted); }
 
-/* THEME GROUPS */
-.theme-group { margin-bottom: 48px; }
-.theme-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
-.theme-label::before { content: ''; display: block; width: 3px; height: 14px; background: var(--red); border-radius: 2px; }
-.pl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+/* GRILLE PLAYLISTS PLEINE PAGE */
+.themes-wrap { padding: 0 64px 120px; }
+.theme-group { margin-bottom: 56px; }
+.theme-label { font-size: 9px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
+.theme-label::before { content:''; display:block; width:3px; height:14px; background:var(--red); border-radius:2px; }
+.pl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 
-/* PLAYLIST CARDS */
-.pl-card { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; cursor: pointer; transition: all 0.3s; }
-.pl-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 24px 60px rgba(0,0,0,0.8); }
-.pl-card:hover .pl-photo { transform: scale(1.09); }
-.pl-card:hover .pl-overlay { background: linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.25) 100%); }
-.pl-card:hover .pl-play { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+/* PLAYLIST CARD — style BMG */
+.pl-card { position: relative; border-radius: 10px; overflow: hidden; cursor: pointer; transition: all 0.3s; background: #111; border: 1px solid rgba(255,255,255,0.06); }
+.pl-card:hover { transform: translateY(-6px); box-shadow: 0 28px 70px rgba(0,0,0,0.9); border-color: rgba(255,255,255,0.12); }
+.pl-card:hover .pl-photo { transform: scale(1.06); }
+.pl-card:hover .pl-play-btn { opacity: 1; transform: scale(1); }
+.pl-photo-wrap { position: relative; aspect-ratio: 1/1; overflow: hidden; }
 .pl-photo { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.5s ease; }
-.pl-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.1) 60%, transparent 100%); transition: background 0.3s; }
-.pl-color-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-.pl-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.75); width: 46px; height: 46px; background: rgba(229,9,20,0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: all 0.3s; font-size: 16px; color: #fff; }
-.pl-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px; }
-.pl-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 3px; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
-.pl-count { font-size: 9px; color: rgba(255,255,255,0.55); margin-bottom: 7px; letter-spacing: 1px; }
-.pl-tags { display: flex; flex-wrap: wrap; gap: 3px; }
-.pl-tag { font-size: 9px; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.12); padding: 2px 7px; border-radius: 8px; backdrop-filter: blur(4px); }
+.pl-photo-ov { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7) 100%); }
+.pl-color-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 2; }
+.pl-play-btn { position: absolute; bottom: 14px; right: 14px; width: 44px; height: 44px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.8); transition: all 0.25s; z-index: 3; font-size: 16px; color: #fff; box-shadow: 0 4px 20px rgba(229,9,20,0.5); }
+.pl-info { padding: 16px 18px 18px; }
+.pl-genres { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+.pl-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.2; }
+.pl-desc { font-size: 11px; color: #666; line-height: 1.7; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.pl-meta { display: flex; align-items: center; justify-content: space-between; }
+.pl-count-badge { font-size: 10px; color: #555; font-weight: 500; }
+.pl-tags-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.pl-tag { font-size: 9px; color: #555; background: rgba(255,255,255,0.05); padding: 2px 7px; border-radius: 6px; }
 
-/* === CATALOGUE === */
-.catalogue-page { padding-top: 0; }
+/* ===== VUE DETAIL PLAYLIST (style BMG) ===== */
+#view-playlist-detail { background: var(--bg); }
+.pd-hero { position: relative; height: 420px; display: flex; align-items: flex-end; overflow: hidden; }
+.pd-hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: background-image 0.4s; }
+.pd-hero-ov { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.2) 100%); }
+.pd-hero-content { position: relative; z-index: 2; padding: 0 64px 48px; display: flex; align-items: flex-end; gap: 40px; width: 100%; }
+.pd-cover { width: 180px; height: 180px; border-radius: 10px; overflow: hidden; flex-shrink: 0; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+.pd-cover img { width: 100%; height: 100%; object-fit: cover; }
+.pd-meta { flex: 1; min-width: 0; }
+.pd-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 4px; color: var(--red); text-transform: uppercase; margin-bottom: 10px; }
+.pd-title { font-size: clamp(28px, 4vw, 52px); font-weight: 900; letter-spacing: -1.5px; line-height: 1; margin-bottom: 12px; }
+.pd-genres { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 14px; letter-spacing: 1px; }
+.pd-desc { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.7; max-width: 600px; margin-bottom: 20px; }
+.pd-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+.pd-tag { font-size: 10px; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.08); padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+.pd-actions { display: flex; gap: 10px; align-items: center; }
+.pd-btn-play { background: var(--red); color: #fff; border: none; padding: 12px 24px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+.pd-btn-play:hover { background: #ff1a1a; transform: translateY(-2px); }
+.pd-btn-back { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 12px 20px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1px; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+.pd-btn-back:hover { background: rgba(255,255,255,0.18); }
+.pd-count { font-size: 11px; color: #666; }
+
+/* TRACK LIST DANS DETAIL */
+.pd-tracks { padding: 32px 64px 160px; }
+.pd-tracks-header { display: grid; grid-template-columns: 52px 52px 1fr 80px 44px 44px; gap: 12px; padding: 8px 14px; font-size: 9px; font-weight: 700; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+.pd-track { display: grid; grid-template-columns: 52px 52px 1fr 80px 44px 44px; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; transition: background 0.15s; border-radius: 6px; }
+.pd-track:hover { background: var(--bg2); }
+.pd-track.playing { background: rgba(229,9,20,0.07); }
+.pd-track-num { font-size: 12px; color: var(--muted); text-align: center; }
+.pd-track.playing .pd-track-num { display: none; }
+.pd-track-icon { display: none; color: var(--red); font-size: 13px; text-align: center; }
+.pd-track.playing .pd-track-icon { display: block; }
+.pd-thumb { width: 44px; height: 44px; border-radius: 4px; background-size: cover; background-position: center; flex-shrink: 0; }
+.pd-track-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pd-track.playing .pd-track-title { color: var(--red); }
+.pd-track-dur { font-size: 11px; color: var(--muted); text-align: right; }
+.pd-track-btn { background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.15s; border-radius: 4px; }
+.pd-track-btn:hover { border-color: var(--border); color: var(--text2); background: var(--bg3); }
+
+/* ===== CATALOGUE ===== */
 .search-active-bar { padding: 10px 48px; background: rgba(229,9,20,0.05); border-bottom: 1px solid rgba(229,9,20,0.12); display: none; align-items: center; gap: 8px; font-size: 11px; color: var(--text2); flex-wrap: wrap; }
 .search-active-bar.visible { display: flex; }
 .kw-tag { background: rgba(229,9,20,0.15); border: 1px solid rgba(229,9,20,0.3); color: #ff6666; padding: 2px 8px; border-radius: 8px; font-size: 10px; }
@@ -174,7 +224,6 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .track { display: grid; grid-template-columns: 48px 1fr 160px 60px 44px 44px 44px; align-items: center; gap: 12px; padding: 11px 14px; cursor: pointer; transition: background 0.15s; border-radius: 4px; }
 .track:hover { background: var(--bg2); box-shadow: inset 3px 0 0 var(--red); }
 .track.playing { background: rgba(229,9,20,0.07); box-shadow: inset 3px 0 0 var(--red); }
-.track.in-queue { border-left: 2px solid var(--red); }
 .track-num { font-size: 12px; color: var(--muted); text-align: center; }
 .track.playing .track-num { display: none; }
 .track-play-icon { display: none; color: var(--red); font-size: 14px; text-align: center; }
@@ -188,13 +237,14 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .track-duration { font-size: 12px; color: var(--muted); text-align: right; }
 .track-btn { background: none; border: 1px solid transparent; color: var(--muted); cursor: pointer; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.15s; border-radius: 4px; }
 .track-btn:hover { border-color: var(--border); color: var(--text2); background: var(--bg3); }
-.track.in-queue .queue-btn { color: var(--red); }
 .match-hl { background: rgba(229,9,20,0.22); color: #ff9999; border-radius: 2px; padding: 0 2px; }
 
 /* PLAYER */
-#player { position: fixed; bottom: 0; left: 0; right: 0; background: #0a0a0a; border-top: 1px solid var(--border); padding: 0 48px; height: 80px; z-index: 200; display: none; align-items: center; }
+#player { position: fixed; bottom: 0; left: 0; right: 0; background: #080808; border-top: 1px solid var(--border); padding: 0 48px; height: 80px; z-index: 200; display: none; align-items: center; }
 #player.visible { display: flex; }
 .player-inner { width: 100%; display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: center; gap: 24px; }
+.player-track-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.player-thumb { width: 44px; height: 44px; border-radius: 4px; background-size: cover; background-position: center; flex-shrink: 0; background-color: var(--bg3); }
 .p-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
 .p-playlist { font-size: 10px; color: var(--text2); }
 .player-controls { display: flex; flex-direction: column; align-items: center; gap: 5px; }
@@ -260,7 +310,7 @@ audio{display:none}
 /* MISC */
 .loading { text-align: center; padding: 80px; color: var(--muted); font-size: 12px; letter-spacing: 2px; }
 .ld { display: inline-block; animation: pulse 1.2s infinite; }
-.ld:nth-child(2){animation-delay:.2s} .ld:nth-child(3){animation-delay:.4s}
+.ld:nth-child(2){animation-delay:.2s}.ld:nth-child(3){animation-delay:.4s}
 @keyframes pulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
 .empty { text-align: center; padding: 80px; color: var(--muted); font-size: 12px; letter-spacing: 2px; }
 .copy-toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--bg3); border: 1px solid rgba(229,9,20,0.3); color: var(--text); padding: 9px 18px; border-radius: 20px; font-size: 12px; opacity: 0; transition: all 0.3s; z-index: 999; pointer-events: none; }
@@ -269,16 +319,22 @@ audio{display:none}
 @media(max-width:900px){
   header{padding:0 16px}
   .hero-content{padding:0 24px 48px}
-  .playlists-page,.stats-section{padding-left:16px;padding-right:16px}
+  .channels-section,.stats-section{padding:32px 16px}
+  .channels-grid{grid-template-columns:repeat(4,1fr)}
+  .themes-wrap,.pl-page-header{padding-left:16px;padding-right:16px}
+  .pl-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
   .pl-nav,.tag-nav,.tracks-section{padding-left:16px;padding-right:16px}
   .tracks-header{display:none}
   .track{grid-template-columns:36px 1fr auto 34px 34px}
   .track-badge,.track-duration{display:none}
   #player{padding:0 16px;height:64px}
   .player-inner{grid-template-columns:1fr auto;gap:12px}
-  .player-info,.player-right{display:none}
+  .player-right{display:none}
   .search-wrap input{width:130px}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .pd-hero-content{padding:0 20px 32px;flex-direction:column;align-items:flex-start;gap:20px}
+  .pd-cover{width:100px;height:100px}
+  .pd-tracks{padding:16px 16px 160px}
 }
 </style>
 </head>
@@ -313,7 +369,7 @@ audio{display:none}
   <div class="header-right">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" id="search" placeholder="piano doux calme..." oninput="onSearch()" onfocus="showSuggestions()" onblur="setTimeout(hideSuggestions,200)">
+      <input type="text" id="search" placeholder="piano suspense groovy..." oninput="onSearch()" onfocus="showSuggestions()" onblur="setTimeout(hideSuggestions,200)">
       <div class="suggestions" id="suggestions"></div>
     </div>
     <button class="btn-nav" onclick="toggleQueue()" style="position:relative">🎵 Ma liste <span class="queue-badge" id="queue-badge"></span></button>
@@ -350,30 +406,55 @@ audio{display:none}
 
   <div class="ticker-wrap">
     <div class="ticker-track">
-      <span class="ticker-item" style="font-size:17px;color:#E50914">TF1</span>
-      <span class="ticker-item" style="font-size:13px;color:#0055A5">FRANCE 2</span>
-      <span class="ticker-item" style="font-size:17px;color:#fff">M6</span>
-      <span class="ticker-item" style="font-size:12px;color:#fff;letter-spacing:3px">ARTE</span>
-      <span class="ticker-item" style="font-size:13px;color:#fff">CANAL+</span>
-      <span class="ticker-item" style="font-size:15px;color:#FF6600">C8</span>
-      <span class="ticker-item" style="font-size:12px;color:#EE6600">FRANCE 3</span>
-      <span class="ticker-item" style="font-size:11px;color:#0077CC">RMC DÉCOUVERTE</span>
-      <span class="ticker-item" style="font-size:13px;color:#fff">TMC</span>
-      <span class="ticker-item" style="font-size:13px;color:#FFD700">TFX</span>
-      <span class="ticker-item" style="font-size:13px;color:#CC0000">W9</span>
-      <span class="ticker-item" style="font-size:11px;color:#00AAFF">USHUAÏA TV</span>
-      <span class="ticker-item" style="font-size:12px;color:#888">CINÉMA</span>
-      <span class="ticker-item" style="font-size:17px;color:#E50914">TF1</span>
-      <span class="ticker-item" style="font-size:13px;color:#0055A5">FRANCE 2</span>
-      <span class="ticker-item" style="font-size:17px;color:#fff">M6</span>
-      <span class="ticker-item" style="font-size:12px;color:#fff;letter-spacing:3px">ARTE</span>
-      <span class="ticker-item" style="font-size:13px;color:#fff">CANAL+</span>
-      <span class="ticker-item" style="font-size:15px;color:#FF6600">C8</span>
-      <span class="ticker-item" style="font-size:12px;color:#EE6600">FRANCE 3</span>
-      <span class="ticker-item" style="font-size:11px;color:#0077CC">RMC DÉCOUVERTE</span>
-      <span class="ticker-item" style="font-size:13px;color:#FFD700">TFX</span>
-      <span class="ticker-item" style="font-size:13px;color:#CC0000">W9</span>
-      <span class="ticker-item" style="font-size:12px;color:#888">CINÉMA</span>
+      <span class="ticker-item"><span style="font-size:17px;color:#E50914;font-weight:900">TF1</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:13px;color:#0055A5;font-weight:900">FRANCE 2</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:17px;color:#fff;font-weight:900">M6</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:12px;color:#fff;letter-spacing:4px;font-weight:900">ARTE</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:13px;color:#fff;font-weight:900">CANAL+</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:15px;color:#FF6600;font-weight:900">C8</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:12px;color:#EE6600;font-weight:900">FRANCE 3</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:11px;color:#0077CC;font-weight:900">RMC DÉCOUVERTE</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:13px;color:#FFD700;font-weight:900">TFX</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:13px;color:#CC0000;font-weight:900">W9</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:11px;color:#00AAFF;font-weight:900">USHUAÏA TV</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:12px;color:#888;font-weight:900">CINÉMA</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:13px;color:#fff;font-weight:900">TMC</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:17px;color:#E50914;font-weight:900">TF1</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:13px;color:#0055A5;font-weight:900">FRANCE 2</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:17px;color:#fff;font-weight:900">M6</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:12px;color:#fff;letter-spacing:4px;font-weight:900">ARTE</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:13px;color:#fff;font-weight:900">CANAL+</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:15px;color:#FF6600;font-weight:900">C8</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:12px;color:#EE6600;font-weight:900">FRANCE 3</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:11px;color:#0077CC;font-weight:900">RMC DÉCOUVERTE</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:13px;color:#FFD700;font-weight:900">TFX</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:13px;color:#CC0000;font-weight:900">W9</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:11px;color:#00AAFF;font-weight:900">USHUAÏA TV</span></span>
+      <span class="ticker-dot"></span>
+      <span class="ticker-item"><span style="font-size:12px;color:#888;font-weight:900">CINÉMA</span></span>
     </div>
   </div>
 
@@ -388,7 +469,7 @@ audio{display:none}
           <div class="stat-sub">Du service public au câble</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">1028</div>
+          <div class="stat-num">2560</div>
           <div class="stat-label">Titres originaux</div>
           <div class="stat-sub">Disponibles en licence</div>
         </div>
@@ -403,76 +484,16 @@ audio{display:none}
           <div class="stat-sub">Supervision & composition</div>
         </div>
       </div>
-
-      <div class="refs-section-title">Ils nous font confiance</div>
+      <div class="refs-section-title"><strong>Ils nous font confiance</strong></div>
       <div class="refs-grid">
-        <div class="refs-block">
-          <div class="refs-channel">France 2</div>
-          <div class="refs-shows">
-            <strong>Cash Investigation</strong><br>
-            <strong>Envoyé Spécial</strong><br>
-            <strong>Complément d'Enquête</strong><br>
-            <strong>Stupéfiant !</strong>
-          </div>
-        </div>
-        <div class="refs-block">
-          <div class="refs-channel">TF1</div>
-          <div class="refs-shows">
-            <strong>50' Inside</strong><br>
-            <strong>7 à 8</strong><br>
-            <strong>Grands Reportages</strong><br>
-            <strong>La France en Bleu</strong>
-          </div>
-        </div>
-        <div class="refs-block">
-          <div class="refs-channel">M6</div>
-          <div class="refs-shows">
-            <strong>Zone Interdite</strong><br>
-            <strong>Enquête Exclusive</strong><br>
-            <strong>Salon de l'Agriculture</strong>
-          </div>
-        </div>
-        <div class="refs-block">
-          <div class="refs-channel">ARTE</div>
-          <div class="refs-shows">
-            <strong>Avortement — Les Croisés</strong><br>
-            <strong>Rhino Dollars</strong><br>
-            <strong>Madagascar</strong>
-          </div>
-        </div>
-        <div class="refs-block">
-          <div class="refs-channel">Canal+</div>
-          <div class="refs-shows">
-            <strong>Sélectionneurs</strong><br>
-            <strong>Canal+ Afrique</strong>
-          </div>
-        </div>
-        <div class="refs-block">
-          <div class="refs-channel">C8 · CStar · RMC</div>
-          <div class="refs-shows">
-            <strong>100 Jours Gendarmes</strong><br>
-            <strong>Top Mechanic</strong><br>
-            <strong>Méga Fourrière</strong>
-          </div>
-        </div>
-        <div class="refs-block">
-          <div class="refs-channel">TMC · TFX · W9</div>
-          <div class="refs-shows">
-            <strong>Martin Weil</strong><br>
-            <strong>Nicolas Canteloup</strong><br>
-            <strong>Wedding Planners</strong><br>
-            <strong>Johnny Hallyday</strong>
-          </div>
-        </div>
-        <div class="refs-block">
-          <div class="refs-channel">Cinéma</div>
-          <div class="refs-shows">
-            <strong>Mamma Weed</strong><br>
-            <strong>La Daronne</strong><br>
-            <strong>L'Étreinte</strong><br>
-            <strong>Moby Dick</strong>
-          </div>
-        </div>
+        <div class="refs-block"><div class="refs-channel">France 2</div><div class="refs-shows"><strong>Cash Investigation</strong><br><strong>Envoyé Spécial</strong><br><strong>Complément d'Enquête</strong><br><strong>Stupéfiant !</strong></div></div>
+        <div class="refs-block"><div class="refs-channel">TF1</div><div class="refs-shows"><strong>50' Inside</strong><br><strong>7 à 8</strong><br><strong>Grands Reportages</strong><br><strong>La France en Bleu</strong></div></div>
+        <div class="refs-block"><div class="refs-channel">M6</div><div class="refs-shows"><strong>Zone Interdite</strong><br><strong>Enquête Exclusive</strong><br><strong>Salon de l'Agriculture</strong></div></div>
+        <div class="refs-block"><div class="refs-channel">ARTE</div><div class="refs-shows"><strong>Avortement — Les Croisés</strong><br><strong>Rhino Dollars</strong><br><strong>Madagascar</strong></div></div>
+        <div class="refs-block"><div class="refs-channel">Canal+</div><div class="refs-shows"><strong>Sélectionneurs</strong><br><strong>Canal+ Afrique</strong></div></div>
+        <div class="refs-block"><div class="refs-channel">C8 · CStar · RMC</div><div class="refs-shows"><strong>100 Jours Gendarmes</strong><br><strong>Top Mechanic</strong><br><strong>Méga Fourrière</strong></div></div>
+        <div class="refs-block"><div class="refs-channel">TMC · TFX · W9</div><div class="refs-shows"><strong>Martin Weil</strong><br><strong>Nicolas Canteloup</strong><br><strong>Wedding Planners</strong><br><strong>Johnny Hallyday</strong></div></div>
+        <div class="refs-block"><div class="refs-channel">Cinéma</div><div class="refs-shows"><strong>Mamma Weed</strong><br><strong>La Daronne</strong><br><strong>L'Étreinte</strong><br><strong>Moby Dick</strong></div></div>
       </div>
     </div>
   </div>
@@ -480,12 +501,39 @@ audio{display:none}
 
 <!-- PLAYLISTS -->
 <div class="view" id="view-playlists">
-  <div class="playlists-page">
-    <div class="page-header">
-      <div class="page-title">Playlists</div>
-      <div class="page-sub">28 univers musicaux classés par thème — cliquez pour écouter</div>
+  <div class="pl-page-header">
+    <div class="pl-page-title">Playlists</div>
+    <div class="pl-page-sub">28 univers musicaux classés par thème — cliquez pour découvrir</div>
+  </div>
+  <div class="themes-wrap" id="themes-container"></div>
+</div>
+
+<!-- DETAIL PLAYLIST -->
+<div class="view" id="view-playlist-detail">
+  <div class="pd-hero" id="pd-hero">
+    <div class="pd-hero-bg" id="pd-hero-bg"></div>
+    <div class="pd-hero-ov"></div>
+    <div class="pd-hero-content">
+      <div class="pd-cover"><img id="pd-cover-img" src="" alt=""></div>
+      <div class="pd-meta">
+        <div class="pd-eyebrow" id="pd-eyebrow">Playlist OSM</div>
+        <div class="pd-title" id="pd-title">—</div>
+        <div class="pd-genres" id="pd-genres">—</div>
+        <div class="pd-desc" id="pd-desc">—</div>
+        <div class="pd-tags" id="pd-tags"></div>
+        <div class="pd-actions">
+          <button class="pd-btn-play" onclick="playAllDetail()">▶ Tout écouter</button>
+          <button class="pd-btn-back" onclick="showView('playlists')">← Retour</button>
+          <span class="pd-count" id="pd-count"></span>
+        </div>
+      </div>
     </div>
-    <div id="themes-container"></div>
+  </div>
+  <div class="pd-tracks" id="pd-tracks">
+    <div class="pd-tracks-header">
+      <span>#</span><span></span><span>Titre</span><span>Durée</span><span></span><span></span>
+    </div>
+    <div id="pd-track-list"></div>
   </div>
 </div>
 
@@ -500,9 +548,7 @@ audio{display:none}
       <span class="section-count" id="section-count"></span>
       <span class="section-tag" id="section-tag" style="display:none"></span>
     </div>
-    <div class="tracks-header">
-      <span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span></span><span></span><span></span>
-    </div>
+    <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span></span><span></span><span></span></div>
     <div id="track-list" class="track-list">
       <div class="loading"><span class="ld">·</span><span class="ld">·</span><span class="ld">·</span> Chargement</div>
     </div>
@@ -511,9 +557,12 @@ audio{display:none}
 
 <div id="player">
   <div class="player-inner">
-    <div class="player-info">
-      <div class="p-title" id="p-title">—</div>
-      <div class="p-playlist" id="p-playlist">—</div>
+    <div class="player-track-info">
+      <div class="player-thumb" id="player-thumb"></div>
+      <div>
+        <div class="p-title" id="p-title">—</div>
+        <div class="p-playlist" id="p-playlist">—</div>
+      </div>
     </div>
     <div class="player-controls">
       <div class="player-btns">
@@ -544,7 +593,6 @@ audio{display:none}
     </div>
   </div>
 </div>
-
 <div class="copy-toast" id="copy-toast">🔗 Lien copié !</div>
 </div>
 <audio id="audio"></audio>
@@ -554,329 +602,362 @@ const PASSWORD = 'osm2026';
 function checkPw() {
   if (document.getElementById('pw-input').value === PASSWORD) {
     sessionStorage.setItem('osm_ok','1');
-    document.getElementById('pw-screen').style.display = 'none';
+    document.getElementById('pw-screen').style.display='none';
     document.getElementById('main').classList.add('visible');
     loadCatalogue();
-  } else { document.getElementById('pw-error').style.display = 'block'; }
+  } else { document.getElementById('pw-error').style.display='block'; }
 }
 if (sessionStorage.getItem('osm_ok')==='1') {
-  document.getElementById('pw-screen').style.display = 'none';
+  document.getElementById('pw-screen').style.display='none';
   document.getElementById('main').classList.add('visible');
 }
 
-// PLAYLISTS par THEME avec photos Unsplash
 const THEMES = [
-  {
-    label: "Tension & Action",
-    playlists: [
-      { key: "ACTION - POURSUITE - COMBAT - CHAOS - SPORT - EXTREME - URGENT", label: "Action", color: "#E50914", photo: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=600&q=80", tags: ["combat","sport","urgent","adrénaline","trailer"] },
-      { key: "HARD ROCK - METAL - URGENT - RAGE - EXTREME - AGITATION - RAPIDE", label: "Hard Rock", color: "#c0392b", photo: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=600&q=80", tags: ["metal","rage","riff","guitare","extrême"] },
-      { key: "SUSPENSE - INVESTIGATION - ENQUETE - ANGOISSE - ESPIONNAGE - POLICIER", label: "Suspense", color: "#2980b9", photo: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=600&q=80", tags: ["thriller","enquête","tension","espionnage"] },
-      { key: "PARANORMAL - EXPERIMENTAL - HYPNOTIQUE", label: "Paranormal", color: "#6a0dad", photo: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=600&q=80", tags: ["mystère","angoisse","hypnotique","drone"] },
-    ]
-  },
-  {
-    label: "Émotion & Intimité",
-    playlists: [
-      { key: "PIANO - CLASSIQUE - INTIMISTE - CALME - MELANCOLIQUE - COSY - DOUX", label: "Piano", color: "#95a5a6", photo: "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=600&q=80", tags: ["classique","intimiste","calme","solo","émotion"] },
-      { key: "ROMANCE - MELANCOLIQUE - AMOUR - NOSTALGIE - TRISTESSE - DRAME", label: "Romance", color: "#e91e63", photo: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600&q=80", tags: ["amour","nostalgie","drame","sentimental"] },
-      { key: "NEUTRE- MELANCOLIE - TRISTESSE", label: "Mélancolie", color: "#5d6d7e", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80", tags: ["tristesse","introspection","minimaliste","portrait"] },
-      { key: "NEUTRE - POSITIF - HAPPY", label: "Neutre Positif", color: "#2ecc71", photo: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80", tags: ["positif","corporate","léger","institutionnel"] },
-    ]
-  },
-  {
-    label: "Épique & Cinématique",
-    playlists: [
-      { key: "ORCHESTRAL - EPIQUE - SYMPHONIQUE - HARMONIE - HEROIQUE", label: "Orchestral", color: "#8e44ad", photo: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600&q=80", tags: ["épique","symphonique","héroïque","cordes","cinéma"] },
-      { key: "ATMOSPHERE - GRANDS ESPACES - AERIEN - COSMIQUE - ABYSSAL", label: "Atmosphère", color: "#4a90d9", photo: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=600&q=80", tags: ["cosmique","aérien","drone","documentaire","nature"] },
-      { key: "TRANSITION - JINGLE - VIRGULE - PONCTUATION - RISE - WHOOSH", label: "Transition", color: "#7f8c8d", photo: "https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=600&q=80", tags: ["jingle","sting","TV","podcast","court"] },
-      { key: "LOOPS - BOUCLE - LOOPING - BPM - METRONOME - ADAPTIVE", label: "Loops", color: "#1abc9c", photo: "https://images.unsplash.com/photo-1516223725307-6f76b9ec8742?w=600&q=80", tags: ["boucle","BPM","adaptive","jeu vidéo","montage"] },
-    ]
-  },
-  {
-    label: "Groove & Énergie",
-    playlists: [
-      { key: "GROOVY - FUNKY - DISCO - RYTHMIQUE - GIMMICK - VIF - EVEILLE", label: "Groovy", color: "#f39c12", photo: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80", tags: ["funky","disco","basse","cuivres","pub"] },
-      { key: "ELECTRO - ELECTRONIQUE - BEAT - CLUBBING - DEEJAYING - PARTY", label: "Électro", color: "#00c2ff", photo: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80", tags: ["beat","club","EDM","dance","nocturne"] },
-      { key: "ELECTRO - POP - ACTUEL - URBAIN - ARTY - ENERGIQUE - CORPORATE", label: "Électro-Pop", color: "#9b59b6", photo: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=80", tags: ["actuel","brand","lifestyle","corporate","dynamique"] },
-      { key: "ROCK - RIFFS - GUITARE - ELECTRIQUE - GARAGE - LIVE - ROCK N ROLL", label: "Rock", color: "#e74c3c", photo: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=600&q=80", tags: ["riff","guitare","live","attitude","rébellion"] },
-      { key: "URBAN - R&B - HIP HOP - STREET - ART - RAP - BEAT", label: "Urban", color: "#7d3c98", photo: "https://images.unsplash.com/photo-1547528005-3a8e9af13a2c?w=600&q=80", tags: ["hip hop","R&B","trap","street","clip"] },
-    ]
-  },
-  {
-    label: "Acoustique & Folk",
-    playlists: [
-      { key: "FOLK ACOUSTIQUE - ELECTRO ACOUSTIQUE - RELAX - GUITARE - HARMONY", label: "Folk Acoustique", color: "#6db33f", photo: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=600&q=80", tags: ["guitare","relax","intimiste","fingerpicking","nature"] },
-      { key: "POP ACOUSTIQUE - SOFT - BALLADE - ACTUEL - ROAD - CHALEUREUX", label: "Pop Acoustique", color: "#27ae60", photo: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=80", tags: ["ballade","road","chaleureux","feel-good","mélodie"] },
-      { key: "COUNTRY BLUES - DOBRO - BOOGIE-WOOGIE - GUITARE - USA", label: "Country Blues", color: "#c49a2a", photo: "https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=600&q=80", tags: ["blues","dobro","americana","western","vintage"] },
-    ]
-  },
-  {
-    label: "Jazz & Rétro",
-    playlists: [
-      { key: "SWING - JAZZ - RYTHME - BIG BAND - JIVE - MANOUCHE", label: "Swing Jazz", color: "#f39c12", photo: "https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=600&q=80", tags: ["jazz","big band","manouche","élégance","rétro"] },
-      { key: "PANAME - PARIS - RETRO - ACCORDEON - PIGALLE - MONTMARTRE", label: "Paname", color: "#d35400", photo: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80", tags: ["Paris","accordéon","Montmartre","bistrot","chanson française"] },
-      { key: "REGGAE - REGGATON - SKA - FUSION - JAMAICA", label: "Reggae", color: "#16a085", photo: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80", tags: ["jamaïque","ska","tropical","roots","festif"] },
-    ]
-  },
-  {
-    label: "Légèreté & Humour",
-    playlists: [
-      { key: "BURLESQUE - HUMOUR - COMIQUE - THEATRAL - LEGER - COCASSE", label: "Burlesque", color: "#f5a623", photo: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=600&q=80", tags: ["humour","comique","cartoon","légèreté","animation"] },
-      { key: "LUDIQUE - ENFANTIN - DIVERTISSANT - THEATRAL - DROLE - AMUSANT", label: "Ludique", color: "#f1c40f", photo: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", tags: ["enfantin","jeunesse","famille","magie","coloré"] },
-      { key: "PIZZICATO - STACCATO - DRAMEDY - BETISIER - CARTOON - ANIMATION", label: "Pizzicato", color: "#e91e8c", photo: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=600&q=80", tags: ["staccato","espiègle","cartoon","bêtisier","making-of"] },
-    ]
-  },
-  {
-    label: "Monde & Voyage",
-    playlists: [
-      { key: "WORLD MUSIC - ETHNIQUE - CULTURE - METISSAGE - TRADITIONNEL", label: "World Music", color: "#16a085", photo: "https://images.unsplash.com/photo-1521335629791-ce4aec67dd15?w=600&q=80", tags: ["ethnique","voyage","diversité","fusion","reportage"] },
-      { key: "LATINO - AUSTRAL - MEXICAN - AMERIQUE DU SUD - CULTURE - WESTERN", label: "Latino", color: "#e67e22", photo: "https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=600&q=80", tags: ["salsa","tango","tropical","festif","documentaire"] },
-    ]
-  },
+  { label:"Tension & Action", playlists:[
+    { key:"ACTION - POURSUITE - COMBAT - CHAOS - SPORT - EXTREME - URGENT", label:"Action", color:"#E50914", photo:"https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&q=80", genres:"Orchestral · Électro hybride · Percussions · Rock épique", desc:"Des musiques taillées pour les séquences à haute intensité : courses-poursuites, scènes de combat, climax dramatiques et montages sportifs. Rythmiques percussives, cordes tendues, cuivres puissants au service de l'adrénaline.", tags:["action","poursuite","combat","sport","urgent","adrénaline","trailer","cinéma"] },
+    { key:"HARD ROCK - METAL - URGENT - RAGE - EXTREME - AGITATION - RAPIDE", label:"Hard Rock", color:"#c0392b", photo:"https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=800&q=80", genres:"Hard rock · Metal · Heavy · Thrash · Punk rock", desc:"La puissance brute du rock et du metal pour les séquences d'intensité maximale. Guitares saturées, double pédale, riffs implacables au service des séquences de conflit et de dépassement de soi.", tags:["hard rock","metal","rage","riff","extrême","sport extrême","impact"] },
+    { key:"SUSPENSE - INVESTIGATION - ENQUETE - ANGOISSE - ESPIONNAGE - POLICIER", label:"Suspense", color:"#2980b9", photo:"https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=800&q=80", genres:"Thriller · Dark ambient · Orchestral tension · Néo-noir", desc:"Des musiques de tension et de mystère pour les univers policiers, les thrillers et les narrations à suspense. Ostinatos inquiétants, silences calculés et harmonies ambiguës qui maintiennent le spectateur en haleine.", tags:["suspense","thriller","enquête","tension","espionnage","policier","mystère"] },
+    { key:"PARANORMAL - EXPERIMENTAL - HYPNOTIQUE", label:"Paranormal", color:"#6a0dad", photo:"https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=800&q=80", genres:"Dark ambient · Expérimental · Drone · Musique concrète", desc:"Des sonorités hors du commun pour les univers qui défient la réalité. Textures sonores étranges, dissonances calculées, drones hypnotiques et ambiances inquiétantes qui instaurent un climat de mystère.", tags:["paranormal","mystère","angoisse","hypnotique","drone","thriller","expérimental"] },
+  ]},
+  { label:"Émotion & Intimité", playlists:[
+    { key:"PIANO - CLASSIQUE - INTIMISTE - CALME - MELANCOLIQUE - COSY - DOUX", label:"Piano", color:"#95a5a6", photo:"https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=800&q=80", genres:"Piano solo · Néo-classique · Classique contemporain · Ambient piano", desc:"Le piano seul ou accompagné pour les moments les plus intimes et les plus touchants. Des compositions délicates aux harmonies raffinées qui créent une atmosphère de recueillement, de tendresse et de beauté simple.", tags:["piano","classique","intimiste","calme","mélancolique","doux","émotion","solo"] },
+    { key:"ROMANCE - MELANCOLIQUE - AMOUR - NOSTALGIE - TRISTESSE - DRAME", label:"Romance", color:"#e91e63", photo:"https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80", genres:"Cinematic romance · Orchestral drama · Néo-classique · Piano & cordes", desc:"Des musiques pour les grandes émotions : l'amour, la perte, le souvenir et le déchirement intérieur. Arrangements soyeux, mélodies qui brisent le cœur et harmonies suspendues.", tags:["romance","amour","nostalgie","drame","sentimental","rupture","émotion"] },
+    { key:"NEUTRE- MELANCOLIE - TRISTESSE", label:"Mélancolie", color:"#5d6d7e", photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", genres:"Néo-classique · Piano ambiant · Cordes · Minimaliste", desc:"Des textures sonores douces et mélancoliques pour les séquences chargées d'émotion contenue. Musiques introspectives, harmonies suspendues et arrangements minimalistes qui laissent de l'espace à l'image.", tags:["mélancolie","tristesse","introspection","minimaliste","portrait","intime"] },
+    { key:"NEUTRE - POSITIF - HAPPY", label:"Neutre Positif", color:"#2ecc71", photo:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", genres:"Corporate · Acoustic pop · Light instrumental · Easy listening", desc:"Des musiques légères et bienveillantes pour accompagner les contenus institutionnels, les témoignages et les séquences du quotidien. Atmosphères positives qui créent un contexte sonore neutre et professionnel.", tags:["positif","corporate","léger","institutionnel","interview","tutoriel"] },
+  ]},
+  { label:"Épique & Cinématique", playlists:[
+    { key:"ORCHESTRAL - EPIQUE - SYMPHONIQUE - HARMONIE - HEROIQUE", label:"Orchestral", color:"#8e44ad", photo:"https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800&q=80", genres:"Orchestral · Symphonique · Épique · Néo-romantique · Choral", desc:"La puissance de l'orchestre symphonique pour les images qui demandent grandeur et émotion. Cordes montantes, cuivres majestueux, chœurs et percussions au service des moments de révélation et de victoire.", tags:["orchestral","épique","symphonique","héroïque","cordes","cuivres","cinéma","trailer"] },
+    { key:"ATMOSPHERE - GRANDS ESPACES - AERIEN - COSMIQUE - ABYSSAL", label:"Atmosphère", color:"#4a90d9", photo:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&q=80", genres:"Ambient · Néo-classique · Drone · Orchestral contemplatif · Post-rock", desc:"Musiques contemplatrices pour des images de grand format : paysages naturels, voyages spatiaux, profondeurs sous-marines. Textures aériennes et nappes synthétiques qui donnent de l'air et de la profondeur.", tags:["atmosphère","cosmique","aérien","drone","documentaire","nature","espace"] },
+    { key:"TRANSITION - JINGLE - VIRGULE - PONCTUATION - RISE - WHOOSH", label:"Transition", color:"#7f8c8d", photo:"https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=800&q=80", genres:"Jingle · Sound design · Sting · Rise · Transition musicale", desc:"Des éléments sonores courts et efficaces pour ponctuer vos montages avec précision. Jingles d'identification, rises dramatiques, whooshes et stings conçus pour marquer les changements de séquence.", tags:["jingle","sting","TV","podcast","court","efficace","montage"] },
+    { key:"LOOPS - BOUCLE - LOOPING - BPM - METRONOME - ADAPTIVE", label:"Loops", color:"#1abc9c", photo:"https://images.unsplash.com/photo-1516223725307-6f76b9ec8742?w=800&q=80", genres:"Électro · Ambient loop · Drum loop · Melodic loop · Adaptative", desc:"Des boucles rythmiques et mélodiques conçues pour s'adapter à tous les formats. Idéal pour les monteurs qui travaillent sur des séquences à longueur variable ou des interfaces interactives.", tags:["boucle","BPM","adaptive","jeu vidéo","montage","digital","flexible"] },
+  ]},
+  { label:"Groove & Énergie", playlists:[
+    { key:"GROOVY - FUNKY - DISCO - RYTHMIQUE - GIMMICK - VIF - EVEILLE", label:"Groovy", color:"#f39c12", photo:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80", genres:"Funk · Disco · Soul · Groove · R&B funk · Nu-funk", desc:"Des rythmes irrésistibles et des lignes de basse groovy pour les séquences pleines de vie. Guitares funk, cuivres incisifs, rythmiques disco et gimmicks mémorables qui donnent du punch à l'image.", tags:["groovy","funky","disco","basse","cuivres","pub","TV","lifestyle"] },
+    { key:"ELECTRO - ELECTRONIQUE - BEAT - CLUBBING - DEEJAYING - PARTY", label:"Électro", color:"#00c2ff", photo:"https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80", genres:"Électro · House · Techno · EDM · Deep house · Synthwave", desc:"Des productions électroniques modernes pour les univers urbains et les atmosphères de club. Synthés analogiques, beats 4/4, drops percutants et textures numériques au service des images contemporaines.", tags:["électro","beat","club","EDM","dance","nocturne","lifestyle"] },
+    { key:"ELECTRO - POP - ACTUEL - URBAIN - ARTY - ENERGIQUE - CORPORATE", label:"Électro-Pop", color:"#9b59b6", photo:"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80", genres:"Électro-pop · Indie pop · Corporate pop · Future pop", desc:"Des sonorités pop électroniques actuelles, entre énergie positive et modernité assumée. Mélodie accessible et production soignée pour les contenus corporate, les publicités et les vlogs dynamiques.", tags:["électro pop","actuel","brand","publicité","lifestyle","dynamique","contemporain"] },
+    { key:"ROCK - RIFFS - GUITARE - ELECTRIQUE - GARAGE - LIVE - ROCK N ROLL", label:"Rock", color:"#e74c3c", photo:"https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&q=80", genres:"Rock · Garage rock · Rock alternatif · Indie rock · Classic rock", desc:"L'énergie brute du rock électrique pour les images qui demandent caractère et authenticité. Riffs de guitare incisifs, batterie puissante et son garage qui évoquent la scène et la liberté.", tags:["rock","riff","guitare","live","attitude","sport","rébellion"] },
+    { key:"URBAN - R&B - HIP HOP - STREET - ART - RAP - BEAT", label:"Urban", color:"#7d3c98", photo:"https://images.unsplash.com/photo-1547528005-3a8e9af13a2c?w=800&q=80", genres:"Hip hop · R&B · Trap · Urban soul · Lo-fi · Neo soul", desc:"Des productions urbaines actuelles pour habiller les images de la rue et de la culture hip hop. Beats trap, samples soul, 808 profonds et flows atmosphériques qui donnent une identité forte et moderne.", tags:["hip hop","R&B","trap","street","clip","documentaire","engagé"] },
+  ]},
+  { label:"Acoustique & Folk", playlists:[
+    { key:"FOLK ACOUSTIQUE - ELECTRO ACOUSTIQUE - RELAX - GUITARE - HARMONY", label:"Folk Acoustique", color:"#6db33f", photo:"https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&q=80", genres:"Folk · Acoustic pop · Indie folk · Singer-songwriter", desc:"Des musiques douces et organiques pour les moments de sincérité et de connexion humaine. Guitares acoustiques, arrangements épurés qui créent un sentiment d'authenticité et de proximité.", tags:["folk","acoustique","relax","guitare","intimiste","nature","authentique"] },
+    { key:"POP ACOUSTIQUE - SOFT - BALLADE - ACTUEL - ROAD - CHALEUREUX", label:"Pop Acoustique", color:"#27ae60", photo:"https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80", genres:"Acoustic pop · Indie folk · Singer-songwriter · Soft rock", desc:"Des ballades pop acoustiques contemporaines pour les récits de voyage et les histoires personnelles. Guitares chaleureuses, mélodies mémorables qui créent un lien émotionnel immédiat.", tags:["ballade","road","chaleureux","feel-good","mélodie","voyage","lifestyle"] },
+    { key:"COUNTRY BLUES - DOBRO - BOOGIE-WOOGIE - GUITARE - USA", label:"Country Blues", color:"#c49a2a", photo:"https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=800&q=80", genres:"Country · Blues · Americana · Folk rock · Boogie-woogie", desc:"L'authenticité americana au service de l'image : guitares slide, dobro, harmonica et rythmiques boogie qui évoquent les grands espaces américains et l'héritage musical du Delta.", tags:["blues","dobro","americana","western","vintage","road movie","nostalgie"] },
+  ]},
+  { label:"Jazz & Rétro", playlists:[
+    { key:"SWING - JAZZ - RYTHME - BIG BAND - JIVE - MANOUCHE", label:"Swing Jazz", color:"#f39c12", photo:"https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80", genres:"Jazz · Swing · Manouche · Big band · Bebop · Jazz traditionnel", desc:"L'élégance intemporelle du jazz et du swing pour les images qui respirent la sophistication. Big bands généreux, jazz manouche chaleureux et rythmes jive pour les univers festifs et rétro.", tags:["jazz","big band","manouche","élégance","rétro","années 40","années 50"] },
+    { key:"PANAME - PARIS - RETRO - ACCORDEON - PIGALLE - MONTMARTRE", label:"Paname", color:"#d35400", photo:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80", genres:"Chanson française · Musette · Jazz manouche · Cabaret · Accordéon", desc:"L'âme de Paris et de la chanson française pour habiller les images de la capitale. Accordéon nostalgique, guitare manouche et ambiances de café qui évoquent Montmartre et le charme de Paname.", tags:["Paris","accordéon","Montmartre","bistrot","chanson française","rétro","vintage"] },
+    { key:"REGGAE - REGGATON - SKA - FUSION - JAMAICA", label:"Reggae", color:"#16a085", photo:"https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&q=80", genres:"Reggae · Ska · Dancehall · Reggaeton · Dub · Tropical fusion", desc:"Les rythmes ensoleillés et positifs des Caraïbes pour des images pleines de vie et de liberté. Offbeats caractéristiques, lignes de basse profondes et énergie fusion qui évoquent l'été et la plage.", tags:["jamaïque","ska","tropical","roots","festif","été","liberté"] },
+  ]},
+  { label:"Légèreté & Humour", playlists:[
+    { key:"BURLESQUE - HUMOUR - COMIQUE - THEATRAL - LEGER - COCASSE", label:"Burlesque", color:"#f5a623", photo:"https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80", genres:"Cartoon · Orchestral comique · Circus · Vaudeville · Comédie musicale", desc:"Une sélection légère et espiègle pour les scènes comiques et les situations cocasses. Musiques de cartoon, orchestrations théâtrales et mélodies bondissantes qui soulignent le gag et rythment la comédie.", tags:["humour","comique","cartoon","légèreté","animation","publicité","décalé"] },
+    { key:"LUDIQUE - ENFANTIN - DIVERTISSANT - THEATRAL - DROLE - AMUSANT", label:"Ludique", color:"#f1c40f", photo:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", genres:"Children's music · Cartoon · Orchestral fantaisie · Musical theatre", desc:"Un univers sonore espiègle et coloré pour les contenus jeunesse et les émissions familiales. Mélodies simples et accrocheuses, orchestrations théâtrales qui captivent les jeunes audiences.", tags:["enfantin","jeunesse","famille","magie","coloré","éducatif","animation"] },
+    { key:"PIZZICATO - STACCATO - DRAMEDY - BETISIER - CARTOON - ANIMATION", label:"Pizzicato", color:"#e91e8c", photo:"https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=800&q=80", genres:"Orchestral léger · Cartoon · Pizzicato · Chamber pop · Dramedy", desc:"Des orchestrations légères spécialement calibrées pour les contenus mixant humour et émotion. Pizzicatos de cordes, staccatos espièges qui soulignent le gag et donnent du rebond aux séquences.", tags:["staccato","espiègle","cartoon","bêtisier","making-of","feel-good","famille"] },
+  ]},
+  { label:"Monde & Voyage", playlists:[
+    { key:"WORLD MUSIC - ETHNIQUE - CULTURE - METISSAGE - TRADITIONNEL", label:"World Music", color:"#16a085", photo:"https://images.unsplash.com/photo-1521335629791-ce4aec67dd15?w=800&q=80", genres:"World music · Ethnic · Fusion · Folk du monde · Global sounds", desc:"Un tour du monde sonore pour les images qui célèbrent la diversité culturelle. Instruments traditionnels du monde entier, rythmes ethniques authentiques et arrangements fusion qui ouvrent l'image sur l'ailleurs.", tags:["ethnique","voyage","diversité","fusion","reportage","humanitaire","global"] },
+    { key:"LATINO - AUSTRAL - MEXICAN - AMERIQUE DU SUD - CULTURE - WESTERN", label:"Latino", color:"#e67e22", photo:"https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=800&q=80", genres:"Latin · Flamenco · Salsa · Bossa nova · Tango · Tex-Mex", desc:"Les rythmes chauds et colorés d'Amérique latine pour donner de l'exotisme à vos images. Guitares espagnoles, percussions latines et cuivres festifs qui évoquent les cultures mexicaine, brésilienne et cubaine.", tags:["salsa","tango","tropical","festif","documentaire","exotique","voyage"] },
+  ]},
 ];
 
-// Flatten pour lookup rapide
 const PLAYLIST_MAP = {};
 const TAGS_MAP = {};
-THEMES.forEach(t => t.playlists.forEach(p => {
-  PLAYLIST_MAP[p.key] = p;
-  TAGS_MAP[p.label] = p.tags;
-}));
+THEMES.forEach(t=>t.playlists.forEach(p=>{ PLAYLIST_MAP[p.key]=p; TAGS_MAP[p.label]=p.tags; }));
+function getLabel(key){ return PLAYLIST_MAP[key]?PLAYLIST_MAP[key].label:key; }
+function getInfo(label){ return Object.values(PLAYLIST_MAP).find(p=>p.label===label)||null; }
 
-function getLabel(key) { return PLAYLIST_MAP[key] ? PLAYLIST_MAP[key].label : key; }
+let allTracks=[],filteredTracks=[],currentIndex=-1,currentFolder=null,activeTag=null;
+let queue=[],queueIndex=-1,playingFromQueue=false,shuffleOn=false,repeatOn=false;
+let currentDetailTracks=[],detailIndex=-1;
+const audio=document.getElementById('audio');
 
-let allTracks = [], filteredTracks = [], currentIndex = -1, currentFolder = null, activeTag = null;
-let queue = [], queueIndex = -1, playingFromQueue = false, shuffleOn = false, repeatOn = false;
-const audio = document.getElementById('audio');
+function fmt(s){if(!s||s==='0:00')return'—';return s;}
+function fmt2(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.toString().padStart(2,'0')}`;}
 
-function fmt(s) { if (!s||s==='0:00') return '—'; return s; }
-function fmt2(s) { const m=Math.floor(s/60),sec=Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
-
-function loadCatalogue() {
+function loadCatalogue(){
   fetch('./catalogue.json').then(r=>r.json()).then(data=>{
-    allTracks = (data.tracks||[]).filter(t=>t.playlist!=='samples').map(t=>({...t,playlistLabel:getLabel(t.playlist)}));
+    allTracks=(data.tracks||[]).filter(t=>t.playlist!=='samples').map(t=>({...t,playlistLabel:getLabel(t.playlist)}));
     renderPlaylists();
     renderNavPills();
-  }).catch(()=>{ document.getElementById('track-list').innerHTML='<div class="empty">Erreur de chargement.</div>'; });
+  }).catch(()=>{document.getElementById('track-list').innerHTML='<div class="empty">Erreur de chargement.</div>';});
 }
 
-// NAV VIEWS
-function showView(name) {
+// NAVIGATION
+function showView(name){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
-  document.getElementById('tab-'+name).classList.add('active');
-  if (name==='catalogue') filterTracks();
+  const tab=document.getElementById('tab-'+name);
+  if(tab) tab.classList.add('active');
+  if(name==='catalogue') filterTracks();
 }
 
-// PLAYLISTS PAGE — par thème
-function renderPlaylists() {
-  const counts = {};
-  allTracks.forEach(t=>{ counts[t.playlistLabel]=(counts[t.playlistLabel]||0)+1; });
-  const container = document.getElementById('themes-container');
-  container.innerHTML = THEMES.map(theme=>`
+// PLAYLISTS — grille par thème
+function renderPlaylists(){
+  const counts={};
+  allTracks.forEach(t=>{counts[t.playlistLabel]=(counts[t.playlistLabel]||0)+1;});
+  const container=document.getElementById('themes-container');
+  container.innerHTML=THEMES.map(theme=>`
     <div class="theme-group">
       <div class="theme-label">${theme.label}</div>
       <div class="pl-grid">
         ${theme.playlists.map(p=>`
-          <div class="pl-card" onclick="openPlaylist('${p.label.replace(/'/g,"\\'")}')">
-            <div class="pl-photo" style="background-image:url('${p.photo}')"></div>
-            <div class="pl-overlay"></div>
-            <div class="pl-color-bar" style="background:${p.color}"></div>
-            <div class="pl-play">▶</div>
-            <div class="pl-body">
+          <div class="pl-card" onclick="openPlaylistDetail('${p.label.replace(/'/g,"\\'")}')">
+            <div class="pl-photo-wrap">
+              <div class="pl-photo" style="background-image:url('${p.photo}')"></div>
+              <div class="pl-photo-ov"></div>
+              <div class="pl-color-bar" style="background:${p.color}"></div>
+              <div class="pl-play-btn">▶</div>
+            </div>
+            <div class="pl-info">
+              <div class="pl-genres">${p.genres}</div>
               <div class="pl-name">${p.label}</div>
-              <div class="pl-count">${counts[p.label]||0} morceaux</div>
-              <div class="pl-tags">${p.tags.slice(0,3).map(t=>`<span class="pl-tag">${t}</span>`).join('')}</div>
+              <div class="pl-desc">${p.desc}</div>
+              <div class="pl-meta">
+                <span class="pl-count-badge">${counts[p.label]||0} morceaux</span>
+                <div class="pl-tags-row">${p.tags.slice(0,3).map(t=>`<span class="pl-tag">${t}</span>`).join('')}</div>
+              </div>
             </div>
           </div>`).join('')}
       </div>
     </div>`).join('');
 }
 
-function openPlaylist(label) {
-  showView('catalogue');
-  currentFolder = label; activeTag = null;
-  document.getElementById('search').value = '';
-  document.getElementById('search-active-bar').classList.remove('visible');
-  document.querySelectorAll('.pl-pill').forEach(b=>{ b.classList.toggle('active', b.dataset.label===label); });
-  renderTags(); filterTracks();
+// VUE DETAIL PLAYLIST style BMG
+function openPlaylistDetail(label){
+  const info=getInfo(label);
+  if(!info)return;
+  const tracks=allTracks.filter(t=>t.playlistLabel===label);
+  currentDetailTracks=tracks;
+  detailIndex=-1;
+
+  document.getElementById('pd-hero-bg').style.backgroundImage=`url('${info.photo}')`;
+  document.getElementById('pd-cover-img').src=info.photo;
+  document.getElementById('pd-eyebrow').textContent='Playlist OSM';
+  document.getElementById('pd-title').textContent=info.label;
+  document.getElementById('pd-genres').textContent=info.genres;
+  document.getElementById('pd-desc').textContent=info.desc;
+  document.getElementById('pd-count').textContent=`${tracks.length} morceaux`;
+  document.getElementById('pd-tags').innerHTML=info.tags.map(t=>`<span class="pd-tag">${t}</span>`).join('');
+  renderDetailTracks();
+  showView('playlist-detail');
+  // ajout tab actif sur playlists
+  document.getElementById('tab-playlists').classList.add('active');
 }
 
-// CATALOGUE NAV
-function renderNavPills() {
-  const counts = {};
-  allTracks.forEach(t=>{ counts[t.playlistLabel]=(counts[t.playlistLabel]||0)+1; });
-  const nav = document.getElementById('pl-nav');
-  nav.innerHTML = '';
-  const all = document.createElement('button');
-  all.className = 'pl-pill active'; all.dataset.label = '';
-  all.innerHTML = `Tout <span class="pl-count-pill">${allTracks.length}</span>`;
-  all.onclick = ()=>selectFolder(null, all);
+function renderDetailTracks(){
+  const list=document.getElementById('pd-track-list');
+  const info=getInfo(currentDetailTracks[0]?currentDetailTracks[0].playlistLabel:'');
+  const photo=info?info.photo:'';
+  list.innerHTML=currentDetailTracks.map((t,i)=>`
+    <div class="pd-track${detailIndex===i?' playing':''}" onclick="playDetailTrack(${i})">
+      <div><div class="pd-track-num">${i+1}</div><div class="pd-track-icon">▶</div></div>
+      <div class="pd-thumb" style="background-image:url('${photo}')"></div>
+      <div class="pd-track-title">${t.title}</div>
+      <div class="pd-track-dur">${fmt(t.duration)}</div>
+      <button class="pd-track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier">🔗</button>
+      <button class="pd-track-btn" onclick="event.stopPropagation();downloadDetailTrack(${i})" title="Télécharger">⬇</button>
+    </div>`).join('');
+}
+
+function playDetailTrack(i){
+  const t=currentDetailTracks[i];if(!t)return;
+  detailIndex=i;currentIndex=-1;playingFromQueue=false;
+  const info=getInfo(t.playlistLabel);
+  document.getElementById('p-title').textContent=t.title;
+  document.getElementById('p-playlist').textContent=t.playlistLabel;
+  if(info) document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  document.getElementById('player').classList.add('visible');
+  audio.src=t.url;audio.play();
+  document.getElementById('btn-play').textContent='⏸';
+  document.getElementById('waveform').classList.add('playing');
+  renderDetailTracks();
+}
+
+function playAllDetail(){
+  if(currentDetailTracks.length>0) playDetailTrack(0);
+}
+
+function downloadDetailTrack(i){
+  const t=currentDetailTracks[i];if(!t)return;
+  const a=document.createElement('a');
+  a.href=t.url.replace('/upload/','/upload/fl_attachment/');
+  a.download=t.title+'.mp3';a.target='_blank';a.click();
+}
+
+// CATALOGUE
+function renderNavPills(){
+  const counts={};
+  allTracks.forEach(t=>{counts[t.playlistLabel]=(counts[t.playlistLabel]||0)+1;});
+  const nav=document.getElementById('pl-nav');
+  nav.innerHTML='';
+  const all=document.createElement('button');
+  all.className='pl-pill active';all.dataset.label='';
+  all.innerHTML=`Tout <span class="pl-count-pill">${allTracks.length}</span>`;
+  all.onclick=()=>selectFolder(null,all);
   nav.appendChild(all);
   THEMES.forEach(theme=>theme.playlists.forEach(p=>{
-    if (!counts[p.label]) return;
-    const btn = document.createElement('button');
-    btn.className = 'pl-pill'; btn.dataset.label = p.label;
-    btn.innerHTML = `${p.label} <span class="pl-count-pill">${counts[p.label]||0}</span>`;
-    btn.onclick = ()=>selectFolder(p.label, btn);
+    if(!counts[p.label])return;
+    const btn=document.createElement('button');
+    btn.className='pl-pill';btn.dataset.label=p.label;
+    btn.innerHTML=`${p.label} <span class="pl-count-pill">${counts[p.label]||0}</span>`;
+    btn.onclick=()=>selectFolder(p.label,btn);
     nav.appendChild(btn);
   }));
 }
 
-function selectFolder(folder, btn) {
-  currentFolder = folder; activeTag = null;
-  document.getElementById('search').value = '';
+function selectFolder(folder,btn){
+  currentFolder=folder;activeTag=null;
+  document.getElementById('search').value='';
   document.getElementById('search-active-bar').classList.remove('visible');
   document.querySelectorAll('.pl-pill').forEach(b=>b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  renderTags(); filterTracks();
+  if(btn)btn.classList.add('active');
+  renderTags();filterTracks();
 }
 
-function renderTags() {
-  const container = document.getElementById('tag-nav'); container.innerHTML = '';
-  const tags = currentFolder ? TAGS_MAP[currentFolder] : null;
-  if (!tags) return;
+function renderTags(){
+  const container=document.getElementById('tag-nav');container.innerHTML='';
+  const tags=currentFolder?TAGS_MAP[currentFolder]:null;
+  if(!tags)return;
   tags.forEach(tag=>{
-    const btn = document.createElement('button');
-    btn.className = 'tag-pill'+(activeTag===tag?' active':'');
-    btn.textContent = tag;
-    btn.onclick = ()=>{ activeTag = activeTag===tag?null:tag; document.querySelectorAll('.tag-pill').forEach(b=>b.classList.remove('active')); if(activeTag) btn.classList.add('active'); filterTracks(); };
+    const btn=document.createElement('button');
+    btn.className='tag-pill'+(activeTag===tag?' active':'');
+    btn.textContent=tag;
+    btn.onclick=()=>{activeTag=activeTag===tag?null:tag;document.querySelectorAll('.tag-pill').forEach(b=>b.classList.remove('active'));if(activeTag)btn.classList.add('active');filterTracks();};
     container.appendChild(btn);
   });
 }
 
-// RECHERCHE MULTI-MOTS
-function getKws(q) { return q.toLowerCase().trim().split(/\s+/).filter(k=>k.length>=2); }
+function getKws(q){return q.toLowerCase().trim().split(/\s+/).filter(k=>k.length>=2);}
 
-function onSearch() {
-  activeTag = null; document.querySelectorAll('.tag-pill').forEach(b=>b.classList.remove('active'));
-  showView('catalogue'); filterTracks(); showSuggestions();
+function onSearch(){
+  activeTag=null;document.querySelectorAll('.tag-pill').forEach(b=>b.classList.remove('active'));
+  showView('catalogue');filterTracks();showSuggestions();
 }
 
-function showSuggestions() {
-  const q = document.getElementById('search').value.toLowerCase().trim();
-  const box = document.getElementById('suggestions');
-  if (!q||q.length<2) { box.classList.remove('visible'); return; }
-  const kws = getKws(q); const results = []; const seen = new Set();
+function showSuggestions(){
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  const box=document.getElementById('suggestions');
+  if(!q||q.length<2){box.classList.remove('visible');return;}
+  const kws=getKws(q);const results=[];const seen=new Set();
   THEMES.forEach(theme=>theme.playlists.forEach(info=>{
-    if (kws.some(kw=>info.label.toLowerCase().includes(kw)) && !seen.has('pl:'+info.label) && results.length<10) {
+    if(kws.some(kw=>info.label.toLowerCase().includes(kw))&&!seen.has('pl:'+info.label)&&results.length<10){
       seen.add('pl:'+info.label);
-      results.push({ label: info.label, type: 'Playlist', action: ()=>openPlaylist(info.label) });
+      results.push({label:info.label,type:'Playlist',action:()=>openPlaylistDetail(info.label)});
     }
     info.tags.forEach(tag=>{
-      if (kws.some(kw=>tag.toLowerCase().includes(kw)) && !seen.has('tag:'+tag+info.label) && results.length<10) {
+      if(kws.some(kw=>tag.toLowerCase().includes(kw))&&!seen.has('tag:'+tag+info.label)&&results.length<10){
         seen.add('tag:'+tag+info.label);
-        results.push({ label: tag, type: info.label, action: ()=>{ openPlaylist(info.label); setTimeout(()=>{ activeTag=tag; document.querySelectorAll('.tag-pill').forEach(b=>{ if(b.textContent===tag) b.classList.add('active'); }); filterTracks(); },100); } });
+        results.push({label:tag,type:info.label,action:()=>{
+          currentFolder=info.label;activeTag=tag;
+          showView('catalogue');
+          setTimeout(()=>{document.querySelectorAll('.pl-pill').forEach(b=>{if(b.dataset.label===info.label)b.classList.add('active');});renderTags();filterTracks();},100);
+        }});
       }
     });
   }));
-  if (!results.length) { box.classList.remove('visible'); return; }
-  box.innerHTML = results.map((r,i)=>`<div class="suggestion" data-i="${i}"><span>${r.label}</span><span class="suggestion-type">${r.type}</span></div>`).join('');
-  box.querySelectorAll('.suggestion').forEach((el,i)=>el.addEventListener('mousedown',()=>{ results[i].action(); box.classList.remove('visible'); document.getElementById('search').value=''; }));
+  if(!results.length){box.classList.remove('visible');return;}
+  box.innerHTML=results.map((r,i)=>`<div class="suggestion" data-i="${i}"><span>${r.label}</span><span class="suggestion-type">${r.type}</span></div>`).join('');
+  box.querySelectorAll('.suggestion').forEach((el,i)=>el.addEventListener('mousedown',()=>{results[i].action();box.classList.remove('visible');document.getElementById('search').value='';}));
   box.classList.add('visible');
 }
-function hideSuggestions() { document.getElementById('suggestions').classList.remove('visible'); }
+function hideSuggestions(){document.getElementById('suggestions').classList.remove('visible');}
 
-function filterTracks() {
-  const q = document.getElementById('search').value.toLowerCase().trim();
-  const kws = q ? getKws(q) : [];
-  filteredTracks = allTracks.filter(t=>{
-    const lbl = t.playlistLabel;
-    const matchFolder = !currentFolder || lbl===currentFolder;
-    const tagPls = activeTag ? THEMES.flatMap(th=>th.playlists.filter(p=>p.tags.includes(activeTag)).map(p=>p.label)) : null;
-    const matchTag = !activeTag || (tagPls&&tagPls.includes(lbl));
-    let matchSearch = true;
-    if (kws.length>0) {
-      const hay = `${t.title} ${lbl} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();
-      matchSearch = kws.every(kw=>hay.includes(kw));
-    }
-    return matchFolder && matchTag && matchSearch;
+function filterTracks(){
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  const kws=q?getKws(q):[];
+  filteredTracks=allTracks.filter(t=>{
+    const lbl=t.playlistLabel;
+    const matchFolder=!currentFolder||lbl===currentFolder;
+    const tagPls=activeTag?THEMES.flatMap(th=>th.playlists.filter(p=>p.tags.includes(activeTag)).map(p=>p.label)):null;
+    const matchTag=!activeTag||(tagPls&&tagPls.includes(lbl));
+    let matchSearch=true;
+    if(kws.length>0){const hay=`${t.title} ${lbl} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();matchSearch=kws.every(kw=>hay.includes(kw));}
+    return matchFolder&&matchTag&&matchSearch;
   });
-
-  const bar = document.getElementById('search-active-bar');
-  if (kws.length>0) {
-    bar.classList.add('visible');
-    bar.innerHTML = `🔍 ${kws.map(k=>`<span class="kw-tag">${k}</span>`).join('')} &nbsp;·&nbsp; <span style="color:var(--red);font-weight:600">${filteredTracks.length} résultats</span> &nbsp;<button onclick="clearSearch()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px">✕ Effacer</button>`;
-  } else { bar.classList.remove('visible'); }
-
-  const tagEl = document.getElementById('section-tag');
-  if (activeTag) { tagEl.textContent=activeTag; tagEl.style.display='inline'; } else { tagEl.style.display='none'; }
+  const bar=document.getElementById('search-active-bar');
+  if(kws.length>0){bar.classList.add('visible');bar.innerHTML=`🔍 ${kws.map(k=>`<span class="kw-tag">${k}</span>`).join('')} &nbsp;·&nbsp; <span style="color:var(--red);font-weight:600">${filteredTracks.length} résultats</span> &nbsp;<button onclick="clearSearch()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px">✕ Effacer</button>`;}
+  else{bar.classList.remove('visible');}
+  const tagEl=document.getElementById('section-tag');
+  if(activeTag){tagEl.textContent=activeTag;tagEl.style.display='inline';}else{tagEl.style.display='none';}
   renderTracks();
 }
 
-function clearSearch() {
-  document.getElementById('search').value='';
-  document.getElementById('search-active-bar').classList.remove('visible');
-  filterTracks();
-}
+function clearSearch(){document.getElementById('search').value='';document.getElementById('search-active-bar').classList.remove('visible');filterTracks();}
 
-function highlight(text, kws) {
-  if (!kws.length) return text;
-  let r = text;
-  kws.forEach(kw=>{ const re=new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'); r=r.replace(re,'<span class="match-hl">$1</span>'); });
+function highlight(text,kws){
+  if(!kws.length)return text;let r=text;
+  kws.forEach(kw=>{const re=new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');r=r.replace(re,'<span class="match-hl">$1</span>');});
   return r;
 }
 
-function renderTracks() {
-  const list = document.getElementById('track-list');
-  const q = document.getElementById('search').value.toLowerCase().trim();
-  const kws = q ? getKws(q) : [];
-  document.getElementById('section-title').textContent = currentFolder||'Catalogue Complet';
-  document.getElementById('section-count').textContent = `${filteredTracks.length} morceaux`;
-  if (!filteredTracks.length) { list.innerHTML='<div class="empty">Aucun résultat</div>'; return; }
-  const qIds = new Set(queue.map(t=>t.id));
-  list.innerHTML = filteredTracks.map((t,i)=>`
+function renderTracks(){
+  const list=document.getElementById('track-list');
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  const kws=q?getKws(q):[];
+  document.getElementById('section-title').textContent=currentFolder||'Catalogue Complet';
+  document.getElementById('section-count').textContent=`${filteredTracks.length} morceaux`;
+  if(!filteredTracks.length){list.innerHTML='<div class="empty">Aucun résultat</div>';return;}
+  const qIds=new Set(queue.map(t=>t.id));
+  list.innerHTML=filteredTracks.map((t,i)=>`
     <div class="track${currentIndex===i?' playing':''}${qIds.has(t.id)?' in-queue':''}" onclick="playTrack(${i})">
       <div><div class="track-num">${i+1}</div><div class="track-play-icon">▶</div></div>
       <div class="track-info"><div class="track-title">${highlight(t.title,kws)}</div><div class="track-artist">${t.playlistLabel}</div></div>
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
       <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier">🔗</button>
-      <button class="track-btn queue-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueTrack(${i})" title="${qIds.has(t.id)?'Retirer':'Ajouter'}">${qIds.has(t.id)?'✓':'+'}</button>
+      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueTrack(${i})">${qIds.has(t.id)?'✓':'+'}</button>
       <button class="track-btn" onclick="event.stopPropagation();downloadTrack(${i})" title="Télécharger">⬇</button>
     </div>`).join('');
 }
 
-function playTrack(i) {
-  const t = filteredTracks[i]; if (!t) return;
-  currentIndex=i; playingFromQueue=false;
+function playTrack(i){
+  const t=filteredTracks[i];if(!t)return;
+  currentIndex=i;playingFromQueue=false;detailIndex=-1;
+  const info=getInfo(t.playlistLabel);
   document.getElementById('p-title').textContent=t.title;
   document.getElementById('p-playlist').textContent=t.playlistLabel;
+  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
   document.getElementById('player').classList.add('visible');
-  audio.src=t.url; audio.play();
+  audio.src=t.url;audio.play();
   document.getElementById('btn-play').textContent='⏸';
   document.getElementById('waveform').classList.add('playing');
   renderTracks();
 }
 
-function togglePlay() {
-  if (audio.paused) { audio.play(); document.getElementById('btn-play').textContent='⏸'; document.getElementById('waveform').classList.add('playing'); }
-  else { audio.pause(); document.getElementById('btn-play').textContent='▶'; document.getElementById('waveform').classList.remove('playing'); }
+function togglePlay(){
+  if(audio.paused){audio.play();document.getElementById('btn-play').textContent='⏸';document.getElementById('waveform').classList.add('playing');}
+  else{audio.pause();document.getElementById('btn-play').textContent='▶';document.getElementById('waveform').classList.remove('playing');}
 }
-function toggleShuffle() { shuffleOn=!shuffleOn; document.getElementById('btn-shuffle').classList.toggle('active',shuffleOn); }
-function toggleRepeat() { repeatOn=!repeatOn; document.getElementById('btn-repeat').classList.toggle('active',repeatOn); }
-function setVolume(v) { audio.volume=v/100; }
-function toggleMute() { audio.muted=!audio.muted; document.querySelector('.vol-icon').textContent=audio.muted?'🔇':'🔊'; }
-function prevTrack() { if(playingFromQueue&&queueIndex>0){queueIndex--;playFromQueue(queueIndex);}else if(!playingFromQueue&&currentIndex>0)playTrack(currentIndex-1); }
-function nextTrack() {
-  if(repeatOn&&currentIndex>=0){audio.currentTime=0;audio.play();return;}
-  if(playingFromQueue&&queueIndex<queue.length-1){queueIndex++;playFromQueue(queueIndex);}
+function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('btn-shuffle').classList.toggle('active',shuffleOn);}
+function toggleRepeat(){repeatOn=!repeatOn;document.getElementById('btn-repeat').classList.toggle('active',repeatOn);}
+function setVolume(v){audio.volume=v/100;}
+function toggleMute(){audio.muted=!audio.muted;document.querySelector('.vol-icon').textContent=audio.muted?'🔇':'🔊';}
+
+function prevTrack(){
+  if(detailIndex>0){playDetailTrack(detailIndex-1);}
+  else if(!playingFromQueue&&currentIndex>0)playTrack(currentIndex-1);
+}
+function nextTrack(){
+  if(repeatOn){audio.currentTime=0;audio.play();return;}
+  if(detailIndex>=0&&detailIndex<currentDetailTracks.length-1){playDetailTrack(detailIndex+1);}
   else if(!playingFromQueue){
     if(shuffleOn&&filteredTracks.length>1){let idx;do{idx=Math.floor(Math.random()*filteredTracks.length);}while(idx===currentIndex);playTrack(idx);}
     else if(currentIndex<filteredTracks.length-1)playTrack(currentIndex+1);
   }
 }
+
 audio.addEventListener('ended',()=>{document.getElementById('waveform').classList.remove('playing');nextTrack();});
 audio.addEventListener('loadedmetadata',()=>{
   const dur=audio.duration;
   if(dur&&currentIndex>=0&&filteredTracks[currentIndex]){
     const m=Math.floor(dur/60),s=Math.floor(dur%60);
     filteredTracks[currentIndex].duration=m+':'+s.toString().padStart(2,'0');
-    const idx=allTracks.findIndex(t=>t.id===filteredTracks[currentIndex].id);
-    if(idx>=0)allTracks[idx].duration=filteredTracks[currentIndex].duration;
     renderTracks();
+  }
+  if(dur&&detailIndex>=0&&currentDetailTracks[detailIndex]){
+    const m=Math.floor(dur/60),s=Math.floor(dur%60);
+    currentDetailTracks[detailIndex].duration=m+':'+s.toString().padStart(2,'0');
+    renderDetailTracks();
   }
 });
 audio.addEventListener('timeupdate',()=>{
@@ -888,7 +969,7 @@ audio.addEventListener('timeupdate',()=>{
 document.getElementById('progress-bar-outer').addEventListener('click',function(e){
   const rect=this.getBoundingClientRect();
   const pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-  if(audio.readyState>=1){audio.currentTime=pct*audio.duration;}
+  if(audio.readyState>=1)audio.currentTime=pct*audio.duration;
 });
 
 function toggleQueue(){document.getElementById('queue-panel').classList.toggle('visible');}
@@ -903,7 +984,7 @@ function clearQueue(){queue=[];queueIndex=-1;updateQueueBadge();renderQueueList(
 function renderQueueList(){
   const list=document.getElementById('queue-list');
   if(!queue.length){list.innerHTML='<div class="queue-empty">Ajoutez des morceaux avec +</div>';return;}
-  list.innerHTML=queue.map((t,i)=>`<div class="queue-item${playingFromQueue&&queueIndex===i?' playing':''}" onclick="playFromQueue(${i})"><div class="qi-num">${playingFromQueue&&queueIndex===i?'▶':i+1}</div><div class="qi-info"><div class="qi-title">${t.title}</div><div class="qi-pl">${t.playlistLabel}</div></div><button class="qi-rm" onclick="event.stopPropagation();removeFromQueue(${i})">✕</button></div>`).join('');
+  list.innerHTML=queue.map((t,i)=>`<div class="queue-item${playingFromQueue&&queueIndex===i?' playing':''}" onclick="playFromQueue(${i})"><div class="qi-num">${i+1}</div><div class="qi-info"><div class="qi-title">${t.title}</div><div class="qi-pl">${t.playlistLabel}</div></div><button class="qi-rm" onclick="event.stopPropagation();removeFromQueue(${i})">✕</button></div>`).join('');
 }
 function removeFromQueue(i){queue.splice(i,1);updateQueueBadge();renderQueueList();renderTracks();}
 function playFromQueue(i){
@@ -918,7 +999,10 @@ function playFromQueue(i){
 }
 function copyLink(url){navigator.clipboard.writeText(url).then(()=>{const t=document.getElementById('copy-toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);});}
 function downloadTrack(i){const t=filteredTracks[i];if(!t)return;const a=document.createElement('a');a.href=t.url.replace('/upload/','/upload/fl_attachment/');a.download=t.title+'.mp3';a.target='_blank';a.click();}
-function downloadCurrent(){if(playingFromQueue&&queueIndex>=0){const t=queue[queueIndex];const a=document.createElement('a');a.href=t.url.replace('/upload/','/upload/fl_attachment/');a.download=t.title+'.mp3';a.target='_blank';a.click();}else if(currentIndex>=0)downloadTrack(currentIndex);}
+function downloadCurrent(){
+  if(detailIndex>=0&&currentDetailTracks[detailIndex]){downloadDetailTrack(detailIndex);}
+  else if(currentIndex>=0)downloadTrack(currentIndex);
+}
 
 if(sessionStorage.getItem('osm_ok')==='1'){
   document.getElementById('pw-screen').style.display='none';
