@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OSM – Original Scores Music</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.7/wavesurfer.min.js"></script>
 <style>
 :root {
   --red: #E50914;
@@ -285,44 +284,34 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .waveform.playing .wb:nth-child(10){animation:wb .8s ease-in-out infinite .05s}
 @keyframes wb{0%,100%{height:4px}50%{height:24px}}
 #wavesurfer-wrap { flex: 2; min-width: 0; }
-#wavesurfer-container { width: 100%; height: 40px; }
+#wavesurfer-container { display: none; }
 audio{display:none}
+// LECTEUR AUDIO
+const audio = document.getElementById('audio');
 
-// WAVESURFER
-let ws = null;
 function loadAndPlay(url) {
-  if (ws) { ws.destroy(); ws = null; }
-  ws = WaveSurfer.create({
-    container: '#wavesurfer-container',
-    waveColor: 'rgba(229,9,20,0.35)',
-    progressColor: '#E50914',
-    cursorColor: 'rgba(255,255,255,0.6)',
-    cursorWidth: 1,
-    barWidth: 2,
-    barGap: 1,
-    barRadius: 2,
-    height: 40,
-    normalize: true,
-    interact: true,
-  });
-  ws.on('ready', () => {
-    document.getElementById('time-dur').textContent = fmt2(ws.getDuration());
-    ws.play();
-    document.getElementById('btn-play').textContent = '⏸';
-    document.getElementById('waveform').classList.add('playing');
-  });
-  ws.on('audioprocess', () => {
-    document.getElementById('time-cur').textContent = fmt2(ws.getCurrentTime());
-  });
-  ws.on('finish', () => {
-    document.getElementById('waveform').classList.remove('playing');
-    nextTrack();
-  });
-  ws.on('pause', () => { document.getElementById('btn-play').textContent = '▶'; document.getElementById('waveform').classList.remove('playing'); });
-  ws.on('play', () => { document.getElementById('btn-play').textContent = '⏸'; document.getElementById('waveform').classList.add('playing'); });
-  ws.load(url);
+  audio.src = url;
+  audio.play();
   document.getElementById('player').classList.add('visible');
+  document.getElementById('btn-play').textContent = '⏸';
+  document.getElementById('waveform').classList.add('playing');
 }
+
+audio.addEventListener('ended', () => {
+  document.getElementById('waveform').classList.remove('playing');
+  nextTrack();
+});
+audio.addEventListener('timeupdate', () => {
+  const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('time-cur').textContent = fmt2(audio.currentTime);
+  if (audio.duration) document.getElementById('time-dur').textContent = fmt2(audio.duration);
+});
+document.getElementById('progress-bar-outer').addEventListener('click', function(e) {
+  const rect = this.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  if (audio.readyState >= 1) audio.currentTime = pct * audio.duration;
+});
 
 
 /* QUEUE */
@@ -618,8 +607,8 @@ function loadAndPlay(url) {
       </div>
       <div class="progress-wrap">
         <span class="time" id="time-cur">0:00</span>
-        <div id="wavesurfer-wrap">
-          <div id="wavesurfer-container"></div>
+        <div class="progress-bar-outer" id="progress-bar-outer">
+          <div class="progress-bar-inner"><div class="progress-fill" id="progress-fill"></div></div>
         </div>
         <span class="time" id="time-dur">0:00</span>
       </div>
@@ -707,7 +696,6 @@ function getInfo(label){ return Object.values(PLAYLIST_MAP).find(p=>p.label===la
 let allTracks=[],filteredTracks=[],currentIndex=-1,currentFolder=null,activeTag=null;
 let queue=[],queueIndex=-1,playingFromQueue=false,shuffleOn=false,repeatOn=false;
 let currentDetailTracks=[],detailIndex=-1;
-const audio=document.getElementById('audio');
 
 function fmt(s){if(!s||s==='0:00')return'—';return s;}
 function fmt2(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.toString().padStart(2,'0')}`;}
@@ -958,21 +946,20 @@ function playTrack(i){
 }
 
 function togglePlay(){
-  if(!ws)return;
-  if(ws.isPlaying()){ws.pause();}
-  else{ws.play();}
+  if(audio.paused){audio.play();document.getElementById('btn-play').textContent='⏸';document.getElementById('waveform').classList.add('playing');}
+  else{audio.pause();document.getElementById('btn-play').textContent='▶';document.getElementById('waveform').classList.remove('playing');}
 }
 function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('btn-shuffle').classList.toggle('active',shuffleOn);}
 function toggleRepeat(){repeatOn=!repeatOn;document.getElementById('btn-repeat').classList.toggle('active',repeatOn);}
-function setVolume(v){if(ws)ws.setVolume(v/100);}
-function toggleMute(){if(ws){const m=!ws.getMuted();ws.setMuted(m);document.querySelector('.vol-icon').textContent=m?'🔇':'🔊';}}
+function setVolume(v){audio.volume=v/100;}
+function toggleMute(){audio.muted=!audio.muted;document.querySelector('.vol-icon').textContent=audio.muted?'🔇':'🔊';}
 
 function prevTrack(){
   if(detailIndex>0){playDetailTrack(detailIndex-1);}
   else if(!playingFromQueue&&currentIndex>0)playTrack(currentIndex-1);
 }
 function nextTrack(){
-  if(repeatOn&&ws){ws.seekTo(0);ws.play();return;}
+  if(repeatOn){audio.currentTime=0;audio.play();return;}
   if(detailIndex>=0&&detailIndex<currentDetailTracks.length-1){playDetailTrack(detailIndex+1);}
   else if(!playingFromQueue){
     if(shuffleOn&&filteredTracks.length>1){let idx;do{idx=Math.floor(Math.random()*filteredTracks.length);}while(idx===currentIndex);playTrack(idx);}
