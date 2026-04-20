@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OSM – Original Scores Music</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.7/wavesurfer.min.js"></script>
 <style>
 :root {
   --red: #E50914;
@@ -283,58 +284,46 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: r
 .waveform.playing .wb:nth-child(9){animation:wb .8s ease-in-out infinite .2s}
 .waveform.playing .wb:nth-child(10){animation:wb .8s ease-in-out infinite .05s}
 @keyframes wb{0%,100%{height:4px}50%{height:24px}}
-#oscillator-canvas { width: 100%; height: 32px; display: none; }
-#oscillator-canvas.active { display: block; }
+#wavesurfer-wrap { flex: 2; min-width: 0; }
+#wavesurfer-container { width: 100%; height: 40px; }
 audio{display:none}
 
-/* OSCILLATEUR */
-let audioCtx=null,analyser=null,source=null,oscRaf=null;
-function initAudioCtx(){
-  if(audioCtx)return;
-  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  analyser=audioCtx.createAnalyser();
-  analyser.fftSize=256;
-  source=audioCtx.createMediaElementSource(audio);
-  source.connect(analyser);
-  analyser.connect(audioCtx.destination);
+// WAVESURFER
+let ws = null;
+function loadAndPlay(url) {
+  if (ws) { ws.destroy(); ws = null; }
+  ws = WaveSurfer.create({
+    container: '#wavesurfer-container',
+    waveColor: 'rgba(229,9,20,0.35)',
+    progressColor: '#E50914',
+    cursorColor: 'rgba(255,255,255,0.6)',
+    cursorWidth: 1,
+    barWidth: 2,
+    barGap: 1,
+    barRadius: 2,
+    height: 40,
+    normalize: true,
+    interact: true,
+  });
+  ws.on('ready', () => {
+    document.getElementById('time-dur').textContent = fmt2(ws.getDuration());
+    ws.play();
+    document.getElementById('btn-play').textContent = '⏸';
+    document.getElementById('waveform').classList.add('playing');
+  });
+  ws.on('audioprocess', () => {
+    document.getElementById('time-cur').textContent = fmt2(ws.getCurrentTime());
+  });
+  ws.on('finish', () => {
+    document.getElementById('waveform').classList.remove('playing');
+    nextTrack();
+  });
+  ws.on('pause', () => { document.getElementById('btn-play').textContent = '▶'; document.getElementById('waveform').classList.remove('playing'); });
+  ws.on('play', () => { document.getElementById('btn-play').textContent = '⏸'; document.getElementById('waveform').classList.add('playing'); });
+  ws.load(url);
+  document.getElementById('player').classList.add('visible');
 }
-function startOscillator(){
-  initAudioCtx();
-  if(audioCtx.state==='suspended')audioCtx.resume();
-  const canvas=document.getElementById('oscillator-canvas');
-  const wf=document.getElementById('waveform');
-  wf.style.display='none';
-  canvas.classList.add('active');
-  const ctx=canvas.getContext('2d');
-  const buf=new Uint8Array(analyser.frequencyBinCount);
-  function draw(){
-    oscRaf=requestAnimationFrame(draw);
-    canvas.width=canvas.offsetWidth;
-    canvas.height=canvas.offsetHeight||32;
-    analyser.getByteTimeDomainData(buf);
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.strokeStyle='#E50914';
-    ctx.lineWidth=2;
-    ctx.beginPath();
-    const sw=canvas.width/buf.length;
-    let x=0;
-    for(let i=0;i<buf.length;i++){
-      const v=buf[i]/128;
-      const y=(v*canvas.height)/2;
-      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-      x+=sw;
-    }
-    ctx.stroke();
-  }
-  draw();
-}
-function stopOscillator(){
-  if(oscRaf)cancelAnimationFrame(oscRaf);
-  const canvas=document.getElementById('oscillator-canvas');
-  const wf=document.getElementById('waveform');
-  canvas.classList.remove('active');
-  wf.style.display='flex';
-}
+
 
 /* QUEUE */
 .queue-badge { position: absolute; top: -6px; right: -6px; background: var(--red); color: #fff; font-size: 9px; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: none; align-items: center; justify-content: center; }
@@ -627,11 +616,10 @@ function stopOscillator(){
         <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
         <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
       </div>
-      <canvas id="oscillator-canvas"></canvas>
       <div class="progress-wrap">
         <span class="time" id="time-cur">0:00</span>
-        <div class="progress-bar-outer" id="progress-bar-outer">
-          <div class="progress-bar-inner"><div class="progress-fill" id="progress-fill"></div></div>
+        <div id="wavesurfer-wrap">
+          <div id="wavesurfer-container"></div>
         </div>
         <span class="time" id="time-dur">0:00</span>
       </div>
@@ -674,7 +662,7 @@ const THEMES = [
   { label:"Émotion & Intimité", playlists:[
     { key:"PIANO - CLASSIQUE - INTIMISTE - CALME - MELANCOLIQUE - COSY - DOUX", label:"Piano", color:"#95a5a6", photo:"https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=800&q=80", genres:"Piano solo · Néo-classique · Classique contemporain · Ambient piano", desc:"Le piano seul ou accompagné pour les moments les plus intimes et les plus touchants. Des compositions délicates aux harmonies raffinées qui créent une atmosphère de recueillement, de tendresse et de beauté simple.", tags:["piano","classique","intimiste","calme","mélancolique","doux","émotion","solo"] },
     { key:"ROMANCE - MELANCOLIQUE - AMOUR - NOSTALGIE - TRISTESSE - DRAME", label:"Romance", color:"#e91e63", photo:"https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80", genres:"Cinematic romance · Orchestral drama · Néo-classique · Piano & cordes", desc:"Des musiques pour les grandes émotions : l'amour, la perte, le souvenir et le déchirement intérieur. Arrangements soyeux, mélodies qui brisent le cœur et harmonies suspendues.", tags:["romance","amour","nostalgie","drame","sentimental","rupture","émotion"] },
-    { key:"NEUTRE- MELANCOLIE - TRISTESSE", label:"Mélancolie", color:"#5d6d7e", photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", genres:"Néo-classique · Piano ambiant · Cordes · Minimaliste", desc:"Des textures sonores douces et mélancoliques pour les séquences chargées d'émotion contenue. Musiques introspectives, harmonies suspendues et arrangements minimalistes qui laissent de l'espace à l'image.", tags:["mélancolie","tristesse","introspection","minimaliste","portrait","intime"] },
+    { key:"NEUTRE- MELANCOLIE - TRISTESSE", label:"Mélancolie", color:"#5d6d7e", photo:"https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800&q=80", genres:"Néo-classique · Piano ambiant · Cordes · Minimaliste", desc:"Des textures sonores douces et mélancoliques pour les séquences chargées d'émotion contenue. Musiques introspectives, harmonies suspendues et arrangements minimalistes qui laissent de l'espace à l'image.", tags:["mélancolie","tristesse","introspection","minimaliste","portrait","intime"] },
     { key:"NEUTRE - POSITIF - HAPPY", label:"Neutre Positif", color:"#2ecc71", photo:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", genres:"Corporate · Acoustic pop · Light instrumental · Easy listening", desc:"Des musiques légères et bienveillantes pour accompagner les contenus institutionnels, les témoignages et les séquences du quotidien. Atmosphères positives qui créent un contexte sonore neutre et professionnel.", tags:["positif","corporate","léger","institutionnel","interview","tutoriel"] },
   ]},
   { label:"Épique & Cinématique", playlists:[
@@ -688,7 +676,6 @@ const THEMES = [
     { key:"ELECTRO - ELECTRONIQUE - BEAT - CLUBBING - DEEJAYING - PARTY", label:"Électro", color:"#00c2ff", photo:"https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80", genres:"Électro · House · Techno · EDM · Deep house · Synthwave", desc:"Des productions électroniques modernes pour les univers urbains et les atmosphères de club. Synthés analogiques, beats 4/4, drops percutants et textures numériques au service des images contemporaines.", tags:["électro","beat","club","EDM","dance","nocturne","lifestyle"] },
     { key:"ELECTRO - POP - ACTUEL - URBAIN - ARTY - ENERGIQUE - CORPORATE", label:"Électro-Pop", color:"#9b59b6", photo:"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80", genres:"Électro-pop · Indie pop · Corporate pop · Future pop", desc:"Des sonorités pop électroniques actuelles, entre énergie positive et modernité assumée. Mélodie accessible et production soignée pour les contenus corporate, les publicités et les vlogs dynamiques.", tags:["électro pop","actuel","brand","publicité","lifestyle","dynamique","contemporain"] },
     { key:"ROCK - RIFFS - GUITARE - ELECTRIQUE - GARAGE - LIVE - ROCK N ROLL", label:"Rock", color:"#e74c3c", photo:"https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&q=80", genres:"Rock · Garage rock · Rock alternatif · Indie rock · Classic rock", desc:"L'énergie brute du rock électrique pour les images qui demandent caractère et authenticité. Riffs de guitare incisifs, batterie puissante et son garage qui évoquent la scène et la liberté.", tags:["rock","riff","guitare","live","attitude","sport","rébellion"] },
-    { key:"URBAN - R&B - HIP HOP - STREET - ART - RAP - BEAT", label:"Urban", color:"#7d3c98", photo:"https://images.unsplash.com/photo-1547528005-3a8e9af13a2c?w=800&q=80", genres:"Hip hop · R&B · Trap · Urban soul · Lo-fi · Neo soul", desc:"Des productions urbaines actuelles pour habiller les images de la rue et de la culture hip hop. Beats trap, samples soul, 808 profonds et flows atmosphériques qui donnent une identité forte et moderne.", tags:["hip hop","R&B","trap","street","clip","documentaire","engagé"] },
   ]},
   { label:"Acoustique & Folk", playlists:[
     { key:"FOLK ACOUSTIQUE - ELECTRO ACOUSTIQUE - RELAX - GUITARE - HARMONY", label:"Folk Acoustique", color:"#6db33f", photo:"https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&q=80", genres:"Folk · Acoustic pop · Indie folk · Singer-songwriter", desc:"Des musiques douces et organiques pour les moments de sincérité et de connexion humaine. Guitares acoustiques, arrangements épurés qui créent un sentiment d'authenticité et de proximité.", tags:["folk","acoustique","relax","guitare","intimiste","nature","authentique"] },
@@ -698,15 +685,15 @@ const THEMES = [
   { label:"Jazz & Rétro", playlists:[
     { key:"SWING - JAZZ - RYTHME - BIG BAND - JIVE - MANOUCHE", label:"Swing Jazz", color:"#f39c12", photo:"https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80", genres:"Jazz · Swing · Manouche · Big band · Bebop · Jazz traditionnel", desc:"L'élégance intemporelle du jazz et du swing pour les images qui respirent la sophistication. Big bands généreux, jazz manouche chaleureux et rythmes jive pour les univers festifs et rétro.", tags:["jazz","big band","manouche","élégance","rétro","années 40","années 50"] },
     { key:"PANAME - PARIS - RETRO - ACCORDEON - PIGALLE - MONTMARTRE", label:"Paname", color:"#d35400", photo:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80", genres:"Chanson française · Musette · Jazz manouche · Cabaret · Accordéon", desc:"L'âme de Paris et de la chanson française pour habiller les images de la capitale. Accordéon nostalgique, guitare manouche et ambiances de café qui évoquent Montmartre et le charme de Paname.", tags:["Paris","accordéon","Montmartre","bistrot","chanson française","rétro","vintage"] },
-    { key:"REGGAE - REGGATON - SKA - FUSION - JAMAICA", label:"Reggae", color:"#16a085", photo:"https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&q=80", genres:"Reggae · Ska · Dancehall · Reggaeton · Dub · Tropical fusion", desc:"Les rythmes ensoleillés et positifs des Caraïbes pour des images pleines de vie et de liberté. Offbeats caractéristiques, lignes de basse profondes et énergie fusion qui évoquent l'été et la plage.", tags:["jamaïque","ska","tropical","roots","festif","été","liberté"] },
+    { key:"REGGAE - REGGATON - SKA - FUSION - JAMAICA", label:"Reggae", color:"#16a085", photo:"https://images.unsplash.com/photo-1520255870062-e9d9a8a39a78?w=800&q=80", genres:"Reggae · Ska · Dancehall · Reggaeton · Dub · Tropical fusion", desc:"Les rythmes ensoleillés et positifs des Caraïbes pour des images pleines de vie et de liberté. Offbeats caractéristiques, lignes de basse profondes et énergie fusion qui évoquent l'été et la plage.", tags:["jamaïque","ska","tropical","roots","festif","été","liberté"] },
   ]},
   { label:"Légèreté & Humour", playlists:[
     { key:"BURLESQUE - HUMOUR - COMIQUE - THEATRAL - LEGER - COCASSE", label:"Burlesque", color:"#f5a623", photo:"https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80", genres:"Cartoon · Orchestral comique · Circus · Vaudeville · Comédie musicale", desc:"Une sélection légère et espiègle pour les scènes comiques et les situations cocasses. Musiques de cartoon, orchestrations théâtrales et mélodies bondissantes qui soulignent le gag et rythment la comédie.", tags:["humour","comique","cartoon","légèreté","animation","publicité","décalé"] },
-    { key:"LUDIQUE - ENFANTIN - DIVERTISSANT - THEATRAL - DROLE - AMUSANT", label:"Ludique", color:"#f1c40f", photo:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", genres:"Children's music · Cartoon · Orchestral fantaisie · Musical theatre", desc:"Un univers sonore espiègle et coloré pour les contenus jeunesse et les émissions familiales. Mélodies simples et accrocheuses, orchestrations théâtrales qui captivent les jeunes audiences.", tags:["enfantin","jeunesse","famille","magie","coloré","éducatif","animation"] },
-    { key:"PIZZICATO - STACCATO - DRAMEDY - BETISIER - CARTOON - ANIMATION", label:"Pizzicato", color:"#e91e8c", photo:"https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=800&q=80", genres:"Orchestral léger · Cartoon · Pizzicato · Chamber pop · Dramedy", desc:"Des orchestrations légères spécialement calibrées pour les contenus mixant humour et émotion. Pizzicatos de cordes, staccatos espièges qui soulignent le gag et donnent du rebond aux séquences.", tags:["staccato","espiègle","cartoon","bêtisier","making-of","feel-good","famille"] },
+    { key:"LUDIQUE - ENFANTIN - DIVERTISSANT - THEATRAL - DROLE - AMUSANT", label:"Ludique", color:"#f1c40f", photo:"https://images.unsplash.com/photo-1566501206188-5dd0cf160a0e?w=800&q=80", genres:"Children's music · Cartoon · Orchestral fantaisie · Musical theatre", desc:"Un univers sonore espiègle et coloré pour les contenus jeunesse et les émissions familiales. Mélodies simples et accrocheuses, orchestrations théâtrales qui captivent les jeunes audiences.", tags:["enfantin","jeunesse","famille","magie","coloré","éducatif","animation"] },
+    { key:"PIZZICATO - STACCATO - DRAMEDY - BETISIER - CARTOON - ANIMATION", label:"Pizzicato", color:"#e91e8c", photo:"https://images.unsplash.com/photo-1509610854841-f3fa91f3b8bf?w=800&q=80", genres:"Orchestral léger · Cartoon · Pizzicato · Chamber pop · Dramedy", desc:"Des orchestrations légères spécialement calibrées pour les contenus mixant humour et émotion. Pizzicatos de cordes, staccatos espièges qui soulignent le gag et donnent du rebond aux séquences.", tags:["staccato","espiègle","cartoon","bêtisier","making-of","feel-good","famille"] },
   ]},
   { label:"Monde & Voyage", playlists:[
-    { key:"WORLD MUSIC - ETHNIQUE - CULTURE - METISSAGE - TRADITIONNEL", label:"World Music", color:"#16a085", photo:"https://images.unsplash.com/photo-1521335629791-ce4aec67dd15?w=800&q=80", genres:"World music · Ethnic · Fusion · Folk du monde · Global sounds", desc:"Un tour du monde sonore pour les images qui célèbrent la diversité culturelle. Instruments traditionnels du monde entier, rythmes ethniques authentiques et arrangements fusion qui ouvrent l'image sur l'ailleurs.", tags:["ethnique","voyage","diversité","fusion","reportage","humanitaire","global"] },
+    { key:"WORLD MUSIC - ETHNIQUE - CULTURE - METISSAGE - TRADITIONNEL", label:"World Music", color:"#16a085", photo:"https://images.unsplash.com/photo-1516663713099-5a2d9db4617a?w=800&q=80", genres:"World music · Ethnic · Fusion · Folk du monde · Global sounds", desc:"Un tour du monde sonore pour les images qui célèbrent la diversité culturelle. Instruments traditionnels du monde entier, rythmes ethniques authentiques et arrangements fusion qui ouvrent l'image sur l'ailleurs.", tags:["ethnique","voyage","diversité","fusion","reportage","humanitaire","global"] },
     { key:"LATINO - AUSTRAL - MEXICAN - AMERIQUE DU SUD - CULTURE - WESTERN", label:"Latino", color:"#e67e22", photo:"https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=800&q=80", genres:"Latin · Flamenco · Salsa · Bossa nova · Tango · Tex-Mex", desc:"Les rythmes chauds et colorés d'Amérique latine pour donner de l'exotisme à vos images. Guitares espagnoles, percussions latines et cuivres festifs qui évoquent les cultures mexicaine, brésilienne et cubaine.", tags:["salsa","tango","tropical","festif","documentaire","exotique","voyage"] },
   ]},
 ];
@@ -818,10 +805,7 @@ function playDetailTrack(i){
   document.getElementById('p-title').textContent=t.title;
   document.getElementById('p-playlist').textContent=t.playlistLabel;
   if(info) document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
-  document.getElementById('player').classList.add('visible');
-  audio.src=t.url;audio.play();
-  document.getElementById('btn-play').textContent='⏸';
-  document.getElementById('waveform').classList.add('playing');
+  loadAndPlay(t.url);
   renderDetailTracks();
 }
 
@@ -969,61 +953,32 @@ function playTrack(i){
   document.getElementById('p-title').textContent=t.title;
   document.getElementById('p-playlist').textContent=t.playlistLabel;
   if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
-  document.getElementById('player').classList.add('visible');
-  audio.src=t.url;audio.play();
-  document.getElementById('btn-play').textContent='⏸';
-  document.getElementById('waveform').classList.add('playing');
-  startOscillator();
+  loadAndPlay(t.url);
   renderTracks();
 }
 
 function togglePlay(){
-  if(audio.paused){audio.play();document.getElementById('btn-play').textContent='⏸';document.getElementById('waveform').classList.add('playing');startOscillator();}
-  else{audio.pause();document.getElementById('btn-play').textContent='▶';document.getElementById('waveform').classList.remove('playing');stopOscillator();}
+  if(!ws)return;
+  if(ws.isPlaying()){ws.pause();}
+  else{ws.play();}
 }
 function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('btn-shuffle').classList.toggle('active',shuffleOn);}
 function toggleRepeat(){repeatOn=!repeatOn;document.getElementById('btn-repeat').classList.toggle('active',repeatOn);}
-function setVolume(v){audio.volume=v/100;}
-function toggleMute(){audio.muted=!audio.muted;document.querySelector('.vol-icon').textContent=audio.muted?'🔇':'🔊';}
+function setVolume(v){if(ws)ws.setVolume(v/100);}
+function toggleMute(){if(ws){const m=!ws.getMuted();ws.setMuted(m);document.querySelector('.vol-icon').textContent=m?'🔇':'🔊';}}
 
 function prevTrack(){
   if(detailIndex>0){playDetailTrack(detailIndex-1);}
   else if(!playingFromQueue&&currentIndex>0)playTrack(currentIndex-1);
 }
 function nextTrack(){
-  if(repeatOn){audio.currentTime=0;audio.play();return;}
+  if(repeatOn&&ws){ws.seekTo(0);ws.play();return;}
   if(detailIndex>=0&&detailIndex<currentDetailTracks.length-1){playDetailTrack(detailIndex+1);}
   else if(!playingFromQueue){
     if(shuffleOn&&filteredTracks.length>1){let idx;do{idx=Math.floor(Math.random()*filteredTracks.length);}while(idx===currentIndex);playTrack(idx);}
     else if(currentIndex<filteredTracks.length-1)playTrack(currentIndex+1);
   }
 }
-
-audio.addEventListener('ended',()=>{document.getElementById('waveform').classList.remove('playing');stopOscillator();nextTrack();});
-audio.addEventListener('loadedmetadata',()=>{
-  const dur=audio.duration;
-  if(dur&&currentIndex>=0&&filteredTracks[currentIndex]){
-    const m=Math.floor(dur/60),s=Math.floor(dur%60);
-    filteredTracks[currentIndex].duration=m+':'+s.toString().padStart(2,'0');
-    renderTracks();
-  }
-  if(dur&&detailIndex>=0&&currentDetailTracks[detailIndex]){
-    const m=Math.floor(dur/60),s=Math.floor(dur%60);
-    currentDetailTracks[detailIndex].duration=m+':'+s.toString().padStart(2,'0');
-    renderDetailTracks();
-  }
-});
-audio.addEventListener('timeupdate',()=>{
-  const pct=audio.duration?(audio.currentTime/audio.duration)*100:0;
-  document.getElementById('progress-fill').style.width=pct+'%';
-  document.getElementById('time-cur').textContent=fmt2(audio.currentTime);
-  if(audio.duration)document.getElementById('time-dur').textContent=fmt2(audio.duration);
-});
-document.getElementById('progress-bar-outer').addEventListener('click',function(e){
-  const rect=this.getBoundingClientRect();
-  const pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-  if(audio.readyState>=1)audio.currentTime=pct*audio.duration;
-});
 
 function toggleQueue(){document.getElementById('queue-panel').classList.toggle('visible');}
 function toggleQueueTrack(i){
@@ -1045,9 +1000,7 @@ function playFromQueue(i){
   queueIndex=i;playingFromQueue=true;
   document.getElementById('p-title').textContent=t.title;
   document.getElementById('p-playlist').textContent=t.playlistLabel;
-  document.getElementById('player').classList.add('visible');
-  audio.src=t.url;audio.play();
-  document.getElementById('btn-play').textContent='⏸';
+  loadAndPlay(t.url);
   renderQueueList();
 }
 function copyLink(url){navigator.clipboard.writeText(url).then(()=>{const t=document.getElementById('copy-toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);});}
