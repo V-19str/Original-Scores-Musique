@@ -6,25 +6,40 @@
 <title>OSM – Sélection Musicale Sur Mesure</title>
 <meta name="description" content="Service de sélection musicale sur mesure pour vos projets cinéma, TV et publicité. Réponse sous 24h, gratuit et sans engagement.">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script>(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
 <style>
 :root {
   --red: #E50914;
+  --bg: #f6f6f6;
+  --bg2: #eeeeee;
+  --bg3: #e4e4e4;
+  --bg4: #d8d8d8;
+  --bg-deep: #e0e0e0;
+  --bg-header: rgba(246,246,246,0.98);
+  --text: #111111;
+  --text2: #2c2c2c;
+  --muted: #666666;
+  --border: rgba(0,0,0,0.1);
+}
+[data-theme="dark"] {
   --bg: #141414;
   --bg2: #1f1f1f;
   --bg3: #2a2a2a;
   --bg4: #383838;
-  --text: #fff;
+  --bg-deep: #0a0a0a;
+  --bg-header: rgba(10,10,10,0.98);
+  --text: #ffffff;
   --text2: #d4d4d4;
-  --muted: #999;
+  --muted: #999999;
   --border: rgba(255,255,255,0.1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; overflow-x: hidden; }
+body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; overflow-x: hidden; transition: background 0.2s, color 0.2s; }
 
 /* ── HEADER ── */
 header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(10,10,10,0.98); backdrop-filter: blur(10px);
+  background: var(--bg-header); backdrop-filter: blur(10px);
   padding: 0 48px; height: 64px;
   display: flex; align-items: center; justify-content: space-between;
   border-bottom: 1px solid var(--border);
@@ -97,8 +112,8 @@ header {
 
 /* ── STATS BAR ── */
 .stats-bar {
-  background: #0a0a0a; border-top: 1px solid rgba(255,255,255,0.06);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: var(--bg-deep); border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   padding: 0 72px;
   display: grid; grid-template-columns: repeat(4, 1fr);
 }
@@ -139,7 +154,7 @@ header {
 .avantage-text { font-size: 12px; color: var(--muted); line-height: 1.7; font-weight: 300; }
 
 /* ── FORM ── */
-.form-section { padding: 80px 72px; background: #0a0a0a; }
+.form-section { padding: 80px 72px; background: var(--bg-deep); }
 .form-inner { max-width: 900px; margin: 0 auto; }
 .form-header { margin-bottom: 40px; }
 .form-card {
@@ -292,7 +307,7 @@ textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
 .testimonial-stars { font-size: 11px; color: var(--red); margin-bottom: 14px; }
 
 /* ── FAQ ── */
-.faq-section { padding: 80px 72px; background: #0a0a0a; border-top: 1px solid var(--border); }
+.faq-section { padding: 80px 72px; background: var(--bg-deep); border-top: 1px solid var(--border); }
 .faq-inner { max-width: 720px; margin: 0 auto; }
 .faq-list { margin-top: 40px; display: flex; flex-direction: column; gap: 2px; }
 .faq-item {
@@ -366,6 +381,9 @@ footer a:hover { color: #999; }
   </a>
   <div class="header-right">
     <a class="btn-nav" href="index.html">Catalogue</a>
+    <a class="btn-nav" href="television.html">Télévision</a>
+    <a class="btn-nav" href="aide.html">Aide</a>
+    <button class="btn-nav" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
     <a class="btn-nav btn-red" href="#brief">Déposer mon brief</a>
   </div>
 </header>
@@ -765,6 +783,21 @@ document.querySelectorAll('a[href="#brief"]').forEach(a => {
     document.getElementById('brief').scrollIntoView({ behavior: 'smooth' });
   });
 });
+
+// ── THEME ──
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('osm-theme', next);
+  const btn = document.getElementById('btn-theme');
+  if (btn) btn.textContent = next === 'dark' ? '☀' : '🌙';
+}
+(function() {
+  const t = localStorage.getItem('osm-theme') || 'light';
+  const btn = document.getElementById('btn-theme');
+  if (btn) btn.textContent = t === 'dark' ? '☀' : '🌙';
+})();
 </script>
 </body>
 </html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – Aide & Guide d'utilisation</title>
+<meta name="description" content="Comment utiliser le catalogue OSM — recherche, écoute, téléchargement, sélection sur mesure.">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script>(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<style>
+:root{--red:#E50914;--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--text:#111;--text2:#2c2c2c;--muted:#666;--border:rgba(0,0,0,0.1);--card-bg:#fff;--bg-header:rgba(246,246,246,0.98)}
+[data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#fff;--text2:#d4d4d4;--muted:#999;--border:rgba(255,255,255,0.1);--card-bg:#1a1a1a;--bg-header:rgba(10,10,10,0.98)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.2s,color 0.2s}
+
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px;color:var(--text)}
+.header-right{display:flex;align-items:center;gap:8px}
+.btn-nav{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s;white-space:nowrap}
+.btn-nav:hover{border-color:#888;color:var(--text)}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.btn-red:hover{background:#c4070f;border-color:#c4070f}
+
+.hero{padding:108px 72px 64px;background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
+.hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:18px}
+.hero-title{font-size:clamp(32px,4.5vw,60px);font-weight:900;letter-spacing:-2px;line-height:0.95;margin-bottom:20px}
+.hero-title span{color:var(--red)}
+.hero-sub{font-size:15px;font-weight:300;color:var(--muted);max-width:600px;line-height:1.7}
+
+.content{padding:56px 72px 80px;max-width:1100px;margin:0 auto}
+
+.section{margin-bottom:60px}
+.section-eyebrow{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.section-title{font-size:22px;font-weight:700;margin-bottom:24px;letter-spacing:-0.3px}
+
+.steps{display:flex;flex-direction:column;gap:16px}
+.step{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:24px 28px;display:flex;align-items:flex-start;gap:20px;transition:border-color 0.2s}
+.step:hover{border-color:rgba(229,9,20,0.3)}
+.step-num{width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-body{flex:1;min-width:0}
+.step-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.7;font-weight:300}
+.step-desc strong{color:var(--text2);font-weight:600}
+.step-desc code{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 6px;font-family:monospace;font-size:12px;color:var(--red)}
+
+.tip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.tip-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:22px 24px;transition:all 0.2s}
+.tip-card:hover{border-color:rgba(229,9,20,0.25);transform:translateY(-2px)}
+.tip-icon{font-size:24px;margin-bottom:12px}
+.tip-title{font-size:13px;font-weight:700;margin-bottom:8px;letter-spacing:0.3px}
+.tip-text{font-size:12px;color:var(--muted);line-height:1.7;font-weight:300}
+.tip-text strong{color:var(--text2);font-weight:600}
+
+.divider{border:none;border-top:1px solid var(--border);margin-bottom:60px}
+
+.contact-band{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:40px 48px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.contact-left h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.contact-left p{font-size:13px;color:var(--muted);font-weight:300;max-width:480px;line-height:1.65}
+.contact-btns{display:flex;gap:10px;flex-wrap:wrap;flex-shrink:0}
+
+footer{text-align:center;padding:24px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--red)}
+
+@media(max-width:900px){
+  header{padding:0 16px}
+  .hero{padding:88px 20px 52px}
+  .content{padding:40px 16px 60px}
+  .contact-band{padding:28px 24px;flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">ORIGINAL SCORES MUSIC</div>
+  </a>
+  <div class="header-right">
+    <a class="btn-nav" href="index.html">← Catalogue</a>
+    <a class="btn-nav" href="television.html">Télévision</a>
+    <a class="btn-nav" href="service.html">Sélection sur mesure</a>
+    <button class="btn-nav" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
+    <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Guide d'utilisation</div>
+  <h1 class="hero-title">Comment utiliser <span>OSM</span></h1>
+  <p class="hero-sub">Tout ce que vous devez savoir pour rechercher, écouter, télécharger et utiliser nos musiques originales dans vos projets.</p>
+</div>
+
+<div class="content">
+
+  <!-- RECHERCHE -->
+  <div class="section">
+    <div class="section-eyebrow">Recherche</div>
+    <div class="section-title">Trouver la musique parfaite</div>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Recherche par mot-clé simple</div>
+          <div class="step-desc">Tapez un mot dans la barre de recherche en haut à droite : <strong>émotion</strong>, <strong>instrument</strong>, <strong>genre musical</strong> ou <strong>ambiance</strong>. Ex : <code>piano</code>, <code>suspense</code>, <code>groovy</code>, <code>tribal</code>. Les résultats s'affichent instantanément.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Recherche multi-mots-clés</div>
+          <div class="step-desc">Combinez plusieurs mots séparés par des espaces pour affiner votre recherche. Ex : <code>piano suspense</code> ou <code>cordes épique aventure</code>. Le catalogue retourne uniquement les titres correspondant à <strong>tous</strong> les mots saisis — plus les mots, plus la recherche est précise.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Naviguer par playlist ou par tag</div>
+          <div class="step-desc">Utilisez l'onglet <strong>Playlists</strong> pour explorer nos 28 univers musicaux classés par thème (action, mélancolie, world, électro…). Dans l'onglet <strong>Catalogue</strong>, filtrez par genre avec les pilules colorées ou affinez par tag thématique.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ÉCOUTE -->
+  <div class="section">
+    <div class="section-eyebrow">Écoute</div>
+    <div class="section-title">Prévisualiser un morceau</div>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Cliquer sur un titre pour l'écouter</div>
+          <div class="step-desc">Un clic sur n'importe quel titre lance la lecture dans le <strong>player en bas de page</strong>. La forme d'onde rouge s'anime et vous pouvez cliquer n'importe où sur la barre de progression pour naviguer dans le morceau.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Contrôles du player</div>
+          <div class="step-desc">Le player propose : lecture/pause, passage au titre suivant/précédent, répétition en boucle, et réglage du volume. Le bouton <strong>🎵 Ma liste</strong> affiche la file d'attente — ajoutez des titres avec le <strong>+</strong> pour les écouter à la suite.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- TÉLÉCHARGEMENT -->
+  <div class="section">
+    <div class="section-eyebrow">Téléchargement</div>
+    <div class="section-title">Exporter un morceau</div>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Bouton télécharger sur la piste</div>
+          <div class="step-desc">Sur chaque ligne de titre, cliquez sur l'icône <strong>⬇</strong> pour télécharger le fichier audio. Le fichier est fourni en qualité broadcast (WAV ou MP3 haute qualité selon la piste).</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Téléchargement depuis le player</div>
+          <div class="step-desc">Le bouton <strong>Télécharger</strong> dans le player en bas de page permet d'exporter le morceau en cours d'écoute directement.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Utilisation en montage</div>
+          <div class="step-desc">Nos musiques sont <strong>gratuites pour le montage</strong>. Nous récupérons nos droits directement auprès de la SACEM en fonction des diffusions. Aucune licence à payer à l'avance — vous montez librement, nous déclarons à la diffusion.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CONSEILS -->
+  <div class="section">
+    <div class="section-eyebrow">Conseils</div>
+    <div class="section-title">Astuces pour mieux chercher</div>
+    <div class="tip-grid">
+
+      <div class="tip-card">
+        <div class="tip-icon">🎭</div>
+        <div class="tip-title">Cherchez par émotion</div>
+        <div class="tip-text">Essayez <strong>mélancolie</strong>, <strong>tension</strong>, <strong>espoir</strong>, <strong>énergie</strong>, <strong>mystère</strong>. Les titres sont tagués par ressenti pour faciliter la recherche au montage.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">🎸</div>
+        <div class="tip-title">Cherchez par instrument</div>
+        <div class="tip-text">Tapez <strong>piano</strong>, <strong>cordes</strong>, <strong>guitare</strong>, <strong>percussions</strong>, <strong>orchestre</strong>, <strong>synthé</strong>… pour cibler rapidement la texture sonore dont vous avez besoin.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">🌍</div>
+        <div class="tip-title">Cherchez par univers</div>
+        <div class="tip-text"><strong>tribal</strong>, <strong>africain</strong>, <strong>oriental</strong>, <strong>jazz</strong>, <strong>électro</strong>, <strong>épique</strong>, <strong>minimaliste</strong> — les playlists thématiques sont aussi un excellent point de départ.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">⚡</div>
+        <div class="tip-title">Combinez les mots-clés</div>
+        <div class="tip-text">Plus vous combinez de mots, plus le résultat est précis. <strong>piano suspense sombre</strong> donnera des résultats très différents de <strong>piano doux mélancolie</strong>.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">📋</div>
+        <div class="tip-title">Utilisez "Ma liste"</div>
+        <div class="tip-text">Ajoutez vos favoris avec le bouton <strong>+</strong> pour constituer une liste d'écoute. Pratique pour comparer plusieurs titres avant de faire votre choix définitif.</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">🔗</div>
+        <div class="tip-title">Copiez le lien d'un titre</div>
+        <div class="tip-text">Le bouton <strong>🔗</strong> sur chaque piste copie un lien direct vers ce morceau. Partagez-le facilement avec vos collègues réalisateurs ou producteurs.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CONTACT / SÉLECTION SUR MESURE -->
+  <div class="contact-band">
+    <div class="contact-left">
+      <h3>Besoin d'une sélection sur mesure ?</h3>
+      <p>Notre équipe sélectionne manuellement les musiques les plus adaptées à votre projet : envoyez-nous votre dossier (sujet, ambiance recherchée, durée, diffusion prévue) et nous vous proposons une short-list sous 24h.</p>
+    </div>
+    <div class="contact-btns">
+      <a class="btn-nav btn-red" href="service.html">Demander une sélection</a>
+      <a class="btn-nav" href="mailto:vladimirstreiff@gmail.com">✉ Écrire directement</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp;
+  <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp;
+  <a href="tel:+33682985752">06 82 98 57 52</a>
+</footer>
+
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  localStorage.setItem('osm-theme',next);
+  const btn=document.getElementById('btn-theme');
+  if(btn)btn.textContent=next==='dark'?'☀':'🌙';
+}
+(function(){
+  const t=localStorage.getItem('osm-theme')||'light';
+  const btn=document.getElementById('btn-theme');
+  if(btn)btn.textContent=t==='dark'?'☀':'🌙';
+})();
+</script>
+
+</body>
+</html>
