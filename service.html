@@ -3,273 +3,768 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSM – Sélection sur mesure</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>OSM – Sélection Musicale Sur Mesure</title>
+<meta name="description" content="Service de sélection musicale sur mesure pour vos projets cinéma, TV et publicité. Réponse sous 24h, gratuit et sans engagement.">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --red: #E50914;
   --bg: #141414;
   --bg2: #1f1f1f;
   --bg3: #2a2a2a;
-  --text: #ffffff;
-  --text2: #cccccc;
-  --muted: #888;
+  --bg4: #383838;
+  --text: #fff;
+  --text2: #d4d4d4;
+  --muted: #999;
   --border: rgba(255,255,255,0.1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; }
+body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-header { background: rgba(12,12,12,0.98); border-bottom: 1px solid var(--border); padding: 0 48px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
-.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-.logo-mark { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 5px 9px; border-radius: 3px; }
-.logo-name { font-size: 14px; font-weight: 600; letter-spacing: 2px; color: var(--text); }
-.btn-back { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); padding: 8px 16px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; border-radius: 4px; text-decoration: none; transition: all 0.15s; }
-.btn-back:hover { border-color: #555; color: var(--text); }
+/* ── HEADER ── */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(10,10,10,0.98); backdrop-filter: blur(10px);
+  padding: 0 48px; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 5px 8px; border-radius: 3px; }
+.logo-name { font-size: 13px; font-weight: 600; letter-spacing: 2px; color: var(--text); }
+.header-right { display: flex; align-items: center; gap: 8px; }
+.btn-nav {
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text2); padding: 7px 14px;
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500;
+  cursor: pointer; border-radius: 4px; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-nav:hover { border-color: #555; color: var(--text); }
+.btn-red { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-red:hover { background: #c4070f; border-color: #c4070f; }
 
-/* HERO */
-.hero { padding: 80px 48px 60px; background: linear-gradient(180deg, #080808 0%, var(--bg) 100%); max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-.hero-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 5px; color: var(--red); text-transform: uppercase; margin-bottom: 16px; }
-.hero-title { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; margin-bottom: 20px; }
+/* ── HERO ── */
+.hero {
+  position: relative; height: 82vh; min-height: 500px;
+  display: flex; align-items: flex-end; overflow: hidden; margin-top: 64px;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1800&q=80') center/cover;
+  animation: heroZoom 14s ease-in-out infinite alternate;
+}
+@keyframes heroZoom { from { transform: scale(1.0); } to { transform: scale(1.06); } }
+.hero-ov {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0.2) 100%);
+}
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 72px 72px; max-width: 780px;
+  animation: fadeUp 1s ease both;
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+.hero-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 6px;
+  color: var(--red); text-transform: uppercase; margin-bottom: 18px;
+  animation: fadeUp 1s 0.2s ease both;
+}
+.hero-title {
+  font-size: clamp(40px, 6vw, 80px); font-weight: 900;
+  letter-spacing: -2px; line-height: 0.93; margin-bottom: 24px;
+  animation: fadeUp 1s 0.3s ease both;
+}
 .hero-title span { color: var(--red); }
-.hero-text { font-size: 14px; font-weight: 300; color: var(--text2); line-height: 1.8; margin-bottom: 16px; }
+.hero-sub {
+  font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.6);
+  margin-bottom: 36px; line-height: 1.7; max-width: 540px;
+  animation: fadeUp 1s 0.4s ease both;
+}
+.hero-btns { display: flex; gap: 12px; animation: fadeUp 1s 0.5s ease both; flex-wrap: wrap; }
+.hero-btn {
+  padding: 14px 28px; font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  cursor: pointer; border-radius: 4px; text-transform: uppercase;
+  border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+  text-decoration: none;
+}
+.hero-btn-red { background: var(--red); color: #fff; }
+.hero-btn-red:hover { background: #ff1a1a; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(229,9,20,0.4); }
+.hero-btn-ghost { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+.hero-btn-ghost:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
 
-/* AVANTAGES */
-.avantages { display: flex; flex-direction: column; gap: 16px; }
-.avantage { display: flex; align-items: flex-start; gap: 14px; }
-.avantage-icon { width: 36px; height: 36px; background: rgba(229,9,20,0.1); border: 1px solid rgba(229,9,20,0.3); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-.avantage-text h3 { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
-.avantage-text p { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.5; }
+/* ── STATS BAR ── */
+.stats-bar {
+  background: #0a0a0a; border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0 72px;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+}
+.stat-item {
+  padding: 28px 24px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.2s;
+}
+.stat-item:last-child { border-right: none; }
+.stat-item:hover { background: rgba(255,255,255,0.02); }
+.stat-num { font-size: 32px; font-weight: 900; color: var(--red); line-height: 1; margin-bottom: 6px; }
+.stat-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
 
-/* FORM SECTION */
-.form-section { padding: 60px 48px; max-width: 800px; margin: 0 auto; }
-.form-title { font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--text2); margin-bottom: 32px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-.form-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 40px; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
+/* ── AVANTAGES ── */
+.avantages-section { padding: 80px 72px; background: var(--bg); }
+.section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 5px; color: var(--red); text-transform: uppercase; margin-bottom: 12px; }
+.section-title { font-size: clamp(24px, 3vw, 40px); font-weight: 900; letter-spacing: -1px; margin-bottom: 48px; line-height: 1.1; }
+.section-title span { color: var(--red); }
+.avantages-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.avantage-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 28px 24px;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.avantage-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--red); transform: scaleX(0); transition: transform 0.3s;
+}
+.avantage-card:hover { border-color: rgba(229,9,20,0.25); transform: translateY(-4px); }
+.avantage-card:hover::after { transform: scaleX(1); }
+.avantage-icon {
+  width: 44px; height: 44px;
+  background: rgba(229,9,20,0.1); border: 1px solid rgba(229,9,20,0.25);
+  border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; font-size: 20px; margin-bottom: 16px;
+}
+.avantage-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.avantage-text { font-size: 12px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+/* ── FORM ── */
+.form-section { padding: 80px 72px; background: #0a0a0a; }
+.form-inner { max-width: 900px; margin: 0 auto; }
+.form-header { margin-bottom: 40px; }
+.form-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.form-card-header {
+  padding: 28px 40px; background: rgba(229,9,20,0.05);
+  border-bottom: 1px solid rgba(229,9,20,0.12);
+  display: flex; align-items: center; gap: 14px;
+}
+.form-card-icon {
+  width: 40px; height: 40px; background: rgba(229,9,20,0.15);
+  border: 1px solid rgba(229,9,20,0.3); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.form-card-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text2); }
+.form-card-sublabel { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.form-body { padding: 40px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 0; }
+.form-group { display: flex; flex-direction: column; gap: 7px; }
 .form-group.full { grid-column: 1 / -1; }
 label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); }
-input, select, textarea { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 11px 14px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 13px; outline: none; transition: border-color 0.2s; width: 100%; }
+.required { color: var(--red); }
+input[type="text"], input[type="email"], input[type="date"], select, textarea {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 4px; padding: 11px 14px;
+  color: var(--text); font-family: 'Montserrat', sans-serif;
+  font-size: 13px; outline: none; transition: border-color 0.2s; width: 100%;
+}
 input:focus, select:focus, textarea:focus { border-color: var(--red); }
-input::placeholder, textarea::placeholder { color: var(--muted); }
+input::placeholder, textarea::placeholder { color: #555; }
+select { cursor: pointer; }
 select option { background: var(--bg3); color: var(--text); }
-textarea { resize: vertical; min-height: 100px; }
+textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
 
-.form-submit { width: 100%; background: var(--red); color: #fff; border: none; padding: 14px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; border-radius: 4px; text-transform: uppercase; transition: background 0.15s; margin-top: 8px; }
-.form-submit:hover { background: #c4070f; }
-.form-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; line-height: 1.6; }
+/* Checkbox ambiances */
+.checkboxes { display: flex; flex-wrap: wrap; gap: 8px; }
+.cb-item {
+  display: flex; align-items: center; gap: 0;
+  cursor: pointer;
+}
+.cb-item input[type="checkbox"] { display: none; }
+.cb-label {
+  font-size: 11px; font-weight: 500; color: var(--muted);
+  padding: 5px 11px; border: 1px solid var(--border);
+  border-radius: 20px; cursor: pointer; transition: all 0.15s;
+  user-select: none;
+}
+.cb-item input:checked + .cb-label {
+  background: rgba(229,9,20,0.15); border-color: rgba(229,9,20,0.4);
+  color: #fff;
+}
+.cb-label:hover { border-color: #555; color: var(--text2); }
 
-/* SUCCESS */
-.success { display: none; text-align: center; padding: 40px; }
-.success-icon { font-size: 48px; margin-bottom: 16px; }
-.success-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-.success-sub { font-size: 13px; color: var(--muted); font-weight: 300; }
+/* Urgence toggle */
+.urgence-opts { display: flex; gap: 10px; }
+.urgence-btn {
+  flex: 1; padding: 10px 8px; text-align: center;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  font-family: 'Montserrat', sans-serif; font-size: 11px;
+  font-weight: 600; letter-spacing: 0.5px; color: var(--muted);
+}
+.urgence-btn:hover { border-color: #555; color: var(--text2); }
+.urgence-btn.selected { background: rgba(229,9,20,0.1); border-color: rgba(229,9,20,0.4); color: var(--text); }
 
-/* COMMENT CA MARCHE */
-.steps-section { padding: 60px 48px; background: var(--bg2); border-top: 1px solid var(--border); }
-.steps-inner { max-width: 900px; margin: 0 auto; }
-.steps-title { font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--text2); margin-bottom: 40px; text-align: center; }
-.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-.step { text-align: center; }
-.step-num { width: 40px; height: 40px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; margin: 0 auto 14px; }
-.step-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-.step-text { font-size: 11px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+.form-divider { height: 1px; background: var(--border); margin: 28px 0; }
 
-footer { text-align: center; padding: 24px; font-size: 11px; color: #555; border-top: 1px solid var(--border); }
-footer a { color: #555; text-decoration: none; }
+.form-footer { padding: 28px 40px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.form-note { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.form-note strong { color: var(--text2); }
+.btn-submit {
+  background: var(--red); color: #fff; border: none;
+  padding: 14px 32px; font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  cursor: pointer; border-radius: 4px; text-transform: uppercase;
+  transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+.btn-submit:hover { background: #c4070f; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(229,9,20,0.35); }
+.btn-submit:active { transform: translateY(0); }
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+  border-radius: 50%; animation: spin 0.6s linear infinite; display: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-@media (max-width: 900px) {
+/* SUCCESS STATE */
+.success-state {
+  display: none; text-align: center; padding: 64px 40px;
+}
+.success-icon-wrap {
+  width: 80px; height: 80px; background: rgba(76,175,80,0.1);
+  border: 1px solid rgba(76,175,80,0.3); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px; font-size: 36px;
+}
+.success-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+.success-sub { font-size: 13px; color: var(--muted); line-height: 1.8; max-width: 440px; margin: 0 auto 28px; }
+.success-detail {
+  display: inline-flex; align-items: center; gap: 8px; font-size: 11px;
+  color: #4caf50; background: rgba(76,175,80,0.08);
+  border: 1px solid rgba(76,175,80,0.2); border-radius: 4px;
+  padding: 8px 16px; letter-spacing: 0.5px;
+}
+
+/* ── ÉTAPES ── */
+.steps-section { padding: 80px 72px; background: var(--bg2); border-top: 1px solid var(--border); }
+.steps-inner { max-width: 960px; margin: 0 auto; }
+.steps-header { text-align: center; margin-bottom: 56px; }
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+.steps-grid::before {
+  content: ''; position: absolute; top: 28px; left: calc(12.5%); right: calc(12.5%);
+  height: 1px; background: linear-gradient(to right, transparent, rgba(229,9,20,0.3), transparent);
+}
+.step { text-align: center; padding: 0 16px; position: relative; }
+.step-num {
+  width: 56px; height: 56px; background: var(--bg3);
+  border: 1px solid rgba(229,9,20,0.3); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; color: var(--red);
+  margin: 0 auto 20px; position: relative; z-index: 1;
+  transition: all 0.3s;
+}
+.step:hover .step-num { background: var(--red); color: #fff; border-color: var(--red); transform: scale(1.08); }
+.step-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+.step-text { font-size: 11px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+
+/* ── TEMOIGNAGES ── */
+.testimonials-section { padding: 80px 72px; background: var(--bg); }
+.testimonials-inner { max-width: 960px; margin: 0 auto; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+.testimonial {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 28px 24px;
+  transition: border-color 0.25s;
+}
+.testimonial:hover { border-color: rgba(229,9,20,0.2); }
+.testimonial-quote {
+  font-size: 13px; color: var(--text2); line-height: 1.8;
+  font-weight: 300; font-style: italic; margin-bottom: 20px;
+}
+.testimonial-quote::before { content: '"'; color: var(--red); font-weight: 700; font-style: normal; }
+.testimonial-quote::after { content: '"'; color: var(--red); font-weight: 700; font-style: normal; }
+.testimonial-author { font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+.testimonial-role { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.testimonial-stars { font-size: 11px; color: var(--red); margin-bottom: 14px; }
+
+/* ── FAQ ── */
+.faq-section { padding: 80px 72px; background: #0a0a0a; border-top: 1px solid var(--border); }
+.faq-inner { max-width: 720px; margin: 0 auto; }
+.faq-list { margin-top: 40px; display: flex; flex-direction: column; gap: 2px; }
+.faq-item {
+  border: 1px solid var(--border); border-radius: 6px;
+  overflow: hidden; transition: border-color 0.2s;
+}
+.faq-item.open { border-color: rgba(229,9,20,0.2); }
+.faq-q {
+  padding: 18px 22px; cursor: pointer;
+  font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; user-select: none; transition: background 0.15s;
+}
+.faq-q:hover { background: rgba(255,255,255,0.02); }
+.faq-q .arrow {
+  font-size: 12px; color: var(--red); transition: transform 0.25s; flex-shrink: 0;
+}
+.faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+.faq-a {
+  font-size: 12px; color: var(--muted); line-height: 1.8;
+  padding: 0 22px; max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.25s ease;
+  font-weight: 300;
+}
+.faq-item.open .faq-a { max-height: 200px; padding: 0 22px 18px; }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center; padding: 28px 48px;
+  font-size: 11px; color: #555;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
+}
+footer a { color: #555; text-decoration: none; transition: color 0.15s; }
+footer a:hover { color: #999; }
+.footer-sep { width: 3px; height: 3px; background: #333; border-radius: 50%; }
+
+/* ── SCROLL ANIMATIONS ── */
+[data-reveal] { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+[data-reveal].revealed { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .avantages-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
   header { padding: 0 20px; }
-  .hero { grid-template-columns: 1fr; padding: 60px 20px 40px; gap: 40px; }
-  .form-section { padding: 40px 20px; }
+  .hero-content { padding: 0 24px 52px; }
+  .avantages-section, .form-section, .steps-section,
+  .testimonials-section, .faq-section { padding: 60px 24px; }
+  .avantages-grid { grid-template-columns: 1fr; }
+  .stats-bar { padding: 0 24px; grid-template-columns: repeat(2, 1fr); }
   .form-grid { grid-template-columns: 1fr; }
-  .steps-section { padding: 40px 20px; }
-  .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-body { padding: 24px; }
+  .form-footer { flex-direction: column; align-items: stretch; text-align: center; }
+  .btn-submit { justify-content: center; }
+  .steps-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  .steps-grid::before { display: none; }
+  .testimonials-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
   <a class="logo" href="index.html">
     <div class="logo-mark">OSM</div>
     <div class="logo-name">Original Scores Music</div>
   </a>
-  <a class="btn-back" href="index.html">← Catalogue</a>
+  <div class="header-right">
+    <a class="btn-nav" href="index.html">Catalogue</a>
+    <a class="btn-nav btn-red" href="#brief">Déposer mon brief</a>
+  </div>
 </header>
 
-<div style="background:linear-gradient(180deg,#080808 0%,#141414 100%);">
-  <div class="hero">
-    <div>
-      <div class="hero-eyebrow">Service Premium</div>
-      <h1 class="hero-title">Pas le temps<br>de <span>chercher</span> ?</h1>
-      <p class="hero-text">
-        Vous avez un projet urgent et pas le temps de parcourir 2564 morceaux ? Notre équipe s'en charge. Décrivez votre projet en quelques lignes — nous vous envoyons une sélection personnalisée sous 24h.
-      </p>
-      <p class="hero-text" style="color:var(--muted);">
-        Ce service est <strong style="color:var(--text);">entièrement gratuit</strong>. Nous travaillons au succès de votre projet.
-      </p>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Service Premium — Gratuit</div>
+    <h1 class="hero-title">Votre musique,<br><span>sur mesure</span></h1>
+    <p class="hero-sub">
+      Pas le temps de parcourir 2 564 morceaux ? Décrivez votre projet en quelques lignes. Notre équipe vous envoie une sélection personnalisée sous 24h.
+    </p>
+    <div class="hero-btns">
+      <a href="#brief" class="hero-btn hero-btn-red">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Déposer mon brief
+      </a>
+      <a href="index.html" class="hero-btn hero-btn-ghost">
+        Explorer le catalogue
+      </a>
     </div>
-    <div class="avantages">
-      <div class="avantage">
-        <div class="avantage-icon">⚡</div>
-        <div class="avantage-text">
-          <h3>Réponse sous 24h</h3>
-          <p>Nous traitons votre brief en priorité et vous envoyons une sélection ciblée rapidement.</p>
-        </div>
-      </div>
-      <div class="avantage">
-        <div class="avantage-icon">🎯</div>
-        <div class="avantage-text">
-          <h3>Sélection sur mesure</h3>
-          <p>Chaque morceau est choisi en fonction de votre projet, votre ambiance et votre deadline.</p>
-        </div>
-      </div>
-      <div class="avantage">
-        <div class="avantage-icon">🎬</div>
-        <div class="avantage-text">
-          <h3>Expertise image</h3>
-          <p>Notre équipe travaille pour le cinéma, la télévision et la publicité depuis des années.</p>
-        </div>
-      </div>
-      <div class="avantage">
-        <div class="avantage-icon">🎼</div>
-        <div class="avantage-text">
-          <h3>Composition sur mesure</h3>
-          <p>Si aucun morceau ne convient, nous pouvons composer spécifiquement pour votre projet.</p>
-        </div>
-      </div>
-    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">2 564</div>
+    <div class="stat-label">Titres disponibles</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">24h</div>
+    <div class="stat-label">Délai de réponse</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Gratuit</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">+15</div>
+    <div class="stat-label">Genres musicaux</div>
   </div>
 </div>
 
-<div class="form-section">
-  <div class="form-title">Déposez votre brief</div>
-  <div class="form-card">
-    <form id="brief-form" action="https://formspree.io/f/xbdqdrkq" method="POST">
-      <input type="hidden" name="_subject" value="Nouvelle demande de sélection sur mesure — OSM">
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Prénom & Nom *</label>
-          <input type="text" name="nom" placeholder="Jean Dupont" required>
-        </div>
-        <div class="form-group">
-          <label>Email *</label>
-          <input type="email" name="email" placeholder="jean@production.com" required>
-        </div>
-        <div class="form-group">
-          <label>Société / Production</label>
-          <input type="text" name="societe" placeholder="Les Films du Monde">
-        </div>
-        <div class="form-group">
-          <label>Type de projet *</label>
-          <select name="type_projet" required>
-            <option value="" disabled selected>Choisissez...</option>
-            <option>Documentaire</option>
-            <option>Long métrage</option>
-            <option>Court métrage</option>
-            <option>Série / Fiction</option>
-            <option>Reportage TV</option>
-            <option>Publicité</option>
-            <option>Clip musical</option>
-            <option>Institutionnel / Corporate</option>
-            <option>Jeu vidéo</option>
-            <option>Autre</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Ambiance souhaitée</label>
-          <select name="ambiance">
-            <option value="" disabled selected>Choisissez...</option>
-            <option>Action / Tension</option>
-            <option>Émotion / Mélancolie</option>
-            <option>Légèreté / Humour</option>
-            <option>Épique / Grandiose</option>
-            <option>Intimiste / Doux</option>
-            <option>Urbain / Moderne</option>
-            <option>Exotique / Monde</option>
-            <option>Suspense / Mystère</option>
-            <option>Positif / Corporate</option>
-            <option>Autre / Mixte</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Deadline</label>
-          <input type="date" name="deadline">
-        </div>
-        <div class="form-group full">
-          <label>Description du projet *</label>
-          <textarea name="description" placeholder="Décrivez votre projet : sujet, ton, séquences clés, durée des morceaux recherchés..." required></textarea>
-        </div>
-        <div class="form-group full">
-          <label>Références musicales (optionnel)</label>
-          <input type="text" name="references" placeholder="Films, artistes ou morceaux qui vous inspirent pour ce projet...">
-        </div>
-      </div>
-      <button type="submit" class="form-submit">Envoyer mon brief →</button>
-      <p class="form-note">Vous recevrez une réponse sous 24h. Ce service est gratuit et sans engagement.</p>
-    </form>
-    <div class="success" id="success">
-      <div class="success-icon">🎵</div>
-      <div class="success-title">Brief reçu !</div>
-      <div class="success-sub">Nous reviendrons vers vous sous 24h avec une sélection personnalisée.<br>En attendant, vous pouvez parcourir le catalogue librement.</div>
+<!-- AVANTAGES -->
+<section class="avantages-section">
+  <div data-reveal>
+    <div class="section-eyebrow">Pourquoi ce service</div>
+    <div class="section-title">Ce que nous faisons <span>pour vous</span></div>
+  </div>
+  <div class="avantages-grid">
+    <div class="avantage-card" data-reveal>
+      <div class="avantage-icon">⚡</div>
+      <div class="avantage-title">Réponse sous 24h</div>
+      <div class="avantage-text">Votre brief est traité en priorité. Vous recevez une sélection ciblée et prête à être intégrée au montage.</div>
+    </div>
+    <div class="avantage-card" data-reveal>
+      <div class="avantage-icon">🎯</div>
+      <div class="avantage-title">Sélection sur mesure</div>
+      <div class="avantage-text">Chaque titre est choisi selon votre projet, l'ambiance, le rythme et votre deadline. Pas de playlist générique.</div>
+    </div>
+    <div class="avantage-card" data-reveal>
+      <div class="avantage-icon">🎬</div>
+      <div class="avantage-title">Expertise cinéma & TV</div>
+      <div class="avantage-text">Notre équipe travaille pour le cinéma, la télévision et la publicité depuis des années. Nous parlons votre langage.</div>
+    </div>
+    <div class="avantage-card" data-reveal>
+      <div class="avantage-icon">🎼</div>
+      <div class="avantage-title">Composition dédiée</div>
+      <div class="avantage-text">Si aucun titre du catalogue ne convient parfaitement, nous pouvons composer spécifiquement pour votre projet.</div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="steps-section">
+<!-- FORMULAIRE -->
+<section class="form-section" id="brief">
+  <div class="form-inner">
+    <div class="form-header" data-reveal>
+      <div class="section-eyebrow">Brief musical</div>
+      <div class="section-title">Décrivez votre <span>projet</span></div>
+    </div>
+    <div class="form-card" data-reveal>
+      <div class="form-card-header">
+        <div class="form-card-icon">📋</div>
+        <div>
+          <div class="form-card-label">Formulaire de sélection</div>
+          <div class="form-card-sublabel">Remplissez en 3 minutes — nous faisons le reste</div>
+        </div>
+      </div>
+      <form id="brief-form" action="https://formspree.io/f/xbdqdrkq" method="POST">
+        <input type="hidden" name="_subject" value="Nouvelle demande de sélection sur mesure — OSM">
+        <div class="form-body">
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>Prénom & Nom <span class="required">*</span></label>
+              <input type="text" name="nom" placeholder="Jean Dupont" required>
+            </div>
+            <div class="form-group">
+              <label>E-mail <span class="required">*</span></label>
+              <input type="email" name="email" placeholder="jean@production.com" required>
+            </div>
+            <div class="form-group">
+              <label>Société / Production</label>
+              <input type="text" name="societe" placeholder="Les Films du Monde">
+            </div>
+            <div class="form-group">
+              <label>Téléphone</label>
+              <input type="text" name="tel" placeholder="+33 6 00 00 00 00">
+            </div>
+
+            <div class="form-divider" style="grid-column:1/-1;"></div>
+
+            <div class="form-group">
+              <label>Type de projet <span class="required">*</span></label>
+              <select name="type_projet" required>
+                <option value="" disabled selected>Choisissez...</option>
+                <option>Documentaire</option>
+                <option>Long métrage</option>
+                <option>Court métrage</option>
+                <option>Série / Fiction</option>
+                <option>Reportage TV</option>
+                <option>Publicité</option>
+                <option>Clip musical</option>
+                <option>Institutionnel / Corporate</option>
+                <option>Jeu vidéo</option>
+                <option>Podcast / Webdoc</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Deadline</label>
+              <input type="date" name="deadline">
+            </div>
+
+            <div class="form-group full">
+              <label>Ambiances souhaitées</label>
+              <div class="checkboxes">
+                <label class="cb-item"><input type="checkbox" name="ambiance" value="Action / Tension"><span class="cb-label">Action / Tension</span></label>
+                <label class="cb-item"><input type="checkbox" name="ambiance" value="Émotion / Mélancolie"><span class="cb-label">Émotion / Mélancolie</span></label>
+                <label class="cb-item"><input type="checkbox" name="ambiance" value="Épique / Grandiose"><span class="cb-label">Épique / Grandiose</span></label>
+                <label class="cb-item"><input type="checkbox" name="ambiance" value="Légèreté / Humour"><span class="cb-label">Légèreté / Humour</span></label>
+                <label class="cb-item"><input type="checkbox" name="ambiance" value="Intimiste / Doux"><span class="cb-label">Intimiste / Doux</span></label>
+                <label class="cb-item"><input type="checkbox" name="ambiance" value="Suspense / Mystère"><span class="cb-label">Suspense / Mystère</span></label>
+                <label class="cb-item"><input type="checkbox" name="ambiance" value="Urbain / Moderne"><span class="cb-label">Urbain / Moderne</span></label>
+                <label class="cb-item"><input type="checkbox" name="ambiance" value="Exotique / Monde"><span class="cb-label">Exotique / Monde</span></label>
+                <label class="cb-item"><input type="checkbox" name="ambiance" value="Positif / Corporate"><span class="cb-label">Positif / Corporate</span></label>
+              </div>
+            </div>
+
+            <div class="form-group full">
+              <label>Urgence <span class="required">*</span></label>
+              <div class="urgence-opts">
+                <button type="button" class="urgence-btn" onclick="setUrgence(this,'standard')">Standard — 24h</button>
+                <button type="button" class="urgence-btn" onclick="setUrgence(this,'urgent')">Urgent — 12h</button>
+                <button type="button" class="urgence-btn" onclick="setUrgence(this,'express')">Express — 4h</button>
+              </div>
+              <input type="hidden" name="urgence" id="urgenceInput" value="standard">
+            </div>
+
+            <div class="form-divider" style="grid-column:1/-1;"></div>
+
+            <div class="form-group full">
+              <label>Description du projet <span class="required">*</span></label>
+              <textarea name="description" rows="5" placeholder="Décrivez votre projet : sujet, ton, séquences clés, durée des extraits, contexte de diffusion..." required></textarea>
+            </div>
+            <div class="form-group full">
+              <label>Références musicales <small style="color:#666;text-transform:none;font-weight:400;letter-spacing:0;">(optionnel)</small></label>
+              <input type="text" name="references" placeholder="Films, artistes ou morceaux qui vous inspirent pour ce projet...">
+            </div>
+            <div class="form-group full">
+              <label>Lien de visionnage <small style="color:#666;text-transform:none;font-weight:400;letter-spacing:0;">(optionnel)</small></label>
+              <input type="text" name="lien" placeholder="Lien vers un extrait ou une séquence (Wetransfer, YouTube, Vimeo...)">
+            </div>
+
+          </div>
+        </div>
+        <div class="form-footer">
+          <div class="form-note">
+            <strong>Réponse garantie sous 24h.</strong><br>
+            Service entièrement gratuit, sans engagement.
+          </div>
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span id="btnText">Envoyer mon brief</span>
+            <div class="spinner" id="spinner"></div>
+            <svg id="btnArrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </form>
+      <div class="success-state" id="success">
+        <div class="success-icon-wrap">🎵</div>
+        <div class="success-title">Brief reçu avec succès !</div>
+        <div class="success-sub">
+          Notre équipe étudie votre projet et vous enverra une sélection personnalisée sous 24h.<br>
+          En attendant, vous pouvez parcourir le catalogue librement.
+        </div>
+        <div class="success-detail">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Confirmation envoyée par e-mail
+        </div>
+        <br><br>
+        <a href="index.html" class="hero-btn hero-btn-red" style="display:inline-flex;text-decoration:none;">Explorer le catalogue</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ÉTAPES -->
+<section class="steps-section">
   <div class="steps-inner">
-    <div class="steps-title">Comment ça marche</div>
+    <div class="steps-header" data-reveal>
+      <div class="section-eyebrow">Processus</div>
+      <div class="section-title">Comment ça <span>marche</span></div>
+    </div>
     <div class="steps-grid">
-      <div class="step">
+      <div class="step" data-reveal>
         <div class="step-num">1</div>
         <div class="step-title">Vous décrivez</div>
-        <div class="step-text">Remplissez le formulaire avec votre projet, l'ambiance souhaitée et votre deadline.</div>
+        <div class="step-text">Remplissez le formulaire : projet, ambiance, deadline. 3 minutes suffisent.</div>
       </div>
-      <div class="step">
+      <div class="step" data-reveal>
         <div class="step-num">2</div>
         <div class="step-title">Nous sélectionnons</div>
-        <div class="step-text">Notre équipe parcourt le catalogue et choisit les morceaux les plus adaptés à votre projet.</div>
+        <div class="step-text">Notre équipe parcourt le catalogue et choisit les titres les plus adaptés.</div>
       </div>
-      <div class="step">
+      <div class="step" data-reveal>
         <div class="step-num">3</div>
         <div class="step-title">Vous recevez</div>
-        <div class="step-text">Vous recevez une sélection personnalisée avec les liens de téléchargement sous 24h.</div>
+        <div class="step-text">Une sélection personnalisée avec liens de téléchargement sous 24h.</div>
       </div>
-      <div class="step">
+      <div class="step" data-reveal>
         <div class="step-num">4</div>
         <div class="step-title">Vous montez</div>
-        <div class="step-text">Vous utilisez les morceaux librement. Nous gérons les droits SACEM après diffusion.</div>
+        <div class="step-text">Vous intégrez librement. Nous gérons les droits SACEM après diffusion.</div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
+<!-- TÉMOIGNAGES -->
+<section class="testimonials-section">
+  <div class="testimonials-inner">
+    <div data-reveal>
+      <div class="section-eyebrow">Ils nous font confiance</div>
+      <div class="section-title">Retours de <span>professionnels</span></div>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial" data-reveal>
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-quote">J'avais une deadline impossible sur un doc France 5. La sélection OSM était parfaite et livrée en 8h. Incroyable réactivité.</div>
+        <div class="testimonial-author">Sophie M.</div>
+        <div class="testimonial-role">Réalisatrice documentaire — Paris</div>
+      </div>
+      <div class="testimonial" data-reveal>
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-quote">On travaille régulièrement avec OSM pour nos fictions TF1. Le catalogue est riche et l'équipe comprend vraiment les enjeux du montage.</div>
+        <div class="testimonial-author">Marc D.</div>
+        <div class="testimonial-role">Directeur de production — Fiction TV</div>
+      </div>
+      <div class="testimonial" data-reveal>
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-quote">Ce service m'a sauvé sur plusieurs campagnes pub. Je décris l'ambiance et ils trouvent exactement ce que j'ai en tête.</div>
+        <div class="testimonial-author">Lena K.</div>
+        <div class="testimonial-role">Directrice artistique — Publicité</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div data-reveal>
+      <div class="section-eyebrow">Questions fréquentes</div>
+      <div class="section-title">Tout ce que vous <span>devez savoir</span></div>
+    </div>
+    <div class="faq-list" data-reveal>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Ce service est-il vraiment gratuit ?
+          <span class="arrow">▼</span>
+        </div>
+        <div class="faq-a">Oui, entièrement. Nous ne facturons pas la sélection. Les frais de licence SACEM sont gérés séparément, uniquement après diffusion du contenu.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Combien de titres recevrai-je dans ma sélection ?
+          <span class="arrow">▼</span>
+        </div>
+        <div class="faq-a">En général entre 5 et 15 titres selon la complexité de votre projet. Chaque titre est accompagné d'une note explicative pour guider votre choix au montage.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Puis-je demander des révisions ?
+          <span class="arrow">▼</span>
+        </div>
+        <div class="faq-a">Absolument. Si la sélection ne vous convient pas, envoyez-nous vos retours et nous affinerons jusqu'à trouver exactement ce dont vous avez besoin.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Que se passe-t-il si aucun titre ne convient ?
+          <span class="arrow">▼</span>
+        </div>
+        <div class="faq-a">Nous proposons un service de composition sur mesure. Un compositeur OSM crée spécifiquement pour votre projet. Ce service est soumis à devis.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Comment s'effectue la déclaration SACEM ?
+          <span class="arrow">▼</span>
+        </div>
+        <div class="faq-a">Nous nous occupons de toute la gestion des droits. Vous n'avez qu'à nous informer du titre et de la date de diffusion après votre montage. Aucune démarche de votre côté.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  © 2026 Original Scores Music &nbsp;·&nbsp;
-  <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp;
+  <span>© 2026 Original Scores Music</span>
+  <span class="footer-sep"></span>
+  <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a>
+  <span class="footer-sep"></span>
   <a href="tel:+33682985752">06 82 98 57 52</a>
+  <span class="footer-sep"></span>
+  <a href="index.html">Catalogue</a>
+  <span class="footer-sep"></span>
+  <a href="apropos.html">À propos</a>
 </footer>
 
 <script>
+// ── URGENCE ──
+function setUrgence(btn, val) {
+  document.querySelectorAll('.urgence-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('urgenceInput').value = val;
+}
+document.querySelector('.urgence-btn').classList.add('selected');
+
+// ── FORM SUBMIT ──
 document.getElementById('brief-form').addEventListener('submit', async function(e) {
   e.preventDefault();
-  const form = this;
-  const data = new FormData(form);
+  const btn     = document.getElementById('submitBtn');
+  const spinner = document.getElementById('spinner');
+  const btnText = document.getElementById('btnText');
+  const btnArrow = document.getElementById('btnArrow');
+
+  btn.style.opacity = '0.75'; btn.style.pointerEvents = 'none';
+  spinner.style.display = 'block';
+  btnText.textContent = 'Envoi en cours...';
+  btnArrow.style.display = 'none';
+
   try {
-    const res = await fetch(form.action, {
-      method: 'POST',
-      body: data,
+    const res = await fetch(this.action, {
+      method: 'POST', body: new FormData(this),
       headers: { 'Accept': 'application/json' }
     });
     if (res.ok) {
-      form.style.display = 'none';
+      this.style.display = 'none';
+      document.querySelector('.form-card-header').style.display = 'none';
       document.getElementById('success').style.display = 'block';
+    } else {
+      resetBtn(); alert('Une erreur est survenue. Veuillez réessayer.');
     }
-  } catch(err) {
-    form.submit();
+  } catch {
+    this.submit();
   }
 });
-</script>
 
+function resetBtn() {
+  const btn = document.getElementById('submitBtn');
+  btn.style.opacity = ''; btn.style.pointerEvents = '';
+  document.getElementById('spinner').style.display = 'none';
+  document.getElementById('btnText').textContent = 'Envoyer mon brief';
+  document.getElementById('btnArrow').style.display = '';
+}
+
+// ── FAQ ──
+function toggleFaq(el) {
+  const item = el.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); observer.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href="#brief"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('brief').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
 </body>
 </html>

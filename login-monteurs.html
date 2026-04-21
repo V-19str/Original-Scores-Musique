@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – Espace Monteurs</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E50914;
+  --bg: #141414;
+  --bg2: #1f1f1f;
+  --bg3: #2a2a2a;
+  --border: rgba(255,255,255,0.1);
+  --muted: #999;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&q=80') center/cover;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+/* LOGO */
+.logo { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
+.logo-mark {
+  background: var(--red);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+.logo-name { font-size: 16px; font-weight: 600; letter-spacing: 3px; }
+
+/* BADGE RÔLE */
+.role-badge {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: -20px;
+}
+.role-badge::before,
+.role-badge::after {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--border);
+}
+
+/* CARD */
+.box {
+  position: relative;
+  z-index: 1;
+  background: rgba(20, 20, 20, 0.96);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 40px;
+  width: 380px;
+  text-align: center;
+  backdrop-filter: blur(16px);
+}
+.box-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(229, 9, 20, 0.12);
+  border: 1px solid rgba(229, 9, 20, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+.box-icon svg { color: var(--red); }
+.box-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.box-sub { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
+
+/* FORM */
+.field { margin-bottom: 14px; text-align: left; }
+.field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+.field input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 16px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+  letter-spacing: 0.5px;
+}
+.field input:focus { border-color: var(--red); }
+.field input::placeholder { color: #555; }
+.field input[type="password"] { letter-spacing: 4px; }
+.field input[type="password"]::placeholder { letter-spacing: 0.5px; }
+
+/* FORGOT */
+.forgot {
+  text-align: right;
+  margin-top: -8px;
+  margin-bottom: 20px;
+}
+.forgot a {
+  font-size: 10px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: color 0.15s;
+}
+.forgot a:hover { color: #fff; }
+
+/* BUTTON */
+.btn-submit {
+  width: 100%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  padding: 13px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-transform: uppercase;
+  transition: background 0.15s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-submit:hover { background: #c4070f; transform: translateY(-1px); }
+.btn-submit:active { transform: translateY(0); }
+.btn-submit.loading { opacity: 0.7; pointer-events: none; }
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* MESSAGES */
+.error-msg {
+  font-size: 11px;
+  color: var(--red);
+  margin-top: 12px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 9px 12px;
+  background: rgba(229, 9, 20, 0.08);
+  border: 1px solid rgba(229, 9, 20, 0.2);
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+.success-msg {
+  font-size: 11px;
+  color: #4caf50;
+  margin-top: 12px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 9px 12px;
+  background: rgba(76, 175, 80, 0.08);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+/* DIVIDER */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: #444;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* SESSION INFO */
+.session-info {
+  display: none;
+  text-align: left;
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.session-info .si-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.session-info .si-user {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* FOOTER LINKS */
+.footer-links {
+  position: relative;
+  z-index: 1;
+  font-size: 11px;
+  color: #555;
+  display: flex;
+  gap: 20px;
+}
+.footer-links a {
+  color: #555;
+  text-decoration: none;
+  transition: color 0.15s;
+  letter-spacing: 0.5px;
+}
+.footer-links a:hover { color: #999; }
+
+/* LOCKED OVERLAY */
+.lockout-overlay {
+  display: none;
+  background: rgba(229, 9, 20, 0.06);
+  border: 1px solid rgba(229, 9, 20, 0.2);
+  border-radius: 4px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 12px;
+}
+.lockout-overlay .lock-icon { font-size: 22px; margin-bottom: 8px; }
+.lockout-overlay .lock-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 4px;
+}
+.lockout-overlay .lock-sub { font-size: 11px; color: var(--muted); }
+#countdown { font-weight: 600; color: #fff; }
+</style>
+</head>
+<body>
+
+<div class="bg-overlay"></div>
+
+<div class="logo">
+  <div class="logo-mark">OSM</div>
+  <div class="logo-name">ORIGINAL SCORES MUSIC</div>
+</div>
+
+<div class="role-badge">Espace Monteurs</div>
+
+<div class="box">
+  <div class="box-icon">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+    </svg>
+  </div>
+  <div class="box-title">Connexion Monteur</div>
+  <div class="box-sub">Accédez à votre espace de synchronisation musicale</div>
+
+  <div class="session-info" id="sessionInfo">
+    <div class="si-label">Session active</div>
+    <div class="si-user" id="sessionUser"></div>
+  </div>
+
+  <form id="loginForm" onsubmit="return false;">
+    <div class="field">
+      <label for="email">Adresse e-mail</label>
+      <input type="email" id="email" placeholder="prenom.nom@production.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter')handleLogin()">
+    </div>
+    <div class="forgot">
+      <a href="#" onclick="showForgot(); return false;">Mot de passe oublié ?</a>
+    </div>
+    <button class="btn-submit" id="submitBtn" onclick="handleLogin()">
+      <span id="btnText">Accéder à mon espace</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+    <div class="error-msg" id="errorMsg">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span id="errorText">Identifiants incorrects</span>
+    </div>
+    <div class="lockout-overlay" id="lockoutOverlay">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">Compte temporairement bloqué</div>
+      <div class="lock-sub">Trop de tentatives. Réessayez dans <span id="countdown">30</span>s</div>
+    </div>
+  </form>
+
+  <div class="divider">ou</div>
+
+  <div style="font-size:11px; color: var(--muted); line-height: 1.7;">
+    Pas encore de compte ?<br>
+    <a href="mailto:contact@originalscoresmusic.com" style="color:#888; text-decoration:none; transition:color 0.15s;"
+       onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">
+      Contacter l'équipe OSM
+    </a>
+  </div>
+</div>
+
+<div class="footer-links">
+  <a href="index.html">← Retour au catalogue</a>
+  <a href="apropos.html">À propos</a>
+</div>
+
+<script>
+// Comptes monteurs (en production : remplacer par un backend sécurisé)
+const MONTEURS = [
+  { email: 'monteur@osm.fr',        password: 'osm2026',   name: 'Monteur OSM',      role: 'senior' },
+  { email: 'demo@osm.fr',           password: 'demo1234',  name: 'Démo Monteur',     role: 'demo'   },
+];
+
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_SECONDS = 30;
+let attempts = 0;
+let lockedUntil = null;
+
+function handleLogin() {
+  if (isLocked()) return;
+
+  const email    = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+  const btn      = document.getElementById('submitBtn');
+  const spinner  = document.getElementById('spinner');
+  const btnText  = document.getElementById('btnText');
+
+  clearMessages();
+
+  if (!email || !password) {
+    showError('Veuillez remplir tous les champs');
+    return;
+  }
+
+  // Loading state
+  btn.classList.add('loading');
+  spinner.style.display = 'block';
+  btnText.style.display = 'none';
+
+  setTimeout(() => {
+    btn.classList.remove('loading');
+    spinner.style.display = 'none';
+    btnText.style.display = 'inline';
+
+    const user = MONTEURS.find(m => m.email === email && m.password === password);
+
+    if (user) {
+      attempts = 0;
+      sessionStorage.setItem('osm_monteur_ok', '1');
+      sessionStorage.setItem('osm_monteur_name', user.name);
+      sessionStorage.setItem('osm_monteur_role', user.role);
+      showSuccess(user.name);
+    } else {
+      attempts++;
+      const remaining = MAX_ATTEMPTS - attempts;
+      if (remaining <= 0) {
+        triggerLockout();
+      } else {
+        showError(
+          remaining === 1
+            ? 'Identifiants incorrects — 1 tentative restante'
+            : `Identifiants incorrects — ${remaining} tentatives restantes`
+        );
+      }
+    }
+  }, 700);
+}
+
+function showSuccess(name) {
+  const msg = document.getElementById('errorMsg');
+  msg.style.display = 'none';
+  const success = document.createElement('div');
+  success.className = 'success-msg';
+  success.style.display = 'flex';
+  success.innerHTML = `
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    <span>Connexion réussie — Bienvenue, ${name}</span>`;
+  document.getElementById('loginForm').appendChild(success);
+  setTimeout(() => { window.location.href = 'espace-monteurs.html'; }, 1200);
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  document.getElementById('errorText').textContent = msg;
+  el.style.display = 'flex';
+}
+
+function clearMessages() {
+  document.getElementById('errorMsg').style.display = 'none';
+}
+
+function isLocked() {
+  if (lockedUntil && Date.now() < lockedUntil) {
+    showError('Compte temporairement bloqué');
+    return true;
+  }
+  return false;
+}
+
+function triggerLockout() {
+  lockedUntil = Date.now() + LOCKOUT_SECONDS * 1000;
+  attempts = 0;
+  document.getElementById('lockoutOverlay').style.display = 'block';
+  document.getElementById('submitBtn').style.display = 'none';
+  clearMessages();
+
+  let remaining = LOCKOUT_SECONDS;
+  document.getElementById('countdown').textContent = remaining;
+
+  const interval = setInterval(() => {
+    remaining--;
+    document.getElementById('countdown').textContent = remaining;
+    if (remaining <= 0) {
+      clearInterval(interval);
+      lockedUntil = null;
+      document.getElementById('lockoutOverlay').style.display = 'none';
+      document.getElementById('submitBtn').style.display = 'flex';
+    }
+  }, 1000);
+}
+
+function showForgot() {
+  const email = document.getElementById('email').value.trim();
+  if (!email) {
+    showError('Entrez votre e-mail pour réinitialiser le mot de passe');
+    return;
+  }
+  clearMessages();
+  const success = document.createElement('div');
+  success.className = 'success-msg';
+  success.style.cssText = 'display:flex;margin-top:12px;font-size:11px;';
+  success.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    <span>Instructions envoyées à ${email}</span>`;
+  document.getElementById('loginForm').appendChild(success);
+  setTimeout(() => success.remove(), 4000);
+}
+
+// Vérifier session existante
+window.addEventListener('DOMContentLoaded', () => {
+  const name = sessionStorage.getItem('osm_monteur_name');
+  if (name && sessionStorage.getItem('osm_monteur_ok') === '1') {
+    document.getElementById('sessionInfo').style.display = 'block';
+    document.getElementById('sessionUser').textContent = name;
+  }
+});
+</script>
+</body>
+</html>
