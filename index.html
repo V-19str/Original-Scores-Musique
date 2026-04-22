@@ -73,6 +73,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:20px;animation:fadeUp 1s 0.2s ease both}
 .hero-title{font-size:clamp(44px,7vw,100px);font-weight:900;letter-spacing:-3px;line-height:0.92;margin-bottom:22px;animation:fadeUp 1s 0.3s ease both}
 .hero-title span{color:var(--red)}
+[data-theme="light"] .hero-title{color:#fff}
+.ticker-logo-wrap{background:rgba(255,255,255,0.92);padding:3px 8px;border-radius:3px;display:inline-flex;align-items:center;flex-shrink:0;height:28px}
+.ticker-logo{height:20px;width:auto;object-fit:contain;display:block;max-width:72px}
 .hero-sub{font-size:15px;font-weight:300;color:rgba(255,255,255,0.82);margin-bottom:36px;letter-spacing:1px;animation:fadeUp 1s 0.4s ease both}
 .hero-btns{display:flex;gap:12px;animation:fadeUp 1s 0.5s ease both}
 .hero-btn{padding:14px 30px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:4px;text-transform:uppercase;border:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
@@ -318,7 +321,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 <header>
   <div class="logo" onclick="showView('accueil')">
     <div class="logo-mark">OSM</div>
-    <div class="logo-name">ORIGINAL SCORES MUSIC</div>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" id="tab-accueil" onclick="showView('accueil')">Accueil</button>
@@ -326,7 +328,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <button class="nav-tab" id="tab-catalogue" onclick="showView('catalogue')">Catalogue</button>
     <a class="nav-tab" href="television.html">Télévision</a>
     <a class="nav-tab" href="service.html">Sélection sur mesure</a>
-    <a class="nav-tab" href="login-monteurs.html">Espace Monteurs</a>
+    <a class="nav-tab" href="login-monteurs.html">Espace Client</a>
     <a class="nav-tab" href="aide.html">Aide</a>
   </div>
   <div class="header-right">
@@ -364,53 +366,30 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   </div>
   <div class="ticker-wrap">
     <div class="ticker-track">
-      <span class="ticker-item" style="font-size:17px;color:#E50914">TF1</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#0055A5">FRANCE 2</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:17px;color:#fff">M6</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#fff;letter-spacing:4px">ARTE</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#fff">CANAL+</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:15px;color:#FF6600">C8</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#EE6600">FRANCE 3</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:11px;color:#0077CC">RMC DÉCOUVERTE</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#FFD700">TFX</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#CC0000">W9</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:11px;color:#00AAFF">USHUAÏA TV</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#888">CINÉMA</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:17px;color:#E50914">TF1</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#0055A5">FRANCE 2</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:17px;color:#fff">M6</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#fff;letter-spacing:4px">ARTE</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#fff">CANAL+</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:15px;color:#FF6600">C8</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#EE6600">FRANCE 3</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:11px;color:#0077CC">RMC DÉCOUVERTE</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#FFD700">TFX</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#CC0000">W9</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:11px;color:#00AAFF">USHUAÏA TV</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#888">CINÉMA</span>
-    </div>
-  </div>
-  <div class="stats-section">
-    <div class="stats-inner">
-      <div class="stats-eyebrow">Notre expérience</div>
-      <div class="stats-title">Musique pour <span>l'image</span> depuis 10 ans</div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-num">15+</div><div class="stat-label">Chaînes TV</div><div class="stat-sub">Du service public au câble</div></div>
-        <div class="stat-card"><div class="stat-num">2560</div><div class="stat-label">Titres originaux</div><div class="stat-sub">Disponibles en licence</div></div>
-        <div class="stat-card"><div class="stat-num">100+</div><div class="stat-label">Émissions & films</div><div class="stat-sub">Documentaires, fictions, cinéma</div></div>
-        <div class="stat-card"><div class="stat-num">10+</div><div class="stat-label">Années d'expérience</div><div class="stat-sub">Supervision & composition</div></div>
-      </div>
-      <div class="refs-title">Ils nous font confiance</div>
-      <div class="refs-grid">
-        <div class="refs-block"><div class="refs-channel">France 2</div><div class="refs-shows"><strong>Cash Investigation</strong><br><strong>Envoyé Spécial</strong><br><strong>Complément d'Enquête</strong><br><strong>Stupéfiant !</strong></div></div>
-        <div class="refs-block"><div class="refs-channel">TF1</div><div class="refs-shows"><strong>50' Inside</strong><br><strong>7 à 8</strong><br><strong>Grands Reportages</strong><br><strong>La France en Bleu</strong></div></div>
-        <div class="refs-block"><div class="refs-channel">M6</div><div class="refs-shows"><strong>Zone Interdite</strong><br><strong>Enquête Exclusive</strong><br><strong>Salon de l'Agriculture</strong></div></div>
-        <div class="refs-block"><div class="refs-channel">ARTE</div><div class="refs-shows"><strong>Avortement — Les Croisés</strong><br><strong>Rhino Dollars</strong><br><strong>Madagascar</strong></div></div>
-        <div class="refs-block"><div class="refs-channel">Canal+</div><div class="refs-shows"><strong>Sélectionneurs</strong><br><strong>Canal+ Afrique</strong></div></div>
-        <div class="refs-block"><div class="refs-channel">C8 · CStar · RMC</div><div class="refs-shows"><strong>100 Jours Gendarmes</strong><br><strong>Top Mechanic</strong><br><strong>Méga Fourrière</strong></div></div>
-        <div class="refs-block"><div class="refs-channel">TMC · TFX · W9</div><div class="refs-shows"><strong>Martin Weil</strong><br><strong>Nicolas Canteloup</strong><br><strong>Wedding Planners</strong><br><strong>Johnny Hallyday</strong></div></div>
-        <div class="refs-block"><div class="refs-channel">Cinéma</div><div class="refs-shows"><strong>Mamma Weed</strong><br><strong>La Daronne</strong><br><strong>L'Étreinte</strong><br><strong>Moby Dick</strong></div></div>
-      </div>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Logo_TF1_2013.svg/100px-Logo_TF1_2013.svg.png" alt="TF1" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/France_2_-_logo_2018.svg/120px-France_2_-_logo_2018.svg.png" alt="France 2" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Logo_M6_%282020%29.svg/80px-Logo_M6_%282020%29.svg.png" alt="M6" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Arte_Logo_2017.svg/100px-Arte_Logo_2017.svg.png" alt="Arte" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Canal_plus_france_logo.svg/100px-Canal_plus_france_logo.svg.png" alt="Canal+" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/C8_TV_logo.svg/80px-C8_TV_logo.svg.png" alt="C8" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/France_3_-_logo_2018.svg/120px-France_3_-_logo_2018.svg.png" alt="France 3" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Logo_RMC_D%C3%A9couverte_2017.svg/120px-Logo_RMC_D%C3%A9couverte_2017.svg.png" alt="RMC Découverte" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/54/TMC_logo.svg/80px-TMC_logo.svg.png" alt="TMC" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/TFX_logo.svg/80px-TFX_logo.svg.png" alt="TFX" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/W9_2018.svg/80px-W9_2018.svg.png" alt="W9" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Ushuaia_tv_logo_V2-RVB.jpg/200px-Ushuaia_tv_logo_V2-RVB.jpg" alt="Ushuaïa TV" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Logo_TF1_2013.svg/100px-Logo_TF1_2013.svg.png" alt="TF1" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/France_2_-_logo_2018.svg/120px-France_2_-_logo_2018.svg.png" alt="France 2" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Logo_M6_%282020%29.svg/80px-Logo_M6_%282020%29.svg.png" alt="M6" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Arte_Logo_2017.svg/100px-Arte_Logo_2017.svg.png" alt="Arte" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Canal_plus_france_logo.svg/100px-Canal_plus_france_logo.svg.png" alt="Canal+" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/C8_TV_logo.svg/80px-C8_TV_logo.svg.png" alt="C8" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/France_3_-_logo_2018.svg/120px-France_3_-_logo_2018.svg.png" alt="France 3" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Logo_RMC_D%C3%A9couverte_2017.svg/120px-Logo_RMC_D%C3%A9couverte_2017.svg.png" alt="RMC Découverte" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/54/TMC_logo.svg/80px-TMC_logo.svg.png" alt="TMC" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/TFX_logo.svg/80px-TFX_logo.svg.png" alt="TFX" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/W9_2018.svg/80px-W9_2018.svg.png" alt="W9" class="ticker-logo"></span><span class="ticker-dot"></span>
+      <span class="ticker-logo-wrap"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Ushuaia_tv_logo_V2-RVB.jpg/200px-Ushuaia_tv_logo_V2-RVB.jpg" alt="Ushuaïa TV" class="ticker-logo"></span>
     </div>
   </div>
 </div>
