@@ -67,7 +67,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#000}
 .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1800&q=80') center/cover no-repeat;animation:heroZoom 12s ease-in-out infinite alternate}
 @keyframes heroZoom{from{transform:scale(1.0)}to{transform:scale(1.07)}}
-.hero-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.98) 0%,rgba(0,0,0,0.98) 10%,rgba(0,0,0,0.45) 28%,rgba(0,0,0,0.38) 55%,rgba(0,0,0,0.75) 80%,rgba(0,0,0,0.97) 100%)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.1) 100%)}
 .hero-content{position:relative;z-index:2;padding:0 64px 72px;animation:fadeUp 1s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 .hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:20px;animation:fadeUp 1s 0.2s ease both}
@@ -87,7 +87,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 /* HERO VIDEO YOUTUBE */
 .hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#000}
-.hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.77vh;transform:translate(-50%,-50%);pointer-events:none;border:0;opacity:0;transition:opacity 1.8s ease}
+.hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px));pointer-events:none;border:0;opacity:0;transition:opacity 1.8s ease}
 .hero-yt-iframe.ready{opacity:1}
 /* HERO CENTER — contenu apparaît après 1,2s pour laisser la vidéo s'installer */
 .hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
