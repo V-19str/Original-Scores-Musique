@@ -64,7 +64,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .view.active{display:block}
 
 /* HERO */
-.hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1800&q=80') center/cover no-repeat}
 .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1800&q=80') center/cover no-repeat;animation:heroZoom 12s ease-in-out infinite alternate}
 @keyframes heroZoom{from{transform:scale(1.0)}to{transform:scale(1.07)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 50%,rgba(0,0,0,0.15) 100%)}
@@ -85,8 +85,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 .hero-scroll-line{width:1px;height:28px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.35))}
 
-/* HERO VIDEO */
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+/* HERO VIDEO YOUTUBE */
+.hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.77vh;transform:translate(-50%,-50%);pointer-events:none;border:0}
 /* HERO CENTER — contenu apparaît après 1,2s pour laisser la vidéo s'installer */
 .hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
 /* OSM LOGO HERO */
@@ -372,10 +373,14 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 <!-- ACCUEIL -->
 <div class="view active" id="view-accueil">
   <div class="hero">
-    <video class="hero-video" autoplay muted loop playsinline>
-      <source src="https://assets.mixkit.co/videos/preview/mixkit-close-up-shot-of-a-drummer-playing-in-a-studio-42788-large.mp4" type="video/mp4">
-      <source src="https://assets.mixkit.co/videos/preview/mixkit-close-up-shot-of-a-long-haired-drummer-playing-in-51838-large.mp4" type="video/mp4">
-    </video>
+    <div class="hero-video-wrap">
+      <iframe class="hero-yt-iframe"
+        src="https://www.youtube.com/embed/EwolY5fAV8c?autoplay=1&mute=1&loop=1&playlist=EwolY5fAV8c&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>
+    </div>
     <div class="hero-ov"></div>
     <div class="hero-center">
       <div class="hero-osm-logo">
