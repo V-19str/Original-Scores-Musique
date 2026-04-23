@@ -64,7 +64,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .view.active{display:block}
 
 /* HERO */
-.hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:flex-end;overflow:hidden}
+.hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1800&q=80') center/cover no-repeat;animation:heroZoom 12s ease-in-out infinite alternate}
 @keyframes heroZoom{from{transform:scale(1.0)}to{transform:scale(1.07)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 50%,rgba(0,0,0,0.15) 100%)}
@@ -84,6 +84,34 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:3px;text-transform:uppercase;animation:bounce 2.5s ease infinite}
 @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 .hero-scroll-line{width:1px;height:28px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.35))}
+
+/* HERO VIDEO */
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+/* HERO CENTER */
+.hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
+/* OSM LOGO HERO */
+.hero-osm-logo{margin-bottom:24px;display:flex;flex-direction:column;align-items:center;gap:14px;animation:fadeUp 1s 0.2s ease both}
+.hero-osm-mark{background:var(--red);color:#fff;font-size:clamp(20px,3.5vw,38px);font-weight:900;letter-spacing:10px;padding:14px 34px;border-radius:4px;text-transform:uppercase;animation:logoReveal 1.2s 0.1s ease both;box-shadow:0 0 80px rgba(229,9,20,0.45),0 4px 24px rgba(229,9,20,0.3)}
+@keyframes logoReveal{0%{opacity:0;transform:scale(0.8) translateY(10px);box-shadow:0 0 0 rgba(229,9,20,0)}60%{opacity:1;transform:scale(1.04) translateY(-2px);box-shadow:0 0 110px rgba(229,9,20,0.65)}100%{transform:scale(1) translateY(0);box-shadow:0 0 80px rgba(229,9,20,0.45),0 4px 24px rgba(229,9,20,0.3)}}
+.hero-osm-divider{width:50px;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.4),transparent);animation:fadeUp 1s 0.5s ease both}
+.hero-osm-name{font-size:clamp(11px,2vw,17px);font-weight:700;letter-spacing:clamp(8px,2vw,16px);color:rgba(255,255,255,0.88);text-transform:uppercase;animation:fadeUp 1s 0.45s ease both}
+.hero-osm-name span{color:var(--red)}
+/* TAGLINE */
+.hero-tagline{font-size:13px;font-weight:300;color:rgba(255,255,255,0.72);margin-bottom:32px;letter-spacing:1.5px;animation:fadeUp 1s 0.55s ease both}
+/* HERO SEARCH BAR */
+.hero-search-container{width:100%;max-width:680px;margin-bottom:20px;animation:fadeUp 1s 0.65s ease both}
+.hero-search-inner{display:flex;align-items:center;background:rgba(8,8,8,0.55);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 6px 6px 22px;transition:all 0.3s;gap:8px}
+.hero-search-inner:focus-within{background:rgba(8,8,8,0.72);border-color:rgba(255,255,255,0.38);box-shadow:0 0 0 3px rgba(229,9,20,0.22),0 8px 40px rgba(0,0,0,0.5)}
+.hero-search-icon{color:rgba(255,255,255,0.5);font-size:15px;flex-shrink:0}
+.hero-search-field{flex:1;background:none;border:none;outline:none;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:400;padding:8px 0;min-width:0}
+.hero-search-field::placeholder{color:rgba(255,255,255,0.32)}
+.hero-search-btn{background:var(--red);color:#fff;border:none;padding:10px 22px;border-radius:40px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:background 0.2s,transform 0.15s;text-transform:uppercase;flex-shrink:0}
+.hero-search-btn:hover{background:#ff1a1a;transform:scale(1.04)}
+/* HERO TAG CLOUD */
+.hero-tag-cloud{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;animation:fadeUp 1s 0.75s ease both}
+.hero-tag-label{font-size:9px;color:rgba(255,255,255,0.32);letter-spacing:2.5px;text-transform:uppercase;font-weight:600;margin-right:2px}
+.hero-tag-pill{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.16);color:rgba(255,255,255,0.8);padding:5px 14px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.3px;cursor:pointer;transition:all 0.2s}
+.hero-tag-pill:hover{background:rgba(229,9,20,0.22);border-color:rgba(229,9,20,0.65);color:#fff;transform:translateY(-1px)}
 
 /* TICKER */
 .ticker-wrap{overflow:hidden;padding:14px 0;background:var(--bg-deep);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -349,15 +377,40 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 <!-- ACCUEIL -->
 <div class="view active" id="view-accueil">
   <div class="hero">
-    <div class="hero-bg"></div>
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-close-up-shot-of-a-drummer-playing-in-a-studio-42788-large.mp4" type="video/mp4">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-close-up-shot-of-a-long-haired-drummer-playing-in-51838-large.mp4" type="video/mp4">
+    </video>
     <div class="hero-ov"></div>
-    <div class="hero-content">
-      <div class="hero-eyebrow">Supervision Musicale · Paris</div>
-      <h1 class="hero-title">Original <span>Scores</span><br>Music</h1>
-      <p class="hero-sub">Musique originale pour l'image &nbsp;·&nbsp; Cinéma &nbsp;·&nbsp; Télévision &nbsp;·&nbsp; Publicité</p>
-      <div class="hero-btns">
-        <button class="hero-btn hero-btn-red" onclick="showView('playlists')">▶ Parcourir les playlists</button>
-        <button class="hero-btn hero-btn-ghost" onclick="showView('catalogue')">🎵 Catalogue complet</button>
+    <div class="hero-center">
+      <div class="hero-osm-logo">
+        <div class="hero-osm-mark">OSM</div>
+        <div class="hero-osm-divider"></div>
+        <div class="hero-osm-name">ORIGINAL &nbsp;<span>SCORES</span>&nbsp; MUSIC</div>
+      </div>
+      <p class="hero-tagline">Musique originale pour l'image &nbsp;·&nbsp; Cinéma &nbsp;·&nbsp; Télévision &nbsp;·&nbsp; Publicité</p>
+      <div class="hero-search-container">
+        <div class="hero-search-inner">
+          <span class="hero-search-icon">🔍</span>
+          <input type="text" id="hero-search-input" class="hero-search-field"
+                 placeholder="Rechercher par ambiance, genre, instrument..."
+                 oninput="heroSearchInput(this.value)"
+                 onkeydown="if(event.key==='Enter')heroSearchSubmit()">
+          <button class="hero-search-btn" onclick="heroSearchSubmit()">Rechercher</button>
+        </div>
+      </div>
+      <div class="hero-tag-cloud">
+        <span class="hero-tag-label">Parcourir :</span>
+        <button class="hero-tag-pill" onclick="heroTag('action')">Action</button>
+        <button class="hero-tag-pill" onclick="heroTag('suspense')">Suspense</button>
+        <button class="hero-tag-pill" onclick="heroTag('orchestral')">Orchestral</button>
+        <button class="hero-tag-pill" onclick="heroTag('épique')">Épique</button>
+        <button class="hero-tag-pill" onclick="heroTag('trailer')">Trailer</button>
+        <button class="hero-tag-pill" onclick="heroTag('piano')">Piano</button>
+        <button class="hero-tag-pill" onclick="heroTag('jazz')">Jazz</button>
+        <button class="hero-tag-pill" onclick="heroTag('groovy')">Groovy</button>
+        <button class="hero-tag-pill" onclick="heroTag('électro')">Électro</button>
+        <button class="hero-tag-pill" onclick="heroTag('romance')">Romance</button>
       </div>
     </div>
     <div class="hero-scroll"><div class="hero-scroll-line"></div>SCROLL</div>
@@ -893,6 +946,9 @@ function toggleTheme(){
   localStorage.setItem('osm-theme',next);
   document.getElementById('btn-theme').textContent=next==='dark'?'☀️':'🌙';
 }
+function heroSearchInput(val){document.getElementById('search').value=val;}
+function heroSearchSubmit(){const v=document.getElementById('hero-search-input').value.trim();if(v){document.getElementById('search').value=v;showView('catalogue');filterTracks();}}
+function heroTag(tag){activeTag=tag;currentFolder=null;showView('catalogue');filterTracks();}
 (function syncThemeBtn(){
   const t=document.documentElement.getAttribute('data-theme')||'light';
   const btn=document.getElementById('btn-theme');
