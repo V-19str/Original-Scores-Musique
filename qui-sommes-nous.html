@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qui sommes-nous ? – Original Scores Music</title>
+<meta name="description" content="OSM — Musique originale pour l'image. Catalogue gratuit pour monteurs, réalisateurs et producteurs. Droits SACEM à la diffusion.">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--red:#E50914;--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#ffffff;--text2:#cccccc;--muted:#888;--border:rgba(255,255,255,0.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh}
+
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.98);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px;color:#fff}
+.header-right{display:flex;align-items:center;gap:10px}
+.btn-nav{background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text2);padding:7px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s}
+.btn-nav:hover{border-color:#555;color:#fff}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.btn-red:hover{background:#c4070f}
+
+/* HERO */
+.hero{position:relative;min-height:50vh;display:flex;align-items:center;overflow:hidden;background:#0a0a0a;padding-top:64px}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a0a0a 0%,#1a0505 60%,#0a0a0a 100%)}
+.hero-line{position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(to bottom,transparent,var(--red),transparent)}
+.hero-content{position:relative;z-index:2;padding:72px 64px 72px;max-width:860px}
+.hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:18px;animation:fadeUp 0.8s 0.2s ease both}
+.hero-title{font-size:clamp(36px,5vw,72px);font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:20px;animation:fadeUp 0.8s 0.4s ease both}
+.hero-sub{font-size:15px;font-weight:300;color:rgba(255,255,255,0.65);letter-spacing:0.5px;animation:fadeUp 0.8s 0.6s ease both;line-height:1.7}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* CONTENT */
+.content-section{padding:80px 64px;max-width:900px;margin:0 auto}
+.lead-text{font-size:17px;font-weight:300;color:var(--text2);line-height:1.95;margin-bottom:32px}
+.lead-text strong{color:#fff;font-weight:600}
+
+.highlight-block{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:0 10px 10px 0;padding:28px 32px;margin:36px 0;position:relative}
+.highlight-block p{font-size:15px;color:var(--text2);line-height:1.9;font-weight:300}
+.highlight-block strong{color:#fff;font-weight:700}
+
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:40px 0}
+.feat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;transition:all 0.25s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transition:transform 0.25s}
+.feat-card:hover{border-color:rgba(229,9,20,0.25);transform:translateY(-3px)}
+.feat-card:hover::before{transform:scaleX(1)}
+.feat-icon{font-size:22px;margin-bottom:12px}
+.feat-title{font-size:13px;font-weight:700;margin-bottom:6px;color:#fff}
+.feat-desc{font-size:12px;color:var(--muted);line-height:1.65;font-weight:300}
+
+.channels{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0}
+.ch{padding:6px 16px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,0.1)}
+
+/* CTA */
+.cta-wrap{background:linear-gradient(135deg,#0a0a0a 0%,#1a0505 100%);border-top:1px solid var(--border);padding:80px 64px;text-align:center}
+.cta-title{font-size:clamp(24px,3.5vw,42px);font-weight:900;letter-spacing:-1px;margin-bottom:12px}
+.cta-sub{font-size:14px;color:var(--muted);font-weight:300;line-height:1.7;margin-bottom:36px;max-width:560px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.cta-btn-main{background:var(--red);color:#fff;border:none;padding:15px 36px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:4px;text-transform:uppercase;transition:all 0.2s;text-decoration:none;display:inline-block}
+.cta-btn-main:hover{background:#ff1a1a;transform:translateY(-2px);box-shadow:0 8px 25px rgba(229,9,20,0.4)}
+.cta-btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);padding:15px 30px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;cursor:pointer;border-radius:4px;text-transform:uppercase;transition:all 0.2s;text-decoration:none;display:inline-block}
+.cta-btn-ghost:hover{border-color:#666;color:#fff}
+
+footer{text-align:center;padding:24px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--text2)}
+
+@media(max-width:900px){
+  header{padding:0 20px}
+  .hero-content{padding:48px 20px}
+  .content-section{padding:48px 20px}
+  .cta-wrap{padding:48px 20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">Original Scores Music</div>
+  </a>
+  <div class="header-right">
+    <a class="btn-nav" href="index.html">← Catalogue</a>
+    <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Original Scores Music</div>
+    <h1 class="hero-title">Qui sommes-nous ?</h1>
+    <p class="hero-sub">Une équipe de compositeurs au service de l'image — cinéma, télévision, publicité.</p>
+  </div>
+</div>
+
+<div class="content-section">
+
+  <p class="lead-text">
+    Bonjour,<br><br>
+    Je travaille avec une <strong>équipe de plusieurs musiciens</strong>. Nous possédons un catalogue de morceaux tous triés par style, émotion, genre, etc.
+  </p>
+
+  <p class="lead-text">
+    Nous travaillons pour <strong>presque toutes les chaînes de télévision</strong>, agences de publicité, sociétés de production, pour des programmes aussi variés que des documentaires, des longs métrages, des reportages :
+  </p>
+
+  <div class="channels">
+    <span class="ch" style="color:#E8000D;border-color:rgba(232,0,13,0.3)">Capital — M6</span>
+    <span class="ch" style="color:#0055A5;border-color:rgba(0,85,165,0.3)">Envoyé Spécial — France 2</span>
+    <span class="ch" style="color:#0055A5;border-color:rgba(0,85,165,0.3)">Complément d'enquête — France 2</span>
+    <span class="ch" style="color:#0055A5;border-color:rgba(0,85,165,0.3)">Stupéfiant ! — France 2</span>
+    <span class="ch" style="color:#E8000D;border-color:rgba(232,0,13,0.3)">50 min Inside — TF1</span>
+    <span class="ch" style="color:#0055A5;border-color:rgba(0,85,165,0.3)">Cash Investigation — France 2</span>
+    <span class="ch" style="color:var(--muted);border-color:var(--border)">Et beaucoup d'autres…</span>
+  </div>
+
+  <div class="highlight-block">
+    <p>
+      Notre concept est simple : <strong>donner notre musique aux monteurs, réalisateurs, producteurs gratuitement</strong>, puis récupérer les droits auprès de la <strong>SACEM</strong> en fonction des diffusions.<br><br>
+      Il n'y a <strong>rien à payer</strong>. Nous sommes tous compositeurs et propriétaires des morceaux, et nous nous rémunérons en droits d'auteurs compositeurs, en fonction des diffusions de vos projets.
+    </p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">🔗</div>
+      <div class="feat-title">Lien privé téléchargeable</div>
+      <div class="feat-desc">Je peux vous faire parvenir un lien privé sur lequel vous pouvez télécharger toutes nos playlists par thèmes.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📦</div>
+      <div class="feat-title">Envoi sur mesure</div>
+      <div class="feat-desc">Si vous avez des demandes précises, nous pouvons vous envoyer les morceaux par WeTransfer, triés et classés en fonction de vos attentes.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🎬</div>
+      <div class="feat-title">Composition à l'image</div>
+      <div class="feat-desc">Nous travaillons aussi à l'image, pour de la composition sur mesure adaptée exactement à votre projet.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">©️</div>
+      <div class="feat-title">Droits SACEM à la diffusion</div>
+      <div class="feat-desc">Aucun frais en amont. Les droits d'auteur sont perçus directement auprès de la SACEM au moment des diffusions.</div>
+    </div>
+  </div>
+
+  <p class="lead-text">
+    N'hésitez pas à me contacter afin de vous présenter plus précisément notre travail.<br>
+    <strong>Merci d'avance.</strong>
+  </p>
+
+</div>
+
+<div class="cta-wrap">
+  <div class="cta-title">Travaillons ensemble</div>
+  <p class="cta-sub">Un projet en cours ? Une demande précise ? Contactez-nous — réponse sous 24h.</p>
+  <div class="cta-btns">
+    <a class="cta-btn-main" href="mailto:vladimirstreiff@gmail.com">✉ Envoyer un message</a>
+    <a class="cta-btn-ghost" href="inscription.html">Accéder au catalogue</a>
+  </div>
+  <div style="margin-top:20px;font-size:11px;color:var(--muted)">
+    <a href="tel:+33682985752" style="color:var(--muted);text-decoration:none">📞 06 82 98 57 52</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:vladimirstreiff@gmail.com" style="color:var(--muted);text-decoration:none">vladimirstreiff@gmail.com</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp; <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp; <a href="index.html">← Retour au catalogue</a></p>
+</footer>
+
+</body>
+</html>
