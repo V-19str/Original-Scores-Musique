@@ -110,6 +110,36 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-search-btn{background:var(--red);color:#fff;border:none;padding:12px 28px;border-radius:40px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:background 0.2s,transform 0.15s;text-transform:uppercase;flex-shrink:0}
 .hero-search-btn:hover{background:#ff1a1a;transform:scale(1.04)}
 
+/* HERO SEARCH DROPDOWN */
+.hero-search-container{position:relative}
+.hero-search-dropdown{
+  position:absolute;top:calc(100% + 10px);left:0;right:0;
+  background:rgba(6,6,6,0.94);
+  backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  border:1px solid rgba(255,255,255,0.13);
+  border-radius:18px;padding:26px 28px 22px;
+  z-index:50;
+  visibility:hidden;opacity:0;pointer-events:none;
+  transform:translateY(-10px);
+  transition:opacity 0.22s ease,transform 0.22s ease,visibility 0s 0.22s;
+}
+.hero-search-dropdown.visible{
+  visibility:visible;opacity:1;pointer-events:all;transform:translateY(0);
+  transition:opacity 0.22s ease,transform 0.22s ease,visibility 0s 0s;
+}
+.hsd-category{margin-bottom:18px}
+.hsd-category:last-child{margin-bottom:0}
+.hsd-cat-label{font-size:9px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.hsd-cat-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06)}
+.hsd-pills{display:flex;flex-wrap:wrap;gap:7px}
+.hsd-pill{
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+  color:rgba(255,255,255,0.78);padding:6px 15px;border-radius:20px;
+  font-family:'Montserrat',sans-serif;font-size:12px;font-weight:500;
+  cursor:pointer;white-space:nowrap;transition:all 0.15s;
+}
+.hsd-pill:hover{background:rgba(229,9,20,0.18);border-color:rgba(229,9,20,0.45);color:#fff;transform:translateY(-1px)}
+
 /* TICKER */
 .ticker-wrap{overflow:hidden;padding:14px 0;background:var(--bg-deep);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .ticker-track{display:flex;gap:56px;white-space:nowrap;animation:ticker 28s linear infinite}
@@ -442,8 +472,62 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
           <input type="text" id="hero-search-input" class="hero-search-field"
                  placeholder="Rechercher par ambiance, genre, instrument..."
                  oninput="heroSearchInput(this.value)"
+                 onfocus="showHeroDropdown()"
+                 onblur="hideHeroDropdown()"
                  onkeydown="if(event.key==='Enter')heroSearchSubmit()">
           <button class="hero-search-btn" onclick="heroSearchSubmit()">Rechercher</button>
+        </div>
+        <div class="hero-search-dropdown" id="hero-search-dropdown">
+          <div class="hsd-category">
+            <div class="hsd-cat-label">Genres</div>
+            <div class="hsd-pills">
+              <button class="hsd-pill" onmousedown="hsdClick('orchestral')">Orchestral</button>
+              <button class="hsd-pill" onmousedown="hsdClick('jazz')">Jazz</button>
+              <button class="hsd-pill" onmousedown="hsdClick('électro')">Électro</button>
+              <button class="hsd-pill" onmousedown="hsdClick('rock')">Rock</button>
+              <button class="hsd-pill" onmousedown="hsdClick('folk')">Folk</button>
+              <button class="hsd-pill" onmousedown="hsdClick('cinématique')">Cinématique</button>
+              <button class="hsd-pill" onmousedown="hsdClick('swing')">Swing</button>
+              <button class="hsd-pill" onmousedown="hsdClick('blues')">Blues</button>
+            </div>
+          </div>
+          <div class="hsd-category">
+            <div class="hsd-cat-label">Instruments</div>
+            <div class="hsd-pills">
+              <button class="hsd-pill" onmousedown="hsdClick('piano')">Piano</button>
+              <button class="hsd-pill" onmousedown="hsdClick('guitare')">Guitare</button>
+              <button class="hsd-pill" onmousedown="hsdClick('violon')">Violon</button>
+              <button class="hsd-pill" onmousedown="hsdClick('batterie')">Batterie</button>
+              <button class="hsd-pill" onmousedown="hsdClick('saxophone')">Saxophone</button>
+              <button class="hsd-pill" onmousedown="hsdClick('synthétiseur')">Synthétiseur</button>
+              <button class="hsd-pill" onmousedown="hsdClick('trompette')">Trompette</button>
+              <button class="hsd-pill" onmousedown="hsdClick('cordes')">Cordes</button>
+            </div>
+          </div>
+          <div class="hsd-category">
+            <div class="hsd-cat-label">Émotions</div>
+            <div class="hsd-pills">
+              <button class="hsd-pill" onmousedown="hsdClick('épique')">Épique</button>
+              <button class="hsd-pill" onmousedown="hsdClick('mélancolique')">Mélancolique</button>
+              <button class="hsd-pill" onmousedown="hsdClick('joyeux')">Joyeux</button>
+              <button class="hsd-pill" onmousedown="hsdClick('mystère')">Mystère</button>
+              <button class="hsd-pill" onmousedown="hsdClick('romantique')">Romantique</button>
+              <button class="hsd-pill" onmousedown="hsdClick('tension')">Tension</button>
+              <button class="hsd-pill" onmousedown="hsdClick('groovy')">Groovy</button>
+              <button class="hsd-pill" onmousedown="hsdClick('calme')">Calme</button>
+            </div>
+          </div>
+          <div class="hsd-category">
+            <div class="hsd-cat-label">Usages</div>
+            <div class="hsd-pills">
+              <button class="hsd-pill" onmousedown="hsdClick('cinéma')">Cinéma</button>
+              <button class="hsd-pill" onmousedown="hsdClick('publicité')">Publicité</button>
+              <button class="hsd-pill" onmousedown="hsdClick('documentaire')">Documentaire</button>
+              <button class="hsd-pill" onmousedown="hsdClick('sport')">Sport</button>
+              <button class="hsd-pill" onmousedown="hsdClick('trailer')">Trailer</button>
+              <button class="hsd-pill" onmousedown="hsdClick('nature')">Nature</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1032,9 +1116,23 @@ function toggleTheme(){
   document.getElementById('btn-theme').textContent=next==='dark'?'☀️':'🌙';
 }
 setTimeout(function(){var f=document.querySelector('.hero-yt-iframe');if(f)f.classList.add('ready');},1500);
-function heroSearchInput(val){document.getElementById('search').value=val;}
-function heroSearchSubmit(){const v=document.getElementById('hero-search-input').value.trim();if(v){document.getElementById('search').value=v;showView('catalogue');filterTracks();}}
+function heroSearchInput(val){
+  document.getElementById('search').value=val;
+  const dd=document.getElementById('hero-search-dropdown');
+  if(val.trim())dd.classList.remove('visible');else dd.classList.add('visible');
+}
+function heroSearchSubmit(){
+  const v=document.getElementById('hero-search-input').value.trim();
+  document.getElementById('hero-search-dropdown').classList.remove('visible');
+  if(v){document.getElementById('search').value=v;showView('catalogue');filterTracks();}
+}
 function heroTag(tag){activeTag=tag;currentFolder=null;showView('catalogue');filterTracks();}
+function showHeroDropdown(){document.getElementById('hero-search-dropdown').classList.add('visible');}
+function hideHeroDropdown(){setTimeout(()=>document.getElementById('hero-search-dropdown').classList.remove('visible'),180);}
+function hsdClick(tag){
+  const inp=document.getElementById('hero-search-input');
+  inp.value=tag;heroSearchInput(tag);heroSearchSubmit();
+}
 (function syncThemeBtn(){
   const t=document.documentElement.getAttribute('data-theme')||'light';
   const btn=document.getElementById('btn-theme');
