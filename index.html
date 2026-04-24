@@ -113,12 +113,13 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 /* HERO SEARCH DROPDOWN */
 .hero-search-container{position:relative}
 .hero-search-dropdown{
-  position:absolute;top:calc(100% + 10px);left:0;right:0;
+  position:fixed;
   background:rgba(6,6,6,0.94);
   backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
   border:1px solid rgba(255,255,255,0.13);
   border-radius:18px;padding:26px 28px 22px;
-  z-index:200;
+  z-index:9999;
+  overflow-y:auto;
   visibility:hidden;opacity:0;pointer-events:none;
   transform:translateY(-10px);
   transition:opacity 0.22s ease,transform 0.22s ease,visibility 0s 0.22s;
@@ -1127,12 +1128,27 @@ function heroSearchSubmit(){
   if(v){document.getElementById('search').value=v;showView('catalogue');filterTracks();}
 }
 function heroTag(tag){activeTag=tag;currentFolder=null;showView('catalogue');filterTracks();}
-function showHeroDropdown(){document.getElementById('hero-search-dropdown').classList.add('visible');}
+function positionHeroDropdown(){
+  const inner=document.querySelector('.hero-search-inner');
+  const dd=document.getElementById('hero-search-dropdown');
+  if(!inner||!dd)return;
+  const r=inner.getBoundingClientRect();
+  const maxH=window.innerHeight-r.bottom-20;
+  dd.style.top=(r.bottom+10)+'px';
+  dd.style.left=r.left+'px';
+  dd.style.width=r.width+'px';
+  dd.style.maxHeight=Math.max(200,maxH)+'px';
+}
+function showHeroDropdown(){positionHeroDropdown();document.getElementById('hero-search-dropdown').classList.add('visible');}
 function hideHeroDropdown(){setTimeout(()=>document.getElementById('hero-search-dropdown').classList.remove('visible'),180);}
 function hsdClick(tag){
   const inp=document.getElementById('hero-search-input');
   inp.value=tag;heroSearchInput(tag);heroSearchSubmit();
 }
+window.addEventListener('resize',()=>{
+  const dd=document.getElementById('hero-search-dropdown');
+  if(dd&&dd.classList.contains('visible'))positionHeroDropdown();
+});
 (function syncThemeBtn(){
   const t=document.documentElement.getAttribute('data-theme')||'light';
   const btn=document.getElementById('btn-theme');
