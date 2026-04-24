@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vladimir Streiff – Compositeur & Superviseur Musical</title>
+<meta name="description" content="Vladimir Streiff — Superviseur musical & compositeur. 11+ ans d'expérience. Cinéma, télévision, publicité.">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--red:#E50914;--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#ffffff;--text2:#cccccc;--muted:#888;--border:rgba(255,255,255,0.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,0.98);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px;color:#fff}
+.header-right{display:flex;align-items:center;gap:10px}
+.btn-nav{background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text2);padding:7px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s}
+.btn-nav:hover{border-color:#555;color:#fff}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.btn-red:hover{background:#c4070f}
+
+/* HERO */
+.hero{position:relative;height:70vh;min-height:480px;display:flex;align-items:flex-end;overflow:hidden;background:#0a0a0a;padding-top:64px}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a0a0a 0%,#1a0505 50%,#0a0a0a 100%)}
+.hero-accent{position:absolute;top:0;right:0;width:50%;height:100%;background:linear-gradient(to left,rgba(229,9,20,0.06) 0%,transparent 100%)}
+.hero-line{position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(to bottom,transparent,var(--red),transparent)}
+.hero-content{position:relative;z-index:2;padding:0 64px 72px;max-width:900px}
+.hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp 0.8s 0.3s ease both}
+.hero-name{font-size:clamp(44px,6vw,88px);font-weight:900;letter-spacing:-3px;line-height:0.92;margin-bottom:18px;opacity:0;animation:fadeUp 0.8s 0.5s ease both}
+.hero-name span{color:var(--red)}
+.hero-title{font-size:16px;font-weight:300;color:rgba(255,255,255,0.72);margin-bottom:28px;letter-spacing:1px;opacity:0;animation:fadeUp 0.8s 0.7s ease both}
+.hero-meta{display:flex;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted);opacity:0;animation:fadeUp 0.8s 0.9s ease both}
+.hero-meta a{color:var(--muted);text-decoration:none;transition:color 0.15s}
+.hero-meta a:hover{color:#fff}
+.hero-meta span{display:flex;align-items:center;gap:6px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* STATS STRIP */
+.stats-strip{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:28px 64px;display:flex;gap:0;overflow:hidden}
+.stat-item{flex:1;text-align:center;border-right:1px solid var(--border)}
+.stat-item:last-child{border-right:none}
+.stat-num{font-size:40px;font-weight:900;color:var(--red);line-height:1;margin-bottom:4px}
+.stat-lbl{font-size:9px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase}
+
+/* SECTION LAYOUT */
+section{padding:80px 64px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-eyebrow{font-size:10px;font-weight:700;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:12px}
+.section-title{font-size:clamp(22px,3vw,36px);font-weight:900;letter-spacing:-1px;margin-bottom:48px}
+
+/* PROFILE */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.profile-text{font-size:15px;line-height:1.9;color:var(--text2);font-weight:300}
+.profile-text strong{color:#fff;font-weight:600}
+.qualities-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.quality-pill{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 14px;font-size:11px;font-weight:600;border-radius:20px;letter-spacing:0.5px}
+
+/* EXPERIENCE TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:grid;grid-template-columns:160px 1fr;gap:32px;padding:36px 0;border-bottom:1px solid var(--border);position:relative}
+.tl-item:last-child{border-bottom:none}
+.tl-item::before{content:'';position:absolute;left:160px;top:0;bottom:0;width:1px;background:var(--border)}
+.tl-item::after{content:'';position:absolute;left:152px;top:44px;width:17px;height:17px;border-radius:50%;background:var(--bg);border:2px solid var(--red)}
+.tl-date{padding-top:4px;text-align:right;padding-right:32px}
+.tl-year{font-size:12px;font-weight:700;color:var(--red);letter-spacing:1px}
+.tl-loc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+.tl-content{padding-left:32px}
+.tl-role{font-size:18px;font-weight:700;margin-bottom:4px}
+.tl-company{font-size:12px;font-weight:600;letter-spacing:1px;color:var(--red);text-transform:uppercase;margin-bottom:16px}
+.tl-desc{font-size:13px;color:var(--muted);line-height:1.85;font-weight:300}
+.tl-desc ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.tl-desc ul li::before{content:'—';color:var(--red);margin-right:8px;font-weight:700}
+.tl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.tl-tag{font-size:10px;color:var(--muted);background:var(--bg3);padding:3px 10px;border-radius:8px;border:1px solid var(--border)}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.skill-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;transition:all 0.25s;position:relative;overflow:hidden}
+.skill-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transition:transform 0.25s}
+.skill-card:hover{border-color:rgba(229,9,20,0.25);transform:translateY(-3px)}
+.skill-card:hover::before{transform:scaleX(1)}
+.skill-icon{font-size:22px;margin-bottom:12px}
+.skill-name{font-size:13px;font-weight:700;margin-bottom:6px}
+.skill-desc{font-size:12px;color:var(--muted);line-height:1.6;font-weight:300}
+
+/* ARTISTS */
+.artists-section{background:var(--bg2);border-top:1px solid var(--border)}
+.artists-grid{display:flex;flex-wrap:wrap;gap:10px}
+.artist-chip{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:8px 18px;border-radius:20px;font-size:12px;font-weight:600;transition:all 0.15s}
+.artist-chip:hover{border-color:rgba(229,9,20,0.4);color:#fff}
+
+/* CTA */
+.cta-section{background:linear-gradient(135deg,#0a0a0a 0%,#1a0505 100%);text-align:center;border-top:1px solid var(--border)}
+.cta-inner{max-width:600px;margin:0 auto}
+.cta-title{font-size:clamp(24px,3.5vw,42px);font-weight:900;letter-spacing:-1px;margin-bottom:14px}
+.cta-sub{font-size:14px;color:var(--muted);font-weight:300;line-height:1.7;margin-bottom:36px}
+.cta-btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.cta-btn-main{background:var(--red);color:#fff;border:none;padding:15px 36px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:4px;text-transform:uppercase;transition:all 0.2s;text-decoration:none;display:inline-block}
+.cta-btn-main:hover{background:#ff1a1a;transform:translateY(-2px);box-shadow:0 8px 25px rgba(229,9,20,0.4)}
+.cta-btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);padding:15px 30px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;cursor:pointer;border-radius:4px;text-transform:uppercase;transition:all 0.2s;text-decoration:none;display:inline-block}
+.cta-btn-ghost:hover{border-color:#666;color:#fff}
+
+/* FOOTER */
+footer{text-align:center;padding:24px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--text2)}
+
+@media(max-width:900px){
+  header{padding:0 20px}
+  .hero-content{padding:0 20px 48px}
+  .stats-strip{padding:20px 16px;gap:4px}
+  .stat-num{font-size:28px}
+  section{padding:48px 20px}
+  .profile-grid{grid-template-columns:1fr}
+  .tl-item{grid-template-columns:1fr;gap:8px}
+  .tl-item::before,.tl-item::after{display:none}
+  .tl-date{text-align:left;padding-right:0}
+  .tl-content{padding-left:0}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">Vladimir Streiff</div>
+  </a>
+  <div class="header-right">
+    <a class="btn-nav" href="index.html">← Catalogue</a>
+    <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Compositeur & Superviseur Musical</div>
+    <div class="hero-name">Vladimir<br><span>Streiff</span></div>
+    <div class="hero-title">Musique originale pour l'image · Supervision musicale · 11+ ans d'expérience</div>
+    <div class="hero-meta">
+      <span>📍 Boulogne-Billancourt</span>
+      <span><a href="mailto:vladimirstreiff@gmail.com">✉ vladimirstreiff@gmail.com</a></span>
+      <span><a href="tel:+33682985752">📞 06 82 98 57 52</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-num">11+</div>
+    <div class="stat-lbl">Ans d'expérience</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">2560+</div>
+    <div class="stat-lbl">Titres composés</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">25+</div>
+    <div class="stat-lbl">Ans de scène</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">TF1</div>
+    <div class="stat-lbl">M6 · France 2 · Arte</div>
+  </div>
+</div>
+
+<!-- PROFIL -->
+<section style="background:var(--bg)">
+  <div class="section-inner">
+    <div class="section-eyebrow">Profil</div>
+    <div class="section-title">Artiste & Expert</div>
+    <div class="profile-grid">
+      <div>
+        <p class="profile-text">
+          Professionnel passionné par l'univers musical depuis toujours, Vladimir Streiff cumule plus de <strong>11 ans d'expérience en supervision musicale</strong> dans l'industrie de l'édition. Musicien actif — batteur pour divers artistes français depuis 2000 — il combine une solide expertise artistique, un excellent sens du relationnel, et une connaissance fine des enjeux de droits, synchronisation et production.
+        </p>
+        <p class="profile-text" style="margin-top:18px">
+          Curieux, rigoureux, à l'écoute et toujours volontaire, il s'engage à construire des projets musicaux exigeants et cohérents avec la vision des artistes, des producteurs et des diffuseurs.
+        </p>
+        <div class="qualities-grid">
+          <span class="quality-pill">Dynamique</span>
+          <span class="quality-pill">Organisé</span>
+          <span class="quality-pill">Curieux</span>
+          <span class="quality-pill">Volontaire</span>
+          <span class="quality-pill">Fiable</span>
+          <span class="quality-pill">À l'écoute</span>
+        </div>
+      </div>
+      <div class="skills-grid" style="gap:10px">
+        <div class="skill-card">
+          <div class="skill-icon">🎬</div>
+          <div class="skill-name">Supervision musicale</div>
+          <div class="skill-desc">Sélection, négociation et placement d'œuvres pour films, séries, publicités, podcasts et documentaires.</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">⚖️</div>
+          <div class="skill-name">Droits & Licensing</div>
+          <div class="skill-desc">Gestion des droits, contrats de synchro, cue sheets. Connaissance SACEM, SDRM, BMG, Sony ATV.</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🥁</div>
+          <div class="skill-name">Musicien professionnel</div>
+          <div class="skill-desc">Batteur actif depuis 2000. Studio et scène. Compréhension approfondie des enjeux artistiques.</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🤝</div>
+          <div class="skill-name">Réseau professionnel</div>
+          <div class="skill-desc">Éditeurs, producteurs, agences de publicité, réalisateurs, labels et maisons d'édition.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPÉRIENCE -->
+<section style="background:var(--bg2)">
+  <div class="section-inner">
+    <div class="section-eyebrow">Expérience</div>
+    <div class="section-title">Parcours professionnel</div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-date">
+          <div class="tl-year">2013 — Aujourd'hui</div>
+          <div class="tl-loc">Paris<br>Boulogne-Billancourt</div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-role">Superviseur Musical Indépendant</div>
+          <div class="tl-company">Édition musicale · Sync & Audiovisuel</div>
+          <div class="tl-desc">
+            <ul>
+              <li>Sélection et négociation des œuvres musicales pour films, séries, publicités, podcasts et documentaires</li>
+              <li>Coordination entre éditeurs, ayants-droits, compositeurs, réalisateurs et producteurs</li>
+              <li>Veille artistique permanente : talents émergents, catalogues</li>
+              <li>Gestion des droits, des contrats de synchro, des cue sheets et des timelines de production</li>
+              <li>Collaboration avec labels, agences créatives et maisons d'édition</li>
+            </ul>
+          </div>
+          <div class="tl-tags">
+            <span class="tl-tag">Synchronisation</span>
+            <span class="tl-tag">Licensing</span>
+            <span class="tl-tag">Cue sheets</span>
+            <span class="tl-tag">Droits d'auteur</span>
+            <span class="tl-tag">SACEM</span>
+            <span class="tl-tag">Direction artistique</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">
+          <div class="tl-year">2000 — Aujourd'hui</div>
+          <div class="tl-loc">France</div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-role">Musicien — Batteur Professionnel</div>
+          <div class="tl-company">Accompagnements live & studio</div>
+          <div class="tl-desc">
+            <ul>
+              <li>Collaborations scéniques et enregistrements studio pour grands artistes français</li>
+              <li>Compréhension approfondie des enjeux artistiques, émotionnels et techniques d'un projet musical</li>
+              <li>Réactivité, rigueur, écoute et capacité à travailler en équipe</li>
+            </ul>
+          </div>
+          <div class="tl-tags">
+            <span class="tl-tag">Live</span>
+            <span class="tl-tag">Studio</span>
+            <span class="tl-tag">Arrangement</span>
+            <span class="tl-tag">Percussion</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ARTISTES -->
+<section class="artists-section">
+  <div class="section-inner">
+    <div class="section-eyebrow">Collaborations</div>
+    <div class="section-title">Artistes avec qui j'ai joué</div>
+    <div class="artists-grid">
+      <span class="artist-chip">Patrick Bruel</span>
+      <span class="artist-chip">Amel Bent</span>
+      <span class="artist-chip">Jenifer</span>
+      <span class="artist-chip">Laurent Voulzy</span>
+      <span class="artist-chip">Et d'autres artistes français</span>
+    </div>
+  </div>
+</section>
+
+<!-- FORMATION -->
+<section style="background:var(--bg)">
+  <div class="section-inner">
+    <div class="section-eyebrow">Formation</div>
+    <div class="section-title">Parcours académique & professionnel</div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon">🎓</div>
+        <div class="skill-name">Supervision musicale & droits</div>
+        <div class="skill-desc">Formation continue en supervision musicale et gestion des droits. Sacem, CNDM, formations professionnelles spécialisées.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🎵</div>
+        <div class="skill-name">Formation musicale professionnelle</div>
+        <div class="skill-desc">Parcours musical complet, de la pratique instrumentale à la théorie musicale et à l'arrangement.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">📡</div>
+        <div class="skill-name">Répertoires & catalogues</div>
+        <div class="skill-desc">Connaissance fine des répertoires SACEM, SDRM, BMG, Sony ATV et des grands catalogues internationaux.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFUSEURS -->
+<section style="background:var(--bg2);padding-top:60px;padding-bottom:60px">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-eyebrow">Diffusion</div>
+    <div class="section-title" style="margin-bottom:32px">Mes musiques diffusées sur</div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;font-size:13px;font-weight:700">
+      <span style="color:#E8000D">TF1</span>
+      <span style="color:rgba(255,255,255,0.2)">·</span>
+      <span style="color:#0055A5">France 2</span>
+      <span style="color:rgba(255,255,255,0.2)">·</span>
+      <span style="color:#F28000">M6</span>
+      <span style="color:rgba(255,255,255,0.2)">·</span>
+      <span style="color:#fff;background:#000;padding:2px 8px;border-radius:2px;letter-spacing:3px">ARTE</span>
+      <span style="color:rgba(255,255,255,0.2)">·</span>
+      <span style="color:#EE6600">France 3</span>
+      <span style="color:rgba(255,255,255,0.2)">·</span>
+      <span style="color:#FF6600">C8</span>
+      <span style="color:rgba(255,255,255,0.2)">·</span>
+      <span style="color:#0077CC">RMC Découverte</span>
+      <span style="color:rgba(255,255,255,0.2)">·</span>
+      <span style="color:#00AAFF">Ushuaïa TV</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="section-eyebrow" style="text-align:center;margin-bottom:16px">Travaillons ensemble</div>
+    <div class="cta-title">Un projet musical ?</div>
+    <div class="cta-sub">
+      Film, série, publicité, documentaire — je sélectionne ou compose la musique qui servira exactement votre vision. Réponse sous 24h.
+    </div>
+    <div class="cta-btns">
+      <a class="cta-btn-main" href="mailto:vladimirstreiff@gmail.com">✉ Envoyer un email</a>
+      <a class="cta-btn-ghost" href="inscription.html">Accéder au catalogue</a>
+    </div>
+    <div style="margin-top:24px;font-size:11px;color:var(--muted)">
+      <a href="tel:+33682985752" style="color:var(--muted);text-decoration:none">📞 06 82 98 57 52</a>
+      &nbsp;·&nbsp; Disponible pour déplacements · Permis B
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp; <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp; <a href="tel:+33682985752">06 82 98 57 52</a> &nbsp;·&nbsp; <a href="index.html">← Retour au catalogue</a></p>
+</footer>
+
+</body>
+</html>

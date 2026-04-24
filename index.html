@@ -223,9 +223,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .section-title{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
 .section-count{font-size:11px;color:var(--muted)}
 .section-tag{font-size:11px;color:var(--red);background:rgba(229,9,20,0.1);padding:3px 10px;border-radius:10px}
-.tracks-header{display:grid;grid-template-columns:48px 1fr 160px 60px 44px 44px 44px;gap:12px;padding:6px 14px;font-size:10px;font-weight:600;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:2px}
+.tracks-header{display:grid;grid-template-columns:48px 1fr 160px 60px 44px 44px 44px 44px;gap:12px;padding:6px 14px;font-size:10px;font-weight:600;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:2px}
 .track-list{display:flex;flex-direction:column}
-.track{display:grid;grid-template-columns:48px 1fr 160px 60px 44px 44px 44px;align-items:center;gap:12px;padding:11px 14px;cursor:pointer;transition:background 0.15s;border-radius:4px}
+.track{display:grid;grid-template-columns:48px 1fr 160px 60px 44px 44px 44px 44px;align-items:center;gap:12px;padding:11px 14px;cursor:pointer;transition:background 0.15s;border-radius:4px}
 .track:hover{background:var(--bg2);box-shadow:inset 3px 0 0 var(--red)}
 .track.playing{background:rgba(229,9,20,0.07);box-shadow:inset 3px 0 0 var(--red)}
 .track-num{font-size:12px;color:var(--muted);text-align:center}
@@ -306,6 +306,48 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .copy-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--bg3);border:1px solid rgba(229,9,20,0.3);color:var(--text);padding:9px 18px;border-radius:20px;font-size:12px;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none}
 .copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* FAVORIS */
+.track-fav{color:var(--muted);transition:color 0.15s}
+.track-fav.faved{color:#ff4d6d}
+.track-fav:hover{color:#ff4d6d}
+.fav-empty{text-align:center;padding:80px 48px;color:var(--muted)}
+.fav-empty-icon{font-size:48px;margin-bottom:16px;opacity:0.4}
+.fav-empty-text{font-size:13px;line-height:1.8}
+.fav-share-bar{padding:10px 48px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)}
+.fav-count-label{font-weight:600;color:var(--text2)}
+.fav-share-btn{background:none;border:1px solid var(--border);color:var(--text2);padding:6px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border-radius:4px;transition:all 0.15s}
+.fav-share-btn:hover{border-color:#666;color:var(--text)}
+
+/* DURATION FILTERS */
+.duration-filters{padding:8px 48px 4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.dur-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-right:4px;flex-shrink:0}
+.dur-pill{background:transparent;border:1px solid rgba(255,255,255,0.07);color:var(--muted);padding:4px 12px;font-size:10px;cursor:pointer;transition:all 0.15s;font-family:'Montserrat',sans-serif;border-radius:12px;white-space:nowrap}
+.dur-pill:hover{border-color:var(--red);color:var(--red)}
+.dur-pill.active{background:rgba(229,9,20,0.12);border-color:var(--red);color:#ff6666}
+
+/* HOVER PREVIEW */
+.track.previewing{background:var(--bg2) !important;box-shadow:inset 3px 0 0 rgba(229,9,20,0.4) !important}
+.preview-tag{font-size:9px;color:rgba(229,9,20,0.7);letter-spacing:1px;text-transform:uppercase;flex-shrink:0;display:none;margin-left:6px}
+.track.previewing .preview-tag{display:inline;animation:previewBlink 1.2s ease infinite}
+@keyframes previewBlink{0%,100%{opacity:0.7}50%{opacity:0.25}}
+
+/* VLADIMIR RECOMMANDE */
+.recommends-wrap{padding:60px 64px;background:var(--bg-alt)}
+.rec-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;gap:24px;flex-wrap:wrap}
+.rec-eyebrow{font-size:10px;font-weight:700;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:10px}
+.rec-title{font-size:clamp(22px,3vw,36px);font-weight:900;letter-spacing:-1px;line-height:1.1}
+.rec-quote{font-size:12px;color:var(--muted);font-style:italic;line-height:1.7;max-width:320px;text-align:right}
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.rec-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden}
+.rec-card:hover{border-color:rgba(229,9,20,0.3);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.14)}
+.rec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transition:transform 0.25s}
+.rec-card:hover::before{transform:scaleX(1)}
+.rec-note{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-bottom:10px}
+.rec-track-title{font-size:15px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rec-playlist{font-size:12px;color:var(--muted);margin-bottom:16px}
+.rec-play-btn{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;border:none;padding:8px 16px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background 0.15s;text-transform:uppercase}
+.rec-play-btn:hover{background:#ff1a1a}
+
 @media(max-width:900px){
   header{padding:0 16px}
   .hero-content{padding:0 24px 48px}
@@ -314,7 +356,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   .pl-nav,.tag-nav,.tracks-section{padding-left:16px;padding-right:16px}
   .tracks-header{display:none}
   .track{grid-template-columns:36px 1fr auto 34px 34px}
-  .track-badge,.track-duration{display:none}
+  .track-badge,.track-duration,.track-fav{display:none}
+  .duration-filters{padding:8px 16px 4px}
+  .recommends-wrap{padding:40px 16px}
   #player{padding:0 16px;height:64px}
   .player-inner{grid-template-columns:1fr auto;gap:12px}
   .player-right{display:none}
@@ -353,6 +397,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <a class="nav-tab" href="service.html">Sélection sur mesure</a>
     <a class="nav-tab" href="login-monteurs.html">Espace Client</a>
     <a class="nav-tab" href="aide.html">Aide</a>
+    <button class="nav-tab" id="tab-favoris" onclick="showView('favoris')">♥ Favoris<span id="fav-count-nav" style="font-size:9px;color:var(--red)"></span></button>
+    <a class="nav-tab" href="compositeur.html">Le Compositeur</a>
   </div>
   <div class="header-right">
     <div class="search-wrap">
@@ -431,6 +477,20 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       <span class="ticker-item" style="font-size:11px;color:#00AAFF">USHUAÏA TV</span>
     </div>
   </div>
+
+  <!-- VLADIMIR RECOMMANDE -->
+  <div class="recommends-wrap">
+    <div class="rec-top">
+      <div>
+        <div class="rec-eyebrow">Sélection personnelle</div>
+        <div class="rec-title">Vladimir recommande</div>
+      </div>
+      <div class="rec-quote">« Ces compositions représentent ce que j'aime faire : de la musique qui sert l'image sans jamais l'écraser. »</div>
+    </div>
+    <div class="rec-grid" id="recommends-container">
+      <div class="loading"><span class="ld">·</span><span class="ld">·</span><span class="ld">·</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- PLAYLISTS -->
@@ -474,14 +534,37 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   <div class="search-active-bar" id="search-active-bar"></div>
   <div class="pl-nav" id="pl-nav"></div>
   <div class="tag-nav" id="tag-nav"></div>
+  <div class="duration-filters">
+    <span class="dur-label">Durée :</span>
+    <button class="dur-pill active" onclick="selectDuration(null,this)">Toutes</button>
+    <button class="dur-pill" onclick="selectDuration('short',this)">&lt; 1 min</button>
+    <button class="dur-pill" onclick="selectDuration('medium',this)">1 – 3 min</button>
+    <button class="dur-pill" onclick="selectDuration('long',this)">&gt; 3 min</button>
+  </div>
   <div class="tracks-section">
     <div class="section-header">
       <span class="section-title" id="section-title">Catalogue complet</span>
       <span class="section-count" id="section-count"></span>
       <span class="section-tag" id="section-tag" style="display:none"></span>
     </div>
-    <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span></span><span></span><span></span></div>
+    <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span></span><span></span><span></span><span></span></div>
     <div id="track-list" class="track-list"><div class="loading"><span class="ld">·</span><span class="ld">·</span><span class="ld">·</span> Chargement</div></div>
+  </div>
+</div>
+
+<!-- FAVORIS -->
+<div class="view" id="view-favoris">
+  <div class="fav-share-bar">
+    <span class="fav-count-label" id="fav-count-label">0 favori</span>
+    <button class="fav-share-btn" onclick="shareFavoris()">🔗 Partager ma sélection</button>
+  </div>
+  <div class="tracks-section">
+    <div class="section-header">
+      <span class="section-title">Mes Favoris</span>
+      <span class="section-count" id="fav-section-count"></span>
+    </div>
+    <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span></span><span></span><span></span><span></span></div>
+    <div id="fav-track-list" class="track-list"></div>
   </div>
 </div>
 
@@ -635,6 +718,11 @@ function loadCatalogue(){
     allTracks=(data.tracks||[]).filter(t=>t.playlist!=='samples').map(t=>({...t,playlistLabel:getLabel(t.playlist)}));
     renderPlaylists();
     renderNavPills();
+    renderRecommends();
+    updateFavNav();
+    const params=new URLSearchParams(location.search);
+    const sharedFavs=params.get('favs');
+    if(sharedFavs){sharedFavs.split(',').forEach(id=>{if(id.trim())favorites.add(id.trim());});localStorage.setItem('osm-favs',JSON.stringify([...favorites]));updateFavNav();}
   }).catch(()=>{document.getElementById('track-list').innerHTML='<div class="empty">Erreur de chargement.</div>';});
 }
 
@@ -646,6 +734,8 @@ function showView(name){
   if(tab)tab.classList.add('active');
   else{document.getElementById('tab-playlists').classList.add('active');}
   if(name==='catalogue')filterTracks();
+  if(name==='favoris')renderFavoris();
+  if(name==='accueil')renderRecommends();
 }
 
 function renderPlaylists(){
@@ -804,7 +894,9 @@ function filterTracks(){
     const matchTag=!activeTag||(tagPls&&tagPls.includes(lbl));
     let matchSearch=true;
     if(kws.length>0){const hay=`${t.title} ${lbl} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();matchSearch=kws.every(kw=>hay.includes(kw));}
-    return matchFolder&&matchTag&&matchSearch;
+    let matchDuration=true;
+    if(activeDuration&&t.duration){const s=parseDurSecs(t.duration);if(s>0){if(activeDuration==='short')matchDuration=s<60;else if(activeDuration==='medium')matchDuration=s>=60&&s<=180;else if(activeDuration==='long')matchDuration=s>180;}}
+    return matchFolder&&matchTag&&matchSearch&&matchDuration;
   });
   const bar=document.getElementById('search-active-bar');
   if(kws.length>0){bar.classList.add('visible');bar.innerHTML=`🔍 ${kws.map(k=>`<span class="kw-tag">${k}</span>`).join('')} &nbsp;·&nbsp; <span style="color:var(--red);font-weight:600">${filteredTracks.length} résultats</span> &nbsp;<button onclick="clearSearch()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px">✕ Effacer</button>`;}
@@ -831,11 +923,15 @@ function renderTracks(){
   if(!filteredTracks.length){list.innerHTML='<div class="empty">Aucun résultat</div>';return;}
   const qIds=new Set(queue.map(t=>t.id));
   list.innerHTML=filteredTracks.map((t,i)=>`
-    <div class="track${currentIndex===i?' playing':''}${qIds.has(t.id)?' in-queue':''}" onclick="playTrack(${i})">
+    <div class="track${currentIndex===i?' playing':''}${qIds.has(t.id)?' in-queue':''}" data-url="${t.url}" onclick="playTrack(${i})">
       <div><div class="track-num">${i+1}</div><div class="track-play-icon">▶</div></div>
-      <div class="track-info"><div class="track-title">${highlight(t.title,kws)}</div><div class="track-artist">${t.playlistLabel}</div></div>
+      <div class="track-info">
+        <div style="display:flex;align-items:center"><div class="track-title">${highlight(t.title,kws)}</div><span class="preview-tag">▶ aperçu</span></div>
+        <div class="track-artist">${t.playlistLabel}</div>
+      </div>
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
+      <button class="track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFav('${t.id}')">♥</button>
       <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')">🔗</button>
       <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueTrack(${i})">${qIds.has(t.id)?'✓':'+'}</button>
       <button class="track-btn" onclick="event.stopPropagation();downloadTrack(${i})">⬇</button>
@@ -943,6 +1039,135 @@ function heroTag(tag){activeTag=tag;currentFolder=null;showView('catalogue');fil
   const btn=document.getElementById('btn-theme');
   if(btn)btn.textContent=t==='dark'?'☀️':'🌙';
 })();
+
+/* ── DURATION FILTER ── */
+let activeDuration=null;
+function parseDurSecs(d){if(!d||d==='—'||d==='0:00')return 0;const p=d.split(':');return p.length===2?parseInt(p[0])*60+parseInt(p[1]):0;}
+function selectDuration(d,btn){
+  activeDuration=d;
+  document.querySelectorAll('.dur-pill').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  filterTracks();
+}
+
+/* ── FAVORITES ── */
+let favorites=new Set(JSON.parse(localStorage.getItem('osm-favs')||'[]'));
+function isFav(id){return favorites.has(id);}
+function toggleFav(id){
+  if(favorites.has(id))favorites.delete(id);else favorites.add(id);
+  localStorage.setItem('osm-favs',JSON.stringify([...favorites]));
+  updateFavNav();renderTracks();
+  if(document.getElementById('view-favoris').classList.contains('active'))renderFavoris();
+}
+function updateFavNav(){
+  const n=favorites.size;
+  const el=document.getElementById('fav-count-nav');if(el)el.textContent=n>0?` (${n})`:'';
+  const lbl=document.getElementById('fav-count-label');if(lbl)lbl.textContent=`${n} favori${n>1?'s':''}`;
+  const cnt=document.getElementById('fav-section-count');if(cnt)cnt.textContent=`${n} morceau${n>1?'x':''}`;
+}
+function renderFavoris(){
+  updateFavNav();
+  const favTracks=allTracks.filter(t=>favorites.has(t.id));
+  const container=document.getElementById('fav-track-list');if(!container)return;
+  if(!favTracks.length){container.innerHTML='<div class="fav-empty"><div class="fav-empty-icon">♡</div><div class="fav-empty-text">Aucun favori pour l\'instant.<br>Cliquez sur ♥ sur une piste pour l\'ajouter ici.</div></div>';return;}
+  const qIds=new Set(queue.map(t=>t.id));
+  container.innerHTML=favTracks.map((t,i)=>`
+    <div class="track" data-url="${t.url}" onclick="playFavTrack('${t.id}')">
+      <div><div class="track-num">${i+1}</div><div class="track-play-icon">▶</div></div>
+      <div class="track-info">
+        <div style="display:flex;align-items:center"><div class="track-title">${t.title}</div><span class="preview-tag">▶ aperçu</span></div>
+        <div class="track-artist">${t.playlistLabel}</div>
+      </div>
+      <div><span class="track-badge">${t.playlistLabel}</span></div>
+      <div class="track-duration">${fmt(t.duration)}</div>
+      <button class="track-btn track-fav faved" onclick="event.stopPropagation();toggleFav('${t.id}')">♥</button>
+      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')">🔗</button>
+      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueFavTrack('${t.id}')">${qIds.has(t.id)?'✓':'+'}</button>
+      <button class="track-btn" onclick="event.stopPropagation();downloadFavTrack('${t.id}')">⬇</button>
+    </div>`).join('');
+}
+function playFavTrack(id){
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  const info=getInfo(t.playlistLabel);
+  document.getElementById('p-title').textContent=t.title;
+  document.getElementById('p-playlist').textContent=t.playlistLabel;
+  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  document.getElementById('player').classList.add('visible');
+  wsLoad(t.url);
+}
+function toggleQueueFavTrack(id){
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  const idx=queue.findIndex(q=>q.id===t.id);
+  if(idx>=0)queue.splice(idx,1);else queue.push(t);
+  updateQueueBadge();renderFavoris();renderQueueList();
+}
+function downloadFavTrack(id){
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  const a=document.createElement('a');a.href=t.url.replace('/upload/','/upload/fl_attachment/');a.download=t.title+'.mp3';a.target='_blank';a.click();
+}
+function shareFavoris(){
+  if(!favorites.size){alert('Ajoutez d\'abord des favoris !');return;}
+  const ids=[...favorites].join(',');
+  const url=location.origin+location.pathname+'?favs='+encodeURIComponent(ids);
+  navigator.clipboard.writeText(url).then(()=>{const t=document.getElementById('copy-toast');t.textContent='🔗 Sélection copiée !';t.classList.add('show');setTimeout(()=>{t.classList.remove('show');t.textContent='🔗 Lien copié !';},2400);});
+}
+
+/* ── HOVER PREVIEW ── */
+const previewAudio=new Audio();previewAudio.volume=0.25;
+let previewTimer=null,previewActiveEl=null;
+function startPreview(url,el){
+  if(previewActiveEl===el)return;
+  clearTimeout(previewTimer);
+  previewTimer=setTimeout(()=>{
+    stopPreview();
+    previewActiveEl=el;el.classList.add('previewing');
+    previewAudio.src=url;previewAudio.currentTime=0;
+    previewAudio.play().catch(()=>{});
+    previewTimer=setTimeout(()=>{if(previewActiveEl===el)stopPreview();},15000);
+  },600);
+}
+function stopPreview(){
+  clearTimeout(previewTimer);previewAudio.pause();previewAudio.src='';
+  if(previewActiveEl){previewActiveEl.classList.remove('previewing');previewActiveEl=null;}
+}
+(function(){
+  ['track-list','fav-track-list'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.addEventListener('mouseover',e=>{const tr=e.target.closest('.track');if(!tr||!tr.dataset.url)return;startPreview(tr.dataset.url,tr);});
+    el.addEventListener('mouseout',e=>{const tr=e.target.closest('.track');const to=e.relatedTarget?e.relatedTarget.closest('.track'):null;if(tr&&to!==tr)stopPreview();});
+  });
+})();
+
+/* ── VLADIMIR RECOMMANDE ── */
+const RECOMMENDS_CONFIG=[
+  {playlist:'Orchestral',note:'Ma signature épique'},
+  {playlist:'Piano',note:"L'émotion à l'état pur"},
+  {playlist:'Suspense',note:'Tension maîtrisée'},
+  {playlist:'Groovy',note:'Du groove pour l\'image'},
+  {playlist:'Romance',note:'Pour les grandes émotions'},
+  {playlist:'Atmosphère',note:'Contemplatif'},
+];
+function renderRecommends(){
+  const container=document.getElementById('recommends-container');if(!container||!allTracks.length)return;
+  const picks=RECOMMENDS_CONFIG.map(cfg=>{const track=allTracks.find(t=>t.playlistLabel===cfg.playlist);return track?{...cfg,track}:null;}).filter(Boolean);
+  if(!picks.length){container.innerHTML='';return;}
+  container.innerHTML=picks.map(p=>`
+    <div class="rec-card" onclick="playRecTrack('${p.track.id}')">
+      <div class="rec-note">${p.note}</div>
+      <div class="rec-track-title">${p.track.title}</div>
+      <div class="rec-playlist">${p.track.playlistLabel}</div>
+      <button class="rec-play-btn">▶ Écouter</button>
+    </div>`).join('');
+}
+function playRecTrack(id){
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  const info=getInfo(t.playlistLabel);
+  document.getElementById('p-title').textContent=t.title;
+  document.getElementById('p-playlist').textContent=t.playlistLabel;
+  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  document.getElementById('player').classList.add('visible');
+  wsLoad(t.url);
+}
 </script>
 </body>
 </html>
