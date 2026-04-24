@@ -190,8 +190,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .pd-btn-back:hover{background:rgba(255,255,255,0.18)}
 .pd-count{font-size:12px;color:#999}
 .pd-tracks{padding:32px 64px 160px}
-.pd-tracks-header{display:grid;grid-template-columns:48px 52px 1fr 80px 44px 44px;gap:12px;padding:8px 14px;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:4px}
-.pd-track{display:grid;grid-template-columns:48px 52px 1fr 80px 44px 44px;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:background 0.15s;border-radius:6px}
+.pd-tracks-header{display:grid;grid-template-columns:48px 52px 1fr 80px 44px 44px 44px;gap:12px;padding:8px 14px;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:4px}
+.pd-track{display:grid;grid-template-columns:48px 52px 1fr 80px 44px 44px 44px;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:background 0.15s;border-radius:6px}
 .pd-track:hover{background:var(--bg2)}
 .pd-track.playing{background:rgba(229,9,20,0.07)}
 .pd-track-num{font-size:12px;color:var(--muted);text-align:center}
@@ -524,7 +524,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     </div>
   </div>
   <div class="pd-tracks">
-    <div class="pd-tracks-header"><span>#</span><span></span><span>Titre</span><span>Durée</span><span></span><span></span></div>
+    <div class="pd-tracks-header"><span>#</span><span></span><span>Titre</span><span>Durée</span><span></span><span></span><span></span></div>
     <div id="pd-track-list"></div>
   </div>
 </div>
@@ -785,11 +785,12 @@ function renderDetailTracks(){
   const info=currentDetailTracks[0]?getInfo(currentDetailTracks[0].playlistLabel):null;
   const photo=info?info.photo:'';
   document.getElementById('pd-track-list').innerHTML=currentDetailTracks.map((t,i)=>`
-    <div class="pd-track${detailIndex===i?' playing':''}" onclick="playDetailTrack(${i})">
+    <div class="pd-track${detailIndex===i?' playing':''}" data-url="${t.url}" onclick="playDetailTrack(${i})">
       <div><div class="pd-track-num">${i+1}</div><div class="pd-track-icon">▶</div></div>
       <div class="pd-thumb" style="background-image:url('${photo}')"></div>
       <div class="pd-track-title">${t.title}</div>
       <div class="pd-track-dur">${fmt(t.duration)}</div>
+      <button class="pd-track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFavDetail('${t.id}',${i})">♥</button>
       <button class="pd-track-btn" onclick="event.stopPropagation();copyLink('${t.url}')">🔗</button>
       <button class="pd-track-btn" onclick="event.stopPropagation();downloadDetailTrack(${i})">⬇</button>
     </div>`).join('');
@@ -1130,12 +1131,22 @@ function stopPreview(){
   clearTimeout(previewTimer);previewAudio.pause();previewAudio.src='';
   if(previewActiveEl){previewActiveEl.classList.remove('previewing');previewActiveEl=null;}
 }
+function toggleFavDetail(id,i){
+  if(favorites.has(id))favorites.delete(id);else favorites.add(id);
+  localStorage.setItem('osm-favs',JSON.stringify([...favorites]));
+  updateFavNav();renderDetailTracks();renderTracks();
+  if(document.getElementById('view-favoris').classList.contains('active'))renderFavoris();
+}
+
 (function(){
   ['track-list','fav-track-list'].forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
     el.addEventListener('mouseover',e=>{const tr=e.target.closest('.track');if(!tr||!tr.dataset.url)return;startPreview(tr.dataset.url,tr);});
     el.addEventListener('mouseout',e=>{const tr=e.target.closest('.track');const to=e.relatedTarget?e.relatedTarget.closest('.track'):null;if(tr&&to!==tr)stopPreview();});
   });
+  const pdl=document.getElementById('pd-track-list');if(!pdl)return;
+  pdl.addEventListener('mouseover',e=>{const tr=e.target.closest('.pd-track');if(!tr||!tr.dataset.url)return;startPreview(tr.dataset.url,tr);});
+  pdl.addEventListener('mouseout',e=>{const tr=e.target.closest('.pd-track');const to=e.relatedTarget?e.relatedTarget.closest('.pd-track'):null;if(tr&&to!==tr)stopPreview();});
 })();
 
 /* ── VLADIMIR RECOMMANDE ── */
