@@ -34,7 +34,7 @@ audio{display:none}
 #main.visible{display:block}
 
 /* HEADER */
-header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
 .logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
 .logo-name{font-size:13px;font-weight:600;letter-spacing:2px}
@@ -42,6 +42,22 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;padding:8px 16px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;position:relative;text-decoration:none}
 .nav-tab:hover{color:var(--text);background:var(--bg3)}
 .nav-tab.active{color:var(--text)}
+
+/* HAMBURGER MENU */
+.ham-btn{background:none;border:1px solid var(--border);color:var(--text2);cursor:pointer;width:38px;height:38px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:all 0.15s;flex-shrink:0;margin-right:8px}
+.ham-btn:hover{border-color:#666;color:var(--text)}
+.ham-btn span{display:block;width:16px;height:1.5px;background:currentColor;border-radius:2px;transition:all 0.2s}
+.ham-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.ham-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.ham-menu{position:fixed;top:64px;left:0;width:280px;background:var(--bg-deep);border-right:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:0 0 12px 0;z-index:99;padding:12px 0;visibility:hidden;opacity:0;pointer-events:none;transform:translateX(-16px);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0.2s}
+.ham-menu.open{visibility:visible;opacity:1;pointer-events:all;transform:translateX(0);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0s}
+.ham-section{padding:6px 16px 2px;font-size:9px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:6px}
+.ham-item{display:flex;align-items:center;gap:10px;padding:11px 20px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.15s;background:none;border:none;width:100%;text-align:left;text-decoration:none}
+.ham-item:hover{background:var(--bg2);color:var(--text)}
+.ham-item.active{color:var(--red);background:rgba(229,9,20,0.06)}
+.ham-item-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.ham-divider{height:1px;background:var(--border);margin:8px 16px}
 .nav-tab.active::after{content:'';position:absolute;bottom:-1px;left:16px;right:16px;height:2px;background:var(--red);border-radius:2px 2px 0 0}
 .header-right{display:flex;align-items:center;gap:10px}
 .search-wrap{position:relative}
@@ -417,19 +433,19 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 <div id="main">
 <header>
-  <div class="logo" onclick="showView('accueil')">
-    <div class="logo-mark">OSM</div>
+  <div style="display:flex;align-items:center;gap:4px">
+    <button class="ham-btn" id="ham-btn" onclick="toggleHamMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="logo" onclick="closeHamMenu();showView('accueil')">
+      <div class="logo-mark">OSM</div>
+      <div class="logo-name" style="display:none" id="logo-full-name">Original Scores Music</div>
+    </div>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" id="tab-accueil" onclick="showView('accueil')">Accueil</button>
     <button class="nav-tab" id="tab-playlists" onclick="showView('playlists')">Playlists</button>
     <button class="nav-tab" id="tab-catalogue" onclick="showView('catalogue')">Catalogue</button>
-    <a class="nav-tab" href="television.html">Télévision</a>
-    <a class="nav-tab" href="service.html">Sélection sur mesure</a>
-    <a class="nav-tab" href="login-monteurs.html">Espace Client</a>
-    <a class="nav-tab" href="aide.html">Aide</a>
-    <button class="nav-tab" id="tab-favoris" onclick="showView('favoris')">♥ Favoris<span id="fav-count-nav" style="font-size:9px;color:var(--red)"></span></button>
-    <a class="nav-tab" href="compositeur.html">Le Compositeur</a>
   </div>
   <div class="header-right">
     <div class="search-wrap">
@@ -442,6 +458,27 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
   </div>
 </header>
+
+<!-- HAMBURGER MENU PANEL -->
+<div class="ham-menu" id="ham-menu">
+  <div class="ham-section">Navigation</div>
+  <button class="ham-item" id="ham-tab-accueil" onclick="closeHamMenu();showView('accueil')"><span class="ham-item-icon">🏠</span>Accueil</button>
+  <button class="ham-item" id="ham-tab-playlists" onclick="closeHamMenu();showView('playlists')"><span class="ham-item-icon">🎵</span>Playlists</button>
+  <button class="ham-item" id="ham-tab-catalogue" onclick="closeHamMenu();showView('catalogue')"><span class="ham-item-icon">📂</span>Catalogue</button>
+  <button class="ham-item" id="ham-tab-favoris" onclick="closeHamMenu();showView('favoris')"><span class="ham-item-icon">♥</span>Favoris<span id="fav-count-nav" style="font-size:9px;color:var(--red);margin-left:4px"></span></button>
+  <div class="ham-divider"></div>
+  <div class="ham-section">Pages</div>
+  <a class="ham-item" href="television.html"><span class="ham-item-icon">📺</span>Télévision</a>
+  <a class="ham-item" href="service.html"><span class="ham-item-icon">🎯</span>Sélection sur mesure</a>
+  <a class="ham-item" href="qui-sommes-nous.html"><span class="ham-item-icon">👥</span>Qui sommes-nous ?</a>
+  <div class="ham-divider"></div>
+  <div class="ham-section">Compte</div>
+  <a class="ham-item" href="login-monteurs.html"><span class="ham-item-icon">👤</span>Espace Client</a>
+  <a class="ham-item" href="inscription.html"><span class="ham-item-icon">✍️</span>Demande d'accès</a>
+  <a class="ham-item" href="aide.html"><span class="ham-item-icon">❓</span>Aide</a>
+  <div class="ham-divider"></div>
+  <a class="ham-item" href="mailto:vladimirstreiff@gmail.com"><span class="ham-item-icon">✉️</span>Contact</a>
+</div>
 
 <div id="queue-panel">
   <div class="queue-header"><span class="queue-title">Ma liste</span><button class="queue-clear" onclick="clearQueue()">Effacer</button></div>
@@ -1116,6 +1153,23 @@ function toggleTheme(){
   localStorage.setItem('osm-theme',next);
   document.getElementById('btn-theme').textContent=next==='dark'?'☀️':'🌙';
 }
+/* ── HAMBURGER MENU ── */
+function toggleHamMenu(){
+  const btn=document.getElementById('ham-btn');
+  const menu=document.getElementById('ham-menu');
+  const open=menu.classList.toggle('open');
+  btn.classList.toggle('open',open);
+}
+function closeHamMenu(){
+  document.getElementById('ham-btn').classList.remove('open');
+  document.getElementById('ham-menu').classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  const btn=document.getElementById('ham-btn');
+  const menu=document.getElementById('ham-menu');
+  if(!btn.contains(e.target)&&!menu.contains(e.target))closeHamMenu();
+});
+
 setTimeout(function(){var f=document.querySelector('.hero-yt-iframe');if(f)f.classList.add('ready');},1500);
 function heroSearchInput(val){
   document.getElementById('search').value=val;
