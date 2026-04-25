@@ -469,8 +469,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 <div class="view active" id="view-accueil">
   <div class="hero">
     <div class="hero-video-wrap">
-      <iframe class="hero-yt-iframe"
-        src="https://www.youtube.com/embed/_w8YqdGpahU?autoplay=1&mute=1&loop=1&playlist=_w8YqdGpahU&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=0&disablekb=1"
+      <iframe class="hero-yt-iframe" id="hero-yt-iframe"
+        src="https://www.youtube.com/embed/_w8YqdGpahU?autoplay=1&mute=1&loop=1&playlist=_w8YqdGpahU&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=0&disablekb=1&enablejsapi=1"
         frameborder="0"
         allow="autoplay; encrypted-media"
         allowfullscreen>
@@ -1160,9 +1160,21 @@ document.addEventListener('click',function(e){
   if(!btn.contains(e.target)&&!menu.contains(e.target))closeHamMenu();
 });
 
-setTimeout(function(){
+/* Lève le voile 1.5s après que YouTube confirme la lecture — bouton play déjà disparu */
+var _coverLifted=false;
+function _liftCover(){
+  if(_coverLifted)return;_coverLifted=true;
   var c=document.getElementById('hero-video-cover');if(c)c.style.opacity='0';
-},3500);
+}
+window.addEventListener('message',function(e){
+  try{
+    var d=typeof e.data==='string'?JSON.parse(e.data):e.data;
+    if(d&&d.event==='onStateChange'&&d.info===1){
+      setTimeout(_liftCover,1500);
+    }
+  }catch(_){}
+});
+setTimeout(_liftCover,8000); /* fallback si l'API ne répond pas */
 /* ── HERO SEARCH ── */
 let activeHeroTags=new Set();
 
