@@ -103,9 +103,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 /* HERO VIDEO YOUTUBE */
 .hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#000}
-.hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px));pointer-events:none;border:0;opacity:0;transition:opacity 1.8s ease}
-.hero-yt-iframe.ready{opacity:1}
-.hero-video-cover{position:absolute;inset:0;z-index:1;background:#000;pointer-events:none;opacity:1;transition:opacity 1.2s ease}
+.hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px));pointer-events:none;border:0}
+.hero-video-cover{position:absolute;inset:0;z-index:1;background:#000;pointer-events:none;transition:opacity 0.8s ease}
 /* HERO CENTER — contenu apparaît après 1,2s pour laisser la vidéo s'installer */
 .hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
 /* OSM LOGO HERO */
@@ -1162,9 +1161,8 @@ document.addEventListener('click',function(e){
 });
 
 setTimeout(function(){
-  var f=document.querySelector('.hero-yt-iframe');if(f)f.classList.add('ready');
   var c=document.getElementById('hero-video-cover');if(c)c.style.opacity='0';
-},2200);
+},3500);
 /* ── HERO SEARCH ── */
 let activeHeroTags=new Set();
 
