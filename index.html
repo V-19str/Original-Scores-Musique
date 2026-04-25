@@ -105,6 +105,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#000}
 .hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px));pointer-events:none;border:0;opacity:0;transition:opacity 1.8s ease}
 .hero-yt-iframe.ready{opacity:1}
+.hero-video-cover{position:absolute;inset:0;z-index:1;background:#000;pointer-events:none;opacity:1;transition:opacity 1.2s ease}
 /* HERO CENTER — contenu apparaît après 1,2s pour laisser la vidéo s'installer */
 .hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
 /* OSM LOGO HERO */
@@ -470,11 +471,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   <div class="hero">
     <div class="hero-video-wrap">
       <iframe class="hero-yt-iframe"
-        src="https://www.youtube.com/embed/_w8YqdGpahU?autoplay=1&mute=1&loop=1&playlist=_w8YqdGpahU&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=0"
+        src="https://www.youtube.com/embed/_w8YqdGpahU?autoplay=1&mute=1&loop=1&playlist=_w8YqdGpahU&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=0&disablekb=1"
         frameborder="0"
         allow="autoplay; encrypted-media"
         allowfullscreen>
       </iframe>
+      <div class="hero-video-cover" id="hero-video-cover"></div>
     </div>
     <div class="hero-ov"></div>
     <div class="hero-center">
@@ -1159,7 +1161,10 @@ document.addEventListener('click',function(e){
   if(!btn.contains(e.target)&&!menu.contains(e.target))closeHamMenu();
 });
 
-setTimeout(function(){var f=document.querySelector('.hero-yt-iframe');if(f)f.classList.add('ready');},1500);
+setTimeout(function(){
+  var f=document.querySelector('.hero-yt-iframe');if(f)f.classList.add('ready');
+  var c=document.getElementById('hero-video-cover');if(c)c.style.opacity='0';
+},2200);
 /* ── HERO SEARCH ── */
 let activeHeroTags=new Set();
 
