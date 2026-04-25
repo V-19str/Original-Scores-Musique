@@ -991,7 +991,7 @@ function filterTracks(){
     const matchFolder=!currentFolder||lbl===currentFolder;
     const tagPls=activeTag?THEMES.flatMap(th=>th.playlists.filter(p=>p.tags.includes(activeTag)).map(p=>p.label)):null;
     const matchTag=!activeTag||(tagPls&&tagPls.includes(lbl));
-    const hay=`${t.title} ${lbl} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();
+    const hay=`${t.title} ${lbl} ${(t.tags||[]).join(' ')} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();
     let matchSearch=true;
     if(kws.length>0){matchSearch=kws.every(kw=>hay.includes(kw));}
     let matchHeroTags=true;
