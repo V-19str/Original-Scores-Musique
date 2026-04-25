@@ -80,7 +80,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .view.active{display:block}
 
 /* HERO */
-.hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:center;justify-content:center;background:#000}
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#000}
 .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1800&q=80') center/cover no-repeat;animation:heroZoom 12s ease-in-out infinite alternate}
 @keyframes heroZoom{from{transform:scale(1.0)}to{transform:scale(1.07)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.1) 100%)}
@@ -116,46 +116,29 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-osm-name span{color:var(--red)}
 /* TAGLINE */
 .hero-tagline{font-size:13px;font-weight:300;color:rgba(255,255,255,0.72);margin-bottom:32px;letter-spacing:1.5px;animation:fadeUp 1s 2.2s ease both}
-/* HERO SEARCH BAR */
-.hero-search-container{width:100%;max-width:780px;margin-bottom:20px;animation:fadeUp 1s 2.5s ease both}
-.hero-search-inner{display:flex;align-items:center;background:rgba(8,8,8,0.55);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:8px 8px 8px 26px;transition:all 0.3s;gap:10px}
-.hero-search-inner:focus-within{background:rgba(8,8,8,0.72);border-color:rgba(255,255,255,0.38);box-shadow:0 0 0 3px rgba(229,9,20,0.22),0 8px 40px rgba(0,0,0,0.5)}
-.hero-search-icon{color:rgba(255,255,255,0.5);font-size:16px;flex-shrink:0}
-.hero-search-field{flex:1;background:none;border:none;outline:none;color:#fff;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:400;padding:10px 0;min-width:0}
-.hero-search-field::placeholder{color:rgba(255,255,255,0.32)}
-.hero-search-btn{background:var(--red);color:#fff;border:none;padding:12px 28px;border-radius:40px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:background 0.2s,transform 0.15s;text-transform:uppercase;flex-shrink:0}
-.hero-search-btn:hover{background:#ff1a1a;transform:scale(1.04)}
-
-/* HERO SEARCH DROPDOWN */
-.hero-search-container{position:relative}
-.hero-search-dropdown{
-  position:fixed;
-  background:rgba(6,6,6,0.94);
-  backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
-  border:1px solid rgba(255,255,255,0.13);
-  border-radius:18px;padding:26px 28px 22px;
-  z-index:9999;
-  overflow-y:auto;
-  visibility:hidden;opacity:0;pointer-events:none;
-  transform:translateY(-10px);
-  transition:opacity 0.22s ease,transform 0.22s ease,visibility 0s 0.22s;
-}
-.hero-search-dropdown.visible{
-  visibility:visible;opacity:1;pointer-events:all;transform:translateY(0);
-  transition:opacity 0.22s ease,transform 0.22s ease,visibility 0s 0s;
-}
-.hsd-category{margin-bottom:18px}
-.hsd-category:last-child{margin-bottom:0}
-.hsd-cat-label{font-size:9px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.hsd-cat-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06)}
-.hsd-pills{display:flex;flex-wrap:wrap;gap:7px}
-.hsd-pill{
-  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
-  color:rgba(255,255,255,0.78);padding:6px 15px;border-radius:20px;
-  font-family:'Montserrat',sans-serif;font-size:12px;font-weight:500;
-  cursor:pointer;white-space:nowrap;transition:all 0.15s;
-}
-.hsd-pill:hover{background:rgba(229,9,20,0.18);border-color:rgba(229,9,20,0.45);color:#fff;transform:translateY(-1px)}
+/* HERO SEARCH */
+.hero-search-wrap{width:100%;max-width:800px;animation:fadeUp 1s 2.5s ease both;position:relative}
+.hero-search-bar{display:flex;align-items:center;background:#fff;border-radius:50px;padding:7px 7px 7px 24px;box-shadow:0 8px 40px rgba(0,0,0,0.45);gap:12px;position:relative}
+.hero-search-icon{color:#aaa;font-size:17px;flex-shrink:0}
+.hero-search-field{flex:1;background:none;border:none;outline:none;color:#111;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:400;padding:10px 0;min-width:0}
+.hero-search-field::placeholder{color:#aaa}
+.hero-search-btn{background:var(--red);color:#fff;border:none;padding:13px 28px;border-radius:40px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:background 0.2s;text-transform:uppercase;flex-shrink:0}
+.hero-search-btn:hover{background:#ff1a1a}
+/* Hero suggestions */
+.hero-sug{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.3);padding:6px 0;z-index:200;display:none;max-height:260px;overflow-y:auto}
+.hero-sug.visible{display:block}
+.hero-sug-item{padding:10px 22px;font-size:13px;color:#222;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:background 0.1s;font-family:'Montserrat',sans-serif}
+.hero-sug-item:hover{background:#f5f5f5}
+.hero-sug-type{font-size:10px;color:#999;background:#eee;padding:2px 8px;border-radius:4px;flex-shrink:0}
+/* Hero tag rows */
+.hero-tags-section{width:100%;max-width:800px;margin-top:18px;animation:fadeUp 1s 2.8s ease both}
+.hero-tag-cat{margin-bottom:9px;display:flex;align-items:center;gap:10px}
+.hero-tag-cat-label{font-size:9px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.35);text-transform:uppercase;white-space:nowrap;min-width:72px;text-align:right;flex-shrink:0}
+.hero-tag-pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:2px}
+.hero-tag-pills::-webkit-scrollbar{display:none}
+.hero-tag-pill{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.82);padding:5px 13px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0;user-select:none}
+.hero-tag-pill:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.35);color:#fff}
+.hero-tag-pill.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 2px 10px rgba(229,9,20,0.4)}
 
 /* TICKER */
 .ticker-wrap{overflow:hidden;padding:14px 0;background:var(--bg-deep);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -409,8 +392,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   #player{padding:0 16px;height:64px}
   .player-inner{grid-template-columns:1fr auto;gap:12px}
   .player-right{display:none}
-  .search-wrap input{width:130px}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-tag-cat-label{min-width:52px;font-size:8px;letter-spacing:2px}
+  .hero-search-field{font-size:13px}
+  .hero-search-btn{padding:11px 18px;font-size:10px}
   .pd-hero-content{padding:0 20px 32px;flex-direction:column;align-items:flex-start;gap:20px}
   .pd-cover{width:100px;height:100px}
   .pd-tracks{padding:16px 16px 160px}
@@ -448,11 +433,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <button class="nav-tab" id="tab-catalogue" onclick="showView('catalogue')">Catalogue</button>
   </div>
   <div class="header-right">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="search" placeholder="piano suspense groovy..." oninput="onSearch()" onfocus="showSuggestions()" onblur="setTimeout(hideSuggestions,200)">
-      <div class="suggestions" id="suggestions"></div>
-    </div>
     <button class="btn-nav btn-theme" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
     <button class="btn-nav" onclick="toggleQueue()" style="position:relative">🎵 Ma liste <span class="queue-badge" id="queue-badge"></span></button>
     <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
@@ -504,66 +484,81 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
         <div class="hero-osm-name">ORIGINAL &nbsp;<span>SCORES</span>&nbsp; MUSIC</div>
       </div>
       <p class="hero-tagline">Musique originale pour l'image &nbsp;·&nbsp; Cinéma &nbsp;·&nbsp; Télévision &nbsp;·&nbsp; Publicité</p>
-      <div class="hero-search-container">
-        <div class="hero-search-inner">
+      <div class="hero-search-wrap">
+        <div class="hero-search-bar">
           <span class="hero-search-icon">🔍</span>
           <input type="text" id="hero-search-input" class="hero-search-field"
-                 placeholder="Rechercher par ambiance, genre, instrument..."
-                 oninput="heroSearchInput(this.value)"
-                 onfocus="showHeroDropdown()"
-                 onblur="hideHeroDropdown()"
+                 placeholder="Rechercher une musique, une ambiance, un instrument..."
+                 oninput="heroSearchLive(this.value)"
+                 onblur="setTimeout(hideHeroSug,200)"
+                 onfocus="if(this.value.trim().length>=2)showHeroSug(this.value)"
                  onkeydown="if(event.key==='Enter')heroSearchSubmit()">
           <button class="hero-search-btn" onclick="heroSearchSubmit()">Rechercher</button>
+          <div class="hero-sug" id="hero-sug"></div>
         </div>
-        <div class="hero-search-dropdown" id="hero-search-dropdown">
-          <div class="hsd-category">
-            <div class="hsd-cat-label">Genres</div>
-            <div class="hsd-pills">
-              <button class="hsd-pill" onmousedown="hsdClick('orchestral')">Orchestral</button>
-              <button class="hsd-pill" onmousedown="hsdClick('jazz')">Jazz</button>
-              <button class="hsd-pill" onmousedown="hsdClick('électro')">Électro</button>
-              <button class="hsd-pill" onmousedown="hsdClick('rock')">Rock</button>
-              <button class="hsd-pill" onmousedown="hsdClick('folk')">Folk</button>
-              <button class="hsd-pill" onmousedown="hsdClick('cinématique')">Cinématique</button>
-              <button class="hsd-pill" onmousedown="hsdClick('swing')">Swing</button>
-              <button class="hsd-pill" onmousedown="hsdClick('blues')">Blues</button>
+        <div class="hero-tags-section">
+          <div class="hero-tag-cat">
+            <div class="hero-tag-cat-label">Mood</div>
+            <div class="hero-tag-pills">
+              <button class="hero-tag-pill" onclick="heroTagClick('épique',this)">Épique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('mélancolique',this)">Mélancolique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('joyeux',this)">Joyeux</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('mystère',this)">Mystérieux</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('romantique',this)">Romantique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('tension',this)">Tendu</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('contemplatif',this)">Contemplatif</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('urgent',this)">Urgent</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('doux',this)">Doux</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('dramatique',this)">Dramatique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('énergique',this)">Énergique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('nostalgique',this)">Nostalgique</button>
             </div>
           </div>
-          <div class="hsd-category">
-            <div class="hsd-cat-label">Instruments</div>
-            <div class="hsd-pills">
-              <button class="hsd-pill" onmousedown="hsdClick('piano')">Piano</button>
-              <button class="hsd-pill" onmousedown="hsdClick('guitare')">Guitare</button>
-              <button class="hsd-pill" onmousedown="hsdClick('violon')">Violon</button>
-              <button class="hsd-pill" onmousedown="hsdClick('batterie')">Batterie</button>
-              <button class="hsd-pill" onmousedown="hsdClick('saxophone')">Saxophone</button>
-              <button class="hsd-pill" onmousedown="hsdClick('synthétiseur')">Synthétiseur</button>
-              <button class="hsd-pill" onmousedown="hsdClick('trompette')">Trompette</button>
-              <button class="hsd-pill" onmousedown="hsdClick('cordes')">Cordes</button>
+          <div class="hero-tag-cat">
+            <div class="hero-tag-cat-label">Style</div>
+            <div class="hero-tag-pills">
+              <button class="hero-tag-pill" onclick="heroTagClick('jazz',this)">Jazz</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('électro',this)">Électro</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('orchestral',this)">Orchestral</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('folk',this)">Folk</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('rock',this)">Rock</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('classique',this)">Classique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('reggae',this)">Reggae</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('funk',this)">Funk</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('ambient',this)">Ambient</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('acoustique',this)">Acoustique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('hip-hop',this)">Hip-Hop</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('cinématique',this)">Cinématique</button>
             </div>
           </div>
-          <div class="hsd-category">
-            <div class="hsd-cat-label">Émotions</div>
-            <div class="hsd-pills">
-              <button class="hsd-pill" onmousedown="hsdClick('épique')">Épique</button>
-              <button class="hsd-pill" onmousedown="hsdClick('mélancolique')">Mélancolique</button>
-              <button class="hsd-pill" onmousedown="hsdClick('joyeux')">Joyeux</button>
-              <button class="hsd-pill" onmousedown="hsdClick('mystère')">Mystère</button>
-              <button class="hsd-pill" onmousedown="hsdClick('romantique')">Romantique</button>
-              <button class="hsd-pill" onmousedown="hsdClick('tension')">Tension</button>
-              <button class="hsd-pill" onmousedown="hsdClick('groovy')">Groovy</button>
-              <button class="hsd-pill" onmousedown="hsdClick('calme')">Calme</button>
+          <div class="hero-tag-cat">
+            <div class="hero-tag-cat-label">Instrument</div>
+            <div class="hero-tag-pills">
+              <button class="hero-tag-pill" onclick="heroTagClick('piano',this)">Piano</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('guitare',this)">Guitare</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('cordes',this)">Cordes</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('cuivres',this)">Cuivres</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('percussions',this)">Percussions</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('synthétiseur',this)">Synthé</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('accordéon',this)">Accordéon</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('violon',this)">Violon</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('batterie',this)">Batterie</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('basse',this)">Basse</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('flûte',this)">Flûte</button>
             </div>
           </div>
-          <div class="hsd-category">
-            <div class="hsd-cat-label">Usages</div>
-            <div class="hsd-pills">
-              <button class="hsd-pill" onmousedown="hsdClick('cinéma')">Cinéma</button>
-              <button class="hsd-pill" onmousedown="hsdClick('publicité')">Publicité</button>
-              <button class="hsd-pill" onmousedown="hsdClick('documentaire')">Documentaire</button>
-              <button class="hsd-pill" onmousedown="hsdClick('sport')">Sport</button>
-              <button class="hsd-pill" onmousedown="hsdClick('trailer')">Trailer</button>
-              <button class="hsd-pill" onmousedown="hsdClick('nature')">Nature</button>
+          <div class="hero-tag-cat">
+            <div class="hero-tag-cat-label">Usage</div>
+            <div class="hero-tag-pills">
+              <button class="hero-tag-pill" onclick="heroTagClick('documentaire',this)">Documentaire</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('publicité',this)">Publicité</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('cinéma',this)">Cinéma</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('série TV',this)">Série TV</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('reportage',this)">Reportage</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('trailer',this)">Trailer</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('corporate',this)">Corporate</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('podcast',this)">Podcast</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('générique',this)">Générique</button>
             </div>
           </div>
         </div>
@@ -721,6 +716,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 </div>
 <div class="copy-toast" id="copy-toast">🔗 Lien copié !</div>
 </div>
+<input type="hidden" id="search" value="">
 <audio id="audio"></audio>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
 
@@ -958,7 +954,7 @@ function renderNavPills(){
 
 function selectFolder(folder,btn){
   currentFolder=folder;activeTag=null;
-  document.getElementById('search').value='';
+  heroSearchQuery='';
   document.getElementById('search-active-bar').classList.remove('visible');
   document.querySelectorAll('.pl-pill').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
@@ -981,55 +977,48 @@ function getKws(q){return q.toLowerCase().trim().split(/\s+/).filter(k=>k.length
 
 function onSearch(){
   activeTag=null;document.querySelectorAll('.tag-pill').forEach(b=>b.classList.remove('active'));
-  showView('catalogue');filterTracks();showSuggestions();
+  showView('catalogue');filterTracks();
 }
 
-function showSuggestions(){
-  const q=document.getElementById('search').value.toLowerCase().trim();
-  const box=document.getElementById('suggestions');
-  if(!q||q.length<2){box.classList.remove('visible');return;}
-  const kws=getKws(q);const results=[];const seen=new Set();
-  THEMES.forEach(theme=>theme.playlists.forEach(info=>{
-    if(kws.some(kw=>info.label.toLowerCase().includes(kw))&&!seen.has('pl:'+info.label)&&results.length<10){
-      seen.add('pl:'+info.label);results.push({label:info.label,type:'Playlist',action:()=>openPlaylistDetail(info.label)});
-    }
-    info.tags.forEach(tag=>{
-      if(kws.some(kw=>tag.toLowerCase().includes(kw))&&!seen.has('tag:'+tag+info.label)&&results.length<10){
-        seen.add('tag:'+tag+info.label);
-        results.push({label:tag,type:info.label,action:()=>{currentFolder=info.label;showView('catalogue');setTimeout(()=>{document.querySelectorAll('.pl-pill').forEach(b=>{if(b.dataset.label===info.label)b.classList.add('active');});renderTags();activeTag=tag;filterTracks();},100);}});
-      }
-    });
-  }));
-  if(!results.length){box.classList.remove('visible');return;}
-  box.innerHTML=results.map((r,i)=>`<div class="suggestion" data-i="${i}"><span>${r.label}</span><span class="suggestion-type">${r.type}</span></div>`).join('');
-  box.querySelectorAll('.suggestion').forEach((el,i)=>el.addEventListener('mousedown',()=>{results[i].action();box.classList.remove('visible');document.getElementById('search').value='';}));
-  box.classList.add('visible');
-}
-function hideSuggestions(){document.getElementById('suggestions').classList.remove('visible');}
+let heroSearchQuery='';
 
 function filterTracks(){
-  const q=document.getElementById('search').value.toLowerCase().trim();
+  const q=heroSearchQuery.toLowerCase().trim();
   const kws=q?getKws(q):[];
   filteredTracks=allTracks.filter(t=>{
     const lbl=t.playlistLabel;
     const matchFolder=!currentFolder||lbl===currentFolder;
     const tagPls=activeTag?THEMES.flatMap(th=>th.playlists.filter(p=>p.tags.includes(activeTag)).map(p=>p.label)):null;
     const matchTag=!activeTag||(tagPls&&tagPls.includes(lbl));
+    const hay=`${t.title} ${lbl} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();
     let matchSearch=true;
-    if(kws.length>0){const hay=`${t.title} ${lbl} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();matchSearch=kws.every(kw=>hay.includes(kw));}
+    if(kws.length>0){matchSearch=kws.every(kw=>hay.includes(kw));}
+    let matchHeroTags=true;
+    if(activeHeroTags.size>0){matchHeroTags=[...activeHeroTags].some(tag=>hay.includes(tag.toLowerCase()));}
     let matchDuration=true;
     if(activeDuration&&t.duration){const s=parseDurSecs(t.duration);if(s>0){if(activeDuration==='short')matchDuration=s<60;else if(activeDuration==='medium')matchDuration=s>=60&&s<=180;else if(activeDuration==='long')matchDuration=s>180;}}
-    return matchFolder&&matchTag&&matchSearch&&matchDuration;
+    return matchFolder&&matchTag&&matchSearch&&matchHeroTags&&matchDuration;
   });
   const bar=document.getElementById('search-active-bar');
-  if(kws.length>0){bar.classList.add('visible');bar.innerHTML=`🔍 ${kws.map(k=>`<span class="kw-tag">${k}</span>`).join('')} &nbsp;·&nbsp; <span style="color:var(--red);font-weight:600">${filteredTracks.length} résultats</span> &nbsp;<button onclick="clearSearch()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px">✕ Effacer</button>`;}
-  else{bar.classList.remove('visible');}
+  const activeTags=[...activeHeroTags];
+  if(kws.length>0||activeTags.length>0){
+    bar.classList.add('visible');
+    const kwSpans=kws.map(k=>`<span class="kw-tag">${k}</span>`).join('');
+    const tagSpans=activeTags.map(t=>`<span class="kw-tag">${t}</span>`).join('');
+    bar.innerHTML=`🔍 ${kwSpans}${tagSpans} &nbsp;·&nbsp; <span style="color:var(--red);font-weight:600">${filteredTracks.length} résultats</span> &nbsp;<button onclick="clearSearch()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px">✕ Effacer</button>`;
+  } else{bar.classList.remove('visible');}
   const tagEl=document.getElementById('section-tag');
   if(activeTag){tagEl.textContent=activeTag;tagEl.style.display='inline';}else{tagEl.style.display='none';}
   renderTracks();
 }
 
-function clearSearch(){document.getElementById('search').value='';document.getElementById('search-active-bar').classList.remove('visible');filterTracks();}
+function clearSearch(){
+  heroSearchQuery='';activeHeroTags=new Set();
+  const inp=document.getElementById('hero-search-input');if(inp)inp.value='';
+  document.querySelectorAll('.hero-tag-pill').forEach(b=>b.classList.remove('active'));
+  document.getElementById('search-active-bar').classList.remove('visible');
+  filterTracks();
+}
 
 function highlight(text,kws){
   if(!kws.length)return text;let r=text;
@@ -1039,7 +1028,7 @@ function highlight(text,kws){
 
 function renderTracks(){
   const list=document.getElementById('track-list');
-  const q=document.getElementById('search').value.toLowerCase().trim();
+  const q=heroSearchQuery.toLowerCase().trim();
   const kws=q?getKws(q):[];
   document.getElementById('section-title').textContent=currentFolder||'Catalogue Complet';
   document.getElementById('section-count').textContent=`${filteredTracks.length} morceaux`;
@@ -1171,38 +1160,53 @@ document.addEventListener('click',function(e){
 });
 
 setTimeout(function(){var f=document.querySelector('.hero-yt-iframe');if(f)f.classList.add('ready');},1500);
-function heroSearchInput(val){
-  document.getElementById('search').value=val;
-  const dd=document.getElementById('hero-search-dropdown');
-  if(val.trim())dd.classList.remove('visible');else dd.classList.add('visible');
+/* ── HERO SEARCH ── */
+let activeHeroTags=new Set();
+
+function heroTagClick(tag,btn){
+  if(activeHeroTags.has(tag)){activeHeroTags.delete(tag);btn.classList.remove('active');}
+  else{activeHeroTags.add(tag);btn.classList.add('active');}
+  showView('catalogue');filterTracks();
 }
+
+function heroSearchLive(val){
+  heroSearchQuery=val;
+  if(val.trim().length>=2)showHeroSug(val);else hideHeroSug();
+  if(val.trim()||activeHeroTags.size>0){showView('catalogue');filterTracks();}
+}
+
+function showHeroSug(q){
+  const box=document.getElementById('hero-sug');
+  const kws=getKws(q.toLowerCase());
+  if(!kws.length||!allTracks.length){hideHeroSug();return;}
+  const results=[];const seen=new Set();
+  THEMES.forEach(theme=>theme.playlists.forEach(info=>{
+    if(kws.some(kw=>info.label.toLowerCase().includes(kw))&&!seen.has('pl:'+info.label)&&results.length<8){
+      seen.add('pl:'+info.label);
+      results.push({label:info.label,type:'Playlist',action:()=>openPlaylistDetail(info.label)});
+    }
+    info.tags.forEach(tag=>{
+      if(kws.some(kw=>tag.toLowerCase().includes(kw))&&!seen.has('t:'+tag)&&results.length<8){
+        seen.add('t:'+tag);
+        results.push({label:tag,type:info.label,action:()=>{
+          document.getElementById('hero-search-input').value=tag;
+          heroSearchLive(tag);
+        }});
+      }
+    });
+  }));
+  if(!results.length){hideHeroSug();return;}
+  box.innerHTML=results.map((r,i)=>`<div class="hero-sug-item" data-i="${i}"><span>${r.label}</span><span class="hero-sug-type">${r.type}</span></div>`).join('');
+  box.querySelectorAll('.hero-sug-item').forEach((el,i)=>el.addEventListener('mousedown',()=>{results[i].action();hideHeroSug();}));
+  box.classList.add('visible');
+}
+
+function hideHeroSug(){const b=document.getElementById('hero-sug');if(b)b.classList.remove('visible');}
+
 function heroSearchSubmit(){
-  const v=document.getElementById('hero-search-input').value.trim();
-  document.getElementById('hero-search-dropdown').classList.remove('visible');
-  if(v){document.getElementById('search').value=v;showView('catalogue');filterTracks();}
+  hideHeroSug();
+  if(heroSearchQuery.trim()||activeHeroTags.size>0){showView('catalogue');filterTracks();}
 }
-function heroTag(tag){activeTag=tag;currentFolder=null;showView('catalogue');filterTracks();}
-function positionHeroDropdown(){
-  const inner=document.querySelector('.hero-search-inner');
-  const dd=document.getElementById('hero-search-dropdown');
-  if(!inner||!dd)return;
-  const r=inner.getBoundingClientRect();
-  const maxH=window.innerHeight-r.bottom-20;
-  dd.style.top=(r.bottom+10)+'px';
-  dd.style.left=r.left+'px';
-  dd.style.width=r.width+'px';
-  dd.style.maxHeight=Math.max(200,maxH)+'px';
-}
-function showHeroDropdown(){positionHeroDropdown();document.getElementById('hero-search-dropdown').classList.add('visible');}
-function hideHeroDropdown(){setTimeout(()=>document.getElementById('hero-search-dropdown').classList.remove('visible'),180);}
-function hsdClick(tag){
-  const inp=document.getElementById('hero-search-input');
-  inp.value=tag;heroSearchInput(tag);heroSearchSubmit();
-}
-window.addEventListener('resize',()=>{
-  const dd=document.getElementById('hero-search-dropdown');
-  if(dd&&dd.classList.contains('visible'))positionHeroDropdown();
-});
 (function syncThemeBtn(){
   const t=document.documentElement.getAttribute('data-theme')||'light';
   const btn=document.getElementById('btn-theme');
