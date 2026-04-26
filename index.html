@@ -294,6 +294,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .btn-mute{background:none;border:1px solid var(--border);color:var(--text2);cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;border-radius:50%;transition:all 0.15s;flex-shrink:0}
 .btn-mute:hover{border-color:var(--red);color:var(--red);background:rgba(255,85,0,0.08)}
 .btn-mute.muted{color:var(--red);border-color:var(--red);background:rgba(255,85,0,0.1)}
+#bg-speaker{display:none;position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:var(--grad);border:none;color:#fff;font-size:22px;cursor:pointer;z-index:400;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(255,85,0,0.4);transition:transform 0.15s,box-shadow 0.15s,opacity 0.3s;font-family:'Montserrat',sans-serif}
+#bg-speaker.visible{display:flex;animation:fadeUp 0.4s ease}
+#bg-speaker:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(255,85,0,0.6)}
+#bg-speaker.muted{background:var(--bg3);color:var(--muted);box-shadow:none}
 .progress-wrap{display:flex;align-items:center;gap:9px;width:100%}
 #waveform-container{flex:1;cursor:pointer;border-radius:3px;overflow:hidden}
 .time{font-size:11px;color:var(--muted);min-width:36px}
@@ -579,7 +583,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   <div class="hero">
     <div class="hero-video-wrap">
       <iframe class="hero-yt-iframe" id="hero-yt-iframe"
-        src="https://www.youtube.com/embed/_w8YqdGpahU?autoplay=1&mute=1&loop=1&playlist=_w8YqdGpahU&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=0&disablekb=1"
+        src=""
         frameborder="0"
         allow="autoplay; encrypted-media"
         allowfullscreen>
@@ -962,6 +966,14 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 const PASSWORD='osm2026';
 const audio=document.getElementById('audio');
 
+/* ── HERO VIDEO ALÉATOIRE ── */
+(function(){
+  const HERO_VIDEOS=['fBZ_DkihTPs','VFTotm7qWyw','1sAMJK385Vs','V3bAOhEwIws','tM8WyhB6zYo','BjGHyQhYwHU'];
+  const id=HERO_VIDEOS[Math.floor(Math.random()*HERO_VIDEOS.length)];
+  const src=`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=0&disablekb=1`;
+  document.getElementById('hero-yt-iframe').src=src;
+})();
+
 /* ── WAVESURFER ── */
 const ws = WaveSurfer.create({
   container: '#waveform-container',
@@ -997,7 +1009,13 @@ ws.on('timeupdate', (t)=>{
   const dur=ws.getDuration();
   if(dur) document.getElementById('time-dur').textContent=fmt2(dur);
 });
-ws.on('finish', ()=>{ document.getElementById('btn-play').textContent='▶'; nextTrack(); });
+ws.on('finish', ()=>{
+  document.getElementById('btn-play').textContent='▶';
+  if(bgMode){
+    const candidates=RECOMMENDS_CONFIG.map(cfg=>allTracks.find(t=>t.playlistLabel===cfg.playlist)).filter(Boolean);
+    if(candidates.length){const nx=candidates[Math.floor(Math.random()*candidates.length)];setTimeout(()=>autoPlayBg(nx.id),400);}
+  }else{nextTrack();}
+});
 ws.on('play',   ()=>{ document.getElementById('btn-play').textContent='⏸'; });
 ws.on('pause',  ()=>{ document.getElementById('btn-play').textContent='▶'; });
 
@@ -1087,13 +1105,24 @@ function loadCatalogue(){
   }).catch(()=>{document.getElementById('track-list').innerHTML='<div class="empty">Erreur de chargement.</div>';});
 }
 
+let bgMode=false;
 function autoPlayReco(){
-  const candidates=RECOMMENDS_CONFIG
-    .map(cfg=>allTracks.find(t=>t.playlistLabel===cfg.playlist))
-    .filter(Boolean);
-  if(!candidates.length)return;
-  const track=candidates[Math.floor(Math.random()*candidates.length)];
-  setTimeout(()=>playRecTrack(track.id),1500);
+  const pool=allTracks.filter(t=>t.playlistLabel==='Neutre Positif');
+  if(!pool.length)return;
+  const track=pool[Math.floor(Math.random()*pool.length)];
+  setTimeout(()=>autoPlayBg(track.id),1500);
+}
+function autoPlayBg(id){
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  bgMode=true;
+  wsPendingPlay=true;
+  document.getElementById('waveform-container').classList.add('ws-loading');
+  ws.load(t.url);
+  document.getElementById('bg-speaker').classList.add('visible');
+}
+function exitBgMode(){
+  bgMode=false;
+  document.getElementById('bg-speaker').classList.remove('visible');
 }
 function showAutoplayBanner(){
   document.getElementById('autoplay-banner').style.display='flex';
@@ -1175,6 +1204,7 @@ function renderDetailTracks(){
 }
 
 function playDetailTrack(i){
+  exitBgMode();
   const t=currentDetailTracks[i];if(!t)return;
   detailIndex=i;currentIndex=-1;playingFromQueue=false;
   const info=getInfo(t.playlistLabel);
@@ -1380,6 +1410,7 @@ function renderTracks(){
 }
 
 function playTrack(i){
+  exitBgMode();
   const t=filteredTracks[i];if(!t)return;
   currentIndex=i;playingFromQueue=false;detailIndex=-1;
   const info=getInfo(t.playlistLabel);
@@ -1404,6 +1435,9 @@ function toggleMute(){
   const btn=document.getElementById('btn-mute');
   btn.textContent=icon;
   btn.classList.toggle('muted',audio.muted);
+  const sp=document.getElementById('bg-speaker');
+  sp.textContent=icon;
+  sp.classList.toggle('muted',audio.muted);
 }
 
 function prevTrack(){
@@ -1449,6 +1483,7 @@ function renderQueueList(){
 }
 function removeFromQueue(i){queue.splice(i,1);updateQueueBadge();renderQueueList();renderTracks();}
 function playFromQueue(i){
+  exitBgMode();
   const t=queue[i];if(!t)return;
   queueIndex=i;playingFromQueue=true;
   document.getElementById('p-title').textContent=t.title;
@@ -1601,6 +1636,7 @@ function renderFavoris(){
     </div>`).join('');
 }
 function playFavTrack(id){
+  exitBgMode();
   const t=allTracks.find(tr=>tr.id===id);if(!t)return;
   const info=getInfo(t.playlistLabel);
   document.getElementById('p-title').textContent=t.title;
@@ -1684,6 +1720,7 @@ function renderRecommends(){
     </div>`).join('');
 }
 function playRecTrack(id){
+  exitBgMode();
   const t=allTracks.find(tr=>tr.id===id);if(!t)return;
   const info=getInfo(t.playlistLabel);
   document.getElementById('p-title').textContent=t.title;
@@ -1693,6 +1730,8 @@ function playRecTrack(id){
   wsLoad(t.url);
 }
 </script>
+
+<button id="bg-speaker" onclick="toggleMute()" title="Couper / remettre le son">🔊</button>
 
 <div id="autoplay-banner" onclick="ws.play();hideAutoplayBanner()" style="display:none;position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;padding:13px 28px;border-radius:30px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;cursor:pointer;z-index:500;gap:10px;align-items:center;box-shadow:0 6px 24px rgba(255,85,0,0.45);animation:fadeUp 0.4s ease;white-space:nowrap;transition:opacity 0.3s">▶&nbsp; Cliquez pour lancer la musique</div>
 
