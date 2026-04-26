@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <script>(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
 <style>
-:root{--red:#E50914;--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--text:#111;--text2:#2c2c2c;--muted:#666;--border:rgba(0,0,0,0.1);--card-bg:#fff;--bg-header:rgba(246,246,246,0.98)}
+:root{--red:#FF5500;--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--text:#111;--text2:#2c2c2c;--muted:#666;--border:rgba(0,0,0,0.1);--card-bg:#fff;--bg-header:rgba(246,246,246,0.98)}
 [data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#fff;--text2:#d4d4d4;--muted:#999;--border:rgba(255,255,255,0.1);--card-bg:#1a1a1a;--bg-header:rgba(10,10,10,0.98)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.2s,color 0.2s}
@@ -21,7 +21,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .btn-nav{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s;white-space:nowrap}
 .btn-nav:hover{border-color:#888;color:var(--text)}
 .btn-red{background:var(--red);border-color:var(--red);color:#fff}
-.btn-red:hover{background:#c4070f;border-color:#c4070f}
+.btn-red:hover{background:#cc4400;border-color:#cc4400}
 
 .hero{padding:108px 72px 64px;background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
 .hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:18px}
@@ -37,7 +37,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 .steps{display:flex;flex-direction:column;gap:16px}
 .step{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:24px 28px;display:flex;align-items:flex-start;gap:20px;transition:border-color 0.2s}
-.step:hover{border-color:rgba(229,9,20,0.3)}
+.step:hover{border-color:rgba(255,85,0,0.3)}
 .step-num{width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .step-body{flex:1;min-width:0}
 .step-title{font-size:15px;font-weight:600;margin-bottom:6px}
@@ -47,7 +47,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 .tip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
 .tip-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:22px 24px;transition:all 0.2s}
-.tip-card:hover{border-color:rgba(229,9,20,0.25);transform:translateY(-2px)}
+.tip-card:hover{border-color:rgba(255,85,0,0.25);transform:translateY(-2px)}
 .tip-icon{font-size:24px;margin-bottom:12px}
 .tip-title{font-size:13px;font-weight:700;margin-bottom:8px;letter-spacing:0.3px}
 .tip-text{font-size:12px;color:var(--muted);line-height:1.7;font-weight:300}
