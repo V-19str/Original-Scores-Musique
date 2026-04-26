@@ -1198,7 +1198,6 @@ function heroTagClick(tag,btn){
 function heroSearchLive(val){
   heroSearchQuery=val;
   if(val.trim().length>=2)showHeroSug(val);else hideHeroSug();
-  if(val.trim()||activeHeroTags.size>0){showView('catalogue');filterTracks();}
 }
 
 function showHeroSug(q){
