@@ -986,7 +986,11 @@ function wsLoad(url){
 }
 ws.on('ready', ()=>{
   document.getElementById('waveform-container').classList.remove('ws-loading');
-  if(wsPendingPlay){ wsPendingPlay=false; ws.play(); }
+  if(wsPendingPlay){
+    wsPendingPlay=false;
+    const p=ws.play();
+    if(p instanceof Promise) p.catch(()=>showAutoplayBanner());
+  }
 });
 ws.on('timeupdate', (t)=>{
   document.getElementById('time-cur').textContent=fmt2(t);
@@ -1089,7 +1093,15 @@ function autoPlayReco(){
     .filter(Boolean);
   if(!candidates.length)return;
   const track=candidates[Math.floor(Math.random()*candidates.length)];
-  setTimeout(()=>playRecTrack(track.id),2500);
+  setTimeout(()=>playRecTrack(track.id),1500);
+}
+function showAutoplayBanner(){
+  document.getElementById('autoplay-banner').style.display='flex';
+}
+function hideAutoplayBanner(){
+  const b=document.getElementById('autoplay-banner');
+  b.style.opacity='0';
+  setTimeout(()=>b.style.display='none',300);
 }
 
 function showView(name){
@@ -1681,5 +1693,8 @@ function playRecTrack(id){
   wsLoad(t.url);
 }
 </script>
+
+<div id="autoplay-banner" onclick="ws.play();hideAutoplayBanner()" style="display:none;position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;padding:13px 28px;border-radius:30px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;cursor:pointer;z-index:500;gap:10px;align-items:center;box-shadow:0 6px 24px rgba(255,85,0,0.45);animation:fadeUp 0.4s ease;white-space:nowrap;transition:opacity 0.3s">▶&nbsp; Cliquez pour lancer la musique</div>
+
 </body>
 </html>
