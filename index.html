@@ -1075,7 +1075,17 @@ function loadCatalogue(){
     const params=new URLSearchParams(location.search);
     const sharedFavs=params.get('favs');
     if(sharedFavs){sharedFavs.split(',').forEach(id=>{if(id.trim())favorites.add(id.trim());});localStorage.setItem('osm-favs',JSON.stringify([...favorites]));updateFavNav();}
+    autoPlayReco();
   }).catch(()=>{document.getElementById('track-list').innerHTML='<div class="empty">Erreur de chargement.</div>';});
+}
+
+function autoPlayReco(){
+  const candidates=RECOMMENDS_CONFIG
+    .map(cfg=>allTracks.find(t=>t.playlistLabel===cfg.playlist))
+    .filter(Boolean);
+  if(!candidates.length)return;
+  const track=candidates[Math.floor(Math.random()*candidates.length)];
+  setTimeout(()=>playRecTrack(track.id),2500);
 }
 
 function showView(name){
