@@ -10,7 +10,7 @@
 (function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
 </script>
 <style>
-:root{--red:#FF5500;--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff;--card-border:rgba(0,0,0,0.08)}
+:root{--red:#FF5500;--purple:#8B5CF6;--blue:#00B4D8;--green:#06D6A0;--pink:#FF006E;--grad:linear-gradient(135deg,#FF5500,#FF006E);--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff;--card-border:rgba(0,0,0,0.08)}
 [data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--bg-alt:#0a0a0a;--bg-deep:#080808;--bg-header:rgba(10,10,10,0.98);--text:#ffffff;--text2:#e2e2e2;--muted:#b0b0b0;--border:rgba(255,255,255,0.12);--card-bg:#111111;--card-border:rgba(255,255,255,0.07)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden}
@@ -36,7 +36,7 @@ audio{display:none}
 /* HEADER */
 header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+.logo-mark{background:var(--grad);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
 .logo-name{font-size:13px;font-weight:600;letter-spacing:2px}
 .nav-tabs{display:flex;align-items:center;gap:4px}
 .nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;padding:8px 16px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;position:relative;text-decoration:none}
@@ -109,7 +109,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
 /* OSM LOGO HERO */
 .hero-osm-logo{margin-bottom:24px;display:flex;flex-direction:column;align-items:center;gap:14px;animation:fadeUp 1.2s 1.2s ease both}
-.hero-osm-mark{background:var(--red);color:#fff;font-size:clamp(20px,3.5vw,38px);font-weight:900;letter-spacing:10px;padding:14px 34px;border-radius:4px;text-transform:uppercase;animation:logoReveal 1.4s 1s ease both;box-shadow:0 0 80px rgba(255,85,0,0.45),0 4px 24px rgba(255,85,0,0.3)}
+.hero-osm-mark{background:var(--grad);color:#fff;font-size:clamp(20px,3.5vw,38px);font-weight:900;letter-spacing:10px;padding:14px 34px;border-radius:4px;text-transform:uppercase;animation:logoReveal 1.4s 1s ease both;box-shadow:0 0 80px rgba(255,85,0,0.45),0 4px 24px rgba(255,85,0,0.3)}
 @keyframes logoReveal{0%{opacity:0;transform:scale(0.8) translateY(10px);box-shadow:0 0 0 rgba(255,85,0,0)}60%{opacity:1;transform:scale(1.04) translateY(-2px);box-shadow:0 0 110px rgba(255,85,0,0.65)}100%{transform:scale(1) translateY(0);box-shadow:0 0 80px rgba(255,85,0,0.45),0 4px 24px rgba(255,85,0,0.3)}}
 .hero-osm-divider{width:50px;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.4),transparent);animation:fadeUp 1s 2s ease both}
 .hero-osm-name{font-size:clamp(11px,2vw,17px);font-weight:700;letter-spacing:clamp(8px,2vw,16px);color:rgba(255,255,255,0.88);text-transform:uppercase;animation:fadeUp 1s 1.8s ease both}
@@ -122,7 +122,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-search-icon{color:#aaa;font-size:17px;flex-shrink:0}
 .hero-search-field{flex:1;background:none;border:none;outline:none;color:#111;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:400;padding:10px 0;min-width:0}
 .hero-search-field::placeholder{color:#aaa}
-.hero-search-btn{background:var(--red);color:#fff;border:none;padding:13px 28px;border-radius:40px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:background 0.2s;text-transform:uppercase;flex-shrink:0}
+.hero-search-btn{background:var(--grad);color:#fff;border:none;padding:13px 28px;border-radius:40px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;text-transform:uppercase;flex-shrink:0}
+.hero-search-btn:hover{opacity:0.88}
 .hero-search-btn:hover{background:#ff7700}
 /* Hero suggestions */
 .hero-sug{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.3);padding:6px 0;z-index:200;display:none;max-height:260px;overflow-y:auto}
@@ -373,7 +374,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .trust-section{padding:48px 48px 40px;background:var(--bg-deep)}
 .trust-eyebrow{font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:28px}
 .trust-logos{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px}
-.tl-card{padding:10px 18px;border-radius:6px;min-width:70px;text-align:center;display:flex;align-items:center;justify-content:center}
 .tl-name{font-size:13px;font-weight:900;color:#fff;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
 .trust-programs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;font-size:11px;color:var(--muted)}
 .trust-dot{color:var(--border);margin:0 2px}
@@ -434,44 +434,31 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .cat-mob-toggle:hover{color:var(--red)}
 .cat-sidebar.mob-open{display:block;position:fixed;top:64px;left:0;width:260px;height:calc(100vh - 64px);z-index:50;box-shadow:4px 0 24px rgba(0,0,0,0.4)}
 
-/* CAT SIDEBAR LAYOUT */
-.cat-layout{display:flex;align-items:flex-start;min-height:calc(100vh - 64px)}
-.cat-sidebar{width:240px;flex-shrink:0;border-right:1px solid var(--border);position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;background:var(--bg-deep)}
-.cat-sidebar::-webkit-scrollbar{width:3px}
-.cat-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.cat-main{flex:1;min-width:0}
-.cat-main .tracks-section{padding:16px 32px 180px}
-.cat-main .search-active-bar{padding-left:32px;padding-right:32px}
-.cat-sb-wrap{padding:12px}
-.cat-sb-input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;transition:border-color 0.15s;box-sizing:border-box}
-.cat-sb-input:focus{border-color:var(--red)}
-.cat-sb-input::placeholder{color:var(--muted)}
-.cat-section{border-top:1px solid var(--border)}
-.cat-section-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;user-select:none;transition:color 0.15s;gap:8px}
-.cat-section-hd:hover{color:var(--text)}
-.cat-section-hd.has-active .cat-chevron{color:var(--red)}
-.cat-chevron{font-size:10px;transition:transform 0.2s;flex-shrink:0}
-.cat-section.collapsed .cat-chevron{transform:rotate(-90deg)}
-.cat-section.collapsed .cat-section-body{display:none}
-.cat-section-body{padding:0 10px 10px;display:flex;flex-wrap:wrap;gap:5px}
-.cat-fpill{background:transparent;border:1px solid var(--border);color:var(--text2);padding:4px 9px;border-radius:16px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;user-select:none}
-.cat-fpill:hover{border-color:var(--red);color:var(--red)}
-.cat-fpill.active{background:var(--red);border-color:var(--red);color:#fff}
-.cat-section-body.dur-body{flex-direction:column;gap:3px}
-.cat-dur-btn{background:transparent;border:1px solid var(--border);color:var(--text2);padding:6px 10px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;text-align:left;transition:all 0.15s;width:100%}
-.cat-dur-btn:hover{border-color:var(--red);color:var(--red)}
-.cat-dur-btn.active{background:rgba(229,9,20,0.1);border-color:var(--red);color:var(--red)}
-.cat-section-body.pl-body{flex-direction:column;gap:1px;padding:0 6px 8px}
-.cat-pl-btn{background:transparent;border:none;color:var(--text2);padding:6px 8px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;text-align:left;width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;transition:all 0.15s}
-.cat-pl-btn:hover{background:var(--bg3);color:var(--text)}
-.cat-pl-btn.active{background:rgba(229,9,20,0.1);color:var(--red)}
-.cat-pl-count{font-size:9px;color:var(--muted);background:var(--bg3);padding:1px 6px;border-radius:8px;flex-shrink:0;font-weight:600}
-.cat-pl-btn.active .cat-pl-count{background:rgba(229,9,20,0.15);color:var(--red)}
-.cat-reset-btn{display:block;width:calc(100% - 24px);margin:10px 12px 16px;padding:8px 0;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:6px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.15s}
-.cat-reset-btn:hover{border-color:var(--red);color:var(--red)}
-.cat-mob-toggle{display:none;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-deep);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text2);cursor:pointer;border:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif;text-transform:uppercase;transition:color 0.15s}
-.cat-mob-toggle:hover{color:var(--red)}
-.cat-sidebar.mob-open{display:block;position:fixed;top:64px;left:0;width:260px;height:calc(100vh - 64px);z-index:50;box-shadow:4px 0 24px rgba(0,0,0,0.4)}
+/* POP COLORS — stat cards per-index */
+.stat-card:nth-child(1) .stat-num{color:#FF5500}
+.stat-card:nth-child(2) .stat-num{color:#8B5CF6}
+.stat-card:nth-child(3) .stat-num{color:#00B4D8}
+.stat-card:nth-child(4) .stat-num{color:#06D6A0}
+.stat-card:nth-child(1):hover::before{background:#FF5500}
+.stat-card:nth-child(2):hover::before{background:#8B5CF6}
+.stat-card:nth-child(3):hover::before{background:#00B4D8}
+.stat-card:nth-child(4):hover::before{background:#06D6A0}
+/* POP COLORS — hero tag categories */
+.hero-tag-cat:nth-child(1) .hero-tag-pill.active{background:#8B5CF6;border-color:#8B5CF6;box-shadow:0 2px 10px rgba(139,92,246,0.5)}
+.hero-tag-cat:nth-child(2) .hero-tag-pill.active{background:#00B4D8;border-color:#00B4D8;box-shadow:0 2px 10px rgba(0,180,216,0.5)}
+.hero-tag-cat:nth-child(3) .hero-tag-pill.active{background:#06D6A0;border-color:#06D6A0;box-shadow:0 2px 10px rgba(6,214,160,0.5)}
+.hero-tag-cat:nth-child(4) .hero-tag-pill.active{background:#FF5500;border-color:#FF5500;box-shadow:0 2px 10px rgba(255,85,0,0.5)}
+/* POP COLORS — services strip icons */
+.srv-card:nth-child(1) .srv-icon-bg{background:rgba(255,85,0,0.15);color:#FF5500}
+.srv-card:nth-child(2) .srv-icon-bg{background:rgba(139,92,246,0.15);color:#8B5CF6}
+.srv-card:nth-child(3) .srv-icon-bg{background:rgba(0,180,216,0.15);color:#00B4D8}
+.srv-card:nth-child(4) .srv-icon-bg{background:rgba(6,214,160,0.15);color:#06D6A0}
+.srv-icon-bg{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+/* REAL LOGOS */
+.tl-card{padding:14px 20px;border-radius:8px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;transition:all 0.2s;min-width:80px;min-height:56px}
+.tl-card:hover{background:rgba(255,255,255,0.14);transform:translateY(-2px)}
+.tl-img{max-height:38px;max-width:110px;object-fit:contain}
+.tl-name{font-size:13px;font-weight:900;color:#fff;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;display:none}
 
 @media(max-width:900px){
   header{padding:0 16px}
@@ -719,22 +706,22 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   <div class="services-strip">
     <div class="services-inner">
       <div class="srv-card">
-        <div class="srv-icon">🎵</div>
+        <div class="srv-icon-bg">🎵</div>
         <div class="srv-title">Catalogue libre</div>
         <div class="srv-desc">+1 000 morceaux originaux en accès gratuit pour vos montages</div>
       </div>
       <div class="srv-card">
-        <div class="srv-icon">📋</div>
+        <div class="srv-icon-bg">📋</div>
         <div class="srv-title">Easy Cue Sheet</div>
         <div class="srv-desc">Cue sheet SACEM pré-rempli fourni pour chaque utilisation</div>
       </div>
       <div class="srv-card">
-        <div class="srv-icon">🎬</div>
+        <div class="srv-icon-bg">🎬</div>
         <div class="srv-title">Composition sur mesure</div>
         <div class="srv-desc">Musique calée à l'image, composée spécifiquement pour votre projet</div>
       </div>
       <div class="srv-card">
-        <div class="srv-icon">©️</div>
+        <div class="srv-icon-bg">©️</div>
         <div class="srv-title">Droits à la diffusion</div>
         <div class="srv-desc">Aucun frais en amont — droits SACEM perçus à la diffusion uniquement</div>
       </div>
@@ -745,18 +732,18 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   <div class="trust-section">
     <div class="trust-eyebrow">Ils nous font confiance</div>
     <div class="trust-logos">
-      <div class="tl-card" style="background:#E8000D"><span class="tl-name">TF1</span></div>
-      <div class="tl-card" style="background:#004493"><span class="tl-name">France 2</span></div>
-      <div class="tl-card" style="background:#EE6600"><span class="tl-name">France 3</span></div>
-      <div class="tl-card" style="background:#003c99"><span class="tl-name">France 5</span></div>
-      <div class="tl-card" style="background:#F28000"><span class="tl-name">M6</span></div>
-      <div class="tl-card" style="background:#111;border:1px solid #f40109"><span class="tl-name" style="letter-spacing:4px">ARTE</span></div>
-      <div class="tl-card" style="background:#111;border:1px solid rgba(255,255,255,0.2)"><span class="tl-name">Canal<span style="color:#f40109">+</span></span></div>
-      <div class="tl-card" style="background:#FF6600"><span class="tl-name">C8</span></div>
-      <div class="tl-card" style="background:#0066CC"><span class="tl-name">TMC</span></div>
-      <div class="tl-card" style="background:#E2001A"><span class="tl-name">W9</span></div>
-      <div class="tl-card" style="background:#0077CC"><span class="tl-name" style="font-size:9px;letter-spacing:0">RMC Découverte</span></div>
-      <div class="tl-card" style="background:#00AAFF"><span class="tl-name" style="font-size:10px;letter-spacing:0">Ushuaïa TV</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/tf1-fr.png" alt="TF1" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">TF1</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-2-fr.png" alt="France 2" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">France 2</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-3-fr.png" alt="France 3" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">France 3</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-5-fr.png" alt="France 5" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">France 5</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/m6-fr.png" alt="M6" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">M6</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/arte-fr.png" alt="Arte" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">ARTE</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/canal-plus-fr.png" alt="Canal+" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">Canal+</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/c8-fr.png" alt="C8" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">C8</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/tmc-fr.png" alt="TMC" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">TMC</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/w9-fr.png" alt="W9" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">W9</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/rmc-decouverte-fr.png" alt="RMC Découverte" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none;font-size:9px">RMC Découverte</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/ushuaia-tv-fr.png" alt="Ushuaïa TV" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none;font-size:10px">Ushuaïa TV</span></div>
     </div>
     <div class="trust-programs">
       <span>50 min Inside</span><span class="trust-dot">·</span>
