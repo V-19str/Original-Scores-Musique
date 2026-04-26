@@ -291,6 +291,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .btn-extra{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;transition:color 0.15s;padding:4px}
 .btn-extra:hover{color:var(--text)}
 .btn-extra.active{color:var(--red)}
+.btn-mute{background:none;border:1px solid var(--border);color:var(--text2);cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;border-radius:50%;transition:all 0.15s;flex-shrink:0}
+.btn-mute:hover{border-color:var(--red);color:var(--red);background:rgba(255,85,0,0.08)}
+.btn-mute.muted{color:var(--red);border-color:var(--red);background:rgba(255,85,0,0.1)}
 .progress-wrap{display:flex;align-items:center;gap:9px;width:100%}
 #waveform-container{flex:1;cursor:pointer;border-radius:3px;overflow:hidden}
 .time{font-size:11px;color:var(--muted);min-width:36px}
@@ -932,6 +935,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
         <button class="btn-play-main" id="btn-play" onclick="togglePlay()">▶</button>
         <button class="btn-ctrl" onclick="nextTrack()">⏭</button>
         <button class="btn-extra" id="btn-repeat" onclick="toggleRepeat()" title="Répéter">↺</button>
+        <button class="btn-mute" id="btn-mute" onclick="toggleMute()" title="Couper / remettre le son">🔊</button>
       </div>
       <div class="progress-wrap">
         <span class="time" id="time-cur">0:00</span>
@@ -1371,7 +1375,14 @@ function togglePlay(){
 function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('btn-shuffle').classList.toggle('active',shuffleOn);}
 function toggleRepeat(){repeatOn=!repeatOn;document.getElementById('btn-repeat').classList.toggle('active',repeatOn);}
 function setVolume(v){audio.volume=v/100;}
-function toggleMute(){audio.muted=!audio.muted;document.querySelector('.vol-icon').textContent=audio.muted?'🔇':'🔊';}
+function toggleMute(){
+  audio.muted=!audio.muted;
+  const icon=audio.muted?'🔇':'🔊';
+  document.querySelector('.vol-icon').textContent=icon;
+  const btn=document.getElementById('btn-mute');
+  btn.textContent=icon;
+  btn.classList.toggle('muted',audio.muted);
+}
 
 function prevTrack(){
   if(detailIndex>0){playDetailTrack(detailIndex-1);}
