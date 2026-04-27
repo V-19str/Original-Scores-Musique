@@ -31,20 +31,24 @@ ANALYZE_SEC = 45    # analyser les N premières secondes par morceau
 KK_MAJOR = [6.35,2.23,3.48,2.33,4.38,4.09,2.52,5.19,2.39,3.66,2.29,2.88]
 KK_MINOR = [6.33,2.68,3.52,5.38,2.60,3.53,2.54,4.75,3.98,2.69,3.34,3.17]
 
+def _f(x):
+    """Convertit un scalaire ou tableau numpy en float Python (compatible NumPy 1.x et 2.x)."""
+    return float(np.asarray(x).flat[0])
+
 def detect_mode(y, sr):
     chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
     mean   = np.mean(chroma, axis=1)
     best, mode = -9, 'majeur'
     for i in range(12):
         for profile, label in [(KK_MAJOR,'majeur'),(KK_MINOR,'mineur')]:
-            score = float(np.corrcoef(mean, np.roll(profile, i))[0,1])
+            score = _f(np.corrcoef(mean, np.roll(profile, i))[0,1])
             if score > best:
                 best, mode = score, label
     return mode
 
 def detect_energy(y, sr):
-    rms      = float(np.mean(librosa.feature.rms(y=y)))
-    contrast = float(np.mean(librosa.feature.spectral_contrast(y=y, sr=sr)))
+    rms      = _f(np.mean(librosa.feature.rms(y=y)))
+    contrast = _f(np.mean(librosa.feature.spectral_contrast(y=y, sr=sr)))
     if rms < 0.04:
         return 'calme'
     if rms > 0.10 and contrast > 22:
@@ -52,13 +56,13 @@ def detect_energy(y, sr):
     return 'action'
 
 def detect_tempo(y, sr):
-    bpm = float(librosa.beat.beat_track(y=y, sr=sr)[0])
+    bpm = _f(librosa.beat.beat_track(y=y, sr=sr)[0])
     if bpm < 72:   return 'lent',   round(bpm)
     if bpm < 132:  return 'modéré', round(bpm)
     return 'rapide', round(bpm)
 
 def detect_freq(y, sr):
-    c = float(np.mean(librosa.feature.spectral_centroid(y=y, sr=sr)))
+    c = _f(np.mean(librosa.feature.spectral_centroid(y=y, sr=sr)))
     if c < 1800: return 'graves'
     if c > 3200: return 'aigus'
     return None
@@ -91,6 +95,9 @@ with open(CATALOGUE, encoding='utf-8') as f:
 tracks = data['tracks']
 
 done = set(json.loads(PROGRESS.read_text())) if PROGRESS.exists() else set()
+# skip tracks already analysed (bpm présent) — utile si on relance après un run partiel
+already = {t['id'] for t in tracks if 'bpm' in t}
+done |= already
 todo = [t for t in tracks if t['id'] not in done]
 
 print(f"\n🎵 OSM — Analyse audio automatique")
