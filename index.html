@@ -10,7 +10,7 @@
 (function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
 </script>
 <style>
-:root{--red:#E50914;--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff;--card-border:rgba(0,0,0,0.08)}
+:root{--red:#FF5500;--purple:#8B5CF6;--blue:#00B4D8;--green:#06D6A0;--pink:#FF006E;--grad:linear-gradient(135deg,#FF5500,#FF006E);--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff;--card-border:rgba(0,0,0,0.08)}
 [data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--bg-alt:#0a0a0a;--bg-deep:#080808;--bg-header:rgba(10,10,10,0.98);--text:#ffffff;--text2:#e2e2e2;--muted:#b0b0b0;--border:rgba(255,255,255,0.12);--card-bg:#111111;--card-border:rgba(255,255,255,0.07)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden}
@@ -28,20 +28,36 @@ audio{display:none}
 .pw-input{width:100%;background:#2a2a2a;border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:12px 16px;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;text-align:center;letter-spacing:4px;outline:none;margin-bottom:14px;transition:border-color 0.2s}
 .pw-input:focus{border-color:var(--red)}
 .pw-btn{width:100%;background:var(--red);color:#fff;border:none;padding:12px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:4px;text-transform:uppercase}
-.pw-btn:hover{background:#c4070f}
+.pw-btn:hover{background:#cc4400}
 .pw-error{font-size:11px;color:var(--red);margin-top:10px;display:none}
 #main{display:none}
 #main.visible{display:block}
 
 /* HEADER */
-header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+.logo-mark{background:var(--grad);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
 .logo-name{font-size:13px;font-weight:600;letter-spacing:2px}
 .nav-tabs{display:flex;align-items:center;gap:4px}
 .nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;padding:8px 16px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;position:relative;text-decoration:none}
 .nav-tab:hover{color:var(--text);background:var(--bg3)}
 .nav-tab.active{color:var(--text)}
+
+/* HAMBURGER MENU */
+.ham-btn{background:none;border:1px solid var(--border);color:var(--text2);cursor:pointer;width:38px;height:38px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:all 0.15s;flex-shrink:0;margin-right:8px}
+.ham-btn:hover{border-color:#666;color:var(--text)}
+.ham-btn span{display:block;width:16px;height:1.5px;background:currentColor;border-radius:2px;transition:all 0.2s}
+.ham-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.ham-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.ham-menu{position:fixed;top:64px;left:0;width:280px;background:var(--bg-deep);border-right:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:0 0 12px 0;z-index:99;padding:12px 0;visibility:hidden;opacity:0;pointer-events:none;transform:translateX(-16px);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0.2s}
+.ham-menu.open{visibility:visible;opacity:1;pointer-events:all;transform:translateX(0);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0s}
+.ham-section{padding:6px 16px 2px;font-size:9px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:6px}
+.ham-item{display:flex;align-items:center;gap:10px;padding:11px 20px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.15s;background:none;border:none;width:100%;text-align:left;text-decoration:none}
+.ham-item:hover{background:var(--bg2);color:var(--text)}
+.ham-item.active{color:var(--red);background:rgba(255,85,0,0.06)}
+.ham-item-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.ham-divider{height:1px;background:var(--border);margin:8px 16px}
 .nav-tab.active::after{content:'';position:absolute;bottom:-1px;left:16px;right:16px;height:2px;background:var(--red);border-radius:2px 2px 0 0}
 .header-right{display:flex;align-items:center;gap:10px}
 .search-wrap{position:relative}
@@ -57,17 +73,17 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .btn-nav{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 13px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;white-space:nowrap;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
 .btn-nav:hover{border-color:#555;color:var(--text)}
 .btn-red{background:var(--red);border-color:var(--red);color:#fff}
-.btn-red:hover{background:#c4070f}
+.btn-red:hover{background:#cc4400}
 
 /* VIEWS */
 .view{display:none;padding-top:64px}
 .view.active{display:block}
 
 /* HERO */
-.hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:flex-end;overflow:hidden}
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#000}
 .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1800&q=80') center/cover no-repeat;animation:heroZoom 12s ease-in-out infinite alternate}
 @keyframes heroZoom{from{transform:scale(1.0)}to{transform:scale(1.07)}}
-.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 50%,rgba(0,0,0,0.15) 100%)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.1) 100%)}
 .hero-content{position:relative;z-index:2;padding:0 64px 72px;animation:fadeUp 1s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 .hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:20px;animation:fadeUp 1s 0.2s ease both}
@@ -78,12 +94,52 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-btns{display:flex;gap:12px;animation:fadeUp 1s 0.5s ease both}
 .hero-btn{padding:14px 30px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:4px;text-transform:uppercase;border:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
 .hero-btn-red{background:var(--red);color:#fff}
-.hero-btn-red:hover{background:#ff1a1a;transform:translateY(-2px);box-shadow:0 8px 25px rgba(229,9,20,0.4)}
+.hero-btn-red:hover{background:#ff7700;transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,85,0,0.4)}
 .hero-btn-ghost{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.25);backdrop-filter:blur(4px)}
 .hero-btn-ghost:hover{background:rgba(255,255,255,0.2);transform:translateY(-2px)}
 .hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:3px;text-transform:uppercase;animation:bounce 2.5s ease infinite}
 @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 .hero-scroll-line{width:1px;height:28px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.35))}
+
+/* HERO VIDEO YOUTUBE */
+.hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#000}
+.hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px));pointer-events:none;border:0}
+.hero-video-cover{position:absolute;inset:0;z-index:1;background:#000;pointer-events:none;transition:opacity 0.8s ease}
+/* HERO CENTER — contenu apparaît après 1,2s pour laisser la vidéo s'installer */
+.hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
+/* OSM LOGO HERO */
+.hero-osm-logo{margin-bottom:24px;display:flex;flex-direction:column;align-items:center;gap:14px;animation:fadeUp 1.2s 1.2s ease both}
+.hero-osm-mark{background:var(--grad);color:#fff;font-size:clamp(20px,3.5vw,38px);font-weight:900;letter-spacing:10px;padding:14px 34px;border-radius:4px;text-transform:uppercase;animation:logoReveal 1.4s 1s ease both;box-shadow:0 0 80px rgba(255,85,0,0.45),0 4px 24px rgba(255,85,0,0.3)}
+@keyframes logoReveal{0%{opacity:0;transform:scale(0.8) translateY(10px);box-shadow:0 0 0 rgba(255,85,0,0)}60%{opacity:1;transform:scale(1.04) translateY(-2px);box-shadow:0 0 110px rgba(255,85,0,0.65)}100%{transform:scale(1) translateY(0);box-shadow:0 0 80px rgba(255,85,0,0.45),0 4px 24px rgba(255,85,0,0.3)}}
+.hero-osm-divider{width:50px;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.4),transparent);animation:fadeUp 1s 2s ease both}
+.hero-osm-name{font-size:clamp(11px,2vw,17px);font-weight:700;letter-spacing:clamp(8px,2vw,16px);color:rgba(255,255,255,0.88);text-transform:uppercase;animation:fadeUp 1s 1.8s ease both}
+.hero-osm-name span{color:var(--red)}
+/* TAGLINE */
+.hero-tagline{font-size:13px;font-weight:300;color:rgba(255,255,255,0.72);margin-bottom:32px;letter-spacing:1.5px;animation:fadeUp 1s 2.2s ease both}
+/* HERO SEARCH */
+.hero-search-wrap{width:100%;max-width:800px;animation:fadeUp 1s 2.5s ease both;position:relative}
+.hero-search-bar{display:flex;align-items:center;background:#fff;border-radius:50px;padding:7px 7px 7px 24px;box-shadow:0 8px 40px rgba(0,0,0,0.45);gap:12px;position:relative}
+.hero-search-icon{color:#aaa;font-size:17px;flex-shrink:0}
+.hero-search-field{flex:1;background:none;border:none;outline:none;color:#111;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:400;padding:10px 0;min-width:0}
+.hero-search-field::placeholder{color:#aaa}
+.hero-search-btn{background:var(--grad);color:#fff;border:none;padding:13px 28px;border-radius:40px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;text-transform:uppercase;flex-shrink:0}
+.hero-search-btn:hover{opacity:0.88}
+.hero-search-btn:hover{background:#ff7700}
+/* Hero suggestions */
+.hero-sug{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.3);padding:6px 0;z-index:200;display:none;max-height:260px;overflow-y:auto}
+.hero-sug.visible{display:block}
+.hero-sug-item{padding:10px 22px;font-size:13px;color:#222;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:background 0.1s;font-family:'Montserrat',sans-serif}
+.hero-sug-item:hover{background:#f5f5f5}
+.hero-sug-type{font-size:10px;color:#999;background:#eee;padding:2px 8px;border-radius:4px;flex-shrink:0}
+/* Hero tag rows */
+.hero-tags-section{width:100%;max-width:800px;margin-top:18px;animation:fadeUp 1s 2.8s ease both}
+.hero-tag-cat{margin-bottom:9px;display:flex;align-items:center;gap:10px}
+.hero-tag-cat-label{font-size:9px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.35);text-transform:uppercase;white-space:nowrap;min-width:72px;text-align:right;flex-shrink:0}
+.hero-tag-pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:2px}
+.hero-tag-pills::-webkit-scrollbar{display:none}
+.hero-tag-pill{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.82);padding:5px 13px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0;user-select:none}
+.hero-tag-pill:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.35);color:#fff}
+.hero-tag-pill.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 2px 10px rgba(255,85,0,0.4)}
 
 /* TICKER */
 .ticker-wrap{overflow:hidden;padding:14px 0;background:var(--bg-deep);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -95,24 +151,24 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 /* STATS */
 .stats-section{padding:80px 64px;background:var(--bg-alt)}
 .stats-inner{max-width:1280px;margin:0 auto}
-.stats-eyebrow{font-size:11px;font-weight:700;letter-spacing:5px;color:#888;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.stats-eyebrow{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;text-align:center}
 .stats-title{font-size:clamp(24px,3vw,40px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:48px}
 .stats-title span{color:var(--red)}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:64px}
 .stat-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:32px 20px;text-align:center;transition:all 0.3s;position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transition:transform 0.3s}
-.stat-card:hover{border-color:rgba(229,9,20,0.25);transform:translateY(-4px)}
+.stat-card:hover{border-color:rgba(255,85,0,0.25);transform:translateY(-4px)}
 .stat-card:hover::before{transform:scaleX(1)}
 .stat-num{font-size:52px;font-weight:900;color:var(--red);line-height:1;margin-bottom:8px}
-.stat-label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:6px}
-.stat-sub{font-size:13px;color:var(--muted);font-weight:400;line-height:1.5}
-.refs-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:28px}
+.stat-label{font-size:11px;color:var(--text2);letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.stat-sub{font-size:13px;color:var(--text2);font-weight:400;line-height:1.5}
+.refs-title{font-size:22px;font-weight:900;color:var(--text);margin-bottom:28px}
 .refs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 .refs-block{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:20px 22px;transition:all 0.25s}
-.refs-block:hover{border-color:rgba(229,9,20,0.25);background:var(--bg2);transform:translateY(-2px)}
+.refs-block:hover{border-color:rgba(255,85,0,0.25);background:var(--bg2);transform:translateY(-2px)}
 .refs-channel{font-size:11px;font-weight:700;color:var(--red);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .refs-channel::before{content:'';display:block;width:4px;height:4px;background:var(--red);border-radius:50%}
-.refs-shows{font-size:13px;color:var(--muted);line-height:2.4;font-weight:300}
+.refs-shows{font-size:13px;color:var(--text2);line-height:2.4;font-weight:400}
 .refs-shows strong{color:var(--text2);font-weight:600}
 
 /* PLAYLISTS PAGE */
@@ -134,15 +190,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .pl-photo{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 0.5s ease}
 .pl-photo-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,0.7) 100%)}
 .pl-color-bar{position:absolute;top:0;left:0;right:0;height:4px;z-index:2}
-.pl-play-btn{position:absolute;bottom:14px;right:14px;width:44px;height:44px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.8);transition:all 0.25s;z-index:3;font-size:16px;color:#fff;box-shadow:0 4px 20px rgba(229,9,20,0.5)}
+.pl-play-btn{position:absolute;bottom:14px;right:14px;width:44px;height:44px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.8);transition:all 0.25s;z-index:3;font-size:16px;color:#fff;box-shadow:0 4px 20px rgba(255,85,0,0.5)}
 .pl-info{padding:16px 18px 18px}
 .pl-genres{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:6px}
-.pl-name{font-size:17px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.2}
-.pl-desc{font-size:13px;color:#bbb;line-height:1.85;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pl-name{font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.2}
+.pl-desc{font-size:13px;color:var(--text2);line-height:1.85;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .pl-meta{display:flex;align-items:center;justify-content:space-between}
-.pl-count-badge{font-size:11px;color:#999;font-weight:500}
+.pl-count-badge{font-size:11px;color:var(--muted);font-weight:500}
 .pl-tags-row{display:flex;gap:4px;flex-wrap:wrap}
-.pl-tag{font-size:10px;color:#999;background:rgba(255,255,255,0.07);padding:2px 8px;border-radius:6px}
+.pl-tag{font-size:10px;color:var(--muted);background:var(--bg3);padding:2px 8px;border-radius:6px}
 
 /* DETAIL PLAYLIST */
 .pd-hero{position:relative;height:420px;display:flex;align-items:flex-end;overflow:hidden}
@@ -160,15 +216,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .pd-tag{font-size:11px;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.1);padding:3px 11px;border-radius:20px;border:1px solid rgba(255,255,255,0.15)}
 .pd-actions{display:flex;gap:10px;align-items:center}
 .pd-btn-play{background:var(--red);color:#fff;border:none;padding:12px 24px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;border-radius:4px;cursor:pointer;text-transform:uppercase;transition:all 0.2s;display:flex;align-items:center;gap:8px}
-.pd-btn-play:hover{background:#ff1a1a;transform:translateY(-2px)}
+.pd-btn-play:hover{background:#ff7700;transform:translateY(-2px)}
 .pd-btn-back{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:12px 20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;border-radius:4px;cursor:pointer;transition:all 0.2s}
 .pd-btn-back:hover{background:rgba(255,255,255,0.18)}
 .pd-count{font-size:12px;color:#999}
 .pd-tracks{padding:32px 64px 160px}
-.pd-tracks-header{display:grid;grid-template-columns:48px 52px 1fr 80px 44px 44px;gap:12px;padding:8px 14px;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:4px}
-.pd-track{display:grid;grid-template-columns:48px 52px 1fr 80px 44px 44px;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:background 0.15s;border-radius:6px}
+.pd-tracks-header{display:grid;grid-template-columns:48px 52px 1fr 80px 44px 44px 44px;gap:12px;padding:8px 14px;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:4px}
+.pd-track{display:grid;grid-template-columns:48px 52px 1fr 80px 44px 44px 44px;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:background 0.15s;border-radius:6px}
 .pd-track:hover{background:var(--bg2)}
-.pd-track.playing{background:rgba(229,9,20,0.07)}
+.pd-track.playing{background:rgba(255,85,0,0.07)}
 .pd-track-num{font-size:12px;color:var(--muted);text-align:center}
 .pd-track.playing .pd-track-num{display:none}
 .pd-track-icon{display:none;color:var(--red);font-size:13px;text-align:center}
@@ -181,34 +237,28 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .pd-track-btn:hover{border-color:var(--border);color:var(--text2);background:var(--bg3)}
 
 /* CATALOGUE */
-.search-active-bar{padding:10px 48px;background:rgba(229,9,20,0.05);border-bottom:1px solid rgba(229,9,20,0.12);display:none;align-items:center;gap:8px;font-size:11px;color:var(--text2);flex-wrap:wrap}
+.search-active-bar{padding:10px 48px;background:rgba(255,85,0,0.05);border-bottom:1px solid rgba(255,85,0,0.12);display:none;align-items:center;gap:8px;font-size:11px;color:var(--text2);flex-wrap:wrap}
 .search-active-bar.visible{display:flex}
-.kw-tag{background:rgba(229,9,20,0.15);border:1px solid rgba(229,9,20,0.3);color:#ff6666;padding:2px 8px;border-radius:8px;font-size:10px}
+.kw-tag{background:rgba(255,85,0,0.15);border:1px solid rgba(255,85,0,0.3);color:#ff8844;padding:2px 8px;border-radius:8px;font-size:10px}
 .pl-nav{padding:16px 48px 0;display:flex;flex-wrap:wrap;gap:7px}
 .pl-pill{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 13px;font-size:11px;font-weight:500;cursor:pointer;transition:all 0.15s;font-family:'Montserrat',sans-serif;border-radius:20px;white-space:nowrap;display:flex;align-items:center;gap:5px}
 .pl-pill:hover{background:var(--bg4);color:var(--text)}
 .pl-pill.active{background:var(--red);color:#fff;border-color:var(--red)}
 .pl-count-pill{font-size:9px;opacity:0.7}
 .tag-nav{padding:8px 48px 0;display:flex;flex-wrap:wrap;gap:5px}
-.audio-filter-nav{padding:8px 48px 4px;display:flex;flex-wrap:wrap;align-items:center;gap:5px}
-.af-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-right:2px}
-.af-sep{width:1px;height:14px;background:var(--border);margin:0 6px}
-.af-btn{background:transparent;border:1px solid rgba(255,255,255,0.07);color:var(--muted);padding:3px 10px;font-size:10px;cursor:pointer;transition:all 0.15s;font-family:'Montserrat',sans-serif;border-radius:10px;white-space:nowrap}
-.af-btn:hover{border-color:var(--purple);color:var(--purple)}
-.af-btn.active{background:rgba(139,92,246,0.15);border-color:var(--purple);color:#a78bfa}
 .tag-pill{background:transparent;border:1px solid rgba(255,255,255,0.07);color:var(--muted);padding:4px 11px;font-size:11px;cursor:pointer;transition:all 0.15s;font-family:'Montserrat',sans-serif;border-radius:12px;white-space:nowrap}
 .tag-pill:hover{border-color:var(--red);color:var(--red)}
-.tag-pill.active{background:rgba(229,9,20,0.12);border-color:var(--red);color:#ff6666}
+.tag-pill.active{background:rgba(255,85,0,0.12);border-color:var(--red);color:#ff8844}
 .tracks-section{padding:16px 48px 160px}
 .section-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .section-title{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
 .section-count{font-size:11px;color:var(--muted)}
-.section-tag{font-size:11px;color:var(--red);background:rgba(229,9,20,0.1);padding:3px 10px;border-radius:10px}
-.tracks-header{display:grid;grid-template-columns:48px 1fr 160px 60px 44px 44px 44px;gap:12px;padding:6px 14px;font-size:10px;font-weight:600;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:2px}
+.section-tag{font-size:11px;color:var(--red);background:rgba(255,85,0,0.1);padding:3px 10px;border-radius:10px}
+.tracks-header{display:grid;grid-template-columns:48px 1fr 160px 60px 44px 44px 44px 44px;gap:12px;padding:6px 14px;font-size:10px;font-weight:600;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:2px}
 .track-list{display:flex;flex-direction:column}
-.track{display:grid;grid-template-columns:48px 1fr 160px 60px 44px 44px 44px;align-items:center;gap:12px;padding:11px 14px;cursor:pointer;transition:background 0.15s;border-radius:4px}
+.track{display:grid;grid-template-columns:48px 1fr 160px 60px 44px 44px 44px 44px;align-items:center;gap:12px;padding:11px 14px;cursor:pointer;transition:background 0.15s;border-radius:4px}
 .track:hover{background:var(--bg2);box-shadow:inset 3px 0 0 var(--red)}
-.track.playing{background:rgba(229,9,20,0.07);box-shadow:inset 3px 0 0 var(--red)}
+.track.playing{background:rgba(255,85,0,0.07);box-shadow:inset 3px 0 0 var(--red)}
 .track-num{font-size:12px;color:var(--muted);text-align:center}
 .track.playing .track-num{display:none}
 .track-play-icon{display:none;color:var(--red);font-size:14px;text-align:center}
@@ -218,11 +268,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .track.playing .track-title{color:var(--red)}
 .track-artist{font-size:12px;color:var(--text2)}
 .track-badge{font-size:10px;font-weight:500;color:var(--text2);background:var(--bg3);padding:3px 9px;border-radius:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;max-width:100%}
-.track.playing .track-badge{background:rgba(229,9,20,0.15);color:#ff6666}
+.track.playing .track-badge{background:rgba(255,85,0,0.15);color:#ff8844}
 .track-duration{font-size:13px;color:var(--muted);text-align:right}
 .track-btn{background:none;border:1px solid transparent;color:var(--muted);cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.15s;border-radius:4px}
 .track-btn:hover{border-color:var(--border);color:var(--text2);background:var(--bg3)}
-.match-hl{background:rgba(229,9,20,0.22);color:#ff9999;border-radius:2px;padding:0 2px}
+.match-hl{background:rgba(255,85,0,0.22);color:var(--red);border-radius:2px;padding:0 2px;font-weight:700}
 
 /* PLAYER */
 #player{position:fixed;bottom:0;left:0;right:0;background:var(--bg-deep);border-top:1px solid var(--border);padding:0 48px;height:80px;z-index:200;display:none;align-items:center}
@@ -241,6 +291,13 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .btn-extra{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;transition:color 0.15s;padding:4px}
 .btn-extra:hover{color:var(--text)}
 .btn-extra.active{color:var(--red)}
+.btn-mute{background:none;border:1px solid var(--border);color:var(--text2);cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;border-radius:50%;transition:all 0.15s;flex-shrink:0}
+.btn-mute:hover{border-color:var(--red);color:var(--red);background:rgba(255,85,0,0.08)}
+.btn-mute.muted{color:var(--red);border-color:var(--red);background:rgba(255,85,0,0.1)}
+#bg-speaker{display:none;position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;background:var(--grad);border:none;color:#fff;font-size:22px;cursor:pointer;z-index:400;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(255,85,0,0.4);transition:transform 0.15s,box-shadow 0.15s,opacity 0.3s;font-family:'Montserrat',sans-serif}
+#bg-speaker.visible{display:flex;animation:fadeUp 0.4s ease}
+#bg-speaker:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(255,85,0,0.6)}
+#bg-speaker.muted{background:var(--bg3);color:var(--muted);box-shadow:none}
 .progress-wrap{display:flex;align-items:center;gap:9px;width:100%}
 #waveform-container{flex:1;cursor:pointer;border-radius:3px;overflow:hidden}
 .time{font-size:11px;color:var(--muted);min-width:36px}
@@ -284,26 +341,177 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .ld:nth-child(2){animation-delay:.2s}.ld:nth-child(3){animation-delay:.4s}
 @keyframes pulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
 .empty{text-align:center;padding:80px;color:var(--muted);font-size:12px;letter-spacing:2px}
-.copy-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--bg3);border:1px solid rgba(229,9,20,0.3);color:var(--text);padding:9px 18px;border-radius:20px;font-size:12px;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none}
+.copy-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--bg3);border:1px solid rgba(255,85,0,0.3);color:var(--text);padding:9px 18px;border-radius:20px;font-size:12px;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none}
 .copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* FAVORIS */
+.track-fav{color:var(--muted);transition:color 0.15s}
+.track-fav.faved{color:#ff4d6d}
+.track-fav:hover{color:#ff4d6d}
+.fav-empty{text-align:center;padding:80px 48px;color:var(--muted)}
+.fav-empty-icon{font-size:48px;margin-bottom:16px;opacity:0.4}
+.fav-empty-text{font-size:13px;line-height:1.8}
+.fav-share-bar{padding:10px 48px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)}
+.fav-count-label{font-weight:600;color:var(--text2)}
+.fav-share-btn{background:none;border:1px solid var(--border);color:var(--text2);padding:6px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border-radius:4px;transition:all 0.15s}
+.fav-share-btn:hover{border-color:#666;color:var(--text)}
+
+/* DURATION FILTERS */
+.duration-filters{padding:8px 48px 4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.dur-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-right:4px;flex-shrink:0}
+.dur-pill{background:transparent;border:1px solid rgba(255,255,255,0.07);color:var(--muted);padding:4px 12px;font-size:10px;cursor:pointer;transition:all 0.15s;font-family:'Montserrat',sans-serif;border-radius:12px;white-space:nowrap}
+.dur-pill:hover{border-color:var(--red);color:var(--red)}
+.dur-pill.active{background:rgba(255,85,0,0.12);border-color:var(--red);color:#ff8844}
+
+/* HOVER PREVIEW */
+.track.previewing{background:var(--bg2) !important;box-shadow:inset 3px 0 0 rgba(255,85,0,0.4) !important}
+.preview-tag{font-size:9px;color:rgba(255,85,0,0.7);letter-spacing:1px;text-transform:uppercase;flex-shrink:0;display:none;margin-left:6px}
+.track.previewing .preview-tag{display:inline;animation:previewBlink 1.2s ease infinite}
+@keyframes previewBlink{0%,100%{opacity:0.7}50%{opacity:0.25}}
+
+/* SERVICES STRIP */
+.services-strip{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 48px}
+.services-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.srv-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:8px}
+.srv-icon{font-size:28px}
+.srv-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:0.5px}
+.srv-desc{font-size:12px;color:var(--text2);line-height:1.65;font-weight:400}
+
+/* ILS NOUS FONT CONFIANCE */
+.trust-section{padding:48px 48px 40px;background:var(--bg-deep)}
+.trust-eyebrow{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:28px}
+.trust-logos{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px}
+.tl-name{font-size:13px;font-weight:900;color:#fff;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+.trust-programs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;font-size:11px;color:var(--muted)}
+.trust-dot{color:var(--border);margin:0 2px}
+
+/* VLADIMIR RECOMMANDE */
+.recommends-wrap{padding:60px 64px;background:var(--bg-alt)}
+.rec-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;gap:24px;flex-wrap:wrap}
+.rec-eyebrow{font-size:10px;font-weight:700;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:10px}
+.rec-title{font-size:clamp(22px,3vw,36px);font-weight:900;letter-spacing:-1px;line-height:1.1}
+.rec-quote{font-size:12px;color:var(--muted);font-style:italic;line-height:1.7;max-width:320px;text-align:right}
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.rec-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden}
+.rec-card:hover{border-color:rgba(255,85,0,0.3);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.14)}
+.rec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transition:transform 0.25s}
+.rec-card:hover::before{transform:scaleX(1)}
+.rec-note{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-bottom:10px}
+.rec-track-title{font-size:15px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rec-playlist{font-size:12px;color:var(--muted);margin-bottom:16px}
+.rec-play-btn{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;border:none;padding:8px 16px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background 0.15s;text-transform:uppercase}
+.rec-play-btn:hover{background:#ff7700}
+
+/* CAT SIDEBAR LAYOUT */
+.cat-layout{display:flex;align-items:flex-start;min-height:calc(100vh - 64px)}
+.cat-sidebar{width:240px;flex-shrink:0;border-right:1px solid var(--border);position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;background:var(--bg-deep)}
+.cat-sidebar::-webkit-scrollbar{width:3px}
+.cat-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.cat-main{flex:1;min-width:0}
+.cat-main .tracks-section{padding:16px 32px 180px}
+.cat-main .search-active-bar{padding-left:32px;padding-right:32px}
+.cat-sb-wrap{padding:12px}
+.cat-sb-input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;transition:border-color 0.15s;box-sizing:border-box}
+.cat-sb-input:focus{border-color:var(--red)}
+.cat-sb-input::placeholder{color:var(--muted)}
+.cat-section{border-top:1px solid var(--border)}
+.cat-section-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;user-select:none;transition:color 0.15s;gap:8px}
+.cat-section-hd:hover{color:var(--text)}
+.cat-section-hd.has-active .cat-chevron{color:var(--red)}
+.cat-chevron{font-size:10px;transition:transform 0.2s;flex-shrink:0}
+.cat-section.collapsed .cat-chevron{transform:rotate(-90deg)}
+.cat-section.collapsed .cat-section-body{display:none}
+.cat-section-body{padding:0 10px 10px;display:flex;flex-wrap:wrap;gap:5px}
+.cat-fpill{background:transparent;border:1px solid var(--border);color:var(--text2);padding:4px 9px;border-radius:16px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;user-select:none}
+.cat-fpill:hover{border-color:var(--red);color:var(--red)}
+.cat-fpill.active{background:var(--red);border-color:var(--red);color:#fff}
+.cat-section-body.dur-body{flex-direction:column;gap:3px}
+.cat-dur-btn{background:transparent;border:1px solid var(--border);color:var(--text2);padding:6px 10px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;text-align:left;transition:all 0.15s;width:100%}
+.cat-dur-btn:hover{border-color:var(--red);color:var(--red)}
+.cat-dur-btn.active{background:rgba(255,85,0,0.1);border-color:var(--red);color:var(--red)}
+.cat-section-body.pl-body{flex-direction:column;gap:1px;padding:0 6px 8px}
+.cat-pl-btn{background:transparent;border:none;color:var(--text2);padding:6px 8px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;text-align:left;width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;transition:all 0.15s}
+.cat-pl-btn:hover{background:var(--bg3);color:var(--text)}
+.cat-pl-btn.active{background:rgba(255,85,0,0.1);color:var(--red)}
+.cat-pl-count{font-size:9px;color:var(--muted);background:var(--bg3);padding:1px 6px;border-radius:8px;flex-shrink:0;font-weight:600}
+.cat-pl-btn.active .cat-pl-count{background:rgba(255,85,0,0.15);color:var(--red)}
+.cat-reset-btn{display:block;width:calc(100% - 24px);margin:10px 12px 16px;padding:8px 0;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:6px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.15s}
+.cat-reset-btn:hover{border-color:var(--red);color:var(--red)}
+.cat-mob-toggle{display:none;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-deep);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text2);cursor:pointer;border:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif;text-transform:uppercase;transition:color 0.15s}
+.cat-mob-toggle:hover{color:var(--red)}
+.cat-sidebar.mob-open{display:block;position:fixed;top:64px;left:0;width:260px;height:calc(100vh - 64px);z-index:50;box-shadow:4px 0 24px rgba(0,0,0,0.4)}
+
+/* POP COLORS — stat cards per-index */
+.stat-card:nth-child(1) .stat-num{color:#FF5500}
+.stat-card:nth-child(2) .stat-num{color:#8B5CF6}
+.stat-card:nth-child(3) .stat-num{color:#00B4D8}
+.stat-card:nth-child(4) .stat-num{color:#06D6A0}
+.stat-card:nth-child(1):hover::before{background:#FF5500}
+.stat-card:nth-child(2):hover::before{background:#8B5CF6}
+.stat-card:nth-child(3):hover::before{background:#00B4D8}
+.stat-card:nth-child(4):hover::before{background:#06D6A0}
+/* POP COLORS — hero tag categories */
+.hero-tag-cat:nth-child(1) .hero-tag-pill.active{background:#8B5CF6;border-color:#8B5CF6;box-shadow:0 2px 10px rgba(139,92,246,0.5)}
+.hero-tag-cat:nth-child(2) .hero-tag-pill.active{background:#00B4D8;border-color:#00B4D8;box-shadow:0 2px 10px rgba(0,180,216,0.5)}
+.hero-tag-cat:nth-child(3) .hero-tag-pill.active{background:#06D6A0;border-color:#06D6A0;box-shadow:0 2px 10px rgba(6,214,160,0.5)}
+.hero-tag-cat:nth-child(4) .hero-tag-pill.active{background:#FF5500;border-color:#FF5500;box-shadow:0 2px 10px rgba(255,85,0,0.5)}
+/* POP COLORS — services strip icons */
+.srv-card:nth-child(1) .srv-icon-bg{background:rgba(255,85,0,0.15);color:#FF5500}
+.srv-card:nth-child(2) .srv-icon-bg{background:rgba(139,92,246,0.15);color:#8B5CF6}
+.srv-card:nth-child(3) .srv-icon-bg{background:rgba(0,180,216,0.15);color:#00B4D8}
+.srv-card:nth-child(4) .srv-icon-bg{background:rgba(6,214,160,0.15);color:#06D6A0}
+.srv-icon-bg{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+/* REAL LOGOS */
+.tl-card{padding:14px 20px;border-radius:8px;background:var(--card-bg);border:1px solid var(--card-border);display:flex;align-items:center;justify-content:center;transition:all 0.2s;min-width:80px;min-height:56px}
+.tl-card:hover{border-color:rgba(255,85,0,0.3);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.12)}
+.tl-img{max-height:38px;max-width:110px;object-fit:contain}
+.tl-name{font-size:13px;font-weight:900;color:var(--text);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;display:none}
 
 @media(max-width:900px){
   header{padding:0 16px}
   .hero-content{padding:0 24px 48px}
+  .cat-sidebar{display:none}
+  .cat-mob-toggle{display:flex}
   .stats-section,.themes-wrap,.pl-page-header{padding-left:16px;padding-right:16px}
   .pl-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
-  .pl-nav,.tag-nav,.audio-filter-nav,.tracks-section{padding-left:16px;padding-right:16px}
+  .pl-nav,.tag-nav,.tracks-section{padding-left:16px;padding-right:16px}
   .tracks-header{display:none}
   .track{grid-template-columns:36px 1fr auto 34px 34px}
-  .track-badge,.track-duration{display:none}
+  .track-badge,.track-duration,.track-fav{display:none}
+  .duration-filters{padding:8px 16px 4px}
+  .recommends-wrap{padding:40px 16px}
+  .services-strip{padding:32px 16px}
+  .services-inner{grid-template-columns:repeat(2,1fr);gap:16px}
+  .trust-section{padding:32px 16px}
   #player{padding:0 16px;height:64px}
   .player-inner{grid-template-columns:1fr auto;gap:12px}
   .player-right{display:none}
-  .search-wrap input{width:130px}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-tag-cat-label{min-width:52px;font-size:8px;letter-spacing:2px}
+  .hero-search-field{font-size:13px}
+  .hero-search-btn{padding:11px 18px;font-size:10px}
   .pd-hero-content{padding:0 20px 32px;flex-direction:column;align-items:flex-start;gap:20px}
   .pd-cover{width:100px;height:100px}
   .pd-tracks{padding:16px 16px 160px}
+}
+@media(max-width:480px){
+  .nav-tabs{display:none}
+  .header-right .btn-nav.btn-red{display:none}
+  .hero-center{padding:16px 14px}
+  .hero-osm-mark{font-size:22px;padding:10px 20px;letter-spacing:6px}
+  .hero-osm-divider{width:80px}
+  .hero-osm-name{font-size:8px;letter-spacing:3px}
+  .hero-tagline{font-size:11px;letter-spacing:0.8px;margin-bottom:20px}
+  .hero-search-bar{padding:5px 5px 5px 14px;gap:8px}
+  .hero-search-field{font-size:12px;padding:8px 0}
+  .hero-search-btn{padding:9px 14px;font-size:9px;letter-spacing:1px}
+  .hero-tags-section{margin-top:12px}
+  .hero-tag-cat{margin-bottom:6px}
+  .hero-tag-cat-label{display:none}
+  .hero-tag-pill{font-size:10px;padding:4px 10px}
+  .pl-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .track{grid-template-columns:32px 1fr auto 32px}
 }
 </style>
 </head>
@@ -323,29 +531,47 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 <div id="main">
 <header>
-  <div class="logo" onclick="showView('accueil')">
-    <div class="logo-mark">OSM</div>
+  <div style="display:flex;align-items:center;gap:4px">
+    <button class="ham-btn" id="ham-btn" onclick="toggleHamMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="logo" onclick="closeHamMenu();showView('accueil')">
+      <div class="logo-mark">OSM</div>
+      <div class="logo-name" style="display:none" id="logo-full-name">Original Scores Music</div>
+    </div>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" id="tab-accueil" onclick="showView('accueil')">Accueil</button>
     <button class="nav-tab" id="tab-playlists" onclick="showView('playlists')">Playlists</button>
     <button class="nav-tab" id="tab-catalogue" onclick="showView('catalogue')">Catalogue</button>
-    <a class="nav-tab" href="television.html">Télévision</a>
-    <a class="nav-tab" href="service.html">Sélection sur mesure</a>
-    <a class="nav-tab" href="login-monteurs.html">Espace Client</a>
-    <a class="nav-tab" href="aide.html">Aide</a>
   </div>
   <div class="header-right">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="search" placeholder="piano suspense groovy..." oninput="onSearch()" onfocus="showSuggestions()" onblur="setTimeout(hideSuggestions,200)">
-      <div class="suggestions" id="suggestions"></div>
-    </div>
     <button class="btn-nav btn-theme" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
     <button class="btn-nav" onclick="toggleQueue()" style="position:relative">🎵 Ma liste <span class="queue-badge" id="queue-badge"></span></button>
     <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
   </div>
 </header>
+
+<!-- HAMBURGER MENU PANEL -->
+<div class="ham-menu" id="ham-menu">
+  <div class="ham-section">Navigation</div>
+  <button class="ham-item" id="ham-tab-accueil" onclick="closeHamMenu();showView('accueil')"><span class="ham-item-icon">🏠</span>Accueil</button>
+  <button class="ham-item" id="ham-tab-playlists" onclick="closeHamMenu();showView('playlists')"><span class="ham-item-icon">🎵</span>Playlists</button>
+  <button class="ham-item" id="ham-tab-catalogue" onclick="closeHamMenu();showView('catalogue')"><span class="ham-item-icon">📂</span>Catalogue</button>
+  <button class="ham-item" id="ham-tab-favoris" onclick="closeHamMenu();showView('favoris')"><span class="ham-item-icon">♥</span>Favoris<span id="fav-count-nav" style="font-size:9px;color:var(--red);margin-left:4px"></span></button>
+  <div class="ham-divider"></div>
+  <div class="ham-section">Pages</div>
+  <a class="ham-item" href="television.html"><span class="ham-item-icon">📺</span>Télévision</a>
+  <a class="ham-item" href="service.html"><span class="ham-item-icon">🎯</span>Sélection sur mesure</a>
+  <a class="ham-item" href="qui-sommes-nous.html"><span class="ham-item-icon">👥</span>Qui sommes-nous ?</a>
+  <div class="ham-divider"></div>
+  <div class="ham-section">Compte</div>
+  <a class="ham-item" href="login-monteurs.html"><span class="ham-item-icon">👤</span>Espace Client</a>
+  <a class="ham-item" href="inscription.html"><span class="ham-item-icon">✍️</span>Demande d'accès</a>
+  <a class="ham-item" href="aide.html"><span class="ham-item-icon">❓</span>Aide</a>
+  <div class="ham-divider"></div>
+  <a class="ham-item" href="mailto:vladimirstreiff@gmail.com"><span class="ham-item-icon">✉️</span>Contact</a>
+</div>
 
 <div id="queue-panel">
   <div class="queue-header"><span class="queue-title">Ma liste</span><button class="queue-clear" onclick="clearQueue()">Effacer</button></div>
@@ -355,15 +581,101 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 <!-- ACCUEIL -->
 <div class="view active" id="view-accueil">
   <div class="hero">
-    <div class="hero-bg"></div>
+    <div class="hero-video-wrap">
+      <iframe class="hero-yt-iframe" id="hero-yt-iframe"
+        src=""
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>
+      <div class="hero-video-cover" id="hero-video-cover"></div>
+    </div>
     <div class="hero-ov"></div>
-    <div class="hero-content">
-      <div class="hero-eyebrow">Supervision Musicale · Paris</div>
-      <h1 class="hero-title">Original <span>Scores</span><br>Music</h1>
-      <p class="hero-sub">Musique originale pour l'image &nbsp;·&nbsp; Cinéma &nbsp;·&nbsp; Télévision &nbsp;·&nbsp; Publicité</p>
-      <div class="hero-btns">
-        <button class="hero-btn hero-btn-red" onclick="showView('playlists')">▶ Parcourir les playlists</button>
-        <button class="hero-btn hero-btn-ghost" onclick="showView('catalogue')">🎵 Catalogue complet</button>
+    <div class="hero-center">
+      <div class="hero-osm-logo">
+        <div class="hero-osm-mark">OSM</div>
+        <div class="hero-osm-divider"></div>
+        <div class="hero-osm-name">ORIGINAL &nbsp;<span>SCORES</span>&nbsp; MUSIC</div>
+      </div>
+      <p class="hero-tagline">Musique originale pour l'image &nbsp;·&nbsp; Cinéma &nbsp;·&nbsp; Télévision &nbsp;·&nbsp; Publicité</p>
+      <div class="hero-search-wrap">
+        <div class="hero-search-bar">
+          <span class="hero-search-icon">🔍</span>
+          <input type="text" id="hero-search-input" class="hero-search-field"
+                 placeholder="Rechercher une musique, une ambiance, un instrument..."
+                 oninput="heroSearchLive(this.value)"
+                 onblur="setTimeout(hideHeroSug,200)"
+                 onfocus="if(this.value.trim().length>=2)showHeroSug(this.value)"
+                 onkeydown="if(event.key==='Enter')heroSearchSubmit()">
+          <button class="hero-search-btn" onclick="heroSearchSubmit()">Rechercher</button>
+          <div class="hero-sug" id="hero-sug"></div>
+        </div>
+        <div class="hero-tags-section">
+          <div class="hero-tag-cat">
+            <div class="hero-tag-cat-label">Mood</div>
+            <div class="hero-tag-pills">
+              <button class="hero-tag-pill" onclick="heroTagClick('épique',this)">Épique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('mélancolique',this)">Mélancolique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('joyeux',this)">Joyeux</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('mystère',this)">Mystérieux</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('romantique',this)">Romantique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('tension',this)">Tendu</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('contemplatif',this)">Contemplatif</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('urgent',this)">Urgent</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('doux',this)">Doux</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('dramatique',this)">Dramatique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('énergique',this)">Énergique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('nostalgique',this)">Nostalgique</button>
+            </div>
+          </div>
+          <div class="hero-tag-cat">
+            <div class="hero-tag-cat-label">Style</div>
+            <div class="hero-tag-pills">
+              <button class="hero-tag-pill" onclick="heroTagClick('jazz',this)">Jazz</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('électro',this)">Électro</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('orchestral',this)">Orchestral</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('folk',this)">Folk</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('rock',this)">Rock</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('classique',this)">Classique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('reggae',this)">Reggae</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('funk',this)">Funk</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('ambient',this)">Ambient</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('acoustique',this)">Acoustique</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('hip-hop',this)">Hip-Hop</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('cinématique',this)">Cinématique</button>
+            </div>
+          </div>
+          <div class="hero-tag-cat">
+            <div class="hero-tag-cat-label">Instrument</div>
+            <div class="hero-tag-pills">
+              <button class="hero-tag-pill" onclick="heroTagClick('piano',this)">Piano</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('guitare',this)">Guitare</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('cordes',this)">Cordes</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('cuivres',this)">Cuivres</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('percussions',this)">Percussions</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('synthétiseur',this)">Synthé</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('accordéon',this)">Accordéon</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('violon',this)">Violon</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('batterie',this)">Batterie</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('basse',this)">Basse</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('flûte',this)">Flûte</button>
+            </div>
+          </div>
+          <div class="hero-tag-cat">
+            <div class="hero-tag-cat-label">Usage</div>
+            <div class="hero-tag-pills">
+              <button class="hero-tag-pill" onclick="heroTagClick('documentaire',this)">Documentaire</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('publicité',this)">Publicité</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('cinéma',this)">Cinéma</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('série TV',this)">Série TV</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('reportage',this)">Reportage</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('trailer',this)">Trailer</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('corporate',this)">Corporate</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('podcast',this)">Podcast</button>
+              <button class="hero-tag-pill" onclick="heroTagClick('générique',this)">Générique</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="hero-scroll"><div class="hero-scroll-line"></div>SCROLL</div>
@@ -394,6 +706,74 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       <span class="ticker-item" style="font-size:13px;color:#FFD700">TFX</span><span class="ticker-dot"></span>
       <span class="ticker-item" style="font-size:13px;color:#E2001A">W9</span><span class="ticker-dot"></span>
       <span class="ticker-item" style="font-size:11px;color:#00AAFF">USHUAÏA TV</span>
+    </div>
+  </div>
+
+  <!-- SERVICES STRIP -->
+  <div class="services-strip">
+    <div class="services-inner">
+      <div class="srv-card">
+        <div class="srv-icon-bg">🎵</div>
+        <div class="srv-title">Catalogue libre</div>
+        <div class="srv-desc">+1 000 morceaux originaux en accès gratuit pour vos montages</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-icon-bg">📋</div>
+        <div class="srv-title">Easy Cue Sheet</div>
+        <div class="srv-desc">Cue sheet SACEM pré-rempli fourni pour chaque utilisation</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-icon-bg">🎬</div>
+        <div class="srv-title">Composition sur mesure</div>
+        <div class="srv-desc">Musique calée à l'image, composée spécifiquement pour votre projet</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-icon-bg">©️</div>
+        <div class="srv-title">Droits à la diffusion</div>
+        <div class="srv-desc">Aucun frais en amont — droits SACEM perçus à la diffusion uniquement</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ILS NOUS FONT CONFIANCE -->
+  <div class="trust-section">
+    <div class="trust-eyebrow">Ils nous font confiance</div>
+    <div class="trust-logos">
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/tf1-fr.png" alt="TF1" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">TF1</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-2-fr.png" alt="France 2" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">France 2</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-3-fr.png" alt="France 3" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">France 3</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-5-fr.png" alt="France 5" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">France 5</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/m6-fr.png" alt="M6" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">M6</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/arte-fr.png" alt="Arte" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">ARTE</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/canal-plus-fr.png" alt="Canal+" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">Canal+</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/c8-fr.png" alt="C8" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">C8</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/tmc-fr.png" alt="TMC" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">TMC</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/w9-fr.png" alt="W9" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none">W9</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/rmc-decouverte-fr.png" alt="RMC Découverte" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none;font-size:9px">RMC Découverte</span></div>
+      <div class="tl-card"><img class="tl-img" src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/ushuaia-tv-fr.png" alt="Ushuaïa TV" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="tl-name" style="display:none;font-size:10px">Ushuaïa TV</span></div>
+    </div>
+    <div class="trust-programs">
+      <span>50 min Inside</span><span class="trust-dot">·</span>
+      <span>Envoyé Spécial</span><span class="trust-dot">·</span>
+      <span>Complément d'enquête</span><span class="trust-dot">·</span>
+      <span>Cash Investigation</span><span class="trust-dot">·</span>
+      <span>Stupéfiant !</span><span class="trust-dot">·</span>
+      <span>Capital</span><span class="trust-dot">·</span>
+      <span>et bien d'autres…</span>
+    </div>
+  </div>
+
+  <!-- VLADIMIR RECOMMANDE -->
+  <div class="recommends-wrap">
+    <div class="rec-top">
+      <div>
+        <div class="rec-eyebrow">Sélection personnelle</div>
+        <div class="rec-title">Vladimir recommande</div>
+      </div>
+      <div class="rec-quote">« Ces compositions représentent ce que j'aime faire : de la musique qui sert l'image sans jamais l'écraser. »</div>
+    </div>
+    <div class="rec-grid" id="recommends-container">
+      <div class="loading"><span class="ld">·</span><span class="ld">·</span><span class="ld">·</span></div>
     </div>
   </div>
 </div>
@@ -429,43 +809,135 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     </div>
   </div>
   <div class="pd-tracks">
-    <div class="pd-tracks-header"><span>#</span><span></span><span>Titre</span><span>Durée</span><span></span><span></span></div>
+    <div class="pd-tracks-header"><span>#</span><span></span><span>Titre</span><span>Durée</span><span></span><span></span><span></span></div>
     <div id="pd-track-list"></div>
   </div>
 </div>
 
 <!-- CATALOGUE -->
 <div class="view" id="view-catalogue">
-  <div class="search-active-bar" id="search-active-bar"></div>
-  <div class="pl-nav" id="pl-nav"></div>
-  <div class="tag-nav" id="tag-nav"></div>
-  <div class="audio-filter-nav" id="audio-filter-nav">
-    <span class="af-label">Énergie</span>
-    <button class="af-btn" data-af="calme">Calme</button>
-    <button class="af-btn" data-af="action">Action</button>
-    <button class="af-btn" data-af="épique">Épique</button>
-    <span class="af-sep"></span>
-    <span class="af-label">Tempo</span>
-    <button class="af-btn" data-af="lent">Lent</button>
-    <button class="af-btn" data-af="modéré">Modéré</button>
-    <button class="af-btn" data-af="rapide">Rapide</button>
-    <span class="af-sep"></span>
-    <span class="af-label">Tonalité</span>
-    <button class="af-btn" data-af="majeur">Majeur</button>
-    <button class="af-btn" data-af="mineur">Mineur</button>
-    <span class="af-sep"></span>
-    <span class="af-label">Fréq.</span>
-    <button class="af-btn" data-af="graves">Graves</button>
-    <button class="af-btn" data-af="aigus">Aigus</button>
+  <button class="cat-mob-toggle" onclick="toggleCatSidebar()">⚙ Filtres</button>
+  <div class="cat-layout">
+    <!-- SIDEBAR FILTRES -->
+    <aside class="cat-sidebar" id="cat-sidebar">
+      <div class="cat-sb-wrap">
+        <input type="text" class="cat-sb-input" id="cat-sb-input" placeholder="🔍  Rechercher..."
+               oninput="catSbSearch(this.value)" onkeydown="if(event.key==='Enter')catSbSearch(this.value)">
+      </div>
+      <div class="cat-section">
+        <div class="cat-section-hd" onclick="toggleCatSection(this)"><span>Ambiance</span><span class="cat-chevron">▾</span></div>
+        <div class="cat-section-body">
+          <button class="cat-fpill" onclick="catTagClick('épique',this)">Épique</button>
+          <button class="cat-fpill" onclick="catTagClick('mélancolique',this)">Mélancolique</button>
+          <button class="cat-fpill" onclick="catTagClick('dramatique',this)">Dramatique</button>
+          <button class="cat-fpill" onclick="catTagClick('calme',this)">Calme</button>
+          <button class="cat-fpill" onclick="catTagClick('joyeux',this)">Joyeux</button>
+          <button class="cat-fpill" onclick="catTagClick('tension',this)">Tendu</button>
+          <button class="cat-fpill" onclick="catTagClick('contemplatif',this)">Contemplatif</button>
+          <button class="cat-fpill" onclick="catTagClick('romantique',this)">Romantique</button>
+          <button class="cat-fpill" onclick="catTagClick('mystère',this)">Mystérieux</button>
+          <button class="cat-fpill" onclick="catTagClick('nostalgique',this)">Nostalgique</button>
+          <button class="cat-fpill" onclick="catTagClick('sombre',this)">Sombre</button>
+          <button class="cat-fpill" onclick="catTagClick('intense',this)">Intense</button>
+          <button class="cat-fpill" onclick="catTagClick('positif',this)">Positif</button>
+        </div>
+      </div>
+      <div class="cat-section">
+        <div class="cat-section-hd" onclick="toggleCatSection(this)"><span>Genre</span><span class="cat-chevron">▾</span></div>
+        <div class="cat-section-body">
+          <button class="cat-fpill" onclick="catTagClick('jazz',this)">Jazz</button>
+          <button class="cat-fpill" onclick="catTagClick('électro',this)">Électro</button>
+          <button class="cat-fpill" onclick="catTagClick('orchestral',this)">Orchestral</button>
+          <button class="cat-fpill" onclick="catTagClick('folk',this)">Folk</button>
+          <button class="cat-fpill" onclick="catTagClick('rock',this)">Rock</button>
+          <button class="cat-fpill" onclick="catTagClick('classique',this)">Classique</button>
+          <button class="cat-fpill" onclick="catTagClick('reggae',this)">Reggae</button>
+          <button class="cat-fpill" onclick="catTagClick('blues',this)">Blues</button>
+          <button class="cat-fpill" onclick="catTagClick('swing',this)">Swing</button>
+          <button class="cat-fpill" onclick="catTagClick('pop',this)">Pop</button>
+          <button class="cat-fpill" onclick="catTagClick('ambient',this)">Ambient</button>
+          <button class="cat-fpill" onclick="catTagClick('world',this)">World</button>
+          <button class="cat-fpill" onclick="catTagClick('funk',this)">Funk</button>
+          <button class="cat-fpill" onclick="catTagClick('latino',this)">Latino</button>
+        </div>
+      </div>
+      <div class="cat-section">
+        <div class="cat-section-hd" onclick="toggleCatSection(this)"><span>Instrument</span><span class="cat-chevron">▾</span></div>
+        <div class="cat-section-body">
+          <button class="cat-fpill" onclick="catTagClick('piano',this)">Piano</button>
+          <button class="cat-fpill" onclick="catTagClick('guitare',this)">Guitare</button>
+          <button class="cat-fpill" onclick="catTagClick('cordes',this)">Cordes</button>
+          <button class="cat-fpill" onclick="catTagClick('cuivres',this)">Cuivres</button>
+          <button class="cat-fpill" onclick="catTagClick('percussions',this)">Percussions</button>
+          <button class="cat-fpill" onclick="catTagClick('synthé',this)">Synthé</button>
+          <button class="cat-fpill" onclick="catTagClick('accordéon',this)">Accordéon</button>
+          <button class="cat-fpill" onclick="catTagClick('violon',this)">Violon</button>
+          <button class="cat-fpill" onclick="catTagClick('batterie',this)">Batterie</button>
+          <button class="cat-fpill" onclick="catTagClick('basse',this)">Basse</button>
+          <button class="cat-fpill" onclick="catTagClick('flûte',this)">Flûte</button>
+        </div>
+      </div>
+      <div class="cat-section">
+        <div class="cat-section-hd" onclick="toggleCatSection(this)"><span>Analyse audio</span><span class="cat-chevron">▾</span></div>
+        <div class="cat-section-body">
+          <button class="cat-fpill" onclick="catTagClick('calme',this)">Calme</button>
+          <button class="cat-fpill" onclick="catTagClick('action',this)">Action</button>
+          <button class="cat-fpill" onclick="catTagClick('épique',this)">Épique</button>
+          <button class="cat-fpill" onclick="catTagClick('lent',this)">Lent</button>
+          <button class="cat-fpill" onclick="catTagClick('modéré',this)">Modéré</button>
+          <button class="cat-fpill" onclick="catTagClick('rapide',this)">Rapide</button>
+          <button class="cat-fpill" onclick="catTagClick('majeur',this)">Majeur</button>
+          <button class="cat-fpill" onclick="catTagClick('mineur',this)">Mineur</button>
+          <button class="cat-fpill" onclick="catTagClick('graves',this)">Graves</button>
+          <button class="cat-fpill" onclick="catTagClick('aigus',this)">Aigus</button>
+        </div>
+      </div>
+      <div class="cat-section">
+        <div class="cat-section-hd"><span>Durée</span></div>
+        <div class="cat-section-body dur-body">
+          <button class="cat-dur-btn active" id="cat-dur-all" onclick="catSelectDur(null,this)">Toutes durées</button>
+          <button class="cat-dur-btn" onclick="catSelectDur('short',this)">Moins de 1 min</button>
+          <button class="cat-dur-btn" onclick="catSelectDur('medium',this)">1 à 3 minutes</button>
+          <button class="cat-dur-btn" onclick="catSelectDur('long',this)">Plus de 3 min</button>
+        </div>
+      </div>
+      <div class="cat-section">
+        <div class="cat-section-hd" onclick="toggleCatSection(this)"><span>Playlists</span><span class="cat-chevron">▾</span></div>
+        <div class="cat-section-body pl-body" id="cat-pl-list"></div>
+      </div>
+      <button class="cat-reset-btn" onclick="resetCatFilters()">Réinitialiser les filtres</button>
+    </aside>
+    <!-- MAIN CONTENT -->
+    <div class="cat-main">
+      <div class="search-active-bar" id="search-active-bar"></div>
+      <div id="pl-nav" style="display:none"></div>
+      <div id="tag-nav" style="display:none"></div>
+      <div class="tracks-section">
+        <div class="section-header">
+          <span class="section-title" id="section-title">Catalogue complet</span>
+          <span class="section-count" id="section-count"></span>
+          <span class="section-tag" id="section-tag" style="display:none"></span>
+        </div>
+        <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span></span><span></span><span></span><span></span></div>
+        <div id="track-list" class="track-list"><div class="loading"><span class="ld">·</span><span class="ld">·</span><span class="ld">·</span> Chargement</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAVORIS -->
+<div class="view" id="view-favoris">
+  <div class="fav-share-bar">
+    <span class="fav-count-label" id="fav-count-label">0 favori</span>
+    <button class="fav-share-btn" onclick="shareFavoris()">🔗 Partager ma sélection</button>
   </div>
   <div class="tracks-section">
     <div class="section-header">
-      <span class="section-title" id="section-title">Catalogue complet</span>
-      <span class="section-count" id="section-count"></span>
-      <span class="section-tag" id="section-tag" style="display:none"></span>
+      <span class="section-title">Mes Favoris</span>
+      <span class="section-count" id="fav-section-count"></span>
     </div>
-    <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span></span><span></span><span></span></div>
-    <div id="track-list" class="track-list"><div class="loading"><span class="ld">·</span><span class="ld">·</span><span class="ld">·</span> Chargement</div></div>
+    <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span></span><span></span><span></span><span></span></div>
+    <div id="fav-track-list" class="track-list"></div>
   </div>
 </div>
 
@@ -482,6 +954,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
         <button class="btn-play-main" id="btn-play" onclick="togglePlay()">▶</button>
         <button class="btn-ctrl" onclick="nextTrack()">⏭</button>
         <button class="btn-extra" id="btn-repeat" onclick="toggleRepeat()" title="Répéter">↺</button>
+        <button class="btn-mute" id="btn-mute" onclick="toggleMute()" title="Couper / remettre le son">🔊</button>
       </div>
       <div class="progress-wrap">
         <span class="time" id="time-cur">0:00</span>
@@ -500,6 +973,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 </div>
 <div class="copy-toast" id="copy-toast">🔗 Lien copié !</div>
 </div>
+<input type="hidden" id="search" value="">
 <audio id="audio"></audio>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
 
@@ -507,12 +981,20 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 const PASSWORD='osm2026';
 const audio=document.getElementById('audio');
 
+/* ── HERO VIDEO ALÉATOIRE ── */
+(function(){
+  const HERO_VIDEOS=['_w8YqdGpahU','kpoanOlb3-w','AhW7Aao_eIc','9SVickQdqGM','RBA9PbuhCw8','dk0eLFVj4Hc'];
+  const id=HERO_VIDEOS[Math.floor(Math.random()*HERO_VIDEOS.length)];
+  const src=`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=0&disablekb=1&vq=hd1080`;
+  document.getElementById('hero-yt-iframe').src=src;
+})();
+
 /* ── WAVESURFER ── */
 const ws = WaveSurfer.create({
   container: '#waveform-container',
   media: audio,
-  waveColor: 'rgba(229,9,20,0.28)',
-  progressColor: '#E50914',
+  waveColor: 'rgba(255,85,0,0.28)',
+  progressColor: '#FF5500',
   cursorColor: 'rgba(255,255,255,0.45)',
   cursorWidth: 1,
   height: 32,
@@ -531,14 +1013,24 @@ function wsLoad(url){
 }
 ws.on('ready', ()=>{
   document.getElementById('waveform-container').classList.remove('ws-loading');
-  if(wsPendingPlay){ wsPendingPlay=false; ws.play(); }
+  if(wsPendingPlay){
+    wsPendingPlay=false;
+    const p=ws.play();
+    if(p instanceof Promise) p.catch(()=>showAutoplayBanner());
+  }
 });
 ws.on('timeupdate', (t)=>{
   document.getElementById('time-cur').textContent=fmt2(t);
   const dur=ws.getDuration();
   if(dur) document.getElementById('time-dur').textContent=fmt2(dur);
 });
-ws.on('finish', ()=>{ document.getElementById('btn-play').textContent='▶'; nextTrack(); });
+ws.on('finish', ()=>{
+  document.getElementById('btn-play').textContent='▶';
+  if(bgMode){
+    const candidates=RECOMMENDS_CONFIG.map(cfg=>allTracks.find(t=>t.playlistLabel===cfg.playlist)).filter(Boolean);
+    if(candidates.length){const nx=candidates[Math.floor(Math.random()*candidates.length)];setTimeout(()=>autoPlayBg(nx.id),400);}
+  }else{nextTrack();}
+});
 ws.on('play',   ()=>{ document.getElementById('btn-play').textContent='⏸'; });
 ws.on('pause',  ()=>{ document.getElementById('btn-play').textContent='▶'; });
 
@@ -557,47 +1049,47 @@ if(sessionStorage.getItem('osm_ok')==='1'){
 
 const THEMES=[
   {label:"Tension & Action",playlists:[
-    {key:"ACTION - POURSUITE - COMBAT - CHAOS - SPORT - EXTREME - URGENT",label:"Action",color:"#E50914",photo:"https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&q=80",genres:"Orchestral · Électro hybride · Percussions · Rock épique",desc:"Des musiques taillées pour les séquences à haute intensité : courses-poursuites, scènes de combat, climax dramatiques et montages sportifs. Rythmiques percussives, cordes tendues, cuivres puissants au service de l'adrénaline.",tags:["action","poursuite","combat","sport","urgent","adrénaline","trailer","cinéma"]},
-    {key:"HARD ROCK - METAL - URGENT - RAGE - EXTREME - AGITATION - RAPIDE",label:"Hard Rock",color:"#c0392b",photo:"https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=800&q=80",genres:"Hard rock · Metal · Heavy · Thrash · Punk rock",desc:"La puissance brute du rock et du metal pour les séquences d'intensité maximale. Guitares saturées, double pédale, riffs implacables au service des séquences de conflit et de dépassement de soi.",tags:["hard rock","metal","rage","riff","extrême","sport extrême","impact"]},
-    {key:"SUSPENSE - INVESTIGATION - ENQUETE - ANGOISSE - ESPIONNAGE - POLICIER",label:"Suspense",color:"#2980b9",photo:"https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=800&q=80",genres:"Thriller · Dark ambient · Orchestral tension · Néo-noir",desc:"Des musiques de tension et de mystère pour les univers policiers, les thrillers et les narrations à suspense. Ostinatos inquiétants, silences calculés et harmonies ambiguës qui maintiennent le spectateur en haleine.",tags:["suspense","thriller","enquête","tension","espionnage","policier","mystère"]},
-    {key:"PARANORMAL - EXPERIMENTAL - HYPNOTIQUE",label:"Paranormal",color:"#6a0dad",photo:"https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=800&q=80",genres:"Dark ambient · Expérimental · Drone · Musique concrète",desc:"Des sonorités hors du commun pour les univers qui défient la réalité. Textures sonores étranges, dissonances calculées, drones hypnotiques et ambiances inquiétantes qui instaurent un climat de mystère.",tags:["paranormal","mystère","angoisse","hypnotique","drone","thriller","expérimental"]},
+    {key:"ACTION - POURSUITE - COMBAT - CHAOS - SPORT - EXTREME - URGENT",label:"Action",color:"#FF5500",photo:"https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&q=80",genres:"Orchestral · Électro hybride · Percussions · Rock épique",desc:"Des musiques taillées pour les séquences à haute intensité : courses-poursuites, scènes de combat, climax dramatiques et montages sportifs. Rythmiques percussives, cordes tendues, cuivres puissants au service de l'adrénaline.",tags:["action","poursuite","combat","sport","urgent","adrénaline","trailer","cinéma","batterie","percussions","cuivres","orchestre","guitare électrique"]},
+    {key:"HARD ROCK - METAL - URGENT - RAGE - EXTREME - AGITATION - RAPIDE",label:"Hard Rock",color:"#c0392b",photo:"https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=800&q=80",genres:"Hard rock · Metal · Heavy · Thrash · Punk rock",desc:"La puissance brute du rock et du metal pour les séquences d'intensité maximale. Guitares saturées, double pédale, riffs implacables au service des séquences de conflit et de dépassement de soi.",tags:["hard rock","metal","rage","riff","extrême","sport extrême","impact","guitare","guitare électrique","basse","batterie","distorsion"]},
+    {key:"SUSPENSE - INVESTIGATION - ENQUETE - ANGOISSE - ESPIONNAGE - POLICIER",label:"Suspense",color:"#2980b9",photo:"https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=800&q=80",genres:"Thriller · Dark ambient · Orchestral tension · Néo-noir",desc:"Des musiques de tension et de mystère pour les univers policiers, les thrillers et les narrations à suspense. Ostinatos inquiétants, silences calculés et harmonies ambiguës qui maintiennent le spectateur en haleine.",tags:["suspense","thriller","enquête","tension","espionnage","policier","mystère","piano","cordes","violon","contrebasse","synthétiseur"]},
+    {key:"PARANORMAL - EXPERIMENTAL - HYPNOTIQUE",label:"Paranormal",color:"#6a0dad",photo:"https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=800&q=80",genres:"Dark ambient · Expérimental · Drone · Musique concrète",desc:"Des sonorités hors du commun pour les univers qui défient la réalité. Textures sonores étranges, dissonances calculées, drones hypnotiques et ambiances inquiétantes qui instaurent un climat de mystère.",tags:["paranormal","mystère","angoisse","hypnotique","drone","thriller","expérimental","synthétiseur","orgue","clavier","cordes"]},
   ]},
   {label:"Émotion & Intimité",playlists:[
-    {key:"PIANO - CLASSIQUE - INTIMISTE - CALME - MELANCOLIQUE - COSY - DOUX",label:"Piano",color:"#95a5a6",photo:"https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=800&q=80",genres:"Piano solo · Néo-classique · Classique contemporain · Ambient piano",desc:"Le piano seul ou accompagné pour les moments les plus intimes et les plus touchants. Des compositions délicates aux harmonies raffinées qui créent une atmosphère de recueillement, de tendresse et de beauté simple.",tags:["piano","classique","intimiste","calme","mélancolique","doux","émotion","solo"]},
-    {key:"ROMANCE - MELANCOLIQUE - AMOUR - NOSTALGIE - TRISTESSE - DRAME",label:"Romance",color:"#e91e63",photo:"https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80",genres:"Cinematic romance · Orchestral drama · Néo-classique · Piano & cordes",desc:"Des musiques pour les grandes émotions : l'amour, la perte, le souvenir et le déchirement intérieur. Arrangements soyeux, mélodies qui brisent le cœur et harmonies suspendues.",tags:["romance","amour","nostalgie","drame","sentimental","rupture","émotion"]},
-    {key:"NEUTRE- MELANCOLIE - TRISTESSE",label:"Mélancolie",color:"#5d6d7e",photo:"https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800&q=80",genres:"Néo-classique · Piano ambiant · Cordes · Minimaliste",desc:"Des textures sonores douces et mélancoliques pour les séquences chargées d'émotion contenue. Musiques introspectives, harmonies suspendues et arrangements minimalistes qui laissent de l'espace à l'image.",tags:["mélancolie","tristesse","introspection","minimaliste","portrait","intime"]},
-    {key:"NEUTRE - POSITIF - HAPPY",label:"Neutre Positif",color:"#2ecc71",photo:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",genres:"Corporate · Acoustic pop · Light instrumental · Easy listening",desc:"Des musiques légères et bienveillantes pour accompagner les contenus institutionnels, les témoignages et les séquences du quotidien. Atmosphères positives qui créent un contexte sonore neutre et professionnel.",tags:["positif","corporate","léger","institutionnel","interview","tutoriel"]},
+    {key:"PIANO - CLASSIQUE - INTIMISTE - CALME - MELANCOLIQUE - COSY - DOUX",label:"Piano",color:"#95a5a6",photo:"https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=800&q=80",genres:"Piano solo · Néo-classique · Classique contemporain · Ambient piano",desc:"Le piano seul ou accompagné pour les moments les plus intimes et les plus touchants. Des compositions délicates aux harmonies raffinées qui créent une atmosphère de recueillement, de tendresse et de beauté simple.",tags:["piano","classique","intimiste","calme","mélancolique","doux","émotion","solo","clavier","cordes","violon","violoncelle"]},
+    {key:"ROMANCE - MELANCOLIQUE - AMOUR - NOSTALGIE - TRISTESSE - DRAME",label:"Romance",color:"#e91e63",photo:"https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&q=80",genres:"Cinematic romance · Orchestral drama · Néo-classique · Piano & cordes",desc:"Des musiques pour les grandes émotions : l'amour, la perte, le souvenir et le déchirement intérieur. Arrangements soyeux, mélodies qui brisent le cœur et harmonies suspendues.",tags:["romance","amour","nostalgie","drame","sentimental","rupture","émotion","violon","cordes","violoncelle","piano","alto"]},
+    {key:"NEUTRE- MELANCOLIE - TRISTESSE",label:"Mélancolie",color:"#5d6d7e",photo:"https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800&q=80",genres:"Néo-classique · Piano ambiant · Cordes · Minimaliste",desc:"Des textures sonores douces et mélancoliques pour les séquences chargées d'émotion contenue. Musiques introspectives, harmonies suspendues et arrangements minimalistes qui laissent de l'espace à l'image.",tags:["mélancolie","tristesse","introspection","minimaliste","portrait","intime","piano","cordes","violon","violoncelle","alto"]},
+    {key:"NEUTRE - POSITIF - HAPPY",label:"Neutre Positif",color:"#2ecc71",photo:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",genres:"Corporate · Acoustic pop · Light instrumental · Easy listening",desc:"Des musiques légères et bienveillantes pour accompagner les contenus institutionnels, les témoignages et les séquences du quotidien. Atmosphères positives qui créent un contexte sonore neutre et professionnel.",tags:["positif","corporate","léger","institutionnel","interview","tutoriel","guitare acoustique","piano","ukulélé","clavier"]},
   ]},
   {label:"Épique & Cinématique",playlists:[
-    {key:"ORCHESTRAL - EPIQUE - SYMPHONIQUE - HARMONIE - HEROIQUE",label:"Orchestral",color:"#8e44ad",photo:"https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800&q=80",genres:"Orchestral · Symphonique · Épique · Néo-romantique · Choral",desc:"La puissance de l'orchestre symphonique pour les images qui demandent grandeur et émotion. Cordes montantes, cuivres majestueux, chœurs et percussions au service des moments de révélation et de victoire.",tags:["orchestral","épique","symphonique","héroïque","cordes","cuivres","cinéma","trailer"]},
-    {key:"ATMOSPHERE - GRANDS ESPACES - AERIEN - COSMIQUE - ABYSSAL",label:"Atmosphère",color:"#4a90d9",photo:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&q=80",genres:"Ambient · Néo-classique · Drone · Orchestral contemplatif · Post-rock",desc:"Musiques contemplatrices pour des images de grand format : paysages naturels, voyages spatiaux, profondeurs sous-marines. Textures aériennes et nappes synthétiques qui donnent de l'air et de la profondeur.",tags:["atmosphère","cosmique","aérien","drone","documentaire","nature","espace"]},
-    {key:"TRANSITION - JINGLE - VIRGULE - PONCTUATION - RISE - WHOOSH",label:"Transition",color:"#7f8c8d",photo:"https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=800&q=80",genres:"Jingle · Sound design · Sting · Rise · Transition musicale",desc:"Des éléments sonores courts et efficaces pour ponctuer vos montages avec précision. Jingles d'identification, rises dramatiques, whooshes et stings conçus pour marquer les changements de séquence.",tags:["jingle","sting","TV","podcast","court","efficace","montage"]},
-    {key:"LOOPS - BOUCLE - LOOPING - BPM - METRONOME - ADAPTIVE",label:"Loops",color:"#1abc9c",photo:"https://images.unsplash.com/photo-1516223725307-6f76b9ec8742?w=800&q=80",genres:"Électro · Ambient loop · Drum loop · Melodic loop · Adaptative",desc:"Des boucles rythmiques et mélodiques conçues pour s'adapter à tous les formats. Idéal pour les monteurs qui travaillent sur des séquences à longueur variable ou des interfaces interactives.",tags:["boucle","BPM","adaptive","jeu vidéo","montage","digital","flexible"]},
+    {key:"ORCHESTRAL - EPIQUE - SYMPHONIQUE - HARMONIE - HEROIQUE",label:"Orchestral",color:"#8e44ad",photo:"https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800&q=80",genres:"Orchestral · Symphonique · Épique · Néo-romantique · Choral",desc:"La puissance de l'orchestre symphonique pour les images qui demandent grandeur et émotion. Cordes montantes, cuivres majestueux, chœurs et percussions au service des moments de révélation et de victoire.",tags:["orchestral","épique","symphonique","héroïque","cordes","cuivres","cinéma","trailer","violon","violoncelle","contrebasse","alto","trompette","trombone","cor","flûte","hautbois","percussions","timbales","orchestre"]},
+    {key:"ATMOSPHERE - GRANDS ESPACES - AERIEN - COSMIQUE - ABYSSAL",label:"Atmosphère",color:"#4a90d9",photo:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&q=80",genres:"Ambient · Néo-classique · Drone · Orchestral contemplatif · Post-rock",desc:"Musiques contemplatrices pour des images de grand format : paysages naturels, voyages spatiaux, profondeurs sous-marines. Textures aériennes et nappes synthétiques qui donnent de l'air et de la profondeur.",tags:["atmosphère","cosmique","aérien","drone","documentaire","nature","espace","synthétiseur","pad","piano","guitare","clavier"]},
+    {key:"TRANSITION - JINGLE - VIRGULE - PONCTUATION - RISE - WHOOSH",label:"Transition",color:"#7f8c8d",photo:"https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=800&q=80",genres:"Jingle · Sound design · Sting · Rise · Transition musicale",desc:"Des éléments sonores courts et efficaces pour ponctuer vos montages avec précision. Jingles d'identification, rises dramatiques, whooshes et stings conçus pour marquer les changements de séquence.",tags:["jingle","sting","TV","podcast","court","efficace","montage","percussions","cuivres","synthétiseur","batterie"]},
+    {key:"LOOPS - BOUCLE - LOOPING - BPM - METRONOME - ADAPTIVE",label:"Loops",color:"#1abc9c",photo:"https://images.unsplash.com/photo-1516223725307-6f76b9ec8742?w=800&q=80",genres:"Électro · Ambient loop · Drum loop · Melodic loop · Adaptative",desc:"Des boucles rythmiques et mélodiques conçues pour s'adapter à tous les formats. Idéal pour les monteurs qui travaillent sur des séquences à longueur variable ou des interfaces interactives.",tags:["boucle","BPM","adaptive","jeu vidéo","montage","digital","flexible","batterie","basse","synthétiseur","guitare","clavier"]},
   ]},
   {label:"Groove & Énergie",playlists:[
-    {key:"GROOVY - FUNKY - DISCO - RYTHMIQUE - GIMMICK - VIF - EVEILLE",label:"Groovy",color:"#f39c12",photo:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80",genres:"Funk · Disco · Soul · Groove · R&B funk · Nu-funk",desc:"Des rythmes irrésistibles et des lignes de basse groovy pour les séquences pleines de vie. Guitares funk, cuivres incisifs, rythmiques disco et gimmicks mémorables qui donnent du punch à l'image.",tags:["groovy","funky","disco","basse","cuivres","pub","TV","lifestyle"]},
-    {key:"ELECTRO - ELECTRONIQUE - BEAT - CLUBBING - DEEJAYING - PARTY",label:"Électro",color:"#00c2ff",photo:"https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80",genres:"Électro · House · Techno · EDM · Deep house · Synthwave",desc:"Des productions électroniques modernes pour les univers urbains et les atmosphères de club. Synthés analogiques, beats 4/4, drops percutants et textures numériques au service des images contemporaines.",tags:["électro","beat","club","EDM","dance","nocturne","lifestyle"]},
-    {key:"ELECTRO - POP - ACTUEL - URBAIN - ARTY - ENERGIQUE - CORPORATE",label:"Électro-Pop",color:"#9b59b6",photo:"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",genres:"Électro-pop · Indie pop · Corporate pop · Future pop",desc:"Des sonorités pop électroniques actuelles, entre énergie positive et modernité assumée. Mélodie accessible et production soignée pour les contenus corporate, les publicités et les vlogs dynamiques.",tags:["électro pop","actuel","brand","publicité","lifestyle","dynamique","contemporain"]},
-    {key:"ROCK - RIFFS - GUITARE - ELECTRIQUE - GARAGE - LIVE - ROCK N ROLL",label:"Rock",color:"#e74c3c",photo:"https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&q=80",genres:"Rock · Garage rock · Rock alternatif · Indie rock · Classic rock",desc:"L'énergie brute du rock électrique pour les images qui demandent caractère et authenticité. Riffs de guitare incisifs, batterie puissante et son garage qui évoquent la scène et la liberté.",tags:["rock","riff","guitare","live","attitude","sport","rébellion"]},
+    {key:"GROOVY - FUNKY - DISCO - RYTHMIQUE - GIMMICK - VIF - EVEILLE",label:"Groovy",color:"#f39c12",photo:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80",genres:"Funk · Disco · Soul · Groove · R&B funk · Nu-funk",desc:"Des rythmes irrésistibles et des lignes de basse groovy pour les séquences pleines de vie. Guitares funk, cuivres incisifs, rythmiques disco et gimmicks mémorables qui donnent du punch à l'image.",tags:["groovy","funky","disco","basse","cuivres","pub","TV","lifestyle","guitare funk","batterie","trompette","saxophone","trombone","basse électrique"]},
+    {key:"ELECTRO - ELECTRONIQUE - BEAT - CLUBBING - DEEJAYING - PARTY",label:"Électro",color:"#00c2ff",photo:"https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80",genres:"Électro · House · Techno · EDM · Deep house · Synthwave",desc:"Des productions électroniques modernes pour les univers urbains et les atmosphères de club. Synthés analogiques, beats 4/4, drops percutants et textures numériques au service des images contemporaines.",tags:["électro","beat","club","EDM","dance","nocturne","lifestyle","synthétiseur","boîte à rythmes","basse synthé","clavier","arp"]},
+    {key:"ELECTRO - POP - ACTUEL - URBAIN - ARTY - ENERGIQUE - CORPORATE",label:"Électro-Pop",color:"#9b59b6",photo:"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",genres:"Électro-pop · Indie pop · Corporate pop · Future pop",desc:"Des sonorités pop électroniques actuelles, entre énergie positive et modernité assumée. Mélodie accessible et production soignée pour les contenus corporate, les publicités et les vlogs dynamiques.",tags:["électro pop","actuel","brand","publicité","lifestyle","dynamique","contemporain","synthétiseur","guitare","basse","clavier","batterie"]},
+    {key:"ROCK - RIFFS - GUITARE - ELECTRIQUE - GARAGE - LIVE - ROCK N ROLL",label:"Rock",color:"#e74c3c",photo:"https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&q=80",genres:"Rock · Garage rock · Rock alternatif · Indie rock · Classic rock",desc:"L'énergie brute du rock électrique pour les images qui demandent caractère et authenticité. Riffs de guitare incisifs, batterie puissante et son garage qui évoquent la scène et la liberté.",tags:["rock","riff","guitare","live","attitude","sport","rébellion","guitare électrique","basse","batterie","guitare acoustique"]},
   ]},
   {label:"Acoustique & Folk",playlists:[
-    {key:"FOLK ACOUSTIQUE - ELECTRO ACOUSTIQUE - RELAX - GUITARE - HARMONY",label:"Folk Acoustique",color:"#6db33f",photo:"https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&q=80",genres:"Folk · Acoustic pop · Indie folk · Singer-songwriter",desc:"Des musiques douces et organiques pour les moments de sincérité et de connexion humaine. Guitares acoustiques, arrangements épurés qui créent un sentiment d'authenticité et de proximité.",tags:["folk","acoustique","relax","guitare","intimiste","nature","authentique"]},
-    {key:"POP ACOUSTIQUE - SOFT - BALLADE - ACTUEL - ROAD - CHALEUREUX",label:"Pop Acoustique",color:"#27ae60",photo:"https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80",genres:"Acoustic pop · Indie folk · Singer-songwriter · Soft rock",desc:"Des ballades pop acoustiques contemporaines pour les récits de voyage et les histoires personnelles. Guitares chaleureuses, mélodies mémorables qui créent un lien émotionnel immédiat.",tags:["ballade","road","chaleureux","feel-good","mélodie","voyage","lifestyle"]},
-    {key:"COUNTRY BLUES - DOBRO - BOOGIE-WOOGIE - GUITARE - USA",label:"Country Blues",color:"#c49a2a",photo:"https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=800&q=80",genres:"Country · Blues · Americana · Folk rock · Boogie-woogie",desc:"L'authenticité americana au service de l'image : guitares slide, dobro, harmonica et rythmiques boogie qui évoquent les grands espaces américains et l'héritage musical du Delta.",tags:["blues","dobro","americana","western","vintage","road movie","nostalgie"]},
+    {key:"FOLK ACOUSTIQUE - ELECTRO ACOUSTIQUE - RELAX - GUITARE - HARMONY",label:"Folk Acoustique",color:"#6db33f",photo:"https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&q=80",genres:"Folk · Acoustic pop · Indie folk · Singer-songwriter",desc:"Des musiques douces et organiques pour les moments de sincérité et de connexion humaine. Guitares acoustiques, arrangements épurés qui créent un sentiment d'authenticité et de proximité.",tags:["folk","acoustique","relax","guitare","intimiste","nature","authentique","guitare acoustique","banjo","mandoline","violon","ukulélé"]},
+    {key:"POP ACOUSTIQUE - SOFT - BALLADE - ACTUEL - ROAD - CHALEUREUX",label:"Pop Acoustique",color:"#27ae60",photo:"https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80",genres:"Acoustic pop · Indie folk · Singer-songwriter · Soft rock",desc:"Des ballades pop acoustiques contemporaines pour les récits de voyage et les histoires personnelles. Guitares chaleureuses, mélodies mémorables qui créent un lien émotionnel immédiat.",tags:["ballade","road","chaleureux","feel-good","mélodie","voyage","lifestyle","guitare acoustique","piano","ukulélé","cordes","voix"]},
+    {key:"COUNTRY BLUES - DOBRO - BOOGIE-WOOGIE - GUITARE - USA",label:"Country Blues",color:"#c49a2a",photo:"https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=800&q=80",genres:"Country · Blues · Americana · Folk rock · Boogie-woogie",desc:"L'authenticité americana au service de l'image : guitares slide, dobro, harmonica et rythmiques boogie qui évoquent les grands espaces américains et l'héritage musical du Delta.",tags:["blues","dobro","americana","western","vintage","road movie","nostalgie","guitare","harmonica","banjo","pedal steel","contrebasse","batterie"]},
   ]},
   {label:"Jazz & Rétro",playlists:[
-    {key:"SWING - JAZZ - RYTHME - BIG BAND - JIVE - MANOUCHE",label:"Swing Jazz",color:"#f39c12",photo:"https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80",genres:"Jazz · Swing · Manouche · Big band · Bebop · Jazz traditionnel",desc:"L'élégance intemporelle du jazz et du swing pour les images qui respirent la sophistication. Big bands généreux, jazz manouche chaleureux et rythmes jive pour les univers festifs et rétro.",tags:["jazz","big band","manouche","élégance","rétro","années 40","années 50"]},
-    {key:"PANAME - PARIS - RETRO - ACCORDEON - PIGALLE - MONTMARTRE",label:"Paname",color:"#d35400",photo:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80",genres:"Chanson française · Musette · Jazz manouche · Cabaret · Accordéon",desc:"L'âme de Paris et de la chanson française pour habiller les images de la capitale. Accordéon nostalgique, guitare manouche et ambiances de café qui évoquent Montmartre et le charme de Paname.",tags:["Paris","accordéon","Montmartre","bistrot","chanson française","rétro","vintage"]},
-    {key:"REGGAE - REGGATON - SKA - FUSION - JAMAICA",label:"Reggae",color:"#16a085",photo:"https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80",genres:"Reggae · Ska · Dancehall · Reggaeton · Dub · Tropical fusion",desc:"Les rythmes ensoleillés et positifs des Caraïbes pour des images pleines de vie et de liberté. Offbeats caractéristiques, lignes de basse profondes et énergie fusion qui évoquent l'été et la plage.",tags:["jamaïque","ska","tropical","roots","festif","été","liberté"]},
+    {key:"SWING - JAZZ - RYTHME - BIG BAND - JIVE - MANOUCHE",label:"Swing Jazz",color:"#f39c12",photo:"https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80",genres:"Jazz · Swing · Manouche · Big band · Bebop · Jazz traditionnel",desc:"L'élégance intemporelle du jazz et du swing pour les images qui respirent la sophistication. Big bands généreux, jazz manouche chaleureux et rythmes jive pour les univers festifs et rétro.",tags:["jazz","big band","manouche","élégance","rétro","années 40","années 50","trompette","saxophone","contrebasse","batterie","piano","clarinette","trombone","guitare manouche"]},
+    {key:"PANAME - PARIS - RETRO - ACCORDEON - PIGALLE - MONTMARTRE",label:"Paname",color:"#d35400",photo:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80",genres:"Chanson française · Musette · Jazz manouche · Cabaret · Accordéon",desc:"L'âme de Paris et de la chanson française pour habiller les images de la capitale. Accordéon nostalgique, guitare manouche et ambiances de café qui évoquent Montmartre et le charme de Paname.",tags:["Paris","accordéon","Montmartre","bistrot","chanson française","rétro","vintage","guitare manouche","contrebasse","violon","piano","clarinette"]},
+    {key:"REGGAE - REGGATON - SKA - FUSION - JAMAICA",label:"Reggae",color:"#16a085",photo:"https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80",genres:"Reggae · Ska · Dancehall · Reggaeton · Dub · Tropical fusion",desc:"Les rythmes ensoleillés et positifs des Caraïbes pour des images pleines de vie et de liberté. Offbeats caractéristiques, lignes de basse profondes et énergie fusion qui évoquent l'été et la plage.",tags:["jamaïque","ska","tropical","roots","festif","été","liberté","basse","batterie","guitare","cuivres","orgue","trompette"]},
   ]},
   {label:"Légèreté & Humour",playlists:[
-    {key:"BURLESQUE - HUMOUR - COMIQUE - THEATRAL - LEGER - COCASSE",label:"Burlesque",color:"#f5a623",photo:"https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80",genres:"Cartoon · Orchestral comique · Circus · Vaudeville · Comédie musicale",desc:"Une sélection légère et espiègle pour les scènes comiques et les situations cocasses. Musiques de cartoon, orchestrations théâtrales et mélodies bondissantes qui soulignent le gag et rythment la comédie.",tags:["humour","comique","cartoon","légèreté","animation","publicité","décalé"]},
-    {key:"LUDIQUE - ENFANTIN - DIVERTISSANT - THEATRAL - DROLE - AMUSANT",label:"Ludique",color:"#f1c40f",photo:"https://images.unsplash.com/photo-1566501206188-5dd0cf160a0e?w=800&q=80",genres:"Children's music · Cartoon · Orchestral fantaisie · Musical theatre",desc:"Un univers sonore espiègle et coloré pour les contenus jeunesse et les émissions familiales. Mélodies simples et accrocheuses, orchestrations théâtrales qui captivent les jeunes audiences.",tags:["enfantin","jeunesse","famille","magie","coloré","éducatif","animation"]},
-    {key:"PIZZICATO - STACCATO - DRAMEDY - BETISIER - CARTOON - ANIMATION",label:"Pizzicato",color:"#e91e8c",photo:"https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?w=800&q=80",genres:"Orchestral léger · Cartoon · Pizzicato · Chamber pop · Dramedy",desc:"Des orchestrations légères spécialement calibrées pour les contenus mixant humour et émotion. Pizzicatos de cordes, staccatos espièges qui soulignent le gag et donnent du rebond aux séquences.",tags:["staccato","espiègle","cartoon","bêtisier","making-of","feel-good","famille"]},
+    {key:"BURLESQUE - HUMOUR - COMIQUE - THEATRAL - LEGER - COCASSE",label:"Burlesque",color:"#f5a623",photo:"https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80",genres:"Cartoon · Orchestral comique · Circus · Vaudeville · Comédie musicale",desc:"Une sélection légère et espiègle pour les scènes comiques et les situations cocasses. Musiques de cartoon, orchestrations théâtrales et mélodies bondissantes qui soulignent le gag et rythment la comédie.",tags:["humour","comique","cartoon","légèreté","animation","publicité","décalé","orchestre","cuivres","percussions","tuba","trombone","clarinette"]},
+    {key:"LUDIQUE - ENFANTIN - DIVERTISSANT - THEATRAL - DROLE - AMUSANT",label:"Ludique",color:"#f1c40f",photo:"https://images.unsplash.com/photo-1566501206188-5dd0cf160a0e?w=800&q=80",genres:"Children's music · Cartoon · Orchestral fantaisie · Musical theatre",desc:"Un univers sonore espiègle et coloré pour les contenus jeunesse et les émissions familiales. Mélodies simples et accrocheuses, orchestrations théâtrales qui captivent les jeunes audiences.",tags:["enfantin","jeunesse","famille","magie","coloré","éducatif","animation","glockenspiel","xylophone","percussions","flûte","piano","triangle"]},
+    {key:"PIZZICATO - STACCATO - DRAMEDY - BETISIER - CARTOON - ANIMATION",label:"Pizzicato",color:"#e91e8c",photo:"https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?w=800&q=80",genres:"Orchestral léger · Cartoon · Pizzicato · Chamber pop · Dramedy",desc:"Des orchestrations légères spécialement calibrées pour les contenus mixant humour et émotion. Pizzicatos de cordes, staccatos espièges qui soulignent le gag et donnent du rebond aux séquences.",tags:["staccato","espiègle","cartoon","bêtisier","making-of","feel-good","famille","cordes","violon","alto","violoncelle","pizzicato","clarinette"]},
   ]},
   {label:"Monde & Voyage",playlists:[
-    {key:"WORLD MUSIC - ETHNIQUE - CULTURE - METISSAGE - TRADITIONNEL",label:"World Music",color:"#16a085",photo:"https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&q=80",genres:"World music · Ethnic · Fusion · Folk du monde · Global sounds",desc:"Un tour du monde sonore pour les images qui célèbrent la diversité culturelle. Instruments traditionnels du monde entier, rythmes ethniques authentiques et arrangements fusion qui ouvrent l'image sur l'ailleurs.",tags:["ethnique","voyage","diversité","fusion","reportage","humanitaire","global"]},
-    {key:"LATINO - AUSTRAL - MEXICAN - AMERIQUE DU SUD - CULTURE - WESTERN",label:"Latino",color:"#e67e22",photo:"https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=800&q=80",genres:"Latin · Flamenco · Salsa · Bossa nova · Tango · Tex-Mex",desc:"Les rythmes chauds et colorés d'Amérique latine pour donner de l'exotisme à vos images. Guitares espagnoles, percussions latines et cuivres festifs qui évoquent les cultures mexicaine, brésilienne et cubaine.",tags:["salsa","tango","tropical","festif","documentaire","exotique","voyage"]},
+    {key:"WORLD MUSIC - ETHNIQUE - CULTURE - METISSAGE - TRADITIONNEL",label:"World Music",color:"#16a085",photo:"https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&q=80",genres:"World music · Ethnic · Fusion · Folk du monde · Global sounds",desc:"Un tour du monde sonore pour les images qui célèbrent la diversité culturelle. Instruments traditionnels du monde entier, rythmes ethniques authentiques et arrangements fusion qui ouvrent l'image sur l'ailleurs.",tags:["ethnique","voyage","diversité","fusion","reportage","humanitaire","global","djembé","kora","flûte","didgeridoo","percussions","balafon","oud","sitar"]},
+    {key:"LATINO - AUSTRAL - MEXICAN - AMERIQUE DU SUD - CULTURE - WESTERN",label:"Latino",color:"#e67e22",photo:"https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=800&q=80",genres:"Latin · Flamenco · Salsa · Bossa nova · Tango · Tex-Mex",desc:"Les rythmes chauds et colorés d'Amérique latine pour donner de l'exotisme à vos images. Guitares espagnoles, percussions latines et cuivres festifs qui évoquent les cultures mexicaine, brésilienne et cubaine.",tags:["salsa","tango","tropical","festif","documentaire","exotique","voyage","guitare espagnole","percussions latines","trompette","bongo","maracas","accordéon","contrebasse"]},
   ]},
 ];
 
@@ -607,7 +1099,7 @@ THEMES.forEach(t=>t.playlists.forEach(p=>{PLAYLIST_MAP[p.key]=p;TAGS_MAP[p.label
 function getLabel(key){return PLAYLIST_MAP[key]?PLAYLIST_MAP[key].label:key;}
 function getInfo(label){return Object.values(PLAYLIST_MAP).find(p=>p.label===label)||null;}
 
-let allTracks=[],filteredTracks=[],currentIndex=-1,currentFolder=null,activeTag=null,activeAudioFilters=new Set();
+let allTracks=[],filteredTracks=[],currentIndex=-1,currentFolder=null,activeTag=null;
 let queue=[],queueIndex=-1,playingFromQueue=false,shuffleOn=false,repeatOn=false;
 let currentDetailTracks=[],detailIndex=-1;
 
@@ -619,7 +1111,41 @@ function loadCatalogue(){
     allTracks=(data.tracks||[]).filter(t=>t.playlist!=='samples').map(t=>({...t,playlistLabel:getLabel(t.playlist)}));
     renderPlaylists();
     renderNavPills();
+    renderRecommends();
+    updateFavNav();
+    const params=new URLSearchParams(location.search);
+    const sharedFavs=params.get('favs');
+    if(sharedFavs){sharedFavs.split(',').forEach(id=>{if(id.trim())favorites.add(id.trim());});localStorage.setItem('osm-favs',JSON.stringify([...favorites]));updateFavNav();}
+    autoPlayReco();
   }).catch(()=>{document.getElementById('track-list').innerHTML='<div class="empty">Erreur de chargement.</div>';});
+}
+
+let bgMode=false;
+function autoPlayReco(){
+  const pool=allTracks.filter(t=>t.playlistLabel==='Neutre Positif');
+  if(!pool.length)return;
+  const track=pool[Math.floor(Math.random()*pool.length)];
+  setTimeout(()=>autoPlayBg(track.id),1500);
+}
+function autoPlayBg(id){
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  bgMode=true;
+  wsPendingPlay=true;
+  document.getElementById('waveform-container').classList.add('ws-loading');
+  ws.load(t.url);
+  document.getElementById('bg-speaker').classList.add('visible');
+}
+function exitBgMode(){
+  bgMode=false;
+  document.getElementById('bg-speaker').classList.remove('visible');
+}
+function showAutoplayBanner(){
+  document.getElementById('autoplay-banner').style.display='flex';
+}
+function hideAutoplayBanner(){
+  const b=document.getElementById('autoplay-banner');
+  b.style.opacity='0';
+  setTimeout(()=>b.style.display='none',300);
 }
 
 function showView(name){
@@ -630,6 +1156,8 @@ function showView(name){
   if(tab)tab.classList.add('active');
   else{document.getElementById('tab-playlists').classList.add('active');}
   if(name==='catalogue')filterTracks();
+  if(name==='favoris')renderFavoris();
+  if(name==='accueil')renderRecommends();
 }
 
 function renderPlaylists(){
@@ -679,17 +1207,19 @@ function renderDetailTracks(){
   const info=currentDetailTracks[0]?getInfo(currentDetailTracks[0].playlistLabel):null;
   const photo=info?info.photo:'';
   document.getElementById('pd-track-list').innerHTML=currentDetailTracks.map((t,i)=>`
-    <div class="pd-track${detailIndex===i?' playing':''}" onclick="playDetailTrack(${i})">
+    <div class="pd-track${detailIndex===i?' playing':''}" data-url="${t.url}" onclick="playDetailTrack(${i})">
       <div><div class="pd-track-num">${i+1}</div><div class="pd-track-icon">▶</div></div>
       <div class="pd-thumb" style="background-image:url('${photo}')"></div>
       <div class="pd-track-title">${t.title}</div>
       <div class="pd-track-dur">${fmt(t.duration)}</div>
+      <button class="pd-track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFavDetail('${t.id}',${i})">♥</button>
       <button class="pd-track-btn" onclick="event.stopPropagation();copyLink('${t.url}')">🔗</button>
       <button class="pd-track-btn" onclick="event.stopPropagation();downloadDetailTrack(${i})">⬇</button>
     </div>`).join('');
 }
 
 function playDetailTrack(i){
+  exitBgMode();
   const t=currentDetailTracks[i];if(!t)return;
   detailIndex=i;currentIndex=-1;playingFromQueue=false;
   const info=getInfo(t.playlistLabel);
@@ -725,18 +1255,83 @@ function renderNavPills(){
     btn.innerHTML=`${p.label} <span class="pl-count-pill">${counts[p.label]||0}</span>`;
     btn.onclick=()=>selectFolder(p.label,btn);nav.appendChild(btn);
   }));
+  renderCatPlaylists(counts);
+}
+
+function renderCatPlaylists(counts){
+  const container=document.getElementById('cat-pl-list');if(!container)return;
+  if(!counts){counts={};allTracks.forEach(t=>{counts[t.playlistLabel]=(counts[t.playlistLabel]||0)+1;});}
+  container.innerHTML='';
+  const allBtn=document.createElement('button');
+  allBtn.className='cat-pl-btn pl-pill active';
+  allBtn.innerHTML=`<span>Tout le catalogue</span><span class="cat-pl-count">${allTracks.length}</span>`;
+  allBtn.onclick=()=>selectFolder(null,allBtn);
+  container.appendChild(allBtn);
+  THEMES.forEach(theme=>theme.playlists.forEach(p=>{
+    if(!counts[p.label])return;
+    const btn=document.createElement('button');
+    btn.className='cat-pl-btn pl-pill';
+    btn.innerHTML=`<span>${p.label}</span><span class="cat-pl-count">${counts[p.label]||0}</span>`;
+    btn.onclick=()=>selectFolder(p.label,btn);
+    container.appendChild(btn);
+  }));
+}
+
+function catSbSearch(val){
+  heroSearchQuery=val;
+  const heroInp=document.getElementById('hero-search-input');if(heroInp)heroInp.value=val;
+  filterTracks();
+}
+
+function catTagClick(tag,btn){
+  if(activeHeroTags.has(tag)){activeHeroTags.delete(tag);btn.classList.remove('active');}
+  else{activeHeroTags.add(tag);btn.classList.add('active');}
+  updateCatSectionHeaders();filterTracks();
+}
+
+function catSelectDur(dur,btn){
+  activeDuration=dur;
+  document.querySelectorAll('.cat-dur-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  filterTracks();
+}
+
+function toggleCatSection(hd){hd.parentElement.classList.toggle('collapsed');}
+
+function toggleCatSidebar(){
+  document.getElementById('cat-sidebar').classList.toggle('mob-open');
+}
+
+function updateCatSectionHeaders(){
+  document.querySelectorAll('.cat-section').forEach(sec=>{
+    const hd=sec.querySelector('.cat-section-hd');if(!hd)return;
+    const hasActive=sec.querySelector('.cat-fpill.active');
+    hd.classList.toggle('has-active',!!hasActive);
+  });
+}
+
+function resetCatFilters(){
+  activeHeroTags=new Set();activeDuration=null;currentFolder=null;heroSearchQuery='';activeTag=null;
+  const catInp=document.getElementById('cat-sb-input');if(catInp)catInp.value='';
+  const heroInp=document.getElementById('hero-search-input');if(heroInp)heroInp.value='';
+  document.querySelectorAll('.cat-fpill.active').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.cat-dur-btn').forEach(b=>b.classList.remove('active'));
+  const durAll=document.getElementById('cat-dur-all');if(durAll)durAll.classList.add('active');
+  document.querySelectorAll('.cat-pl-btn,.pl-pill').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.cat-pl-btn:first-child,.pl-pill[data-label=""]').forEach(b=>b.classList.add('active'));
+  updateCatSectionHeaders();
+  document.getElementById('search-active-bar').classList.remove('visible');
+  filterTracks();
 }
 
 function selectFolder(folder,btn){
   currentFolder=folder;activeTag=null;
-  document.getElementById('search').value='';
+  heroSearchQuery='';
   document.getElementById('search-active-bar').classList.remove('visible');
   document.querySelectorAll('.pl-pill').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
   renderTags();filterTracks();
 }
-
-function clearAudioFilters(){activeAudioFilters.clear();document.querySelectorAll('.af-btn').forEach(b=>b.classList.remove('active'));}
 
 function renderTags(){
   const container=document.getElementById('tag-nav');container.innerHTML='';
@@ -750,70 +1345,54 @@ function renderTags(){
   });
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-  document.querySelectorAll('.af-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const af=btn.dataset.af;
-      if(activeAudioFilters.has(af)){activeAudioFilters.delete(af);btn.classList.remove('active');}
-      else{activeAudioFilters.add(af);btn.classList.add('active');}
-      filterTracks();
-    });
-  });
-});
-
 function getKws(q){return q.toLowerCase().trim().split(/\s+/).filter(k=>k.length>=2);}
 
 function onSearch(){
   activeTag=null;document.querySelectorAll('.tag-pill').forEach(b=>b.classList.remove('active'));
-  showView('catalogue');filterTracks();showSuggestions();
+  showView('catalogue');filterTracks();
 }
 
-function showSuggestions(){
-  const q=document.getElementById('search').value.toLowerCase().trim();
-  const box=document.getElementById('suggestions');
-  if(!q||q.length<2){box.classList.remove('visible');return;}
-  const kws=getKws(q);const results=[];const seen=new Set();
-  THEMES.forEach(theme=>theme.playlists.forEach(info=>{
-    if(kws.some(kw=>info.label.toLowerCase().includes(kw))&&!seen.has('pl:'+info.label)&&results.length<10){
-      seen.add('pl:'+info.label);results.push({label:info.label,type:'Playlist',action:()=>openPlaylistDetail(info.label)});
-    }
-    info.tags.forEach(tag=>{
-      if(kws.some(kw=>tag.toLowerCase().includes(kw))&&!seen.has('tag:'+tag+info.label)&&results.length<10){
-        seen.add('tag:'+tag+info.label);
-        results.push({label:tag,type:info.label,action:()=>{currentFolder=info.label;showView('catalogue');setTimeout(()=>{document.querySelectorAll('.pl-pill').forEach(b=>{if(b.dataset.label===info.label)b.classList.add('active');});renderTags();activeTag=tag;filterTracks();},100);}});
-      }
-    });
-  }));
-  if(!results.length){box.classList.remove('visible');return;}
-  box.innerHTML=results.map((r,i)=>`<div class="suggestion" data-i="${i}"><span>${r.label}</span><span class="suggestion-type">${r.type}</span></div>`).join('');
-  box.querySelectorAll('.suggestion').forEach((el,i)=>el.addEventListener('mousedown',()=>{results[i].action();box.classList.remove('visible');document.getElementById('search').value='';}));
-  box.classList.add('visible');
-}
-function hideSuggestions(){document.getElementById('suggestions').classList.remove('visible');}
+let heroSearchQuery='';
 
 function filterTracks(){
-  const q=document.getElementById('search').value.toLowerCase().trim();
+  const q=heroSearchQuery.toLowerCase().trim();
   const kws=q?getKws(q):[];
   filteredTracks=allTracks.filter(t=>{
     const lbl=t.playlistLabel;
     const matchFolder=!currentFolder||lbl===currentFolder;
     const tagPls=activeTag?THEMES.flatMap(th=>th.playlists.filter(p=>p.tags.includes(activeTag)).map(p=>p.label)):null;
     const matchTag=!activeTag||(tagPls&&tagPls.includes(lbl));
-    const tTags=(t.tags||[]).map(x=>x.toLowerCase());
-    const matchAudio=activeAudioFilters.size===0||[...activeAudioFilters].every(af=>tTags.includes(af));
+    const hay=`${t.title} ${lbl} ${(t.tags||[]).join(' ')} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();
     let matchSearch=true;
-    if(kws.length>0){const hay=`${t.title} ${lbl} ${(TAGS_MAP[lbl]||[]).join(' ')} ${tTags.join(' ')}`.toLowerCase();matchSearch=kws.every(kw=>hay.includes(kw));}
-    return matchFolder&&matchTag&&matchAudio&&matchSearch;
+    if(kws.length>0){matchSearch=kws.every(kw=>hay.includes(kw));}
+    let matchHeroTags=true;
+    if(activeHeroTags.size>0){matchHeroTags=[...activeHeroTags].some(tag=>hay.includes(tag.toLowerCase()));}
+    let matchDuration=true;
+    if(activeDuration&&t.duration){const s=parseDurSecs(t.duration);if(s>0){if(activeDuration==='short')matchDuration=s<60;else if(activeDuration==='medium')matchDuration=s>=60&&s<=180;else if(activeDuration==='long')matchDuration=s>180;}}
+    return matchFolder&&matchTag&&matchSearch&&matchHeroTags&&matchDuration;
   });
   const bar=document.getElementById('search-active-bar');
-  if(kws.length>0){bar.classList.add('visible');bar.innerHTML=`🔍 ${kws.map(k=>`<span class="kw-tag">${k}</span>`).join('')} &nbsp;·&nbsp; <span style="color:var(--red);font-weight:600">${filteredTracks.length} résultats</span> &nbsp;<button onclick="clearSearch()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px">✕ Effacer</button>`;}
-  else{bar.classList.remove('visible');}
+  const activeTags=[...activeHeroTags];
+  if(kws.length>0||activeTags.length>0){
+    bar.classList.add('visible');
+    const kwSpans=kws.map(k=>`<span class="kw-tag">${k}</span>`).join('');
+    const tagSpans=activeTags.map(t=>`<span class="kw-tag">${t}</span>`).join('');
+    bar.innerHTML=`🔍 ${kwSpans}${tagSpans} &nbsp;·&nbsp; <span style="color:var(--red);font-weight:600">${filteredTracks.length} résultats</span> &nbsp;<button onclick="clearSearch()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px">✕ Effacer</button>`;
+  } else{bar.classList.remove('visible');}
   const tagEl=document.getElementById('section-tag');
   if(activeTag){tagEl.textContent=activeTag;tagEl.style.display='inline';}else{tagEl.style.display='none';}
   renderTracks();
 }
 
-function clearSearch(){document.getElementById('search').value='';document.getElementById('search-active-bar').classList.remove('visible');filterTracks();}
+function clearSearch(){
+  heroSearchQuery='';activeHeroTags=new Set();
+  const inp=document.getElementById('hero-search-input');if(inp)inp.value='';
+  const catInp=document.getElementById('cat-sb-input');if(catInp)catInp.value='';
+  document.querySelectorAll('.hero-tag-pill,.cat-fpill').forEach(b=>b.classList.remove('active'));
+  updateCatSectionHeaders();
+  document.getElementById('search-active-bar').classList.remove('visible');
+  filterTracks();
+}
 
 function highlight(text,kws){
   if(!kws.length)return text;let r=text;
@@ -823,18 +1402,22 @@ function highlight(text,kws){
 
 function renderTracks(){
   const list=document.getElementById('track-list');
-  const q=document.getElementById('search').value.toLowerCase().trim();
+  const q=heroSearchQuery.toLowerCase().trim();
   const kws=q?getKws(q):[];
   document.getElementById('section-title').textContent=currentFolder||'Catalogue Complet';
   document.getElementById('section-count').textContent=`${filteredTracks.length} morceaux`;
   if(!filteredTracks.length){list.innerHTML='<div class="empty">Aucun résultat</div>';return;}
   const qIds=new Set(queue.map(t=>t.id));
   list.innerHTML=filteredTracks.map((t,i)=>`
-    <div class="track${currentIndex===i?' playing':''}${qIds.has(t.id)?' in-queue':''}" onclick="playTrack(${i})">
+    <div class="track${currentIndex===i?' playing':''}${qIds.has(t.id)?' in-queue':''}" data-url="${t.url}" onclick="playTrack(${i})">
       <div><div class="track-num">${i+1}</div><div class="track-play-icon">▶</div></div>
-      <div class="track-info"><div class="track-title">${highlight(t.title,kws)}</div><div class="track-artist">${t.playlistLabel}</div></div>
+      <div class="track-info">
+        <div style="display:flex;align-items:center"><div class="track-title">${highlight(t.title,kws)}</div><span class="preview-tag">▶ aperçu</span></div>
+        <div class="track-artist">${t.playlistLabel}</div>
+      </div>
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
+      <button class="track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFav('${t.id}')">♥</button>
       <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')">🔗</button>
       <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueTrack(${i})">${qIds.has(t.id)?'✓':'+'}</button>
       <button class="track-btn" onclick="event.stopPropagation();downloadTrack(${i})">⬇</button>
@@ -842,6 +1425,7 @@ function renderTracks(){
 }
 
 function playTrack(i){
+  exitBgMode();
   const t=filteredTracks[i];if(!t)return;
   currentIndex=i;playingFromQueue=false;detailIndex=-1;
   const info=getInfo(t.playlistLabel);
@@ -859,7 +1443,17 @@ function togglePlay(){
 function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('btn-shuffle').classList.toggle('active',shuffleOn);}
 function toggleRepeat(){repeatOn=!repeatOn;document.getElementById('btn-repeat').classList.toggle('active',repeatOn);}
 function setVolume(v){audio.volume=v/100;}
-function toggleMute(){audio.muted=!audio.muted;document.querySelector('.vol-icon').textContent=audio.muted?'🔇':'🔊';}
+function toggleMute(){
+  audio.muted=!audio.muted;
+  const icon=audio.muted?'🔇':'🔊';
+  document.querySelector('.vol-icon').textContent=icon;
+  const btn=document.getElementById('btn-mute');
+  btn.textContent=icon;
+  btn.classList.toggle('muted',audio.muted);
+  const sp=document.getElementById('bg-speaker');
+  sp.textContent=icon;
+  sp.classList.toggle('muted',audio.muted);
+}
 
 function prevTrack(){
   if(detailIndex>0){playDetailTrack(detailIndex-1);}
@@ -904,6 +1498,7 @@ function renderQueueList(){
 }
 function removeFromQueue(i){queue.splice(i,1);updateQueueBadge();renderQueueList();renderTracks();}
 function playFromQueue(i){
+  exitBgMode();
   const t=queue[i];if(!t)return;
   queueIndex=i;playingFromQueue=true;
   document.getElementById('p-title').textContent=t.title;
@@ -933,11 +1528,227 @@ function toggleTheme(){
   localStorage.setItem('osm-theme',next);
   document.getElementById('btn-theme').textContent=next==='dark'?'☀️':'🌙';
 }
+/* ── HAMBURGER MENU ── */
+function toggleHamMenu(){
+  const btn=document.getElementById('ham-btn');
+  const menu=document.getElementById('ham-menu');
+  const open=menu.classList.toggle('open');
+  btn.classList.toggle('open',open);
+}
+function closeHamMenu(){
+  document.getElementById('ham-btn').classList.remove('open');
+  document.getElementById('ham-menu').classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  const btn=document.getElementById('ham-btn');
+  const menu=document.getElementById('ham-menu');
+  if(!btn.contains(e.target)&&!menu.contains(e.target))closeHamMenu();
+});
+
+/* Lève le voile après 5s — le bouton play YouTube a disparu depuis longtemps */
+var _coverLifted=false;
+function _liftCover(){
+  if(_coverLifted)return;_coverLifted=true;
+  var c=document.getElementById('hero-video-cover');if(c)c.style.opacity='0';
+}
+setTimeout(_liftCover,5000);
+/* ── HERO SEARCH ── */
+let activeHeroTags=new Set();
+
+function heroTagClick(tag,btn){
+  if(activeHeroTags.has(tag)){activeHeroTags.delete(tag);btn.classList.remove('active');}
+  else{activeHeroTags.add(tag);btn.classList.add('active');}
+  showView('catalogue');filterTracks();
+}
+
+function heroSearchLive(val){
+  heroSearchQuery=val;
+  if(val.trim().length>=2)showHeroSug(val);else hideHeroSug();
+}
+
+function showHeroSug(q){
+  const box=document.getElementById('hero-sug');
+  const kws=getKws(q.toLowerCase());
+  if(!kws.length||!allTracks.length){hideHeroSug();return;}
+  const results=[];const seen=new Set();
+  THEMES.forEach(theme=>theme.playlists.forEach(info=>{
+    if(kws.some(kw=>info.label.toLowerCase().includes(kw))&&!seen.has('pl:'+info.label)&&results.length<8){
+      seen.add('pl:'+info.label);
+      results.push({label:info.label,type:'Playlist',action:()=>openPlaylistDetail(info.label)});
+    }
+    info.tags.forEach(tag=>{
+      if(kws.some(kw=>tag.toLowerCase().includes(kw))&&!seen.has('t:'+tag)&&results.length<8){
+        seen.add('t:'+tag);
+        results.push({label:tag,type:info.label,action:()=>{
+          document.getElementById('hero-search-input').value=tag;
+          heroSearchLive(tag);
+        }});
+      }
+    });
+  }));
+  if(!results.length){hideHeroSug();return;}
+  box.innerHTML=results.map((r,i)=>`<div class="hero-sug-item" data-i="${i}"><span>${r.label}</span><span class="hero-sug-type">${r.type}</span></div>`).join('');
+  box.querySelectorAll('.hero-sug-item').forEach((el,i)=>el.addEventListener('mousedown',()=>{results[i].action();hideHeroSug();}));
+  box.classList.add('visible');
+}
+
+function hideHeroSug(){const b=document.getElementById('hero-sug');if(b)b.classList.remove('visible');}
+
+function heroSearchSubmit(){
+  hideHeroSug();
+  if(heroSearchQuery.trim()||activeHeroTags.size>0){showView('catalogue');filterTracks();}
+}
 (function syncThemeBtn(){
   const t=document.documentElement.getAttribute('data-theme')||'light';
   const btn=document.getElementById('btn-theme');
   if(btn)btn.textContent=t==='dark'?'☀️':'🌙';
 })();
+
+/* ── DURATION FILTER ── */
+let activeDuration=null;
+function parseDurSecs(d){if(!d||d==='—'||d==='0:00')return 0;const p=d.split(':');return p.length===2?parseInt(p[0])*60+parseInt(p[1]):0;}
+function selectDuration(d,btn){
+  activeDuration=d;
+  document.querySelectorAll('.dur-pill').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  filterTracks();
+}
+
+/* ── FAVORITES ── */
+let favorites=new Set(JSON.parse(localStorage.getItem('osm-favs')||'[]'));
+function isFav(id){return favorites.has(id);}
+function toggleFav(id){
+  if(favorites.has(id))favorites.delete(id);else favorites.add(id);
+  localStorage.setItem('osm-favs',JSON.stringify([...favorites]));
+  updateFavNav();renderTracks();
+  if(document.getElementById('view-favoris').classList.contains('active'))renderFavoris();
+}
+function updateFavNav(){
+  const n=favorites.size;
+  const el=document.getElementById('fav-count-nav');if(el)el.textContent=n>0?` (${n})`:'';
+  const lbl=document.getElementById('fav-count-label');if(lbl)lbl.textContent=`${n} favori${n>1?'s':''}`;
+  const cnt=document.getElementById('fav-section-count');if(cnt)cnt.textContent=`${n} morceau${n>1?'x':''}`;
+}
+function renderFavoris(){
+  updateFavNav();
+  const favTracks=allTracks.filter(t=>favorites.has(t.id));
+  const container=document.getElementById('fav-track-list');if(!container)return;
+  if(!favTracks.length){container.innerHTML='<div class="fav-empty"><div class="fav-empty-icon">♡</div><div class="fav-empty-text">Aucun favori pour l\'instant.<br>Cliquez sur ♥ sur une piste pour l\'ajouter ici.</div></div>';return;}
+  const qIds=new Set(queue.map(t=>t.id));
+  container.innerHTML=favTracks.map((t,i)=>`
+    <div class="track" data-url="${t.url}" onclick="playFavTrack('${t.id}')">
+      <div><div class="track-num">${i+1}</div><div class="track-play-icon">▶</div></div>
+      <div class="track-info">
+        <div style="display:flex;align-items:center"><div class="track-title">${t.title}</div><span class="preview-tag">▶ aperçu</span></div>
+        <div class="track-artist">${t.playlistLabel}</div>
+      </div>
+      <div><span class="track-badge">${t.playlistLabel}</span></div>
+      <div class="track-duration">${fmt(t.duration)}</div>
+      <button class="track-btn track-fav faved" onclick="event.stopPropagation();toggleFav('${t.id}')">♥</button>
+      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')">🔗</button>
+      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueFavTrack('${t.id}')">${qIds.has(t.id)?'✓':'+'}</button>
+      <button class="track-btn" onclick="event.stopPropagation();downloadFavTrack('${t.id}')">⬇</button>
+    </div>`).join('');
+}
+function playFavTrack(id){
+  exitBgMode();
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  const info=getInfo(t.playlistLabel);
+  document.getElementById('p-title').textContent=t.title;
+  document.getElementById('p-playlist').textContent=t.playlistLabel;
+  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  document.getElementById('player').classList.add('visible');
+  wsLoad(t.url);
+}
+function toggleQueueFavTrack(id){
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  const idx=queue.findIndex(q=>q.id===t.id);
+  if(idx>=0)queue.splice(idx,1);else queue.push(t);
+  updateQueueBadge();renderFavoris();renderQueueList();
+}
+function downloadFavTrack(id){
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  const a=document.createElement('a');a.href=t.url.replace('/upload/','/upload/fl_attachment/');a.download=t.title+'.mp3';a.target='_blank';a.click();
+}
+function shareFavoris(){
+  if(!favorites.size){alert('Ajoutez d\'abord des favoris !');return;}
+  const ids=[...favorites].join(',');
+  const url=location.origin+location.pathname+'?favs='+encodeURIComponent(ids);
+  navigator.clipboard.writeText(url).then(()=>{const t=document.getElementById('copy-toast');t.textContent='🔗 Sélection copiée !';t.classList.add('show');setTimeout(()=>{t.classList.remove('show');t.textContent='🔗 Lien copié !';},2400);});
+}
+
+/* ── HOVER PREVIEW ── */
+const previewAudio=new Audio();previewAudio.volume=0.25;
+let previewTimer=null,previewActiveEl=null;
+function startPreview(url,el){
+  if(previewActiveEl===el)return;
+  clearTimeout(previewTimer);
+  previewTimer=setTimeout(()=>{
+    stopPreview();
+    previewActiveEl=el;el.classList.add('previewing');
+    previewAudio.src=url;previewAudio.currentTime=0;
+    previewAudio.play().catch(()=>{});
+    previewTimer=setTimeout(()=>{if(previewActiveEl===el)stopPreview();},15000);
+  },600);
+}
+function stopPreview(){
+  clearTimeout(previewTimer);previewAudio.pause();previewAudio.src='';
+  if(previewActiveEl){previewActiveEl.classList.remove('previewing');previewActiveEl=null;}
+}
+function toggleFavDetail(id,i){
+  if(favorites.has(id))favorites.delete(id);else favorites.add(id);
+  localStorage.setItem('osm-favs',JSON.stringify([...favorites]));
+  updateFavNav();renderDetailTracks();renderTracks();
+  if(document.getElementById('view-favoris').classList.contains('active'))renderFavoris();
+}
+
+(function(){
+  ['track-list','fav-track-list'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.addEventListener('mouseover',e=>{const tr=e.target.closest('.track');if(!tr||!tr.dataset.url)return;startPreview(tr.dataset.url,tr);});
+    el.addEventListener('mouseout',e=>{const tr=e.target.closest('.track');const to=e.relatedTarget?e.relatedTarget.closest('.track'):null;if(tr&&to!==tr)stopPreview();});
+  });
+  const pdl=document.getElementById('pd-track-list');if(!pdl)return;
+  pdl.addEventListener('mouseover',e=>{const tr=e.target.closest('.pd-track');if(!tr||!tr.dataset.url)return;startPreview(tr.dataset.url,tr);});
+  pdl.addEventListener('mouseout',e=>{const tr=e.target.closest('.pd-track');const to=e.relatedTarget?e.relatedTarget.closest('.pd-track'):null;if(tr&&to!==tr)stopPreview();});
+})();
+
+/* ── VLADIMIR RECOMMANDE ── */
+const RECOMMENDS_CONFIG=[
+  {playlist:'Orchestral',note:'Ma signature épique'},
+  {playlist:'Piano',note:"L'émotion à l'état pur"},
+  {playlist:'Suspense',note:'Tension maîtrisée'},
+  {playlist:'Groovy',note:'Du groove pour l\'image'},
+  {playlist:'Romance',note:'Pour les grandes émotions'},
+  {playlist:'Atmosphère',note:'Contemplatif'},
+];
+function renderRecommends(){
+  const container=document.getElementById('recommends-container');if(!container||!allTracks.length)return;
+  const picks=RECOMMENDS_CONFIG.map(cfg=>{const track=allTracks.find(t=>t.playlistLabel===cfg.playlist);return track?{...cfg,track}:null;}).filter(Boolean);
+  if(!picks.length){container.innerHTML='';return;}
+  container.innerHTML=picks.map(p=>`
+    <div class="rec-card" onclick="playRecTrack('${p.track.id}')">
+      <div class="rec-note">${p.note}</div>
+      <div class="rec-track-title">${p.track.title}</div>
+      <div class="rec-playlist">${p.track.playlistLabel}</div>
+      <button class="rec-play-btn">▶ Écouter</button>
+    </div>`).join('');
+}
+function playRecTrack(id){
+  exitBgMode();
+  const t=allTracks.find(tr=>tr.id===id);if(!t)return;
+  const info=getInfo(t.playlistLabel);
+  document.getElementById('p-title').textContent=t.title;
+  document.getElementById('p-playlist').textContent=t.playlistLabel;
+  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  document.getElementById('player').classList.add('visible');
+  wsLoad(t.url);
+}
 </script>
+
+<button id="bg-speaker" onclick="toggleMute()" title="Couper / remettre le son">🔊</button>
+
+<div id="autoplay-banner" onclick="ws.play();hideAutoplayBanner()" style="display:none;position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;padding:13px 28px;border-radius:30px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;cursor:pointer;z-index:500;gap:10px;align-items:center;box-shadow:0 6px 24px rgba(255,85,0,0.45);animation:fadeUp 0.4s ease;white-space:nowrap;transition:opacity 0.3s">▶&nbsp; Cliquez pour lancer la musique</div>
+
 </body>
 </html>
