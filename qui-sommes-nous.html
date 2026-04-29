@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – Qui sommes-nous ?</title>
+<meta name="description" content="Original Scores Music — L'histoire, le concept et l'équipe derrière le catalogue de musique originale pour l'image.">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script>(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<style>
+:root{--red:#FF5500;--grad:linear-gradient(135deg,#FF5500,#FF006E);--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff;--card-border:rgba(0,0,0,0.08)}
+[data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg-alt:#0a0a0a;--bg-deep:#080808;--bg-header:rgba(10,10,10,0.98);--text:#ffffff;--text2:#e2e2e2;--muted:#b0b0b0;--border:rgba(255,255,255,0.12);--card-bg:#111111;--card-border:rgba(255,255,255,0.07)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ── HEADER ── */
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{background:var(--grad);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px;color:var(--text)}
+.nav-tabs{display:flex;align-items:center;gap:4px}
+.nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;padding:8px 14px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;text-decoration:none;white-space:nowrap}
+.nav-tab:hover{color:var(--text);background:var(--bg3)}
+.nav-tab.active{color:var(--text)}
+.header-right{display:flex;align-items:center;gap:10px}
+.btn-nav{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 13px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;white-space:nowrap;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.btn-nav:hover{border-color:#555;color:var(--text)}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.btn-red:hover{background:#cc4400}
+
+/* ── HAMBURGER ── */
+.ham-btn{background:none;border:1px solid var(--border);color:var(--text2);cursor:pointer;width:38px;height:38px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:all 0.15s;flex-shrink:0;margin-right:8px}
+.ham-btn:hover{border-color:#666;color:var(--text)}
+.ham-btn span{display:block;width:16px;height:1.5px;background:currentColor;border-radius:2px;transition:all 0.2s}
+.ham-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.ham-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.ham-menu{position:fixed;top:64px;left:0;width:280px;background:var(--bg-deep);border-right:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:0 0 12px 0;z-index:99;padding:12px 0;visibility:hidden;opacity:0;pointer-events:none;transform:translateX(-16px);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0.2s}
+.ham-menu.open{visibility:visible;opacity:1;pointer-events:all;transform:translateX(0);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0s}
+.ham-section{padding:6px 16px 2px;font-size:9px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:6px}
+.ham-item{display:flex;align-items:center;gap:10px;padding:11px 20px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.15s;background:none;border:none;width:100%;text-align:left;text-decoration:none}
+.ham-item:hover{background:var(--bg2);color:var(--text)}
+.ham-item.active{color:var(--red);background:rgba(255,85,0,0.06)}
+.ham-item-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.ham-divider{height:1px;background:var(--border);margin:8px 16px}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#000}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1800&q=80') center/cover no-repeat;animation:heroZoom 16s ease-in-out infinite alternate}
+@keyframes heroZoom{from{transform:scale(1.0)}to{transform:scale(1.09)}}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.96) 0%,rgba(0,0,0,0.55) 50%,rgba(0,0,0,0.2) 100%)}
+.hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 24px;max-width:860px;width:100%}
+.hero-osm-mark{background:var(--grad);color:#fff;font-size:clamp(18px,3vw,34px);font-weight:900;letter-spacing:10px;padding:12px 30px;border-radius:4px;text-transform:uppercase;margin-bottom:20px;animation:logoReveal 1.4s 0.8s ease both;box-shadow:0 0 80px rgba(255,85,0,0.45),0 4px 24px rgba(255,85,0,0.3)}
+@keyframes logoReveal{0%{opacity:0;transform:scale(0.82) translateY(10px);box-shadow:0 0 0 rgba(255,85,0,0)}60%{opacity:1;transform:scale(1.04) translateY(-2px);box-shadow:0 0 110px rgba(255,85,0,0.65)}100%{transform:scale(1) translateY(0);box-shadow:0 0 80px rgba(255,85,0,0.45),0 4px 24px rgba(255,85,0,0.3)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.hero-divider{width:48px;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.5),transparent);margin-bottom:20px;animation:fadeUp 1s 1.6s ease both}
+.hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:18px;animation:fadeUp 1s 1.8s ease both}
+.hero-title{font-size:clamp(38px,7vw,96px);font-weight:900;letter-spacing:-3px;line-height:0.92;color:#fff;margin-bottom:22px;animation:fadeUp 1s 2s ease both}
+.hero-title span{color:var(--red)}
+.hero-sub{font-size:15px;font-weight:300;color:rgba(255,255,255,0.7);letter-spacing:1.5px;animation:fadeUp 1s 2.2s ease both}
+.hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;color:rgba(255,255,255,0.3);font-size:9px;letter-spacing:3px;text-transform:uppercase;animation:bounce 2.5s 3s ease infinite}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+.hero-scroll-line{width:1px;height:28px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.3))}
+
+/* ── HISTOIRE ── */
+.histoire-section{padding:120px 64px;background:var(--bg-deep);position:relative}
+.histoire-section::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:1px;height:60px;background:linear-gradient(to bottom,var(--border),transparent)}
+.histoire-inner{max-width:900px;margin:0 auto;text-align:center}
+.section-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:20px}
+.histoire-title{font-size:clamp(26px,4vw,52px);font-weight:900;letter-spacing:-1.5px;line-height:1.05;margin-bottom:52px}
+.histoire-title span{color:var(--red)}
+.histoire-text{font-size:clamp(15px,2vw,20px);font-weight:300;color:var(--text2);line-height:2;font-style:italic;position:relative;padding:0 20px}
+.histoire-text::before{content:'\201C';font-size:120px;font-weight:900;color:var(--red);opacity:0.15;position:absolute;top:-30px;left:-10px;line-height:1;font-family:Georgia,serif;pointer-events:none}
+
+/* ── CHIFFRES ── */
+.stats-section{padding:100px 64px;background:var(--bg-alt)}
+.stats-inner{max-width:1100px;margin:0 auto}
+.stats-title-wrap{text-align:center;margin-bottom:60px}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:48px 28px;text-align:center;transition:all 0.35s;position:relative;overflow:hidden;cursor:default}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transform:scaleX(0);transition:transform 0.35s}
+.stat-card:hover{transform:translateY(-6px)}
+.stat-card:hover::before{transform:scaleX(1)}
+.stat-card:nth-child(1)::before,.stat-card:nth-child(1):hover{border-color:rgba(255,85,0,0.25)}
+.stat-card:nth-child(1)::before{background:#FF5500}
+.stat-card:nth-child(2)::before,.stat-card:nth-child(2):hover{border-color:rgba(139,92,246,0.25)}
+.stat-card:nth-child(2)::before{background:#8B5CF6}
+.stat-card:nth-child(3)::before,.stat-card:nth-child(3):hover{border-color:rgba(0,180,216,0.25)}
+.stat-card:nth-child(3)::before{background:#00B4D8}
+.stat-num{font-size:clamp(48px,7vw,80px);font-weight:900;line-height:1;margin-bottom:12px;letter-spacing:-2px}
+.stat-card:nth-child(1) .stat-num{color:#FF5500}
+.stat-card:nth-child(2) .stat-num{color:#8B5CF6}
+.stat-card:nth-child(3) .stat-num{color:#00B4D8}
+.stat-label{font-size:12px;color:var(--text2);letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.stat-sub{font-size:13px;color:var(--muted);font-weight:400;line-height:1.6}
+
+/* ── CONCEPT ── */
+.concept-section{padding:120px 64px;background:var(--bg2);border-top:1px solid var(--border);position:relative;overflow:hidden}
+.concept-section::before{content:'';position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(255,85,0,0.4),transparent)}
+.concept-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:80px;align-items:center}
+.concept-left-label{font-size:10px;font-weight:700;letter-spacing:5px;color:var(--red);text-transform:uppercase;margin-bottom:20px}
+.concept-left-title{font-size:clamp(28px,4vw,52px);font-weight:900;letter-spacing:-1.5px;line-height:1.05;margin-bottom:0}
+.concept-left-title span{color:var(--red)}
+.concept-right-text{font-size:15px;font-weight:300;color:var(--text2);line-height:2;margin-bottom:28px}
+.concept-highlight{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:4px;padding:22px 26px}
+.concept-highlight p{font-size:13px;color:var(--text2);line-height:1.85;font-weight:300}
+.concept-highlight strong{color:var(--text);font-weight:700}
+
+/* ── CONTACT ── */
+.contact-section{padding:120px 64px;background:var(--bg-deep);text-align:center;position:relative;overflow:hidden}
+.contact-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:80px;background:linear-gradient(to bottom,var(--red),transparent)}
+.contact-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:16px}
+.contact-title{font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-2px;line-height:0.95;margin-bottom:16px}
+.contact-sub{font-size:14px;color:var(--muted);margin-bottom:48px;font-weight:300;letter-spacing:0.5px}
+.contact-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--red);color:#fff;border:none;padding:18px 36px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:4px;text-decoration:none;text-transform:uppercase;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:#ff7700;transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,85,0,0.4)}
+.btn-secondary{background:transparent;color:var(--text2);border:1px solid var(--border);padding:18px 36px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;cursor:pointer;border-radius:4px;text-decoration:none;text-transform:uppercase;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-secondary:hover{border-color:#666;color:var(--text);transform:translateY(-2px)}
+
+footer{text-align:center;padding:28px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--muted);text-decoration:none;transition:color 0.15s}
+footer a:hover{color:var(--red)}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.75s ease,transform 0.75s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:0.1s}
+.reveal-d2{transition-delay:0.2s}
+.reveal-d3{transition-delay:0.3s}
+
+@media(max-width:1024px){
+  .concept-inner{grid-template-columns:1fr;gap:40px}
+}
+@media(max-width:900px){
+  header{padding:0 16px}
+  .nav-tabs{display:none}
+  .histoire-section,.stats-section,.concept-section,.contact-section{padding:72px 20px}
+  .stats-grid{grid-template-columns:1fr}
+  .histoire-text{font-size:15px;padding:0}
+}
+@media(max-width:480px){
+  .hero-title{font-size:44px;letter-spacing:-2px}
+  .histoire-text{font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:4px">
+    <button class="ham-btn" id="ham-btn" onclick="toggleHam()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="logo" href="index.html">
+      <div class="logo-mark">OSM</div>
+      <div class="logo-name">Original Scores Music</div>
+    </a>
+  </div>
+  <nav class="nav-tabs">
+    <a class="nav-tab" href="index.html">Accueil</a>
+    <a class="nav-tab" href="television.html">Télévision</a>
+    <a class="nav-tab" href="service.html">Sur mesure</a>
+    <a class="nav-tab active" href="qui-sommes-nous.html">Qui sommes-nous</a>
+  </nav>
+  <div class="header-right">
+    <button class="btn-nav" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
+    <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
+  </div>
+</header>
+
+<div class="ham-menu" id="ham-menu">
+  <div class="ham-section">Navigation</div>
+  <a class="ham-item" href="index.html"><span class="ham-item-icon">🏠</span>Accueil</a>
+  <div class="ham-divider"></div>
+  <div class="ham-section">Pages</div>
+  <a class="ham-item" href="television.html"><span class="ham-item-icon">📺</span>Télévision</a>
+  <a class="ham-item" href="service.html"><span class="ham-item-icon">🎯</span>Sélection sur mesure</a>
+  <a class="ham-item active" href="qui-sommes-nous.html"><span class="ham-item-icon">👥</span>Qui sommes-nous ?</a>
+  <div class="ham-divider"></div>
+  <div class="ham-section">Compte</div>
+  <a class="ham-item" href="login-monteurs.html"><span class="ham-item-icon">👤</span>Espace Client</a>
+  <a class="ham-item" href="inscription.html"><span class="ham-item-icon">✍️</span>Demande d'accès</a>
+  <a class="ham-item" href="aide.html"><span class="ham-item-icon">❓</span>Aide</a>
+  <div class="ham-divider"></div>
+  <a class="ham-item" href="mailto:vladimirstreiff@gmail.com"><span class="ham-item-icon">✉️</span>Contact</a>
+</div>
+
+<!-- 1. HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-center">
+    <div class="hero-osm-mark">OSM</div>
+    <div class="hero-divider"></div>
+    <div class="hero-eyebrow">Supervision Musicale · Paris</div>
+    <h1 class="hero-title">Qui <span>sommes</span>-nous ?</h1>
+    <p class="hero-sub">Musique originale pour l'image &nbsp;·&nbsp; Cinéma &nbsp;·&nbsp; Télévision &nbsp;·&nbsp; Publicité</p>
+  </div>
+  <div class="hero-scroll"><div class="hero-scroll-line"></div>Découvrir</div>
+</section>
+
+<!-- 2. HISTOIRE -->
+<section class="histoire-section">
+  <div class="histoire-inner">
+    <div class="section-eyebrow reveal">Notre histoire</div>
+    <h2 class="histoire-title reveal">Une sensibilité forgée <span>par l'art</span></h2>
+    <p class="histoire-text reveal">
+      Original Scores Music est né d'une histoire familiale profondément ancrée dans l'art et la création. Issu d'une famille où la musique, le théâtre et l'opéra ont toujours occupé une place centrale, j'ai grandi entouré de compositeurs, de metteurs en scène et d'interprètes — un héritage rare qui forge une sensibilité particulière pour l'image, le son et l'émotion. C'est naturellement que j'ai commencé ma carrière derrière une batterie, accompagnant des artistes français reconnus pour leurs promo TV, leurs showcases et leurs tournées. Cette expérience de scène m'a appris l'essentiel : la musique doit sublimer l'image, jamais l'écraser.
+    </p>
+  </div>
+</section>
+
+<!-- 3. CHIFFRES -->
+<section class="stats-section">
+  <div class="stats-inner">
+    <div class="stats-title-wrap">
+      <div class="section-eyebrow reveal">En chiffres</div>
+      <h2 class="histoire-title reveal" style="margin-bottom:0">OSM <span>aujourd'hui</span></h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card reveal">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Ans d'expérience</div>
+        <div class="stat-sub">Music supervision & composition pour l'image</div>
+      </div>
+      <div class="stat-card reveal reveal-d1">
+        <div class="stat-num">2560</div>
+        <div class="stat-label">Titres originaux</div>
+        <div class="stat-sub">Composés et détenus intégralement par l'équipe</div>
+      </div>
+      <div class="stat-card reveal reveal-d2">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Chaînes TV</div>
+        <div class="stat-sub">France 2, TF1, M6, ARTE, Canal+, C8 et bien d'autres</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. CONCEPT -->
+<section class="concept-section">
+  <div class="concept-inner">
+    <div>
+      <div class="concept-left-label reveal">Notre modèle</div>
+      <h2 class="concept-left-title reveal">Un concept <span>unique</span> dans l'industrie</h2>
+    </div>
+    <div>
+      <p class="concept-right-text reveal">
+        Depuis plus de 15 ans, je travaille comme music supervisor et compositeur. J'ai eu la chance de m'entourer de musiciens et compositeurs de grand talent, issus des univers du jazz, de la musique classique, de l'opéra et des musiques du monde. Ensemble, nous avons bâti un catalogue de plus de 2560 titres originaux, pensés spécifiquement pour l'image.
+      </p>
+      <div class="concept-highlight reveal reveal-d1">
+        <p>Notre modèle est unique : nous mettons notre musique à disposition des monteurs, réalisateurs et producteurs <strong>gratuitement</strong>. Nous nous rémunérons via les droits d'auteur collectés à la SACEM selon les diffusions — <strong>sans aucun risque financier pour vous</strong>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. CONTACT -->
+<section class="contact-section">
+  <div class="contact-eyebrow reveal">Travaillons ensemble</div>
+  <h2 class="contact-title reveal">Nous <span style="color:var(--red)">contacter</span></h2>
+  <p class="contact-sub reveal">Accès gratuit au catalogue · Droits SACEM · Équipe disponible 7j/7</p>
+  <div class="contact-btns reveal">
+    <a class="btn-primary" href="mailto:vladimirstreiff@gmail.com">✉ Nous contacter</a>
+    <a class="btn-secondary" href="login.html">🎵 Accéder au catalogue</a>
+    <a class="btn-secondary" href="index.html">← Retour à l'accueil</a>
+  </div>
+</section>
+
+<footer>
+  © 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp;
+  <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp;
+  <a href="tel:+33682985752">06 82 98 57 52</a>
+</footer>
+
+<script>
+function toggleHam(){
+  document.getElementById('ham-btn').classList.toggle('open');
+  document.getElementById('ham-menu').classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  const btn=document.getElementById('ham-btn');
+  const menu=document.getElementById('ham-menu');
+  if(!btn.contains(e.target)&&!menu.contains(e.target)){
+    btn.classList.remove('open');
+    menu.classList.remove('open');
+  }
+});
+
+function toggleTheme(){
+  const root=document.documentElement;
+  const next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+  root.setAttribute('data-theme',next);
+  localStorage.setItem('osm-theme',next);
+  document.getElementById('btn-theme').textContent=next==='dark'?'☀️':'🌙';
+}
+(function(){
+  const t=localStorage.getItem('osm-theme')||'light';
+  document.getElementById('btn-theme').textContent=t==='dark'?'☀️':'🌙';
+})();
+
+const obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+</script>
+</body>
+</html>

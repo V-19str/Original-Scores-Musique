@@ -1,7 +1,28 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\bin\\\\git.exe\"; cd \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add index.html; if \\($?\\) { & $git commit -m \"Fix ticker et tags\" }; if \\($?\\) { & $git push })",
+      "PowerShell(cmd /c \"where git 2>nul\")",
+      "PowerShell(cmd /c \"dir C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\bin 2>nul\")",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add index.html; if \\($?\\) { & $git commit -m \"Fix ticker et tags\" }; if \\($?\\) { & $git push })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git pull --rebase; if \\($?\\) { & $git push })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git stash; if \\($?\\) { & $git pull --rebase }; if \\($?\\) { & $git stash pop }; if \\($?\\) { & $git push })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git reset --hard HEAD~1; & $git fetch origin; & $git merge origin/main)",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add television.html; if \\($?\\) { & $git commit -m \"Vrais logos SVG chaînes TV dans television.html\" }; if \\($?\\) { & $git push })",
+      "WebFetch(domain:upload.wikimedia.org)",
+      "WebSearch",
+      "WebFetch(domain:commons.wikimedia.org)",
+      "WebFetch(domain:fr.wikipedia.org)",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add television.html; if \\($?\\) { & $git commit -m \"Vrais logos TV : TF1 paths officiels, France 2/3/M6/TMC/TFX/W9 Wikimedia, ARTE/Canal+/C8/RMC/Ushuaia vectorisés\" }; if \\($?\\) { & $git push })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add television.html; if \\($?\\) { & $git commit -m \"Fix logo M6 : remplace SVG cassé par PNG Wikimedia\" }; if \\($?\\) { & $git push })",
+      "PowerShell(git *)",
+      "PowerShell(setx PATH \"$env:PATH;C:\\\\Program Files\\\\Git\\\\cmd\" /M)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(where.exe git 2>$null; cmd /c \"where git\" 2>$null)",
+      "PowerShell(cmd /c \"dir /s /b C:\\\\Program Files\\\\git.exe 2>nul\"; cmd /c \"dir /s /b \"\"C:\\\\Program Files \\(x86\\)\"\"\\\\git.exe 2>nul\")",
+      "PowerShell(cmd /c \"dir /s /b C:\\\\git.exe\" 2>$null; if \\(-not $?\\) { \"Not found on C:\\\\\" })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add .; & $git commit -m \"Page qui sommes nous\"; & $git push)"
     ]
   }
 }
