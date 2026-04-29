@@ -132,7 +132,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-sug-item:hover{background:#f5f5f5}
 .hero-sug-type{font-size:10px;color:#999;background:#eee;padding:2px 8px;border-radius:4px;flex-shrink:0}
 /* Hero tag rows */
-.hero-tags-section{width:100%;max-width:800px;margin-top:18px;animation:fadeUp 1s 2.8s ease both}
+.hero-tags-section{width:100%;max-width:800px;margin-top:8px;display:none}
+.hero-tags-section.open{display:block}
+.hero-filter-toggle{margin-top:10px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;padding:6px 16px;border-radius:20px;cursor:pointer;transition:all 0.15s;backdrop-filter:blur(4px)}
+.hero-filter-toggle:hover{background:rgba(255,255,255,0.18);color:#fff;border-color:rgba(255,255,255,0.35)}
 .hero-tag-cat{margin-bottom:9px;display:flex;align-items:center;gap:10px}
 .hero-tag-cat-label{font-size:9px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.35);text-transform:uppercase;white-space:nowrap;min-width:72px;text-align:right;flex-shrink:0}
 .hero-tag-pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:2px}
@@ -140,13 +143,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-tag-pill{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.82);padding:5px 13px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0;user-select:none}
 .hero-tag-pill:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.35);color:#fff}
 .hero-tag-pill.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 2px 10px rgba(255,85,0,0.4)}
-
-/* TICKER */
-.ticker-wrap{overflow:hidden;padding:14px 0;background:var(--bg-deep);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.ticker-track{display:flex;gap:56px;white-space:nowrap;animation:ticker 28s linear infinite}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.ticker-item{font-weight:900;flex-shrink:0}
-.ticker-dot{display:inline-block;width:4px;height:4px;background:var(--red);border-radius:50%;opacity:0.4;margin:0 4px;vertical-align:middle}
 
 /* STATS */
 .stats-section{padding:80px 64px;background:var(--bg-alt)}
@@ -610,7 +606,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
           <button class="hero-search-btn" onclick="heroSearchSubmit()">Rechercher</button>
           <div class="hero-sug" id="hero-sug"></div>
         </div>
-        <div class="hero-tags-section">
+        <button class="hero-filter-toggle" id="hero-filter-toggle" onclick="toggleHeroTags()">Mood · Style · Instrument ▾</button>
+        <div class="hero-tags-section" id="hero-tags-section">
           <div class="hero-tag-cat">
             <div class="hero-tag-cat-label">Mood</div>
             <div class="hero-tag-pills">
@@ -680,35 +677,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     </div>
     <div class="hero-scroll"><div class="hero-scroll-line"></div>SCROLL</div>
   </div>
-  <div class="ticker-wrap">
-    <div class="ticker-track">
-      <span class="ticker-item" style="font-size:17px;color:#E8000D">TF1</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#0055A5">FRANCE 2</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:17px;color:#F28000">M6</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#000;background:#fff;padding:2px 8px;border-radius:3px;letter-spacing:4px">ARTE</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#000;background:#fff;padding:2px 8px;border-radius:3px">CANAL+</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:15px;color:#FF6600">C8</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#EE6600">FRANCE 3</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:11px;color:#0077CC">RMC DÉCOUVERTE</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#0066CC">TMC</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#FFD700">TFX</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#E2001A">W9</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:11px;color:#00AAFF">USHUAÏA TV</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:17px;color:#E8000D">TF1</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#0055A5">FRANCE 2</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:17px;color:#F28000">M6</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#000;background:#fff;padding:2px 8px;border-radius:3px;letter-spacing:4px">ARTE</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#000;background:#fff;padding:2px 8px;border-radius:3px">CANAL+</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:15px;color:#FF6600">C8</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:12px;color:#EE6600">FRANCE 3</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:11px;color:#0077CC">RMC DÉCOUVERTE</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#0066CC">TMC</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#FFD700">TFX</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:13px;color:#E2001A">W9</span><span class="ticker-dot"></span>
-      <span class="ticker-item" style="font-size:11px;color:#00AAFF">USHUAÏA TV</span>
-    </div>
-  </div>
-
   <!-- SERVICES STRIP -->
   <div class="services-strip">
     <div class="services-inner">
@@ -1554,6 +1522,14 @@ function _liftCover(){
 setTimeout(_liftCover,5000);
 /* ── HERO SEARCH ── */
 let activeHeroTags=new Set();
+
+function toggleHeroTags(){
+  const sec=document.getElementById('hero-tags-section');
+  const btn=document.getElementById('hero-filter-toggle');
+  sec.classList.toggle('open');
+  const open=sec.classList.contains('open');
+  if(btn)btn.textContent='Mood · Style · Instrument '+(open?'▴':'▾');
+}
 
 function heroTagClick(tag,btn){
   if(activeHeroTags.has(tag)){activeHeroTags.delete(tag);btn.classList.remove('active');}
