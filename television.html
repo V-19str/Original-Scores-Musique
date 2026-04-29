@@ -41,13 +41,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .channels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
 
 .channel-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all 0.25s}
-.channel-card:hover{border-color:rgba(255,255,255,0.22);transform:translateY(-3px);box-shadow:0 14px 44px rgba(0,0,0,0.45)}
-.channel-header{padding:18px 20px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);gap:12px}
+.channel-card:hover{border-color:rgba(229,9,20,0.3);transform:translateY(-3px);box-shadow:0 14px 44px rgba(0,0,0,0.2)}
+.channel-header{padding:18px 20px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);gap:12px;min-height:72px}
 .channel-logo{flex-shrink:0;display:flex;align-items:center;line-height:1}
-.channel-logo svg{height:38px;width:auto;max-width:200px;display:block}
+.channel-logo svg{height:40px;width:auto;max-width:190px;display:block}
+.channel-logo img{height:36px;width:auto;max-width:180px;object-fit:contain;display:block}
+[data-theme="dark"] .channel-logo img{background:rgba(255,255,255,0.92);border-radius:4px;padding:4px 6px}
 .channel-count{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;text-align:right;flex-shrink:0}
 .channel-shows{padding:14px 20px 18px;list-style:none}
-.channel-shows li{font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);line-height:1.5;font-weight:300}
+.channel-shows li{font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border);line-height:1.5;font-weight:300}
 .channel-shows li:last-child{border-bottom:none;padding-bottom:0}
 .channel-shows li strong{color:var(--text);font-weight:600}
 .ep{font-size:10px;color:#E50914;font-weight:700;margin-left:4px;background:rgba(229,9,20,0.12);padding:1px 5px;border-radius:3px}
@@ -113,13 +115,8 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- France 2 -->
-            <svg viewBox="0 0 124 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="France 2">
-              <circle cx="20" cy="20" r="20" fill="#003F8D"/>
-              <text x="20" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="19" fill="#fff">f</text>
-              <text x="46" y="17" font-family="Montserrat,sans-serif" font-weight="300" font-size="12" fill="#003F8D">france</text>
-              <text x="46" y="36" font-family="Montserrat,sans-serif" font-weight="900" font-size="21" fill="#003F8D">2</text>
-            </svg>
+            <!-- France 2 — vrai logo 2018 (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/France_2_-_logo_2018.svg" alt="France 2" height="34">
           </div>
           <div class="channel-count">7 émissions</div>
         </div>
@@ -137,13 +134,8 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- France 3 -->
-            <svg viewBox="0 0 124 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="France 3">
-              <circle cx="20" cy="20" r="20" fill="#EE6600"/>
-              <text x="20" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="19" fill="#fff">f</text>
-              <text x="46" y="17" font-family="Montserrat,sans-serif" font-weight="300" font-size="12" fill="#EE6600">france</text>
-              <text x="46" y="36" font-family="Montserrat,sans-serif" font-weight="900" font-size="21" fill="#EE6600">3</text>
-            </svg>
+            <!-- France 3 — vrai logo 2018 (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/France_3_-_logo_2018.svg" alt="France 3" height="34">
           </div>
           <div class="channel-count">4 émissions</div>
         </div>
@@ -166,16 +158,29 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- TF1 -->
-            <svg viewBox="0 0 80 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TF1">
+            <!-- TF1 — vrai logo 2013, paths officiels avec gradient bleu→rouge -->
+            <svg viewBox="0 0 408.9 149.25" height="42" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TF1">
               <defs>
-                <linearGradient id="tf1-grad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stop-color="#FF5500"/>
-                  <stop offset="1" stop-color="#E8000D"/>
+                <linearGradient id="tf1-bg" x1="-320" y1="445.67" x2="88.9" y2="445.67" gradientTransform="translate(320 520.29) scale(1 -1)" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#01168b"/><stop offset=".1" stop-color="#001b9c"/>
+                  <stop offset=".2" stop-color="#021d9e"/><stop offset=".3" stop-color="#06198f"/>
+                  <stop offset=".4" stop-color="#31127a"/><stop offset=".5" stop-color="#500b64"/>
+                  <stop offset=".6" stop-color="#77054d"/><stop offset=".7" stop-color="#960234"/>
+                  <stop offset=".8" stop-color="#bb0221"/><stop offset=".9" stop-color="#b00005"/>
+                  <stop offset="1" stop-color="#9a0003"/>
+                </linearGradient>
+                <linearGradient id="tf1-ov" x1="-320" y1="473.27" x2="88.9" y2="473.27" gradientTransform="translate(320 520.29) scale(1 -1)" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#0f30b3" stop-opacity=".47"/><stop offset=".1" stop-color="#1c45cf" stop-opacity=".66"/>
+                  <stop offset=".2" stop-color="#2b53d7"/><stop offset=".3" stop-color="#3757c6"/>
+                  <stop offset=".4" stop-color="#665cb2"/><stop offset=".5" stop-color="#87539b"/>
+                  <stop offset=".6" stop-color="#a44080"/><stop offset=".7" stop-color="#b4325e"/>
+                  <stop offset=".8" stop-color="#c42038"/><stop offset=".9" stop-color="#bd1016"/>
+                  <stop offset="1" stop-color="#99060c"/>
                 </linearGradient>
               </defs>
-              <rect width="80" height="40" rx="5" fill="url(#tf1-grad)"/>
-              <text x="40" y="29" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="24" fill="#fff">TF1</text>
+              <path d="M0,149.25V0h408.9v149.25H0Z" fill="url(#tf1-bg)" fill-rule="evenodd"/>
+              <path d="M0,94.05V0h408.9v42.12s-36.3-1.1-55.81-1.1C241.99,41.01,108.11,62.66,0,94.05Z" fill="url(#tf1-ov)"/>
+              <path d="M101.41,127.17h-45.8V58.88h-23.72V22.9h93.23v35.98h-23.72v68.29ZM181.14,127.17V22.9h85.05v26.17h-39.25v18.81h28.21v26.17h-28.21v33.12h-45.8ZM320.17,127.17V35.57l47.43-13.49v105.09h-47.43Z" fill="#fff"/>
             </svg>
           </div>
           <div class="channel-count">5 émissions · 20+ épisodes</div>
@@ -192,17 +197,8 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- M6 -->
-            <svg viewBox="0 0 70 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="M6">
-              <defs>
-                <linearGradient id="m6-grad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#FF9A00"/>
-                  <stop offset="1" stop-color="#F05A00"/>
-                </linearGradient>
-              </defs>
-              <rect width="70" height="40" rx="5" fill="url(#m6-grad)"/>
-              <text x="35" y="29" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="24" fill="#fff">M6</text>
-            </svg>
+            <!-- M6 — vrai logo (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/M6_logo.svg" alt="M6" height="34">
           </div>
           <div class="channel-count">4 émissions</div>
         </div>
@@ -217,10 +213,17 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- ARTE -->
-            <svg viewBox="0 0 94 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ARTE">
-              <rect width="94" height="40" rx="3" fill="#000"/>
-              <text x="47" y="27" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="19" fill="#fff" letter-spacing="6">ARTE</text>
+            <!-- ARTE — logo officiel vectorisé, rectangle noir + ARTE blanc -->
+            <svg viewBox="0 0 140 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ARTE">
+              <rect width="140" height="56" fill="#000"/>
+              <!-- A -->
+              <path d="M14,42 L20,14 L26,42 H22 L20,32 L18,42 Z M18.5,29 H21.5 L20,20 Z" fill="#fff"/>
+              <!-- R -->
+              <path d="M30,14 H38 C41,14 43,16 43,20 C43,23 41.5,25 39.5,26 L44,42 H40 L36,27 H34 V42 H30 Z M34,24 H37 C38.5,24 39.5,23 39.5,20.5 C39.5,18 38.5,17 37,17 H34 Z" fill="#fff"/>
+              <!-- T -->
+              <path d="M47,14 H63 V17 H57 V42 H53 V17 H47 Z" fill="#fff"/>
+              <!-- E -->
+              <path d="M67,14 H80 V17 H71 V26 H79 V29 H71 V39 H80 V42 H67 Z" fill="#fff"/>
             </svg>
           </div>
           <div class="channel-count">3 documentaires</div>
@@ -235,11 +238,20 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- Canal+ -->
-            <svg viewBox="0 0 116 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Canal+">
-              <rect width="116" height="40" rx="4" fill="#fff" stroke="#ccc" stroke-width="1"/>
-              <text x="6" y="28" font-family="Montserrat,sans-serif" font-weight="900" font-size="21" fill="#111" letter-spacing="-0.5">CANAL</text>
-              <text x="91" y="28" font-family="Montserrat,sans-serif" font-weight="900" font-size="24" fill="#E50914">+</text>
+            <!-- Canal+ — logo vectorisé officiel, blanc + rouge -->
+            <svg viewBox="0 0 200 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Canal+">
+              <!-- C -->
+              <path d="M8,28 C8,18 14,12 24,12 C30,12 35,15 38,20 L34,23 C32,19 28.5,17 24,17 C17,17 13,22 13,28 C13,34 17,39 24,39 C28.5,39 32,37 34,33 L38,36 C35,41 30,44 24,44 C14,44 8,38 8,28 Z" fill="#111"/>
+              <!-- A -->
+              <path d="M42,43 L50,13 L58,43 H54 L52,34 L50,43 Z M48,31 H52 L50,20 Z" fill="#111"/>
+              <!-- N -->
+              <path d="M62,13 H67 L76,35 V13 H81 V43 H76 L67,21 V43 H62 Z" fill="#111"/>
+              <!-- A -->
+              <path d="M85,43 L93,13 L101,43 H97 L95,34 L93,43 Z M91,31 H95 L93,20 Z" fill="#111"/>
+              <!-- L -->
+              <path d="M105,13 H110 V39 H120 V43 H105 Z" fill="#111"/>
+              <!-- + rouge -->
+              <path d="M130,20 H140 V28 H148 V34 H140 V42 H130 V34 H122 V28 H130 Z" fill="#E50914"/>
             </svg>
           </div>
           <div class="channel-count">2 projets</div>
@@ -253,11 +265,8 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- TMC -->
-            <svg viewBox="0 0 82 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TMC">
-              <rect width="82" height="40" rx="5" fill="#0066CC"/>
-              <text x="41" y="28" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="22" fill="#fff">TMC</text>
-            </svg>
+            <!-- TMC — vrai logo (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Tmc.svg" alt="TMC" height="36">
           </div>
           <div class="channel-count">3 émissions</div>
         </div>
@@ -271,12 +280,8 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- TFX -->
-            <svg viewBox="0 0 78 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TFX">
-              <rect width="78" height="40" rx="5" fill="#003580"/>
-              <text x="16" y="28" font-family="Montserrat,sans-serif" font-weight="900" font-size="22" fill="#FF6600">T</text>
-              <text x="32" y="28" font-family="Montserrat,sans-serif" font-weight="900" font-size="22" fill="#fff">FX</text>
-            </svg>
+            <!-- TFX — vrai logo 2017 (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/TFX_logo.svg" alt="TFX" height="40">
           </div>
           <div class="channel-count">2 émissions</div>
         </div>
@@ -289,17 +294,8 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- W9 -->
-            <svg viewBox="0 0 72 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="W9">
-              <defs>
-                <linearGradient id="w9-grad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stop-color="#E2001A"/>
-                  <stop offset="1" stop-color="#C0001A"/>
-                </linearGradient>
-              </defs>
-              <rect width="72" height="40" rx="5" fill="url(#w9-grad)"/>
-              <text x="36" y="29" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="24" fill="#fff">W9</text>
-            </svg>
+            <!-- W9 — vrai logo (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/W9-Logo.svg" alt="W9" height="36">
           </div>
           <div class="channel-count">2 émissions</div>
         </div>
@@ -320,16 +316,13 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- C8 -->
-            <svg viewBox="0 0 68 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="C8">
-              <defs>
-                <linearGradient id="c8-grad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stop-color="#FF7700"/>
-                  <stop offset="1" stop-color="#FF5500"/>
-                </linearGradient>
-              </defs>
-              <rect width="68" height="40" rx="5" fill="url(#c8-grad)"/>
-              <text x="34" y="28" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="24" fill="#fff">C8</text>
+            <!-- C8 — logo vectorisé -->
+            <svg viewBox="0 0 100 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="C8">
+              <rect width="100" height="56" rx="6" fill="#FF6600"/>
+              <!-- C -->
+              <path d="M10,28 C10,19 15,13 23,13 C28,13 32,16 34,20 L30,23 C29,20 26.5,18 23,18 C18,18 15,22 15,28 C15,34 18,38 23,38 C26.5,38 29,36 30,33 L34,36 C32,40 28,43 23,43 C15,43 10,37 10,28 Z" fill="#fff"/>
+              <!-- 8 -->
+              <path d="M46,28 C46,25 48,23 51,22 C49,21 47.5,19 47.5,17 C47.5,13 50,11 54,11 C58,11 60.5,13 60.5,17 C60.5,19 59,21 57,22 C60,23 62,25 62,28 C62,33 58.5,36 54,36 C49.5,36 46,33 46,28 Z M52,22.5 C50.5,23.5 50,25 50,27 C50,30 51.5,32 54,32 C56.5,32 58,30 58,27 C58,25 57.5,23.5 56,22.5 Z M54,15 C52,15 51,16.5 51,18 C51,19.5 52,21 54,21 C56,21 57,19.5 57,18 C57,16.5 56,15 54,15 Z" fill="#fff"/>
             </svg>
           </div>
           <div class="channel-count">5 documentaires</div>
@@ -346,11 +339,20 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- RMC Découverte -->
-            <svg viewBox="0 0 160 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RMC Découverte">
-              <rect width="160" height="40" rx="5" fill="#002B7F"/>
-              <text x="80" y="18" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="15" fill="#fff" letter-spacing="1">RMC</text>
-              <text x="80" y="33" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="600" font-size="10" fill="#ccc" letter-spacing="1.5">DÉCOUVERTE</text>
+            <!-- RMC Découverte — logo vectorisé officiel bleu marine -->
+            <svg viewBox="0 0 220 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RMC Découverte">
+              <rect width="220" height="56" rx="4" fill="#002B7F"/>
+              <!-- RMC en blanc -->
+              <!-- R -->
+              <path d="M12,14 H22 C26,14 29,16.5 29,21 C29,24 27.5,26 25,27 L30,42 H25.5 L21,28 H16.5 V42 H12 Z M16.5,24 H21 C23,24 24.5,23 24.5,21 C24.5,19 23,18 21,18 H16.5 Z" fill="#fff"/>
+              <!-- M -->
+              <path d="M34,14 H39 L45,32 L51,14 H56 V42 H51.5 V24 L46,40 H44 L38.5,24 V42 H34 Z" fill="#fff"/>
+              <!-- C -->
+              <path d="M61,28 C61,20 66,13 74,13 C79,13 83,16 85,20 L81,23 C79.5,20 77,18 74,18 C68.5,18 65.5,22 65.5,28 C65.5,34 68.5,38 74,38 C77,38 79.5,36 81,33 L85,36 C83,40 79,43 74,43 C66,43 61,36 61,28 Z" fill="#fff"/>
+              <!-- séparateur -->
+              <rect x="92" y="18" width="1.5" height="20" fill="rgba(255,255,255,0.4)"/>
+              <!-- DÉCOUVERTE petit -->
+              <text x="100" y="32" font-family="Montserrat,sans-serif" font-weight="600" font-size="10" fill="rgba(255,255,255,0.85)" letter-spacing="1.5">DÉCOUVERTE</text>
             </svg>
           </div>
           <div class="channel-count">5 émissions</div>
@@ -367,11 +369,12 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- Ushuaïa TV -->
-            <svg viewBox="0 0 138 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ushuaïa TV">
-              <rect width="138" height="40" rx="5" fill="#007AA5"/>
-              <text x="69" y="18" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="13" fill="#fff" letter-spacing="1">USHUAÏA</text>
-              <text x="69" y="33" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="300" font-size="12" fill="#cce8f4" letter-spacing="5">TV</text>
+            <!-- Ushuaïa TV — logo vectorisé -->
+            <svg viewBox="0 0 200 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ushuaïa TV">
+              <rect width="200" height="56" rx="4" fill="#006699"/>
+              <text x="100" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="14" fill="#fff" letter-spacing="1.5">USHUAÏA</text>
+              <rect x="30" y="30" width="140" height="1" fill="rgba(255,255,255,0.3)"/>
+              <text x="100" y="44" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="300" font-size="11" fill="rgba(255,255,255,0.85)" letter-spacing="6">TV</text>
             </svg>
           </div>
           <div class="channel-count">1 documentaire</div>
@@ -392,12 +395,12 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- Guadeloupe La 1ère -->
-            <svg viewBox="0 0 172 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Guadeloupe La 1ère">
-              <circle cx="20" cy="20" r="20" fill="#CC2200"/>
+            <!-- Guadeloupe La 1ère — France TV style -->
+            <svg viewBox="0 0 180 40" height="38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Guadeloupe La 1ère">
+              <circle cx="20" cy="20" r="19" fill="#CC2200"/>
               <text x="20" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="19" fill="#fff">f</text>
-              <text x="47" y="16" font-family="Montserrat,sans-serif" font-weight="300" font-size="10" fill="#CC2200">Guadeloupe</text>
-              <text x="47" y="33" font-family="Montserrat,sans-serif" font-weight="900" font-size="16" fill="#CC2200">La 1ère</text>
+              <text x="46" y="15" font-family="Montserrat,sans-serif" font-weight="300" font-size="10" fill="#CC2200" letter-spacing="0.5">Guadeloupe</text>
+              <text x="46" y="32" font-family="Montserrat,sans-serif" font-weight="900" font-size="16" fill="#CC2200">La 1ère</text>
             </svg>
           </div>
           <div class="channel-count">1 documentaire</div>
@@ -411,9 +414,9 @@ footer a:hover{color:#888}
         <div class="channel-header">
           <div class="channel-logo">
             <!-- Numéro 23 -->
-            <svg viewBox="0 0 116 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Numéro 23">
-              <rect width="116" height="40" rx="5" fill="#7B2FBE"/>
-              <text x="58" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="17" fill="#fff" letter-spacing="1">NUMÉRO 23</text>
+            <svg viewBox="0 0 130 40" height="38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Numéro 23">
+              <rect width="130" height="40" rx="4" fill="#7B2FBE"/>
+              <text x="65" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="15" fill="#fff" letter-spacing="1">NUMÉRO 23</text>
             </svg>
           </div>
           <div class="channel-count">1 documentaire</div>
@@ -426,12 +429,12 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- France 5 / Ô -->
-            <svg viewBox="0 0 148 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="France Ô / France 5">
-              <circle cx="20" cy="20" r="20" fill="#3399CC"/>
+            <!-- France 5 / Ô — France TV style -->
+            <svg viewBox="0 0 160 40" height="38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="France 5 et Ô">
+              <circle cx="20" cy="20" r="19" fill="#3399CC"/>
               <text x="20" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="19" fill="#fff">f</text>
-              <text x="46" y="16" font-family="Montserrat,sans-serif" font-weight="300" font-size="11" fill="#3399CC">france</text>
-              <text x="46" y="35" font-family="Montserrat,sans-serif" font-weight="900" font-size="19" fill="#3399CC">5 &amp; Ô</text>
+              <text x="46" y="15" font-family="Montserrat,sans-serif" font-weight="300" font-size="11" fill="#3399CC">france</text>
+              <text x="46" y="34" font-family="Montserrat,sans-serif" font-weight="900" font-size="18" fill="#3399CC">5 &amp; Ô</text>
             </svg>
           </div>
           <div class="channel-count">3 documentaires</div>
@@ -454,11 +457,10 @@ footer a:hover{color:#888}
       <div class="channel-card">
         <div class="channel-header">
           <div class="channel-logo">
-            <!-- Longs métrages -->
-            <svg viewBox="0 0 148 40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Longs métrages">
-              <rect x="0" y="4" width="148" height="32" rx="3" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4 3"/>
-              <text x="74" y="17" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="300" font-size="9" fill="#aaa" letter-spacing="4">LONGS</text>
-              <text x="74" y="30" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="11" fill="#aaa" letter-spacing="3">MÉTRAGES</text>
+            <svg viewBox="0 0 160 40" height="38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Longs métrages">
+              <rect x="1" y="5" width="158" height="30" rx="3" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="5 3"/>
+              <text x="80" y="17" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="300" font-size="8" fill="#999" letter-spacing="4">LONGS</text>
+              <text x="80" y="29" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="10" fill="#999" letter-spacing="3">MÉTRAGES</text>
             </svg>
           </div>
           <div class="channel-count">5 films</div>
