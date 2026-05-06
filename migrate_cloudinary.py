@@ -2,9 +2,8 @@
 """
 migrate_cloudinary.py
 ─────────────────────
-Copie les playlists Action, Suspense, Piano, Orchestral et Groovy
-du compte Cloudinary source (dqfogw7sg) vers le compte destination (dfm2cwm0),
-puis met à jour catalogue.json pour que ces pistes pointent vers le nouveau cloud.
+Copie TOUS les MP3 du compte Cloudinary source (dqfogw7sg) vers le compte
+destination (dfm2cwm0), puis met à jour catalogue.json.
 
 Usage :
     pip install requests
@@ -27,11 +26,11 @@ SRC_SECRET = "4O-X2gHhbCCud7Yppkpe38TxhTc"
 
 # ── Compte destination ───────────────────────────────────────────────────────
 DST_CLOUD  = "dfm2cwm0"
-DST_KEY    = ""   # ← remplir avec la clé API du nouveau compte
-DST_SECRET = ""   # ← remplir avec le secret API du nouveau compte
+DST_KEY    = "645955733157556"
+DST_SECRET = "RB6VjSQe802PqJ7FA8cjQ-n0Qqg"
 
-# ── Playlists à migrer ───────────────────────────────────────────────────────
-PLAYLISTS_TO_MIGRATE = {"Action", "Suspense", "Piano", "Orchestral", "Groovy"}
+# ── Playlists à migrer (None = toutes) ───────────────────────────────────────
+PLAYLISTS_TO_MIGRATE = None   # toutes les playlists
 
 CATALOGUE_PATH = Path("catalogue.json")
 PROGRESS_PATH  = Path("migration_progress.json")
@@ -112,7 +111,7 @@ def patch_url(old_url: str, new_secure_url: str) -> str:
 def main() -> None:
     # ── Vérifications préalables ─────────────────────────────────────────────
     if not DST_KEY or not DST_SECRET:
-        print("❌  Remplis DST_KEY et DST_SECRET dans le script avant de lancer.")
+        print("❌  DST_KEY et DST_SECRET manquants.")
         return
 
     if not CATALOGUE_PATH.exists():
@@ -130,11 +129,14 @@ def main() -> None:
         print(f"↩  Reprise : {len(progress)} piste(s) déjà migrée(s)\n")
 
     # ── Sélection des pistes cibles ──────────────────────────────────────────
-    targets = [t for t in tracks if t["playlist"] in PLAYLISTS_TO_MIGRATE]
-    by_playlist = {}
+    if PLAYLISTS_TO_MIGRATE is None:
+        targets = list(tracks)
+    else:
+        targets = [t for t in tracks if t["playlist"] in PLAYLISTS_TO_MIGRATE]
+
+    by_playlist: dict[str, int] = {}
     for t in targets:
-        by_playlist.setdefault(t["playlist"], 0)
-        by_playlist[t["playlist"]] += 1
+        by_playlist[t["playlist"]] = by_playlist.get(t["playlist"], 0) + 1
 
     print(f"📦  {len(targets)} pistes à migrer vers « {DST_CLOUD} »")
     for pl, n in sorted(by_playlist.items()):
@@ -198,10 +200,7 @@ def main() -> None:
             print(f"🗑  migration_progress.json supprimé")
 
     # ── Vérification rapide ──────────────────────────────────────────────────
-    new_cloud_count = sum(
-        1 for t in tracks
-        if t["playlist"] in PLAYLISTS_TO_MIGRATE and DST_CLOUD in t.get("url", "")
-    )
+    new_cloud_count = sum(1 for t in tracks if DST_CLOUD in t.get("url", ""))
     print(f"\n🔍  {new_cloud_count}/{len(targets)} URLs pointent maintenant vers « {DST_CLOUD} »")
 
 
