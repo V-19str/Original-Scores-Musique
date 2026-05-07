@@ -15,9 +15,13 @@ migration_progress.json et les pistes déjà migrées sont ignorées.
 
 import hashlib
 import json
+import sys
 import time
 import requests
 from pathlib import Path
+
+# Force UTF-8 output (Windows cp1252 ne gère pas les emojis)
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 # ── Compte source (lecture seule) ───────────────────────────────────────────
 SRC_CLOUD  = "dqfogw7sg"
@@ -25,7 +29,7 @@ SRC_KEY    = "968571581867276"
 SRC_SECRET = "4O-X2gHhbCCud7Yppkpe38TxhTc"
 
 # ── Compte destination ───────────────────────────────────────────────────────
-DST_CLOUD  = "dfm2cwm0"
+DST_CLOUD  = "dtfm2cwm0"
 DST_KEY    = "645955733157556"
 DST_SECRET = "RB6VjSQe802PqJ7FA8cjQ-n0Qqg"
 
