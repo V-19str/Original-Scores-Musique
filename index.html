@@ -296,6 +296,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 #bg-speaker.muted{background:var(--bg3);color:var(--muted);box-shadow:none}
 .progress-wrap{display:flex;align-items:center;gap:9px;width:100%}
 #waveform-container{flex:1;cursor:pointer;border-radius:3px;overflow:hidden}
+#osc-canvas{width:72px;height:32px;flex-shrink:0;border-radius:3px}
 .time{font-size:11px;color:var(--muted);min-width:36px}
 .time:last-child{text-align:right}
 .player-right{display:flex;justify-content:flex-end;align-items:center;gap:10px}
@@ -931,6 +932,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       </div>
       <div class="progress-wrap">
         <span class="time" id="time-cur">0:00</span>
+        <canvas id="osc-canvas" width="72" height="32"></canvas>
         <div id="waveform-container"></div>
         <span class="time" id="time-dur">0:00</span>
       </div>
@@ -1009,6 +1011,46 @@ ws.on('finish', ()=>{
 });
 ws.on('play',   ()=>{ document.getElementById('btn-play').textContent='⏸'; });
 ws.on('pause',  ()=>{ document.getElementById('btn-play').textContent='▶'; });
+
+/* ── OSCILLOSCOPE ── */
+(function(){
+  const cvs=document.getElementById('osc-canvas');
+  if(!cvs)return;
+  const c=cvs.getContext('2d');
+  const W=cvs.width,H=cvs.height;
+  let actx=null,analyser=null;
+  function ensureCtx(){
+    if(analyser)return;
+    try{
+      actx=new(window.AudioContext||window.webkitAudioContext)();
+      const src=actx.createMediaElementSource(audio);
+      analyser=actx.createAnalyser();
+      analyser.fftSize=256;
+      src.connect(analyser);
+      analyser.connect(actx.destination);
+    }catch(e){}
+  }
+  audio.addEventListener('play',()=>{ensureCtx();if(actx&&actx.state==='suspended')actx.resume();});
+  (function draw(){
+    requestAnimationFrame(draw);
+    c.clearRect(0,0,W,H);
+    if(!analyser){
+      c.strokeStyle='rgba(255,85,0,0.22)';c.lineWidth=1;
+      c.beginPath();c.moveTo(0,H/2);c.lineTo(W,H/2);c.stroke();
+      return;
+    }
+    const buf=new Uint8Array(analyser.fftSize);
+    analyser.getByteTimeDomainData(buf);
+    c.strokeStyle='#FF5500';c.lineWidth=1.5;
+    c.beginPath();
+    const step=W/buf.length;
+    for(let i=0;i<buf.length;i++){
+      const y=((buf[i]/128)-1)*(H/2)+H/2;
+      i===0?c.moveTo(0,y):c.lineTo(i*step,y);
+    }
+    c.stroke();
+  })();
+})();
 
 function checkPw(){
   if(document.getElementById('pw-input').value===PASSWORD){
@@ -1325,6 +1367,42 @@ function renderTags(){
 
 function getKws(q){return q.toLowerCase().trim().split(/\s+/).filter(k=>k.length>=2);}
 
+const SYNONYMES={
+  triste:['sad','melancolique','mélancolique','sombre','dark','lonely','nostalgique','nostalgie','grave','douloureux'],
+  joyeux:['happy','joyful','upbeat','positif','feel-good','festif','célébration','allegro','léger','gai'],
+  épique:['epic','trailer','heroic','majestueux','orchestral','cinématique','puissant','heroique','épopée'],
+  rapide:['fast','energetic','intense','dynamique','action','urgent','rush','vif','allegro','frénétique'],
+  lent:['slow','doux','calme','calm','atmosphérique','ambient','dreamy','adagio','paisible','tranquille'],
+  peur:['horror','fear','tension','angoisse','suspense','thriller','dark','sombre','horreur','effroi','terreur'],
+  amour:['love','romantic','romantique','tendre','sweet','intime','passion','séduction','douceur'],
+  guerre:['battle','combat','military','militaire','heroic','fight','conflit','puissance','armée'],
+  enfants:['kids','children','ludique','fun','playful','comique','léger','fantaisie','rêve'],
+  sport:['sports','athletique','énergie','energie','power','dynamique','pump','motivation','workout'],
+  nature:['forest','ocean','ambient','atmospherique','zen','organic','forêt','mer','vent','campagne'],
+  film:['cinéma','cinema','cinématique','movie','score','bande','originale','soundtrack','générique'],
+  pub:['publicité','advertising','commercial','brand','corporate','spot'],
+  danse:['dance','electronic','electro','techno','house','club','groove','beat'],
+  rock:['guitare','electrique','metal','hard','punk','indie','riff','distorsion'],
+  classique:['orchestral','orchestre','symphonie','symphony','strings','cordes','piano','quatuor'],
+  jazz:['blues','swing','cool','bossa','soul','saxophone','trompette','improvisation'],
+  electronique:['electronic','electro','synth','techno','trance','ambient','house','synthétiseur'],
+  mélancolique:['sad','triste','sombre','dark','melancholy','nostalgique','grave'],
+  dramatique:['drama','tension','intense','tragique','émouvant','poignant'],
+  mystère:['mystery','suspense','enquête','policier','sombre','investigation'],
+  // anglais → français
+  sad:['triste','mélancolique','sombre','dark'],
+  happy:['joyeux','uplifting','positif','festif'],
+  epic:['épique','trailer','héroïque','majestueux'],
+  fear:['peur','horreur','tension','sombre'],
+  battle:['guerre','combat','militaire','héroïque'],
+  love:['amour','romantique','tendre'],
+  slow:['lent','calme','doux','atmosphérique'],
+  fast:['rapide','dynamique','énergique'],
+  horror:['peur','angoisse','sombre','tension'],
+  dark:['sombre','triste','tension','mystère'],
+  light:['léger','joyeux','doux','positif'],
+};
+
 function onSearch(){
   activeTag=null;document.querySelectorAll('.tag-pill').forEach(b=>b.classList.remove('active'));
   showView('catalogue');filterTracks();
@@ -1342,7 +1420,7 @@ function filterTracks(){
     const matchTag=!activeTag||(tagPls&&tagPls.includes(lbl));
     const hay=`${t.title} ${lbl} ${(t.tags||[]).join(' ')} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();
     let matchSearch=true;
-    if(kws.length>0){matchSearch=kws.every(kw=>hay.includes(kw));}
+    if(kws.length>0){matchSearch=kws.every(kw=>hay.includes(kw)||(SYNONYMES[kw]||[]).some(s=>hay.includes(s)));}
     let matchHeroTags=true;
     if(activeHeroTags.size>0){matchHeroTags=[...activeHeroTags].some(tag=>hay.includes(tag.toLowerCase()));}
     let matchDuration=true;
