@@ -251,6 +251,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .section-count{font-size:11px;color:var(--muted)}
 .section-tag{font-size:11px;color:var(--red);background:rgba(255,85,0,0.1);padding:3px 10px;border-radius:10px}
 .tracks-header{display:grid;grid-template-columns:48px 1fr 160px 60px 52px 44px 44px 44px 44px;gap:12px;padding:6px 14px;font-size:10px;font-weight:600;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:2px}
+.tracks-header span:nth-child(1),.tracks-header span:nth-child(4),.tracks-header span:nth-child(5){text-align:center}
 .track-list{display:flex;flex-direction:column}
 .track{display:grid;grid-template-columns:48px 1fr 160px 60px 52px 44px 44px 44px 44px;align-items:center;gap:12px;padding:11px 14px;cursor:pointer;transition:background 0.15s;border-radius:4px}
 .track:hover{background:var(--bg2);box-shadow:inset 3px 0 0 var(--red)}
@@ -265,7 +266,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .track-artist{font-size:12px;color:var(--text2)}
 .track-badge{font-size:10px;font-weight:500;color:var(--text2);background:var(--bg3);padding:3px 9px;border-radius:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;max-width:100%}
 .track.playing .track-badge{background:rgba(255,85,0,0.15);color:#ff8844}
-.track-duration{font-size:13px;color:var(--muted);text-align:right}
+.track-duration{font-size:13px;color:var(--muted);text-align:center}
 .track-bpm{font-size:11px;color:var(--muted);text-align:center;letter-spacing:0.5px}
 .track-btn{background:none;border:1px solid transparent;color:var(--muted);cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.15s;border-radius:4px}
 .track-btn:hover{border-color:var(--border);color:var(--text2);background:var(--bg3)}
@@ -896,7 +897,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
           <span class="section-count" id="section-count"></span>
           <span class="section-tag" id="section-tag" style="display:none"></span>
         </div>
-        <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span style="text-align:center">BPM</span><span></span><span></span><span></span><span></span></div>
+        <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span>BPM</span><span></span><span></span><span></span><span></span></div>
         <div id="track-list" class="track-list"><div class="loading"><span class="ld">·</span><span class="ld">·</span><span class="ld">·</span> Chargement</div></div>
       </div>
     </div>
@@ -914,7 +915,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       <span class="section-title">Mes Favoris</span>
       <span class="section-count" id="fav-section-count"></span>
     </div>
-    <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span></span><span></span><span></span><span></span></div>
+    <div class="tracks-header"><span>#</span><span>Titre</span><span>Playlist</span><span>Durée</span><span>BPM</span><span></span><span></span><span></span><span></span></div>
     <div id="fav-track-list" class="track-list"></div>
   </div>
 </div>
