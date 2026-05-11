@@ -49,7 +49,7 @@ def fetch_one(track: dict) -> tuple[str, str | None]:
                 if dur is not None:
                     return pid, secs_to_mmss(float(dur))
                 return pid, None
-            if r.status_code == 429:
+            if r.status_code in (420, 429):
                 time.sleep(5 * attempt)
                 continue
         except Exception:
