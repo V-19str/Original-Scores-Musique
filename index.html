@@ -345,6 +345,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .load-more-btn:hover{border-color:var(--red);color:var(--red)}
 .copy-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--bg3);border:1px solid rgba(255,85,0,0.3);color:var(--text);padding:9px 18px;border-radius:20px;font-size:12px;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none}
 .copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.dl-gate{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(12px);background:#0f0f0f;border:1px solid rgba(229,9,20,0.6);color:#fff;padding:13px 26px;border-radius:26px;font-size:12px;font-weight:600;letter-spacing:0.3px;opacity:0;transition:all 0.3s;z-index:1000;pointer-events:none;white-space:nowrap;text-decoration:none;box-shadow:0 4px 24px rgba(229,9,20,0.25);display:inline-flex;align-items:center;gap:8px}
+.dl-gate.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.dl-gate:hover{background:#1a0000;border-color:rgba(229,9,20,0.9)}
+.dl-gate .dl-gate-arrow{color:var(--red);font-size:14px}
 
 /* FAVORIS */
 .track-fav{color:var(--muted);transition:color 0.15s}
@@ -953,6 +957,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   </div>
 </div>
 <div class="copy-toast" id="copy-toast">🔗 Lien copié !</div>
+<a class="dl-gate" id="dl-gate" href="login-monteurs.html">🔒 Créez un compte gratuit pour télécharger <span class="dl-gate-arrow">→</span></a>
 </div>
 <input type="hidden" id="search" value="">
 <audio id="audio"></audio>
@@ -1327,10 +1332,14 @@ function playDetailTrack(i){
 function playAllDetail(){if(currentDetailTracks.length>0)playDetailTrack(0);}
 
 function downloadDetailTrack(i){
+  if(!canDownload())return;
   const t=currentDetailTracks[i];if(!t)return;
   const a=document.createElement('a');
   a.href=t.url.replace('/upload/','/upload/fl_attachment/');
   a.download=t.title+'.mp3';a.target='_blank';a.click();
+  if(osmUser&&typeof osmSB!=='undefined'){
+    osmSB.from('downloads').insert({user_id:osmUser.id,track_id:t.id||t.title,track_title:t.title,track_playlist:t.playlistLabel,track_url:t.url}).then(()=>{});
+  }
 }
 
 function renderNavPills(){
@@ -1646,6 +1655,7 @@ function playFromQueue(i){
 }
 function copyLink(url){navigator.clipboard.writeText(url).then(()=>{const t=document.getElementById('copy-toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);});}
 function downloadTrack(i){
+  if(!canDownload())return;
   const t=filteredTracks[i];if(!t)return;
   const a=document.createElement('a');
   a.href=t.url.replace('/upload/','/upload/fl_attachment/');
@@ -1830,8 +1840,12 @@ function toggleQueueFavTrack(id){
   updateQueueBadge();renderFavoris();renderQueueList();
 }
 function downloadFavTrack(id){
+  if(!canDownload())return;
   const t=allTracks.find(tr=>tr.id===id);if(!t)return;
   const a=document.createElement('a');a.href=t.url.replace('/upload/','/upload/fl_attachment/');a.download=t.title+'.mp3';a.target='_blank';a.click();
+  if(osmUser&&typeof osmSB!=='undefined'){
+    osmSB.from('downloads').insert({user_id:osmUser.id,track_id:t.id||t.title,track_title:t.title,track_playlist:t.playlistLabel,track_url:t.url}).then(()=>{});
+  }
 }
 function shareFavoris(){
   if(!favorites.size){alert('Ajoutez d\'abord des favoris !');return;}
@@ -1951,6 +1965,18 @@ function osmClearUser() {
   osmUser = null;
   const el = document.getElementById('osm-auth-nav');
   if (el) el.innerHTML = `<a class="btn-nav" href="login-monteurs.html">👤 Mon compte</a>`;
+}
+
+function canDownload(){
+  if(osmUser)return true;
+  showDlGate();return false;
+}
+let dlGateTimer=null;
+function showDlGate(){
+  const g=document.getElementById('dl-gate');if(!g)return;
+  g.classList.add('show');
+  clearTimeout(dlGateTimer);
+  dlGateTimer=setTimeout(()=>g.classList.remove('show'),3500);
 }
 
 osmInit();
