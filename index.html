@@ -1189,6 +1189,15 @@ function fmt2(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec
 
 function loadCatalogue(){
   fetch('./catalogue.json').then(r=>r.json()).then(data=>{
+    const cataloguePlaylists=data.playlists||[];
+    const tagsMapKeys=Object.keys(TAGS_MAP);
+    console.log('[OSM] Playlists dans catalogue.json (%d):', cataloguePlaylists.length, cataloguePlaylists);
+    console.log('[OSM] Clés TAGS_MAP (%d):', tagsMapKeys.length, tagsMapKeys);
+    const orphanTags=tagsMapKeys.filter(k=>!cataloguePlaylists.includes(k));
+    const unmappedPlaylists=cataloguePlaylists.filter(p=>!TAGS_MAP[p]);
+    if(orphanTags.length)console.warn('[OSM] Tags sans playlist correspondante:', orphanTags);
+    else console.log('[OSM] Tous les tags TAGS_MAP correspondent à une playlist catalogue.');
+    if(unmappedPlaylists.length)console.info('[OSM] Playlists catalogue sans entrée TAGS_MAP:', unmappedPlaylists);
     allTracks=(data.tracks||[]).filter(t=>t.playlist!=='samples').map(t=>({...t,playlistLabel:getLabel(t.playlist)}));
     renderPlaylists();
     renderNavPills();
