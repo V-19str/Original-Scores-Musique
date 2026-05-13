@@ -1573,7 +1573,7 @@ function filterTracks(){
     let matchSearch=true;
     if(kws.length>0){matchSearch=kws.every(kw=>hay.includes(kw)||(SYNONYMES[kw]||[]).some(s=>hay.includes(s)));}
     let matchHeroTags=true;
-    if(activeHeroTags.size>0){matchHeroTags=[...activeHeroTags].some(tag=>hay.includes(tag.toLowerCase()));}
+    if(activeHeroTags.size>0){matchHeroTags=[...activeHeroTags].every(tag=>hay.includes(tag.toLowerCase())||(SYNONYMES[tag]||[]).some(s=>hay.includes(s)));}
     let matchDuration=true;
     if(activeDuration&&t.duration){const s=parseDurSecs(t.duration);if(s>0){if(activeDuration==='short')matchDuration=s<60;else if(activeDuration==='medium')matchDuration=s>=60&&s<=180;else if(activeDuration==='long')matchDuration=s>180;}}
     return matchFolder&&matchTag&&matchSearch&&matchHeroTags&&matchDuration;
