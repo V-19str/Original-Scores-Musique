@@ -128,17 +128,17 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-sug-item:hover{background:#f5f5f5}
 .hero-sug-type{font-size:10px;color:#999;background:#eee;padding:2px 8px;border-radius:4px;flex-shrink:0}
 /* Hero tag rows */
-.hero-tags-section{width:100%;max-width:800px;margin-top:8px;display:none}
-.hero-tags-section.open{display:block}
-.hero-filter-toggle{margin-top:10px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;padding:6px 16px;border-radius:20px;cursor:pointer;transition:all 0.15s;backdrop-filter:blur(4px)}
-.hero-filter-toggle:hover{background:rgba(255,255,255,0.18);color:#fff;border-color:rgba(255,255,255,0.35)}
-.hero-tag-cat{margin-bottom:9px;display:flex;align-items:center;gap:10px}
-.hero-tag-cat-label{font-size:9px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.35);text-transform:uppercase;white-space:nowrap;min-width:72px;text-align:right;flex-shrink:0}
-.hero-tag-pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:2px}
+.hero-tags-section{width:100%;max-width:960px;margin-top:12px;display:none}
+.hero-tags-section.open{display:block;padding:18px 20px 14px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.12);border-radius:14px;backdrop-filter:blur(12px)}
+.hero-filter-toggle{margin-top:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;padding:7px 18px;border-radius:20px;cursor:pointer;transition:all 0.15s;backdrop-filter:blur(4px);letter-spacing:0.3px}
+.hero-filter-toggle:hover{background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.5);color:#fff}
+.hero-tag-cat{margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.hero-tag-cat-label{font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;min-width:76px;text-align:right;flex-shrink:0}
+.hero-tag-pills{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:3px;flex-wrap:wrap}
 .hero-tag-pills::-webkit-scrollbar{display:none}
-.hero-tag-pill{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.82);padding:5px 13px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0;user-select:none}
-.hero-tag-pill:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.35);color:#fff}
-.hero-tag-pill.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 2px 10px rgba(255,85,0,0.4)}
+.hero-tag-pill{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff;padding:6px 15px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0;user-select:none}
+.hero-tag-pill:hover{background:rgba(255,255,255,0.24);border-color:rgba(255,255,255,0.55);color:#fff;transform:translateY(-1px)}
+.hero-tag-pill.active{color:#fff;box-shadow:0 2px 12px rgba(255,85,0,0.45)}
 
 /* STATS */
 .stats-section{padding:80px 64px;background:var(--bg-alt)}
@@ -453,11 +453,19 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .stat-card:nth-child(2):hover::before{background:#8B5CF6}
 .stat-card:nth-child(3):hover::before{background:#00B4D8}
 .stat-card:nth-child(4):hover::before{background:#06D6A0}
-/* POP COLORS — hero tag categories */
-.hero-tag-cat:nth-child(1) .hero-tag-pill.active{background:#8B5CF6;border-color:#8B5CF6;box-shadow:0 2px 10px rgba(139,92,246,0.5)}
-.hero-tag-cat:nth-child(2) .hero-tag-pill.active{background:#00B4D8;border-color:#00B4D8;box-shadow:0 2px 10px rgba(0,180,216,0.5)}
-.hero-tag-cat:nth-child(3) .hero-tag-pill.active{background:#06D6A0;border-color:#06D6A0;box-shadow:0 2px 10px rgba(6,214,160,0.5)}
-.hero-tag-cat:nth-child(4) .hero-tag-pill.active{background:#FF5500;border-color:#FF5500;box-shadow:0 2px 10px rgba(255,85,0,0.5)}
+/* POP COLORS — hero tag categories : labels + pill idle tint + active */
+.hero-tag-cat:nth-child(1) .hero-tag-cat-label{color:#a78bfa}
+.hero-tag-cat:nth-child(2) .hero-tag-cat-label{color:#38bdf8}
+.hero-tag-cat:nth-child(3) .hero-tag-cat-label{color:#34d399}
+.hero-tag-cat:nth-child(4) .hero-tag-cat-label{color:#fb7185}
+.hero-tag-cat:nth-child(1) .hero-tag-pill{border-color:rgba(167,139,250,0.35)}
+.hero-tag-cat:nth-child(2) .hero-tag-pill{border-color:rgba(56,189,248,0.35)}
+.hero-tag-cat:nth-child(3) .hero-tag-pill{border-color:rgba(52,211,153,0.35)}
+.hero-tag-cat:nth-child(4) .hero-tag-pill{border-color:rgba(251,113,133,0.35)}
+.hero-tag-cat:nth-child(1) .hero-tag-pill.active{background:#8B5CF6;border-color:#8B5CF6;box-shadow:0 2px 12px rgba(139,92,246,0.55)}
+.hero-tag-cat:nth-child(2) .hero-tag-pill.active{background:#0ea5e9;border-color:#0ea5e9;box-shadow:0 2px 12px rgba(14,165,233,0.55)}
+.hero-tag-cat:nth-child(3) .hero-tag-pill.active{background:#10b981;border-color:#10b981;box-shadow:0 2px 12px rgba(16,185,129,0.55)}
+.hero-tag-cat:nth-child(4) .hero-tag-pill.active{background:#FF5500;border-color:#FF5500;box-shadow:0 2px 12px rgba(255,85,0,0.55)}
 /* POP COLORS — services strip icons */
 .srv-card:nth-child(1) .srv-icon-bg{background:rgba(255,85,0,0.15);color:#FF5500}
 .srv-card:nth-child(2) .srv-icon-bg{background:rgba(139,92,246,0.15);color:#8B5CF6}
@@ -511,10 +519,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   .hero-search-bar{padding:5px 5px 5px 14px;gap:8px}
   .hero-search-field{font-size:12px;padding:8px 0}
   .hero-search-btn{padding:9px 14px;font-size:9px;letter-spacing:1px}
-  .hero-tags-section{margin-top:12px}
-  .hero-tag-cat{margin-bottom:6px}
+  .hero-tags-section.open{padding:14px 14px 10px;border-radius:12px}
+  .hero-tag-cat{margin-bottom:8px}
   .hero-tag-cat-label{display:none}
-  .hero-tag-pill{font-size:10px;padding:4px 10px}
+  .hero-tag-pill{font-size:11px;padding:5px 11px}
+  .hero-tag-pills{flex-wrap:wrap;gap:6px}
   .pl-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
   .stats-grid{grid-template-columns:1fr 1fr}
   .track{grid-template-columns:32px 1fr auto 32px}
