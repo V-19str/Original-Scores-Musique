@@ -954,7 +954,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 </div>
 </div>
 <input type="hidden" id="search" value="">
-<audio id="audio"></audio>
+<audio id="audio" crossorigin="anonymous"></audio>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
 
 <script>
@@ -971,7 +971,6 @@ const audio=document.getElementById('audio');
 /* ── WAVESURFER ── */
 const ws = WaveSurfer.create({
   container: '#waveform-container',
-  backend: 'WebAudio',
   media: audio,
   waveColor: 'rgba(255,85,0,0.28)',
   progressColor: '#FF5500',
@@ -990,8 +989,10 @@ function parseDur(s){const d=parseDurSecs(s);return d>0?d:undefined;}
 function wsLoad(url,dur){
   wsPendingPlay = true;
   document.getElementById('waveform-container').classList.add('ws-loading');
-  // Provide flat peaks + duration so WaveSurfer skips the full-file XHR fetch (saves Cloudinary bandwidth)
-  ws.load(url,[[0]],dur);
+  ws.load(url,[[0]],dur).catch(()=>{
+    wsPendingPlay=false;
+    document.getElementById('waveform-container').classList.remove('ws-loading');
+  });
 }
 ws.on('ready', ()=>{
   document.getElementById('waveform-container').classList.remove('ws-loading');
@@ -1016,6 +1017,7 @@ ws.on('finish', ()=>{
 });
 ws.on('play',   ()=>{ const b=document.getElementById('btn-play'); b.textContent='⏸'; b.title='Pause'; b.setAttribute('aria-label','Pause'); });
 ws.on('pause',  ()=>{ const b=document.getElementById('btn-play'); b.textContent='▶'; b.title='Lire'; b.setAttribute('aria-label','Lire'); });
+ws.on('error',  ()=>{ wsPendingPlay=false; document.getElementById('waveform-container').classList.remove('ws-loading'); });
 
 /* ── WAVEFORM BARS (FranceTV Synchro style) ── */
 (function(){
