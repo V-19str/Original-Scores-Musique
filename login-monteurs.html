@@ -203,6 +203,63 @@ footer a { color: #666; text-decoration: none; }
   .tab-pane { padding: 24px 16px 80px; }
   .dash-stats { grid-template-columns: 1fr; }
 }
+
+/* ── ADMIN SCREEN ─────────────────────────────── */
+#admin-screen { display: none; padding-top: 80px; min-height: 100vh; }
+.admin-hero { padding: 32px 48px 0; background: linear-gradient(180deg,#090909 0%,var(--bg) 100%); }
+[data-theme="light"] .admin-hero { background: linear-gradient(180deg,#d8d8d8 0%,var(--bg) 100%); }
+.admin-eyebrow { font-size: 10px; color: var(--red); font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 10px; }
+.admin-title { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+.admin-meta { font-size: 12px; color: var(--muted); padding-bottom: 28px; }
+.admin-stats { padding: 24px 48px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.admin-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
+.admin-stat-num { font-size: 28px; font-weight: 700; color: var(--red); }
+.admin-stat-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+.admin-controls { padding: 0 48px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.search-admin { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 9px 14px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 13px; outline: none; width: 280px; transition: border-color 0.2s; }
+.search-admin:focus { border-color: #555; }
+.search-admin::placeholder { color: var(--muted); }
+.filter-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--muted); padding: 9px 16px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 4px; transition: all 0.15s; letter-spacing: 1px; }
+.filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+.admin-clients-section { padding: 0 48px 120px; }
+.admin-section-title { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text2); margin-bottom: 16px; }
+.client-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
+.client-card:hover { border-color: rgba(229,9,20,0.25); }
+.client-header { padding: 16px 20px; display: grid; grid-template-columns: auto 1fr auto auto auto auto; align-items: center; gap: 16px; cursor: pointer; }
+.client-avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(229,9,20,0.15); border: 1px solid rgba(229,9,20,0.3); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: var(--red); flex-shrink: 0; }
+.client-info { min-width: 0; }
+.client-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.client-email { font-size: 11px; color: var(--muted); }
+.client-societe { font-size: 12px; color: var(--text2); }
+.client-metier { font-size: 10px; color: var(--muted); background: var(--bg3); padding: 3px 9px; border-radius: 10px; white-space: nowrap; }
+.client-date { font-size: 11px; color: var(--muted); white-space: nowrap; text-align: right; }
+.client-badge { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: var(--text2); white-space: nowrap; text-align: center; min-width: 60px; }
+.client-badge.has-data { border-color: rgba(229,9,20,0.3); color: var(--red); background: rgba(229,9,20,0.06); }
+.client-toggle { font-size: 13px; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
+.client-card.open .client-toggle { transform: rotate(180deg); }
+.client-detail { display: none; border-top: 1px solid var(--border); padding: 20px; background: rgba(0,0,0,0.2); }
+.client-card.open .client-detail { display: block; }
+.detail-tabs { display: flex; gap: 0; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+.detail-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); padding: 8px 16px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; margin-bottom: -1px; }
+.detail-tab.active { color: var(--text); border-bottom-color: var(--red); }
+.detail-panel { display: none; }
+.detail-panel.active { display: block; }
+.mini-track { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 4px; transition: background 0.1s; }
+.mini-track:hover { background: var(--bg3); }
+.mini-track-num { font-size: 11px; color: var(--muted); min-width: 20px; text-align: center; }
+.mini-track-info { flex: 1; min-width: 0; }
+.mini-track-title { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.mini-track-playlist { font-size: 11px; color: var(--muted); }
+.mini-track-date { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+.detail-empty { padding: 20px; text-align: center; color: var(--muted); font-size: 12px; }
+.admin-empty-msg { text-align: center; padding: 60px; color: var(--muted); font-size: 13px; }
+.admin-loading { text-align: center; padding: 60px; color: var(--muted); font-size: 12px; letter-spacing: 2px; }
+@media (max-width: 768px) {
+  .admin-hero, .admin-stats, .admin-controls, .admin-clients-section { padding-left: 16px; padding-right: 16px; }
+  .admin-stats { grid-template-columns: repeat(2, 1fr); }
+  .client-header { grid-template-columns: auto 1fr auto; }
+  .client-metier, .client-date { display: none; }
+}
 </style>
 </head>
 <body>
@@ -342,6 +399,36 @@ footer a { color: #666; text-decoration: none; }
 
 </div>
 
+<!-- ══════════════════ ADMIN SCREEN ══════════════════ -->
+<div id="admin-screen">
+
+  <div class="admin-hero">
+    <div class="admin-eyebrow">Panneau Administrateur</div>
+    <div class="admin-title">Vue d'ensemble</div>
+    <div class="admin-meta" id="admin-meta"></div>
+  </div>
+
+  <div class="admin-stats">
+    <div class="admin-stat"><div class="admin-stat-num" id="as-clients">—</div><div class="admin-stat-label">Clients</div></div>
+    <div class="admin-stat"><div class="admin-stat-num" id="as-favs">—</div><div class="admin-stat-label">Favoris</div></div>
+    <div class="admin-stat"><div class="admin-stat-num" id="as-dls">—</div><div class="admin-stat-label">Téléchargements</div></div>
+    <div class="admin-stat"><div class="admin-stat-num" id="as-today">—</div><div class="admin-stat-label">DL aujourd'hui</div></div>
+  </div>
+
+  <div class="admin-controls">
+    <input type="text" class="search-admin" id="admin-search" placeholder="Rechercher un client..." oninput="renderAdminClients()">
+    <button class="filter-btn active" data-afilter="all" onclick="setAdminFilter('all',this)">Tous</button>
+    <button class="filter-btn" data-afilter="favorites" onclick="setAdminFilter('favorites',this)">Avec favoris</button>
+    <button class="filter-btn" data-afilter="downloads" onclick="setAdminFilter('downloads',this)">Avec DL</button>
+  </div>
+
+  <div class="admin-clients-section">
+    <div class="admin-section-title" id="admin-clients-count">Clients</div>
+    <div id="admin-clients-list"><div class="admin-loading">· · · Chargement des données</div></div>
+  </div>
+
+</div>
+
 <!-- Modal Nouveau Projet -->
 <div class="modal" id="modal-proj">
   <div class="modal-box">
@@ -376,6 +463,9 @@ const SKEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
 const sb = supabase.createClient(SURL, SKEY);
 
 let me = null, myProfile = null;
+const ADMIN_EMAIL = 'vladimirstreiff@gmail.com';
+const ADMIN_RPC_PWD = 'OSM_ADMIN_2026';
+let allProfiles = [], allFavorites = [], allDownloads = [], activeAdminFilter = 'all';
 
 // ── INIT ──────────────────────────────────────────
 async function init() {
@@ -400,6 +490,7 @@ function showAuth() {
   me = null; myProfile = null;
   document.getElementById('auth-screen').style.display = 'flex';
   document.getElementById('dashboard-screen').style.display = 'none';
+  document.getElementById('admin-screen').style.display = 'none';
   document.getElementById('header-username').style.display = 'none';
   document.getElementById('btn-logout').style.display = 'none';
 }
@@ -467,8 +558,10 @@ async function logout() {
 
 // ── DASHBOARD ─────────────────────────────────────
 function showDash() {
+  if (me?.email === ADMIN_EMAIL) { showAdminDash(); return; }
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('dashboard-screen').style.display = 'block';
+  document.getElementById('admin-screen').style.display = 'none';
 
   const p = myProfile, m = me?.user_metadata;
   const prenom = p?.prenom || m?.prenom || '';
@@ -627,6 +720,115 @@ function setLoading(btnId, spId, on) {
 document.getElementById('modal-proj').addEventListener('click', e => {
   if (e.target === document.getElementById('modal-proj')) closeProjModal();
 });
+
+// ── ADMIN ─────────────────────────────────────────
+function showAdminDash() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('dashboard-screen').style.display = 'none';
+  document.getElementById('admin-screen').style.display = 'block';
+  document.getElementById('header-username').textContent = '⚙ Admin';
+  document.getElementById('header-username').style.display = 'inline';
+  document.getElementById('btn-logout').style.display = 'inline-flex';
+  loadAdminData();
+}
+
+async function loadAdminData() {
+  document.getElementById('admin-clients-list').innerHTML = '<div class="admin-loading">· · · Chargement des données clients</div>';
+  const { data, error } = await sb.rpc('get_admin_data', { admin_pwd: ADMIN_RPC_PWD });
+  if (error) {
+    document.getElementById('admin-clients-list').innerHTML = `<div class="admin-empty-msg">Erreur : ${esc(error.message)}</div>`;
+    return;
+  }
+  allProfiles = data?.profiles || [];
+  allFavorites = data?.favorites || [];
+  allDownloads = data?.downloads || [];
+  const today = new Date().toISOString().slice(0, 10);
+  const todayDls = allDownloads.filter(d => (d.downloaded_at || '').slice(0, 10) === today);
+  document.getElementById('as-clients').textContent = allProfiles.length;
+  document.getElementById('as-favs').textContent = allFavorites.length;
+  document.getElementById('as-dls').textContent = allDownloads.length;
+  document.getElementById('as-today').textContent = todayDls.length;
+  document.getElementById('admin-meta').textContent = `${allProfiles.length} client${allProfiles.length !== 1 ? 's' : ''} · ${allDownloads.length} téléchargement${allDownloads.length !== 1 ? 's' : ''} · ${allFavorites.length} favori${allFavorites.length !== 1 ? 's' : ''}`;
+  renderAdminClients();
+}
+
+function renderAdminClients() {
+  const query = (document.getElementById('admin-search')?.value || '').toLowerCase().trim();
+  let profiles = allProfiles.filter(p => {
+    const text = [p.prenom, p.nom, p.email, p.societe, p.metier].join(' ').toLowerCase();
+    if (query && !text.includes(query)) return false;
+    if (activeAdminFilter === 'favorites') return allFavorites.some(f => f.user_id === p.id);
+    if (activeAdminFilter === 'downloads') return allDownloads.some(d => d.user_id === p.id);
+    return true;
+  });
+  const count = profiles.length, total = allProfiles.length;
+  document.getElementById('admin-clients-count').textContent = (query || activeAdminFilter !== 'all')
+    ? `${count} client${count > 1 ? 's' : ''} (sur ${total})`
+    : `${total} client${total > 1 ? 's' : ''} enregistré${total > 1 ? 's' : ''}`;
+  if (!profiles.length) {
+    document.getElementById('admin-clients-list').innerHTML = '<div class="admin-empty-msg">Aucun client trouvé</div>';
+    return;
+  }
+  document.getElementById('admin-clients-list').innerHTML = profiles.map(p => {
+    const favs = allFavorites.filter(f => f.user_id === p.id);
+    const dls = allDownloads.filter(d => d.user_id === p.id);
+    const initials = [(p.prenom || '?')[0], (p.nom || '')[0]].join('').toUpperCase();
+    const fullName = [p.prenom, p.nom].filter(Boolean).join(' ') || p.email;
+    return `<div class="client-card" id="acard-${p.id}">
+      <div class="client-header" onclick="toggleAdminCard('${p.id}')">
+        <div class="client-avatar">${initials}</div>
+        <div class="client-info">
+          <div class="client-name">${esc(fullName)}</div>
+          <div class="client-email">${esc(p.email || '')}</div>
+          <div class="client-societe">${esc(p.societe || '')}</div>
+        </div>
+        <div class="client-metier">${esc(p.metier || '—')}</div>
+        <div class="client-badge ${favs.length ? 'has-data' : ''}">♥ ${favs.length}</div>
+        <div class="client-badge ${dls.length ? 'has-data' : ''}">⬇ ${dls.length}</div>
+        <div class="client-date">${fmtD(p.created_at)}<br><span style="font-size:10px;color:#555">${p.last_sign_in ? 'Vu ' + fmtD(p.last_sign_in) : 'Jamais connecté'}</span></div>
+        <div class="client-toggle">▼</div>
+      </div>
+      <div class="client-detail" id="adetail-${p.id}">
+        <div class="detail-tabs">
+          <button class="detail-tab active" onclick="switchAdminDetail(this,'${p.id}','favs')">♥ Favoris (${favs.length})</button>
+          <button class="detail-tab" onclick="switchAdminDetail(this,'${p.id}','dls')">⬇ Téléchargements (${dls.length})</button>
+        </div>
+        <div class="detail-panel active" id="apanel-favs-${p.id}">${renderAdminMiniTracks(favs, 'fav')}</div>
+        <div class="detail-panel" id="apanel-dls-${p.id}">${renderAdminMiniTracks(dls, 'dl')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAdminMiniTracks(tracks, type) {
+  if (!tracks.length) return '<div class="detail-empty">Aucun enregistrement</div>';
+  return tracks.slice(0, 50).map((t, i) => `
+    <div class="mini-track">
+      <div class="mini-track-num">${i + 1}</div>
+      <div class="mini-track-info">
+        <div class="mini-track-title">${esc(t.track_title || 'Sans titre')}</div>
+        <div class="mini-track-playlist">${esc(t.track_playlist || '')}</div>
+      </div>
+      <div class="mini-track-date">${fmtD(type === 'fav' ? t.created_at : t.downloaded_at)}</div>
+    </div>`).join('') + (tracks.length > 50 ? `<div class="detail-empty">+${tracks.length - 50} autres...</div>` : '');
+}
+
+function toggleAdminCard(id) { document.getElementById('acard-' + id).classList.toggle('open'); }
+
+function switchAdminDetail(btn, uid, panel) {
+  const card = document.getElementById('acard-' + uid);
+  card.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+  card.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`apanel-${panel}-${uid}`).classList.add('active');
+}
+
+function setAdminFilter(filter, btn) {
+  activeAdminFilter = filter;
+  document.querySelectorAll('[data-afilter]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAdminClients();
+}
 
 init();
 </script>
