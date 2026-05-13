@@ -1,25 +1,5 @@
-# Exécutables
-*.exe
-*.bat
-
-# Fichiers Office et archives
-*.docx
-*.pdf
-*.xml
-*.py
-
-# Images réseaux sociaux
-osm_linkedin*.png
-osm_linkedin*.jpg
-OSM_QRCode.jpg
-
-# Versions archivées (index_1 à index_29, variantes)
-index_*.html
-index*.html.html
-index*.html.htm
-index (1).html
-index_v3.html
-oscillateur_test.html
-
-# Dossiers
-.claude/
+__pycache__/
+*.pyc
+_audio_cache/
+analysis_progress.json
+catalogue_backup.json

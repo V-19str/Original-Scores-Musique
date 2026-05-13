@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\bin\\\\git.exe\"; cd \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add index.html; if \\($?\\) { & $git commit -m \"Fix ticker et tags\" }; if \\($?\\) { & $git push })",
+      "PowerShell(cmd /c \"where git 2>nul\")",
+      "PowerShell(cmd /c \"dir C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\bin 2>nul\")",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add index.html; if \\($?\\) { & $git commit -m \"Fix ticker et tags\" }; if \\($?\\) { & $git push })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git pull --rebase; if \\($?\\) { & $git push })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git stash; if \\($?\\) { & $git pull --rebase }; if \\($?\\) { & $git stash pop }; if \\($?\\) { & $git push })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git reset --hard HEAD~1; & $git fetch origin; & $git merge origin/main)",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add television.html; if \\($?\\) { & $git commit -m \"Vrais logos SVG chaînes TV dans television.html\" }; if \\($?\\) { & $git push })",
+      "WebFetch(domain:upload.wikimedia.org)",
+      "WebSearch",
+      "WebFetch(domain:commons.wikimedia.org)",
+      "WebFetch(domain:fr.wikipedia.org)",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add television.html; if \\($?\\) { & $git commit -m \"Vrais logos TV : TF1 paths officiels, France 2/3/M6/TMC/TFX/W9 Wikimedia, ARTE/Canal+/C8/RMC/Ushuaia vectorisés\" }; if \\($?\\) { & $git push })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add television.html; if \\($?\\) { & $git commit -m \"Fix logo M6 : remplace SVG cassé par PNG Wikimedia\" }; if \\($?\\) { & $git push })",
+      "PowerShell(git *)",
+      "PowerShell(setx PATH \"$env:PATH;C:\\\\Program Files\\\\Git\\\\cmd\" /M)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(where.exe git 2>$null; cmd /c \"where git\" 2>$null)",
+      "PowerShell(cmd /c \"dir /s /b C:\\\\Program Files\\\\git.exe 2>nul\"; cmd /c \"dir /s /b \"\"C:\\\\Program Files \\(x86\\)\"\"\\\\git.exe 2>nul\")",
+      "PowerShell(cmd /c \"dir /s /b C:\\\\git.exe\" 2>$null; if \\(-not $?\\) { \"Not found on C:\\\\\" })",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git add .; & $git commit -m \"Page qui sommes nous\"; & $git push)",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git rm \"index.html.htm\"; & $git commit -m \"Suppression index.html.htm\"; & $git push)",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git ls-files --stage | Select-String \"worktree\")",
+      "PowerShell($git = \"C:\\\\Users\\\\vladimir.streiff\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; Set-Location \"C:\\\\Users\\\\vladimir.streiff\\\\Original-Scores-Musique\"; & $git rm --cached \".claude/worktrees/tender-elion-ce1b23\"; & $git commit -m \"Suppression sous-module .claude/worktrees\"; & $git push)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(python -c \"import json; d=json.load\\(open\\('catalogue.json',encoding='utf-8'\\)\\); t=next\\(x for x in d['tracks'] if x['playlist']=='Action'\\); print\\(json.dumps\\(t,indent=2,ensure_ascii=False\\)\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('migrate_cloudinary.py',encoding='utf-8'\\).read\\(\\)\\); print\\('OK'\\)\")",
+      "Bash(pip install *)",
+      "Bash(ping -n 31 127.0.0.1)",
+      "Bash(ping *)",
+      "Bash(exit 0)",
+      "Bash(git *)"
+    ]
+  }
+}

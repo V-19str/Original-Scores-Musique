@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – Références Télévision & Cinéma</title>
+<meta name="description" content="Musique originale OSM diffusée sur TF1, France 2, M6, ARTE, Canal+, RMC Découverte, TMC, TFX, W9, Ushuaïa TV, C8 et bien d'autres chaînes françaises.">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script>(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<style>
+:root{--red:#E50914;--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--bg-deep:#e0e0e0;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff}
+[data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--bg-deep:#0a0a0a;--bg-header:rgba(10,10,10,0.98);--text:#ffffff;--text2:#d4d4d4;--muted:#999999;--border:rgba(255,255,255,0.1);--card-bg:#1a1a1a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.2s,color 0.2s}
+
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px;color:var(--text)}
+.header-right{display:flex;align-items:center;gap:8px}
+.btn-nav{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s;white-space:nowrap}
+.btn-nav:hover{border-color:#555;color:var(--text)}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.btn-red:hover{background:#c4070f;border-color:#c4070f}
+
+.hero{padding:120px 72px 72px;background:linear-gradient(180deg,var(--bg-deep) 0%,var(--bg) 100%)}
+.hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:18px}
+.hero-title{font-size:clamp(36px,5vw,68px);font-weight:900;letter-spacing:-2px;line-height:0.95;margin-bottom:20px}
+.hero-title span{color:var(--red)}
+.hero-sub{font-size:15px;font-weight:300;color:var(--text2);max-width:660px;line-height:1.7}
+
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+.stat-item{background:var(--card-bg);padding:28px 20px;text-align:center}
+.stat-num{font-size:38px;font-weight:900;color:var(--red);line-height:1;margin-bottom:6px}
+.stat-label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:700}
+
+.groups-wrap{padding:64px 72px 80px;max-width:1440px;margin:0 auto}
+.group{margin-bottom:64px}
+.group-label{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.group-label::before{content:'';display:block;width:3px;height:14px;background:var(--red);border-radius:2px}
+.channels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+
+.channel-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all 0.25s}
+.channel-card:hover{border-color:rgba(229,9,20,0.3);transform:translateY(-3px);box-shadow:0 14px 44px rgba(0,0,0,0.2)}
+.channel-header{padding:18px 20px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);gap:12px;min-height:72px}
+.channel-logo{flex-shrink:0;display:flex;align-items:center;line-height:1}
+.channel-logo svg{height:40px;width:auto;max-width:190px;display:block}
+.channel-logo img{height:36px;width:auto;max-width:180px;object-fit:contain;display:block}
+[data-theme="dark"] .channel-logo img{background:rgba(255,255,255,0.92);border-radius:4px;padding:4px 6px}
+.channel-count{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;text-align:right;flex-shrink:0}
+.channel-shows{padding:14px 20px 18px;list-style:none}
+.channel-shows li{font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border);line-height:1.5;font-weight:300}
+.channel-shows li:last-child{border-bottom:none;padding-bottom:0}
+.channel-shows li strong{color:var(--text);font-weight:600}
+.ep{font-size:10px;color:#E50914;font-weight:700;margin-left:4px;background:rgba(229,9,20,0.12);padding:1px 5px;border-radius:3px}
+
+.cta-section{padding:72px;text-align:center;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-deep) 100%)}
+.cta-title{font-size:28px;font-weight:900;letter-spacing:-0.5px;margin-bottom:12px}
+.cta-sub{font-size:14px;color:var(--muted);margin-bottom:36px;font-weight:300}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--red);color:#fff;border:none;padding:14px 28px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:4px;text-decoration:none;text-transform:uppercase;transition:background 0.15s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:#c4070f}
+.btn-secondary{background:transparent;color:var(--text2);border:1px solid var(--border);padding:14px 28px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;cursor:pointer;border-radius:4px;text-decoration:none;text-transform:uppercase;transition:all 0.15s;display:inline-flex;align-items:center;gap:8px}
+.btn-secondary:hover{border-color:#555;color:var(--text)}
+
+footer{text-align:center;padding:24px;font-size:11px;color:#555;border-top:1px solid var(--border)}
+footer a{color:#555;text-decoration:none}
+footer a:hover{color:#888}
+
+@media(max-width:900px){
+  header{padding:0 16px}
+  .hero{padding:88px 20px 56px}
+  .groups-wrap{padding:40px 16px 60px}
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  .cta-section{padding:48px 20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">ORIGINAL SCORES MUSIC</div>
+  </a>
+  <div class="header-right">
+    <a class="btn-nav" href="index.html">← Catalogue</a>
+    <a class="btn-nav" href="nouveautes.html">⭐ Nouveautés</a>
+    <a class="btn-nav" href="service.html">Sélection sur mesure</a>
+    <a class="btn-nav" href="aide.html">Aide</a>
+    <button class="btn-nav" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
+    <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Références · Diffusions</div>
+  <h1 class="hero-title">Télévision &amp; <span>Cinéma</span></h1>
+  <p class="hero-sub">Nos compositions originales ont été diffusées sur les plus grandes chaînes françaises — reportages d'investigation, documentaires, fictions et émissions de prime time.</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num">15+</div><div class="stat-label">Chaînes TV</div></div>
+  <div class="stat-item"><div class="stat-num">100+</div><div class="stat-label">Émissions</div></div>
+  <div class="stat-item"><div class="stat-num">2560+</div><div class="stat-label">Titres originaux</div></div>
+  <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label">Ans d'expérience</div></div>
+</div>
+
+<div class="groups-wrap">
+
+  <!-- TÉLÉVISION PUBLIQUE -->
+  <div class="group">
+    <div class="group-label">Télévision publique</div>
+    <div class="channels-grid">
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- France 2 — vrai logo 2018 (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/France_2_-_logo_2018.svg" alt="France 2" height="34">
+          </div>
+          <div class="channel-count">7 émissions</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Cash Investigation</strong> — Panama Papers, Paradise Papers, Implants, Plastique...</li>
+          <li><strong>Envoyé Spécial</strong> — Monsanto, Russie Kompromat, Afghanes, Oligarques...</li>
+          <li><strong>Complément d'Enquête</strong> — Lafarge, Nucléaire, Dubaï, Climato-sceptiques...</li>
+          <li><strong>Stupéfiant !</strong> — Allen Jones, Houellebecq, Ibiza l'île hippie</li>
+          <li><strong>Sale Temps pour la Planète</strong></li>
+          <li><strong>Nature</strong></li>
+          <li><strong>Monde Secret d'un Refuge</strong></li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- France 3 — vrai logo 2018 (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/France_3_-_logo_2018.svg" alt="France 3" height="34">
+          </div>
+          <div class="channel-count">4 émissions</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Cette Semaine Là</strong> — Yvan Colonna, JFK...</li>
+          <li><strong>Vieilles Canailles</strong></li>
+          <li><strong>Dernière Saison</strong></li>
+          <li><strong>Étoile Normande</strong></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TNT PRIVÉE -->
+  <div class="group">
+    <div class="group-label">TNT Privée</div>
+    <div class="channels-grid">
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- TF1 — vrai logo 2013, paths officiels avec gradient bleu→rouge -->
+            <svg viewBox="0 0 408.9 149.25" height="42" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TF1">
+              <defs>
+                <linearGradient id="tf1-bg" x1="-320" y1="445.67" x2="88.9" y2="445.67" gradientTransform="translate(320 520.29) scale(1 -1)" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#01168b"/><stop offset=".1" stop-color="#001b9c"/>
+                  <stop offset=".2" stop-color="#021d9e"/><stop offset=".3" stop-color="#06198f"/>
+                  <stop offset=".4" stop-color="#31127a"/><stop offset=".5" stop-color="#500b64"/>
+                  <stop offset=".6" stop-color="#77054d"/><stop offset=".7" stop-color="#960234"/>
+                  <stop offset=".8" stop-color="#bb0221"/><stop offset=".9" stop-color="#b00005"/>
+                  <stop offset="1" stop-color="#9a0003"/>
+                </linearGradient>
+                <linearGradient id="tf1-ov" x1="-320" y1="473.27" x2="88.9" y2="473.27" gradientTransform="translate(320 520.29) scale(1 -1)" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#0f30b3" stop-opacity=".47"/><stop offset=".1" stop-color="#1c45cf" stop-opacity=".66"/>
+                  <stop offset=".2" stop-color="#2b53d7"/><stop offset=".3" stop-color="#3757c6"/>
+                  <stop offset=".4" stop-color="#665cb2"/><stop offset=".5" stop-color="#87539b"/>
+                  <stop offset=".6" stop-color="#a44080"/><stop offset=".7" stop-color="#b4325e"/>
+                  <stop offset=".8" stop-color="#c42038"/><stop offset=".9" stop-color="#bd1016"/>
+                  <stop offset="1" stop-color="#99060c"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,149.25V0h408.9v149.25H0Z" fill="url(#tf1-bg)" fill-rule="evenodd"/>
+              <path d="M0,94.05V0h408.9v42.12s-36.3-1.1-55.81-1.1C241.99,41.01,108.11,62.66,0,94.05Z" fill="url(#tf1-ov)"/>
+              <path d="M101.41,127.17h-45.8V58.88h-23.72V22.9h93.23v35.98h-23.72v68.29ZM181.14,127.17V22.9h85.05v26.17h-39.25v18.81h28.21v26.17h-28.21v33.12h-45.8ZM320.17,127.17V35.57l47.43-13.49v105.09h-47.43Z" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="channel-count">5 émissions · 20+ épisodes</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>50' Inside</strong> <span class="ep">×11</span> — Tahiti, Maroc, Philippines, Annecy...</li>
+          <li><strong>7 à 8</strong> <span class="ep">×5</span> — Portrait Murielle Bolle, Miss Univers Salvador...</li>
+          <li><strong>Grands Reportages</strong> <span class="ep">×2</span> — Affaire Lagrave, Affaire Troadec</li>
+          <li><strong>La France en Bleu</strong></li>
+          <li><strong>Les Battements du Cœur des Restos</strong></li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- M6 — vrai logo (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Logo_M6_2009.svg/200px-Logo_M6_2009.svg.png" alt="M6" height="34">
+          </div>
+          <div class="channel-count">4 émissions</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Zone Interdite</strong> — Gaza, Îles de rêve, Enfants maltraités...</li>
+          <li><strong>Enquête Exclusive</strong> — Gaza</li>
+          <li><strong>Salon de l'Agriculture</strong> — Le grand retour</li>
+          <li><strong>Monde Secret d'un Refuge pour Animaux</strong></li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- ARTE — logo officiel vectorisé, rectangle noir + ARTE blanc -->
+            <svg viewBox="0 0 140 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ARTE">
+              <rect width="140" height="56" fill="#000"/>
+              <!-- A -->
+              <path d="M14,42 L20,14 L26,42 H22 L20,32 L18,42 Z M18.5,29 H21.5 L20,20 Z" fill="#fff"/>
+              <!-- R -->
+              <path d="M30,14 H38 C41,14 43,16 43,20 C43,23 41.5,25 39.5,26 L44,42 H40 L36,27 H34 V42 H30 Z M34,24 H37 C38.5,24 39.5,23 39.5,20.5 C39.5,18 38.5,17 37,17 H34 Z" fill="#fff"/>
+              <!-- T -->
+              <path d="M47,14 H63 V17 H57 V42 H53 V17 H47 Z" fill="#fff"/>
+              <!-- E -->
+              <path d="M67,14 H80 V17 H71 V26 H79 V29 H71 V39 H80 V42 H67 Z" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="channel-count">3 documentaires</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Avortement, les croisés contre-attaquent</strong></li>
+          <li><strong>Rhino Dollars</strong></li>
+          <li><strong>Madagascar</strong> — La forêt aux esprits</li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- Canal+ — logo vectorisé officiel, blanc + rouge -->
+            <svg viewBox="0 0 200 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Canal+">
+              <!-- C -->
+              <path d="M8,28 C8,18 14,12 24,12 C30,12 35,15 38,20 L34,23 C32,19 28.5,17 24,17 C17,17 13,22 13,28 C13,34 17,39 24,39 C28.5,39 32,37 34,33 L38,36 C35,41 30,44 24,44 C14,44 8,38 8,28 Z" fill="#111"/>
+              <!-- A -->
+              <path d="M42,43 L50,13 L58,43 H54 L52,34 L50,43 Z M48,31 H52 L50,20 Z" fill="#111"/>
+              <!-- N -->
+              <path d="M62,13 H67 L76,35 V13 H81 V43 H76 L67,21 V43 H62 Z" fill="#111"/>
+              <!-- A -->
+              <path d="M85,43 L93,13 L101,43 H97 L95,34 L93,43 Z M91,31 H95 L93,20 Z" fill="#111"/>
+              <!-- L -->
+              <path d="M105,13 H110 V39 H120 V43 H105 Z" fill="#111"/>
+              <!-- + rouge -->
+              <path d="M130,20 H140 V28 H148 V34 H140 V42 H130 V34 H122 V28 H130 Z" fill="#E50914"/>
+            </svg>
+          </div>
+          <div class="channel-count">2 projets</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Sélectionneurs</strong></li>
+          <li><strong>Canal+ Afrique</strong> — Rendez-vous au Nord Bénin</li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- TMC — vrai logo (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Tmc.svg" alt="TMC" height="36">
+          </div>
+          <div class="channel-count">3 émissions</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Martin Weil</strong></li>
+          <li><strong>Nicolas Canteloup</strong> — 20 ans de regard sur l'actualité</li>
+          <li><strong>Prime</strong></li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- TFX — vrai logo 2017 (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/TFX_logo.svg" alt="TFX" height="40">
+          </div>
+          <div class="channel-count">2 émissions</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Wedding Planners</strong></li>
+          <li><strong>Chroniques Criminelles</strong> — Maureen Jacquier</li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- W9 — vrai logo (Wikimedia Commons) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/W9-Logo.svg" alt="W9" height="36">
+          </div>
+          <div class="channel-count">2 émissions</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Héritage de Johnny Hallyday</strong></li>
+          <li><strong>Urgences</strong> — La vie au bout du fil</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CÂBLE & SATELLITE -->
+  <div class="group">
+    <div class="group-label">Câble · Satellite</div>
+    <div class="channels-grid">
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- C8 — logo vectorisé -->
+            <svg viewBox="0 0 100 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="C8">
+              <rect width="100" height="56" rx="6" fill="#FF6600"/>
+              <!-- C -->
+              <path d="M10,28 C10,19 15,13 23,13 C28,13 32,16 34,20 L30,23 C29,20 26.5,18 23,18 C18,18 15,22 15,28 C15,34 18,38 23,38 C26.5,38 29,36 30,33 L34,36 C32,40 28,43 23,43 C15,43 10,37 10,28 Z" fill="#fff"/>
+              <!-- 8 -->
+              <path d="M46,28 C46,25 48,23 51,22 C49,21 47.5,19 47.5,17 C47.5,13 50,11 54,11 C58,11 60.5,13 60.5,17 C60.5,19 59,21 57,22 C60,23 62,25 62,28 C62,33 58.5,36 54,36 C49.5,36 46,33 46,28 Z M52,22.5 C50.5,23.5 50,25 50,27 C50,30 51.5,32 54,32 C56.5,32 58,30 58,27 C58,25 57.5,23.5 56,22.5 Z M54,15 C52,15 51,16.5 51,18 C51,19.5 52,21 54,21 C56,21 57,19.5 57,18 C57,16.5 56,15 54,15 Z" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="channel-count">5 documentaires</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>100 Jours avec les Gendarmes de l'Autoroute</strong></li>
+          <li><strong>100 Jours avec la Police de Marseille</strong></li>
+          <li><strong>Les Fachos vont-ils conquérir l'Amérique ?</strong></li>
+          <li><strong>Mélenchon est-il vraiment un Insoumis ?</strong></li>
+          <li><strong>Trump est-il vraiment fini ?</strong></li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- RMC Découverte — logo vectorisé officiel bleu marine -->
+            <svg viewBox="0 0 220 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RMC Découverte">
+              <rect width="220" height="56" rx="4" fill="#002B7F"/>
+              <!-- RMC en blanc -->
+              <!-- R -->
+              <path d="M12,14 H22 C26,14 29,16.5 29,21 C29,24 27.5,26 25,27 L30,42 H25.5 L21,28 H16.5 V42 H12 Z M16.5,24 H21 C23,24 24.5,23 24.5,21 C24.5,19 23,18 21,18 H16.5 Z" fill="#fff"/>
+              <!-- M -->
+              <path d="M34,14 H39 L45,32 L51,14 H56 V42 H51.5 V24 L46,40 H44 L38.5,24 V42 H34 Z" fill="#fff"/>
+              <!-- C -->
+              <path d="M61,28 C61,20 66,13 74,13 C79,13 83,16 85,20 L81,23 C79.5,20 77,18 74,18 C68.5,18 65.5,22 65.5,28 C65.5,34 68.5,38 74,38 C77,38 79.5,36 81,33 L85,36 C83,40 79,43 74,43 C66,43 61,36 61,28 Z" fill="#fff"/>
+              <!-- séparateur -->
+              <rect x="92" y="18" width="1.5" height="20" fill="rgba(255,255,255,0.4)"/>
+              <!-- DÉCOUVERTE petit -->
+              <text x="100" y="32" font-family="Montserrat,sans-serif" font-weight="600" font-size="10" fill="rgba(255,255,255,0.85)" letter-spacing="1.5">DÉCOUVERTE</text>
+            </svg>
+          </div>
+          <div class="channel-count">5 émissions</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Génie Français</strong> — Le Barrage de tous les Records</li>
+          <li><strong>100 Jours avec les Gendarmes de Bourgogne</strong></li>
+          <li><strong>Accidents de la Route</strong></li>
+          <li><strong>Immersion dans une Méga Fourrière</strong></li>
+          <li><strong>Top Mechanic</strong></li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- Ushuaïa TV — logo vectorisé -->
+            <svg viewBox="0 0 200 56" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ushuaïa TV">
+              <rect width="200" height="56" rx="4" fill="#006699"/>
+              <text x="100" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="14" fill="#fff" letter-spacing="1.5">USHUAÏA</text>
+              <rect x="30" y="30" width="140" height="1" fill="rgba(255,255,255,0.3)"/>
+              <text x="100" y="44" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="300" font-size="11" fill="rgba(255,255,255,0.85)" letter-spacing="6">TV</text>
+            </svg>
+          </div>
+          <div class="channel-count">1 documentaire</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Fenua Aihere</strong> — Le Cœur de Tahiti</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OUTRE-MER & AUTRES -->
+  <div class="group">
+    <div class="group-label">Outre-mer &amp; autres chaînes</div>
+    <div class="channels-grid">
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- Guadeloupe La 1ère — France TV style -->
+            <svg viewBox="0 0 180 40" height="38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Guadeloupe La 1ère">
+              <circle cx="20" cy="20" r="19" fill="#CC2200"/>
+              <text x="20" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="19" fill="#fff">f</text>
+              <text x="46" y="15" font-family="Montserrat,sans-serif" font-weight="300" font-size="10" fill="#CC2200" letter-spacing="0.5">Guadeloupe</text>
+              <text x="46" y="32" font-family="Montserrat,sans-serif" font-weight="900" font-size="16" fill="#CC2200">La 1ère</text>
+            </svg>
+          </div>
+          <div class="channel-count">1 documentaire</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Nos Voisins Olympiques</strong></li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- Numéro 23 -->
+            <svg viewBox="0 0 130 40" height="38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Numéro 23">
+              <rect width="130" height="40" rx="4" fill="#7B2FBE"/>
+              <text x="65" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="15" fill="#fff" letter-spacing="1">NUMÉRO 23</text>
+            </svg>
+          </div>
+          <div class="channel-count">1 documentaire</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Homophobie, de Victimes à Combattants</strong></li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <!-- France 5 / Ô — France TV style -->
+            <svg viewBox="0 0 160 40" height="38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="France 5 et Ô">
+              <circle cx="20" cy="20" r="19" fill="#3399CC"/>
+              <text x="20" y="26" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="19" fill="#fff">f</text>
+              <text x="46" y="15" font-family="Montserrat,sans-serif" font-weight="300" font-size="11" fill="#3399CC">france</text>
+              <text x="46" y="34" font-family="Montserrat,sans-serif" font-weight="900" font-size="18" fill="#3399CC">5 &amp; Ô</text>
+            </svg>
+          </div>
+          <div class="channel-count">3 documentaires</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Mozambique</strong></li>
+          <li><strong>Saint-Germain-des-Prés</strong> — Paradis Perdu</li>
+          <li><strong>Hine Tai A</strong> — Chroniques d'une famille de pêcheurs</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CINÉMA -->
+  <div class="group">
+    <div class="group-label">Cinéma</div>
+    <div class="channels-grid">
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-logo">
+            <svg viewBox="0 0 160 40" height="38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Longs métrages">
+              <rect x="1" y="5" width="158" height="30" rx="3" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="5 3"/>
+              <text x="80" y="17" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="300" font-size="8" fill="#999" letter-spacing="4">LONGS</text>
+              <text x="80" y="29" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="10" fill="#999" letter-spacing="3">MÉTRAGES</text>
+            </svg>
+          </div>
+          <div class="channel-count">5 films</div>
+        </div>
+        <ul class="channel-shows">
+          <li><strong>Moby Dick</strong></li>
+          <li><strong>L'Étreinte</strong></li>
+          <li><strong>Mamma Weed</strong></li>
+          <li><strong>La Daronne</strong></li>
+          <li><strong>Les Films du Lendemain</strong></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-section">
+  <h2 class="cta-title">Vous cherchez de la musique pour votre projet ?</h2>
+  <p class="cta-sub">2560 titres originaux disponibles — ou demandez une sélection sur mesure</p>
+  <div class="cta-btns">
+    <a class="btn-primary" href="index.html">🎵 Accéder au catalogue</a>
+    <a class="btn-secondary" href="service.html">Sélection sur mesure</a>
+    <a class="btn-secondary" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
+  </div>
+</div>
+
+<footer>
+  © 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp;
+  <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp;
+  <a href="tel:+33682985752">06 82 98 57 52</a>
+</footer>
+
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  localStorage.setItem('osm-theme',next);
+  const btn=document.getElementById('btn-theme');
+  if(btn)btn.textContent=next==='dark'?'☀':'🌙';
+}
+(function(){
+  const t=localStorage.getItem('osm-theme')||'light';
+  const btn=document.getElementById('btn-theme');
+  if(btn)btn.textContent=t==='dark'?'☀':'🌙';
+})();
+</script>
+</body>
+</html>
