@@ -1940,8 +1940,11 @@ async function osmApplyUser(user) {
   osmUser = user;
   const { data: p } = await osmSB.from('profiles').select('prenom,nom').eq('id', user.id).single();
   const name = p ? [p.prenom, p.nom].filter(Boolean).join(' ') : user.email;
+  const adminLink = user.email === 'vladimirstreiff@gmail.com'
+    ? ' <a class="btn-nav" href="admin.html" style="border-color:rgba(229,9,20,0.4);color:var(--red)" title="Panneau admin">⚙ Admin</a>'
+    : '';
   const el = document.getElementById('osm-auth-nav');
-  if (el) el.innerHTML = `<a class="btn-nav" href="login-monteurs.html" title="Mon espace client">👤 ${name}</a>`;
+  if (el) el.innerHTML = `<a class="btn-nav" href="login-monteurs.html" title="Mon espace client">👤 ${name}</a>${adminLink}`;
 }
 
 function osmClearUser() {

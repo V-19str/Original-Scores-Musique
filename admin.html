@@ -142,11 +142,12 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
   </div>
   <div class="pw-badge">Administration</div>
   <div class="pw-box">
-    <div class="pw-title">Accès Admin</div>
+    <div class="pw-title">Connexion Admin</div>
     <div class="pw-sub">Réservé à Vladimir Streiff</div>
-    <input type="password" class="pw-input" id="pw-input" placeholder="••••••••••••••" onkeydown="if(event.key==='Enter')checkAdmin()">
-    <button class="pw-btn" id="pw-btn" onclick="checkAdmin()">Accéder au panneau admin</button>
-    <div class="pw-error" id="pw-error">Mot de passe incorrect</div>
+    <input type="email" class="pw-input" id="pw-email" placeholder="vladimirstreiff@gmail.com" style="letter-spacing:0;text-align:left" autocomplete="email" onkeydown="if(event.key==='Enter')document.getElementById('pw-pw').focus()">
+    <input type="password" class="pw-input" id="pw-pw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkAdmin()" style="margin-bottom:14px">
+    <button class="pw-btn" id="pw-btn" onclick="checkAdmin()">Se connecter</button>
+    <div class="pw-error" id="pw-error"></div>
   </div>
 </div>
 
@@ -327,47 +328,64 @@ const SUPABASE_URL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const ADMIN_PASSWORD = 'OSM_ADMIN_2026';
+const ADMIN_EMAIL = 'vladimirstreiff@gmail.com';
+const ADMIN_RPC_PWD = 'OSM_ADMIN_2026'; // transmis côté serveur uniquement
 
 let allProfiles = [], allFavorites = [], allDownloads = [];
 let activeFilter = 'all';
 
 // ── AUTH ──────────────────────────────────────────────────────────
-function checkAdmin() {
-  const val = document.getElementById('pw-input').value;
-  const errEl = document.getElementById('pw-error');
+async function checkAdmin() {
+  const email = document.getElementById('pw-email').value.trim();
+  const pw = document.getElementById('pw-pw').value;
   const btn = document.getElementById('pw-btn');
 
-  if (val === ADMIN_PASSWORD) {
-    sessionStorage.setItem('osm_admin', '1');
-    document.getElementById('pw-screen').style.display = 'none';
-    document.getElementById('main').classList.add('visible');
-    loadAdminData();
-  } else {
-    errEl.style.display = 'block';
-    document.getElementById('pw-input').value = '';
-    setTimeout(() => errEl.style.display = 'none', 3000);
+  document.getElementById('pw-error').style.display = 'none';
+  if (!email || !pw) { showPwErr('Remplissez email et mot de passe.'); return; }
+
+  btn.disabled = true; btn.textContent = 'Connexion...';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+  btn.disabled = false; btn.textContent = 'Se connecter';
+
+  if (error) { showPwErr(error.message.includes('Invalid') ? 'Email ou mot de passe incorrect.' : error.message); return; }
+  if (data.user.email !== ADMIN_EMAIL) {
+    showPwErr('Accès refusé. Ce compte n\'est pas autorisé.');
+    await sb.auth.signOut(); return;
   }
+  openAdmin();
 }
 
-function adminLogout() {
-  sessionStorage.removeItem('osm_admin');
+function showPwErr(msg) {
+  const el = document.getElementById('pw-error');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+async function adminLogout() {
+  await sb.auth.signOut();
   document.getElementById('pw-screen').style.display = 'flex';
   document.getElementById('main').classList.remove('visible');
-  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-email').value = '';
+  document.getElementById('pw-pw').value = '';
 }
 
-if (sessionStorage.getItem('osm_admin') === '1') {
+function openAdmin() {
   document.getElementById('pw-screen').style.display = 'none';
   document.getElementById('main').classList.add('visible');
   loadAdminData();
 }
 
+async function initAdmin() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user?.email === ADMIN_EMAIL) openAdmin();
+}
+
+initAdmin();
+
 // ── DATA ──────────────────────────────────────────────────────────
 async function loadAdminData() {
   document.getElementById('clients-list').innerHTML = '<div class="loading-msg">· · · Chargement des données clients</div>';
 
-  const { data, error } = await sb.rpc('get_admin_data', { admin_pwd: ADMIN_PASSWORD });
+  const { data, error } = await sb.rpc('get_admin_data', { admin_pwd: ADMIN_RPC_PWD });
 
   if (error) {
     if (error.message.includes('does not exist') || error.message.includes('function')) {
