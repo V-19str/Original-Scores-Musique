@@ -341,10 +341,16 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .load-more-btn:hover{border-color:var(--red);color:var(--red)}
 .copy-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--bg3);border:1px solid rgba(255,85,0,0.3);color:var(--text);padding:9px 18px;border-radius:20px;font-size:12px;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none}
 .copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.dl-gate{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(12px);background:#0f0f0f;border:1px solid rgba(229,9,20,0.6);color:#fff;padding:13px 26px;border-radius:26px;font-size:12px;font-weight:600;letter-spacing:0.3px;opacity:0;transition:all 0.3s;z-index:1000;pointer-events:none;white-space:nowrap;text-decoration:none;box-shadow:0 4px 24px rgba(229,9,20,0.25);display:inline-flex;align-items:center;gap:8px}
-.dl-gate.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
-.dl-gate:hover{background:#1a0000;border-color:rgba(229,9,20,0.9)}
-.dl-gate .dl-gate-arrow{color:var(--red);font-size:14px}
+.dl-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.dl-modal-overlay.show{opacity:1;pointer-events:auto}
+.dl-modal-card{background:#111;border:1px solid rgba(255,85,0,0.35);border-radius:18px;padding:40px 36px 32px;max-width:320px;width:90%;text-align:center;position:relative;box-shadow:0 12px 48px rgba(0,0,0,0.7)}
+.dl-modal-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:0;font-family:inherit}
+.dl-modal-close:hover{color:var(--text)}
+.dl-modal-lock{font-size:36px;margin-bottom:18px}
+.dl-modal-title{color:var(--text);font-size:15px;font-weight:700;margin:0 0 8px;line-height:1.45;font-family:'Montserrat',sans-serif}
+.dl-modal-sub{color:var(--muted);font-size:12px;margin:0 0 28px;font-style:italic}
+.dl-modal-btn{display:inline-block;background:var(--red);color:#fff;padding:13px 32px;border-radius:7px;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;text-decoration:none;font-family:'Montserrat',sans-serif;transition:background 0.15s;box-shadow:0 4px 16px rgba(229,9,20,0.35)}
+.dl-modal-btn:hover{background:#c0392b}
 
 /* FAVORIS */
 .track-fav{color:var(--muted);transition:color 0.15s}
@@ -937,7 +943,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   </div>
 </div>
 <div class="copy-toast" id="copy-toast">🔗 Lien copié !</div>
-<a class="dl-gate" id="dl-gate" href="login-monteurs.html">🔒 Créez un compte gratuit pour télécharger <span class="dl-gate-arrow">→</span></a>
+<div class="dl-modal-overlay" id="dl-modal" onclick="hideDlModal()">
+  <div class="dl-modal-card" onclick="event.stopPropagation()">
+    <button class="dl-modal-close" onclick="hideDlModal()" aria-label="Fermer">×</button>
+    <div class="dl-modal-lock">🔒</div>
+    <p class="dl-modal-title">Pour télécharger, créez votre compte gratuit</p>
+    <p class="dl-modal-sub">↳ c'est rapide et gratuit</p>
+    <a class="dl-modal-btn" href="login-monteurs.html">Télécharger</a>
+  </div>
+</div>
 </div>
 <input type="hidden" id="search" value="">
 <audio id="audio"></audio>
@@ -1906,12 +1920,13 @@ function canDownload(){
   if(osmUser)return true;
   showDlGate();return false;
 }
-let dlGateTimer=null;
 function showDlGate(){
-  const g=document.getElementById('dl-gate');if(!g)return;
+  const g=document.getElementById('dl-modal');if(!g)return;
   g.classList.add('show');
-  clearTimeout(dlGateTimer);
-  dlGateTimer=setTimeout(()=>g.classList.remove('show'),3500);
+}
+function hideDlModal(){
+  const g=document.getElementById('dl-modal');if(!g)return;
+  g.classList.remove('show');
 }
 
 osmInit();
