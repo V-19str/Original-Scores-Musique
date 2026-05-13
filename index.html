@@ -901,10 +901,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
         <div><div class="p-title" id="p-title">—</div><div class="p-playlist" id="p-playlist">—</div></div>
       </div>
       <div class="player-btns">
-        <button class="btn-extra" id="btn-shuffle" onclick="toggleShuffle()" title="Aléatoire">⇄</button>
-        <button class="btn-ctrl" onclick="prevTrack()">⏮</button>
-        <button class="btn-play-main" id="btn-play" onclick="togglePlay()">▶</button>
-        <button class="btn-ctrl" onclick="nextTrack()">⏭</button>
+        <button class="btn-extra" id="btn-shuffle" onclick="toggleShuffle()" title="Lecture aléatoire">⇄</button>
+        <button class="btn-ctrl" onclick="prevTrack()" title="Précédent">⏮</button>
+        <button class="btn-play-main" id="btn-play" onclick="togglePlay()" title="Lire">▶</button>
+        <button class="btn-ctrl" onclick="nextTrack()" title="Suivant">⏭</button>
         <button class="btn-extra" id="btn-repeat" onclick="toggleRepeat()" title="Répéter">↺</button>
         <button class="btn-mute" id="btn-mute" onclick="toggleMute()" title="Couper / remettre le son">🔊</button>
       </div>
@@ -913,7 +913,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
           <span class="vol-icon" onclick="toggleMute()">🔊</span>
           <input type="range" class="vol-slider" id="vol-slider" min="0" max="100" value="100" oninput="setVolume(this.value)">
         </div>
-        <button class="player-dl" onclick="downloadCurrent()">⬇ Télécharger</button>
+        <button class="player-dl" onclick="downloadCurrent()" title="Télécharger">⬇ Télécharger</button>
       </div>
     </div>
     <div class="wf-bar">
@@ -982,14 +982,14 @@ ws.on('timeupdate', (t)=>{
   if(dur) document.getElementById('time-dur').textContent=fmt2(dur);
 });
 ws.on('finish', ()=>{
-  document.getElementById('btn-play').textContent='▶';
+  const _bp=document.getElementById('btn-play'); _bp.textContent='▶'; _bp.title='Lire';
   if(bgMode){
     const candidates=RECOMMENDS_CONFIG.map(cfg=>allTracks.find(t=>t.playlistLabel===cfg.playlist)).filter(Boolean);
     if(candidates.length){const nx=candidates[Math.floor(Math.random()*candidates.length)];setTimeout(()=>autoPlayBg(nx.id),400);}
   }else{nextTrack();}
 });
-ws.on('play',   ()=>{ document.getElementById('btn-play').textContent='⏸'; });
-ws.on('pause',  ()=>{ document.getElementById('btn-play').textContent='▶'; });
+ws.on('play',   ()=>{ const b=document.getElementById('btn-play'); b.textContent='⏸'; b.title='Pause'; });
+ws.on('pause',  ()=>{ const b=document.getElementById('btn-play'); b.textContent='▶'; b.title='Lire'; });
 
 /* ── WAVEFORM BARS (FranceTV Synchro style) ── */
 (function(){
@@ -1265,9 +1265,9 @@ function renderDetailTracks(){
       <div class="pd-thumb" style="background-image:url('${photo}')"></div>
       <div class="pd-track-title">${t.title}</div>
       <div class="pd-track-dur">${fmt(t.duration)}</div>
-      <button class="pd-track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFavDetail('${t.id}',${i})">♥</button>
-      <button class="pd-track-btn" onclick="event.stopPropagation();copyLink('${t.url}')">🔗</button>
-      <button class="pd-track-btn" onclick="event.stopPropagation();downloadDetailTrack(${i})">⬇</button>
+      <button class="pd-track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFavDetail('${t.id}',${i})" title="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}">♥</button>
+      <button class="pd-track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien">🔗</button>
+      <button class="pd-track-btn" onclick="event.stopPropagation();downloadDetailTrack(${i})" title="Télécharger">⬇</button>
     </div>`).join('');
 }
 
@@ -1513,10 +1513,10 @@ function renderTracks(){
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
       <div class="track-bpm">${t.bpm||'—'}</div>
-      <button class="track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFav('${t.id}')">♥</button>
-      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')">🔗</button>
-      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueTrack(${i})">${qIds.has(t.id)?'✓':'+'}</button>
-      <button class="track-btn" onclick="event.stopPropagation();downloadTrack(${i})">⬇</button>
+      <button class="track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFav('${t.id}')" title="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}">♥</button>
+      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien">🔗</button>
+      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueTrack(${i})" title="${qIds.has(t.id)?'Retirer de ma liste':'Ajouter à ma liste'}">${qIds.has(t.id)?'✓':'+'}</button>
+      <button class="track-btn" onclick="event.stopPropagation();downloadTrack(${i})" title="Télécharger">⬇</button>
     </div>`).join('');
   if(visibleCount<filteredTracks.length){
     const remaining=filteredTracks.length-visibleCount;
@@ -1768,10 +1768,10 @@ function renderFavoris(){
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
       <div class="track-bpm">${t.bpm||'—'}</div>
-      <button class="track-btn track-fav faved" onclick="event.stopPropagation();toggleFav('${t.id}')">♥</button>
-      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')">🔗</button>
-      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueFavTrack('${t.id}')">${qIds.has(t.id)?'✓':'+'}</button>
-      <button class="track-btn" onclick="event.stopPropagation();downloadFavTrack('${t.id}')">⬇</button>
+      <button class="track-btn track-fav faved" onclick="event.stopPropagation();toggleFav('${t.id}')" title="Retirer des favoris">♥</button>
+      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien">🔗</button>
+      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueFavTrack('${t.id}')" title="${qIds.has(t.id)?'Retirer de ma liste':'Ajouter à ma liste'}">${qIds.has(t.id)?'✓':'+'}</button>
+      <button class="track-btn" onclick="event.stopPropagation();downloadFavTrack('${t.id}')" title="Télécharger">⬇</button>
     </div>`).join('');
 }
 function playFavTrack(id){
