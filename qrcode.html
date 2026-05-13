@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>OSM – QR Code</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #141414; color: #fff; font-family: 'Montserrat', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; gap: 32px; }
+
+.card {
+  background: #fff;
+  color: #141414;
+  border-radius: 16px;
+  padding: 40px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.card-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 24px; }
+.card-mark { background: #E50914; color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 2px; padding: 6px 10px; border-radius: 3px; }
+.card-name { font-size: 14px; font-weight: 700; letter-spacing: 2px; color: #141414; }
+.qr-wrap { background: #fff; padding: 12px; border-radius: 8px; display: inline-block; margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.08); }
+.card-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #141414; }
+.card-sub { font-size: 12px; color: #666; margin-bottom: 16px; line-height: 1.5; }
+.card-divider { height: 1px; background: rgba(0,0,0,0.08); margin: 16px 0; }
+.card-info { font-size: 11px; color: #888; line-height: 1.6; }
+.card-info strong { color: #141414; font-weight: 600; }
+
+.card-dark {
+  background: #141414;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.card-dark .card-name { color: #fff; }
+.card-dark .card-title { color: #fff; }
+.card-dark .card-sub { color: #999; }
+.card-dark .card-divider { background: rgba(255,255,255,0.1); }
+.card-dark .card-info { color: #666; }
+.card-dark .card-info strong { color: #ccc; }
+.card-dark .qr-wrap { border-color: rgba(255,255,255,0.1); }
+
+.buttons { display: flex; gap: 12px; }
+.btn { background: #E50914; color: #fff; border: none; padding: 12px 24px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; cursor: pointer; border-radius: 6px; transition: background 0.15s; text-transform: uppercase; }
+.btn:hover { background: #c4070f; }
+.btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #ccc; }
+.btn-outline:hover { border-color: #555; color: #fff; background: transparent; }
+
+.label { font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="label">Version claire — à imprimer</div>
+<div class="card" id="card-light">
+  <div class="card-logo">
+    <div class="card-mark">OSM</div>
+    <div class="card-name">Vladimir Streiff</div>
+  </div>
+  <div class="qr-wrap">
+    <div id="qr-light"></div>
+  </div>
+  <div class="card-title">Catalogue Musical Original</div>
+  <div class="card-sub">2849 morceaux originaux organisés en 28 playlists thématiques — disponibles gratuitement pour vos projets.</div>
+  <div class="card-divider"></div>
+  <div class="card-info">
+    <strong>Scannez pour accéder au catalogue</strong><br>
+    Cinéma · Télévision · Publicité<br>
+    <strong>06 82 98 57 52</strong>
+  </div>
+</div>
+
+<div class="label">Version sombre</div>
+<div class="card card-dark" id="card-dark">
+  <div class="card-logo">
+    <div class="card-mark">OSM</div>
+    <div class="card-name">Vladimir Streiff</div>
+  </div>
+  <div class="qr-wrap">
+    <div id="qr-dark"></div>
+  </div>
+  <div class="card-title">Catalogue Musical Original</div>
+  <div class="card-sub">2849 morceaux originaux organisés en 28 playlists thématiques — disponibles gratuitement pour vos projets.</div>
+  <div class="card-divider"></div>
+  <div class="card-info">
+    <strong>Scannez pour accéder au catalogue</strong><br>
+    Cinéma · Télévision · Publicité<br>
+    <strong>06 82 98 57 52</strong>
+  </div>
+</div>
+
+<div class="buttons">
+  <button class="btn" onclick="window.print()">🖨️ Imprimer</button>
+  <button class="btn btn-outline" onclick="window.location.href='index.html'">← Retour</button>
+</div>
+
+<script>
+const URL = 'https://v-19str.github.io/Original-Scores-Musique/inscription.html';
+
+new QRCode(document.getElementById('qr-light'), {
+  text: URL,
+  width: 180,
+  height: 180,
+  colorDark: '#141414',
+  colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.H
+});
+
+new QRCode(document.getElementById('qr-dark'), {
+  text: URL,
+  width: 180,
+  height: 180,
+  colorDark: '#141414',
+  colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.H
+});
+</script>
+</body>
+</html>

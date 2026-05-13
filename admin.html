@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – Administration</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E50914;
+  --bg: #0d0d0d;
+  --bg2: #1a1a1a;
+  --bg3: #252525;
+  --bg4: #333;
+  --text: #ffffff;
+  --text2: #ccc;
+  --muted: #888;
+  --border: rgba(255,255,255,0.1);
+  --green: #2ecc71;
+  --yellow: #f39c12;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; }
+
+/* ── PASSWORD SCREEN ── */
+#pw-screen { position: fixed; inset: 0; background: #090909; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; z-index: 9999; }
+.pw-logo { display: flex; align-items: center; gap: 12px; }
+.pw-mark { background: var(--red); color: #fff; font-size: 14px; font-weight: 700; letter-spacing: 2px; padding: 6px 10px; border-radius: 3px; }
+.pw-name { font-size: 15px; font-weight: 600; letter-spacing: 3px; }
+.pw-badge { background: rgba(229,9,20,0.15); border: 1px solid rgba(229,9,20,0.3); color: var(--red); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+.pw-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 42px; width: 360px; text-align: center; }
+.pw-title { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+.pw-sub { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
+.pw-input { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 14px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 14px; transition: border-color 0.2s; }
+.pw-input:focus { border-color: var(--red); }
+.pw-btn { width: 100%; background: var(--red); color: #fff; border: none; padding: 13px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; border-radius: 4px; text-transform: uppercase; transition: background 0.15s; }
+.pw-btn:hover { background: #c4070f; }
+.pw-btn:disabled { background: var(--bg4); color: var(--muted); cursor: not-allowed; }
+.pw-error { font-size: 11px; color: var(--red); margin-top: 10px; display: none; }
+
+/* ── MAIN ── */
+#main { display: none; }
+#main.visible { display: block; }
+
+header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border); padding: 0 48px; height: 68px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-mark { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 5px 9px; border-radius: 3px; }
+.logo-name { font-size: 14px; font-weight: 600; letter-spacing: 2px; }
+.admin-badge { background: rgba(229,9,20,0.15); border: 1px solid rgba(229,9,20,0.3); color: var(--red); padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.btn-sm { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); padding: 7px 14px; font-family: 'Montserrat', sans-serif; font-size: 11px; cursor: pointer; border-radius: 4px; transition: all 0.15s; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+.btn-sm:hover { border-color: #555; color: var(--text); }
+.btn-red-sm { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-red-sm:hover { background: #c4070f; }
+
+/* ── STATS BAR ── */
+.stats-bar { padding: 24px 48px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: linear-gradient(180deg,#0a0a0a 0%,var(--bg) 100%); }
+.stat-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
+.stat-num { font-size: 28px; font-weight: 700; color: var(--red); }
+.stat-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+
+/* ── CONTROLS ── */
+.controls { padding: 0 48px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.search-admin { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 9px 14px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 13px; outline: none; width: 280px; transition: border-color 0.2s; }
+.search-admin:focus { border-color: #555; }
+.search-admin::placeholder { color: var(--muted); }
+.filter-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--muted); padding: 9px 16px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 4px; transition: all 0.15s; letter-spacing: 1px; }
+.filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+/* ── CLIENTS TABLE ── */
+.clients-section { padding: 0 48px 120px; }
+.section-title { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text2); margin-bottom: 16px; }
+
+.client-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
+.client-card:hover { border-color: rgba(229,9,20,0.25); }
+.client-header { padding: 16px 20px; display: grid; grid-template-columns: auto 1fr auto auto auto auto; align-items: center; gap: 16px; cursor: pointer; }
+.client-avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(229,9,20,0.15); border: 1px solid rgba(229,9,20,0.3); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: var(--red); flex-shrink: 0; }
+.client-info { min-width: 0; }
+.client-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.client-email { font-size: 11px; color: var(--muted); }
+.client-societe { font-size: 12px; color: var(--text2); }
+.client-metier { font-size: 10px; color: var(--muted); background: var(--bg3); padding: 3px 9px; border-radius: 10px; white-space: nowrap; }
+.client-date { font-size: 11px; color: var(--muted); white-space: nowrap; text-align: right; }
+.client-badge { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: var(--text2); white-space: nowrap; text-align: center; min-width: 60px; }
+.client-badge.has-data { border-color: rgba(229,9,20,0.3); color: var(--red); background: rgba(229,9,20,0.06); }
+.client-toggle { font-size: 13px; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
+.client-card.open .client-toggle { transform: rotate(180deg); }
+
+.client-detail { display: none; border-top: 1px solid var(--border); padding: 20px; background: rgba(0,0,0,0.2); }
+.client-card.open .client-detail { display: block; }
+
+.detail-tabs { display: flex; gap: 0; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+.detail-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); padding: 8px 16px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; margin-bottom: -1px; }
+.detail-tab.active { color: var(--text); border-bottom-color: var(--red); }
+.detail-panel { display: none; }
+.detail-panel.active { display: block; }
+
+.mini-track { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 4px; transition: background 0.1s; }
+.mini-track:hover { background: var(--bg3); }
+.mini-track-num { font-size: 11px; color: var(--muted); min-width: 20px; text-align: center; }
+.mini-track-info { flex: 1; min-width: 0; }
+.mini-track-title { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.mini-track-playlist { font-size: 11px; color: var(--muted); }
+.mini-track-date { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+.detail-empty { padding: 20px; text-align: center; color: var(--muted); font-size: 12px; }
+
+/* ── SETUP PANEL ── */
+.setup-panel { margin: 24px 48px; background: rgba(229,9,20,0.06); border: 1px solid rgba(229,9,20,0.25); border-radius: 8px; overflow: hidden; }
+.setup-header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.setup-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--red); }
+.setup-body { display: none; padding: 0 20px 20px; }
+.setup-panel.open .setup-body { display: block; }
+.setup-body p { font-size: 12px; color: var(--text2); margin-bottom: 12px; line-height: 1.6; }
+.sql-block { background: #0a0a0a; border: 1px solid var(--border); border-radius: 6px; padding: 16px; font-family: monospace; font-size: 12px; color: #aef; white-space: pre-wrap; overflow-x: auto; margin-bottom: 12px; }
+.copy-sql-btn { background: none; border: 1px solid var(--border); color: var(--text2); padding: 7px 14px; font-family: 'Montserrat', sans-serif; font-size: 11px; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
+.copy-sql-btn:hover { border-color: #555; color: var(--text); }
+
+/* ── LOADING / EMPTY ── */
+.loading-msg { text-align: center; padding: 60px; color: var(--muted); font-size: 12px; letter-spacing: 2px; }
+.empty-msg { text-align: center; padding: 60px; color: var(--muted); font-size: 13px; }
+
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--bg3); border: 1px solid rgba(229,9,20,0.3); color: var(--text); padding: 10px 22px; border-radius: 20px; font-size: 12px; opacity: 0; transition: all 0.3s; z-index: 9999; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 900px) {
+  header { padding: 0 16px; }
+  .stats-bar, .controls, .clients-section { padding-left: 16px; padding-right: 16px; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .client-header { grid-template-columns: auto 1fr auto; }
+  .client-metier, .client-date { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="pw-screen">
+  <div class="pw-logo">
+    <div class="pw-mark">OSM</div>
+    <div class="pw-name">ORIGINAL SCORES MUSIC</div>
+  </div>
+  <div class="pw-badge">Administration</div>
+  <div class="pw-box">
+    <div class="pw-title">Accès Admin</div>
+    <div class="pw-sub">Réservé à Vladimir Streiff</div>
+    <input type="password" class="pw-input" id="pw-input" placeholder="••••••••••••••" onkeydown="if(event.key==='Enter')checkAdmin()">
+    <button class="pw-btn" id="pw-btn" onclick="checkAdmin()">Accéder au panneau admin</button>
+    <div class="pw-error" id="pw-error">Mot de passe incorrect</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">ADMIN</div>
+    <span class="admin-badge">Panneau Admin</span>
+  </div>
+  <div class="header-right">
+    <button class="btn-sm" onclick="refreshData()">↺ Actualiser</button>
+    <a class="btn-sm" href="index.html">← Catalogue</a>
+    <button class="btn-sm btn-red-sm" onclick="adminLogout()">Déconnexion</button>
+  </div>
+</header>
+
+<!-- SETUP SQL PANEL -->
+<div class="setup-panel" id="setup-panel">
+  <div class="setup-header" onclick="toggleSetup()">
+    <span class="setup-title">⚙ Configuration Supabase – Cliquez pour voir le SQL à exécuter</span>
+    <span style="color:var(--red);font-size:12px">▼</span>
+  </div>
+  <div class="setup-body">
+    <p>Copiez et exécutez ce SQL dans l'éditeur SQL de votre projet Supabase (<strong>SQL Editor → New query</strong>) :</p>
+    <div class="sql-block" id="setup-sql">-- ===================================================
+-- OSM – SETUP SUPABASE (à exécuter une seule fois)
+-- ===================================================
+
+-- 1. Table profils clients
+create table if not exists public.profiles (
+  id uuid references auth.users on delete cascade primary key,
+  email text, prenom text, nom text,
+  societe text, metier text,
+  created_at timestamptz default now()
+);
+
+-- 2. Table favoris
+create table if not exists public.favorites (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users on delete cascade not null,
+  track_id text not null, track_title text,
+  track_playlist text, track_url text,
+  created_at timestamptz default now(),
+  unique(user_id, track_id)
+);
+
+-- 3. Table téléchargements
+create table if not exists public.downloads (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users on delete cascade not null,
+  track_id text not null, track_title text,
+  track_playlist text, track_url text,
+  downloaded_at timestamptz default now()
+);
+
+-- 4. Table projets
+create table if not exists public.projects (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users on delete cascade not null,
+  name text not null, description text,
+  created_at timestamptz default now()
+);
+
+-- 5. Activer RLS
+alter table public.profiles enable row level security;
+alter table public.favorites enable row level security;
+alter table public.downloads enable row level security;
+alter table public.projects enable row level security;
+
+-- 6. Politiques RLS (utilisateur voit ses propres données)
+create policy "profiles_own" on public.profiles for all using (auth.uid() = id);
+create policy "favorites_own" on public.favorites for all using (auth.uid() = user_id);
+create policy "downloads_own" on public.downloads for all using (auth.uid() = user_id);
+create policy "projects_own" on public.projects for all using (auth.uid() = user_id);
+
+-- 7. Trigger auto-création profil à l'inscription
+create or replace function public.handle_new_user()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  insert into public.profiles (id, email, prenom, nom, societe, metier)
+  values (
+    new.id, new.email,
+    new.raw_user_meta_data->>'prenom',
+    new.raw_user_meta_data->>'nom',
+    new.raw_user_meta_data->>'societe',
+    new.raw_user_meta_data->>'metier'
+  ) on conflict (id) do nothing;
+  return new;
+end; $$;
+
+create or replace trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function public.handle_new_user();
+
+-- 8. Fonction admin (contourne RLS avec mot de passe)
+create or replace function public.get_admin_data(admin_pwd text)
+returns json language plpgsql security definer
+set search_path = public, auth as $$
+begin
+  if admin_pwd != 'OSM_ADMIN_2026' then
+    raise exception 'Accès refusé';
+  end if;
+  return (
+    select json_build_object(
+      'profiles', (
+        select coalesce(json_agg(
+          json_build_object(
+            'id', p.id, 'email', p.email,
+            'prenom', p.prenom, 'nom', p.nom,
+            'societe', p.societe, 'metier', p.metier,
+            'created_at', p.created_at,
+            'last_sign_in', u.last_sign_in_at
+          ) order by p.created_at desc
+        ), '[]'::json)
+        from profiles p left join auth.users u on u.id = p.id
+      ),
+      'favorites', (
+        select coalesce(json_agg(row_to_json(f.*) order by f.created_at desc), '[]'::json)
+        from favorites f
+      ),
+      'downloads', (
+        select coalesce(json_agg(row_to_json(d.*) order by d.downloaded_at desc), '[]'::json)
+        from downloads d
+      )
+    )
+  );
+end; $$;
+
+grant execute on function public.get_admin_data(text) to anon;</div>
+    <button class="copy-sql-btn" onclick="copySQL()">Copier le SQL</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-box">
+    <div class="stat-num" id="stat-clients">—</div>
+    <div class="stat-label">Clients</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num" id="stat-favs">—</div>
+    <div class="stat-label">Favoris total</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num" id="stat-dls">—</div>
+    <div class="stat-label">Téléchargements total</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num" id="stat-today">—</div>
+    <div class="stat-label">Téléchargements aujourd'hui</div>
+  </div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <input type="text" class="search-admin" id="search-input" placeholder="Rechercher un client..." oninput="filterClients()">
+  <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">Tous</button>
+  <button class="filter-btn" data-filter="favorites" onclick="setFilter('favorites',this)">Avec favoris</button>
+  <button class="filter-btn" data-filter="downloads" onclick="setFilter('downloads',this)">Avec DL</button>
+</div>
+
+<!-- CLIENTS -->
+<div class="clients-section">
+  <div class="section-title" id="clients-count">Clients</div>
+  <div id="clients-list"><div class="loading-msg">· · · Chargement des données</div></div>
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const ADMIN_PASSWORD = 'OSM_ADMIN_2026';
+
+let allProfiles = [], allFavorites = [], allDownloads = [];
+let activeFilter = 'all';
+
+// ── AUTH ──────────────────────────────────────────────────────────
+function checkAdmin() {
+  const val = document.getElementById('pw-input').value;
+  const errEl = document.getElementById('pw-error');
+  const btn = document.getElementById('pw-btn');
+
+  if (val === ADMIN_PASSWORD) {
+    sessionStorage.setItem('osm_admin', '1');
+    document.getElementById('pw-screen').style.display = 'none';
+    document.getElementById('main').classList.add('visible');
+    loadAdminData();
+  } else {
+    errEl.style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    setTimeout(() => errEl.style.display = 'none', 3000);
+  }
+}
+
+function adminLogout() {
+  sessionStorage.removeItem('osm_admin');
+  document.getElementById('pw-screen').style.display = 'flex';
+  document.getElementById('main').classList.remove('visible');
+  document.getElementById('pw-input').value = '';
+}
+
+if (sessionStorage.getItem('osm_admin') === '1') {
+  document.getElementById('pw-screen').style.display = 'none';
+  document.getElementById('main').classList.add('visible');
+  loadAdminData();
+}
+
+// ── DATA ──────────────────────────────────────────────────────────
+async function loadAdminData() {
+  document.getElementById('clients-list').innerHTML = '<div class="loading-msg">· · · Chargement des données clients</div>';
+
+  const { data, error } = await sb.rpc('get_admin_data', { admin_pwd: ADMIN_PASSWORD });
+
+  if (error) {
+    if (error.message.includes('does not exist') || error.message.includes('function')) {
+      document.getElementById('clients-list').innerHTML = `<div class="empty-msg">⚙ La fonction admin n'est pas encore configurée.<br><br><span style="font-size:12px;color:var(--muted)">Cliquez sur le panneau de configuration ci-dessus et exécutez le SQL dans Supabase.</span></div>`;
+      document.getElementById('setup-panel').classList.add('open');
+    } else {
+      document.getElementById('clients-list').innerHTML = `<div class="empty-msg">Erreur : ${escHtml(error.message)}</div>`;
+    }
+    return;
+  }
+
+  allProfiles = data?.profiles || [];
+  allFavorites = data?.favorites || [];
+  allDownloads = data?.downloads || [];
+
+  updateStats();
+  renderClients();
+}
+
+function refreshData() { loadAdminData(); }
+
+function updateStats() {
+  const today = new Date().toISOString().slice(0, 10);
+  const todayDls = allDownloads.filter(d => (d.downloaded_at || '').slice(0, 10) === today);
+
+  document.getElementById('stat-clients').textContent = allProfiles.length;
+  document.getElementById('stat-favs').textContent = allFavorites.length;
+  document.getElementById('stat-dls').textContent = allDownloads.length;
+  document.getElementById('stat-today').textContent = todayDls.length;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function renderClients() {
+  const query = document.getElementById('search-input').value.toLowerCase().trim();
+
+  let profiles = allProfiles.filter(p => {
+    const text = [p.prenom, p.nom, p.email, p.societe, p.metier].join(' ').toLowerCase();
+    if (query && !text.includes(query)) return false;
+    if (activeFilter === 'favorites') return allFavorites.some(f => f.user_id === p.id);
+    if (activeFilter === 'downloads') return allDownloads.some(d => d.user_id === p.id);
+    return true;
+  });
+
+  const count = profiles.length;
+  const total = allProfiles.length;
+  document.getElementById('clients-count').textContent = query || activeFilter !== 'all'
+    ? `${count} client${count > 1 ? 's' : ''} (sur ${total})`
+    : `${total} client${total > 1 ? 's' : ''} enregistré${total > 1 ? 's' : ''}`;
+
+  if (!profiles.length) {
+    document.getElementById('clients-list').innerHTML = '<div class="empty-msg">Aucun client trouvé</div>';
+    return;
+  }
+
+  document.getElementById('clients-list').innerHTML = profiles.map(p => {
+    const favs = allFavorites.filter(f => f.user_id === p.id);
+    const dls = allDownloads.filter(d => d.user_id === p.id);
+    const initials = [(p.prenom || '?')[0], (p.nom || '')[0]].join('').toUpperCase();
+    const fullName = [p.prenom, p.nom].filter(Boolean).join(' ') || p.email;
+
+    return `<div class="client-card" id="card-${p.id}">
+      <div class="client-header" onclick="toggleCard('${p.id}')">
+        <div class="client-avatar">${initials}</div>
+        <div class="client-info">
+          <div class="client-name">${escHtml(fullName)}</div>
+          <div class="client-email">${escHtml(p.email || '')}</div>
+          <div class="client-societe">${escHtml(p.societe || '')}</div>
+        </div>
+        <div class="client-metier">${escHtml(p.metier || '—')}</div>
+        <div class="client-badge ${favs.length ? 'has-data' : ''}">♥ ${favs.length}</div>
+        <div class="client-badge ${dls.length ? 'has-data' : ''}">⬇ ${dls.length}</div>
+        <div class="client-date">${fmtDate(p.created_at)}<br><span style="font-size:10px;color:#555">${p.last_sign_in ? 'Vu ' + fmtDate(p.last_sign_in) : 'Jamais connecté'}</span></div>
+        <div class="client-toggle">▼</div>
+      </div>
+      <div class="client-detail" id="detail-${p.id}">
+        <div class="detail-tabs">
+          <button class="detail-tab active" data-uid="${p.id}" data-panel="favs" onclick="switchDetail(this,'${p.id}','favs')">♥ Favoris (${favs.length})</button>
+          <button class="detail-tab" data-uid="${p.id}" data-panel="dls" onclick="switchDetail(this,'${p.id}','dls')">⬇ Téléchargements (${dls.length})</button>
+        </div>
+        <div class="detail-panel active" id="panel-favs-${p.id}">
+          ${renderMiniTracks(favs, 'fav')}
+        </div>
+        <div class="detail-panel" id="panel-dls-${p.id}">
+          ${renderMiniTracks(dls, 'dl')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMiniTracks(tracks, type) {
+  if (!tracks.length) return `<div class="detail-empty">Aucun enregistrement</div>`;
+  return tracks.slice(0, 50).map((t, i) => `
+    <div class="mini-track">
+      <div class="mini-track-num">${i + 1}</div>
+      <div class="mini-track-info">
+        <div class="mini-track-title">${escHtml(t.track_title || 'Sans titre')}</div>
+        <div class="mini-track-playlist">${escHtml(t.track_playlist || '')}</div>
+      </div>
+      <div class="mini-track-date">${fmtDate(type === 'fav' ? t.created_at : t.downloaded_at)}</div>
+    </div>`).join('') + (tracks.length > 50 ? `<div class="detail-empty">+${tracks.length - 50} autres...</div>` : '');
+}
+
+function toggleCard(id) {
+  const card = document.getElementById('card-' + id);
+  card.classList.toggle('open');
+}
+
+function switchDetail(btn, uid, panel) {
+  const card = document.getElementById('card-' + uid);
+  card.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+  card.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`panel-${panel}-${uid}`).classList.add('active');
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────
+function filterClients() { renderClients(); }
+
+function setFilter(filter, btn) {
+  activeFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderClients();
+}
+
+// ── SETUP PANEL ───────────────────────────────────────────────────
+function toggleSetup() {
+  document.getElementById('setup-panel').classList.toggle('open');
+}
+
+function copySQL() {
+  const sql = document.getElementById('setup-sql').textContent;
+  navigator.clipboard.writeText(sql).then(() => showToast('SQL copié dans le presse-papiers !'));
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────
+function fmtDate(str) {
+  if (!str) return '—';
+  return new Date(str).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>

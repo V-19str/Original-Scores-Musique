@@ -1,0 +1,136 @@
+{
+  "playlists": [
+    {
+      "id": "PL001",
+      "nom": "Épopées Orchestrales",
+      "description": "Musiques de grande envergure pour des productions ambitieuses — suspense, révélation, climax narratif.",
+      "tags": ["orchestral", "épique", "cinéma", "blockbuster"],
+      "ambiances": ["épique", "dramatique", "grandeur"],
+      "saisons": ["toutes"],
+      "evenements": ["générique", "climax"],
+      "nb_titres": 24,
+      "duree_moy": "2:45"
+    },
+    {
+      "id": "PL002",
+      "nom": "Romance & Élégance",
+      "description": "Mélodies douces et lumineuses, parfaites pour les scènes d'amour, de tendresse et d'émotion partagée.",
+      "tags": ["romantique", "piano", "cordes", "doux"],
+      "ambiances": ["romantique", "tendre", "nostalgique"],
+      "saisons": ["toutes"],
+      "evenements": ["saint-valentin", "fête-des-mères", "mariage"],
+      "nb_titres": 18,
+      "duree_moy": "3:10"
+    },
+    {
+      "id": "PL003",
+      "nom": "Célébrations & Fêtes",
+      "description": "Rythmes festifs et entraînants pour illuminer vos moments de partage et de joie collective.",
+      "tags": ["festif", "joyeux", "cuivres", "percussion"],
+      "ambiances": ["joyeux", "festif", "énergique"],
+      "saisons": ["toutes"],
+      "evenements": ["nouvel-an", "noël", "fête-des-pères"],
+      "nb_titres": 21,
+      "duree_moy": "2:30"
+    },
+    {
+      "id": "PL004",
+      "nom": "Frissons & Mystères",
+      "description": "Atmosphères sombres et envoûtantes pour suspense, thriller psychologique et horreur subtile.",
+      "tags": ["dark", "suspense", "atmosphérique", "thriller"],
+      "ambiances": ["mystérieux", "angoissant", "sombre"],
+      "saisons": ["automne"],
+      "evenements": ["halloween"],
+      "nb_titres": 30,
+      "duree_moy": "3:20"
+    },
+    {
+      "id": "PL005",
+      "nom": "Évasion Estivale",
+      "description": "Sonorités légères et solaires évoquant la liberté, la mer et les longues journées d'été.",
+      "tags": ["été", "solaire", "acoustique", "liberté"],
+      "ambiances": ["léger", "joyeux", "ensoleillé"],
+      "saisons": ["été"],
+      "evenements": ["été", "vacances"],
+      "nb_titres": 22,
+      "duree_moy": "2:55"
+    },
+    {
+      "id": "PL006",
+      "nom": "Rentrée & Nouveau Départ",
+      "description": "Musiques motivantes et positives pour accompagner les commencements, la détermination et le changement.",
+      "tags": ["motivant", "positif", "contemporain", "dynamique"],
+      "ambiances": ["motivant", "positif", "dynamique"],
+      "saisons": ["automne"],
+      "evenements": ["rentrée", "nouvel-an"],
+      "nb_titres": 16,
+      "duree_moy": "2:40"
+    },
+    {
+      "id": "PL007",
+      "nom": "Minimalisme & Contemplation",
+      "description": "Compositions épurées pour documentaires, portraits, méditation visuelle et émotions introspectives.",
+      "tags": ["minimaliste", "ambient", "piano", "contemplatif"],
+      "ambiances": ["contemplatif", "serein", "mélancolique"],
+      "saisons": ["toutes"],
+      "evenements": ["générique"],
+      "nb_titres": 14,
+      "duree_moy": "3:45"
+    },
+    {
+      "id": "PL008",
+      "nom": "Action & Adrénaline",
+      "description": "Beats percussifs et hybrides électroniques pour les séquences d'action, sport et montage dynamique.",
+      "tags": ["action", "électronique", "percussif", "sport"],
+      "ambiances": ["intense", "puissant", "urgent"],
+      "saisons": ["toutes"],
+      "evenements": ["générique"],
+      "nb_titres": 28,
+      "duree_moy": "2:15"
+    },
+    {
+      "id": "PL009",
+      "nom": "Hiver & Magie de Noël",
+      "description": "Orchestrations chaleureuses et féeriques pour habiller les fêtes de fin d'année avec élégance.",
+      "tags": ["noël", "hivernal", "féerique", "orchestral"],
+      "ambiances": ["chaleureux", "féerique", "nostalgique"],
+      "saisons": ["hiver"],
+      "evenements": ["noël", "nouvel-an"],
+      "nb_titres": 19,
+      "duree_moy": "3:00"
+    },
+    {
+      "id": "PL010",
+      "nom": "Corporate & Modernité",
+      "description": "Sons propres et professionnels pour films d'entreprise, présentations et contenus institutionnels.",
+      "tags": ["corporate", "moderne", "propre", "professionnel"],
+      "ambiances": ["professionnel", "neutre", "dynamique"],
+      "saisons": ["toutes"],
+      "evenements": ["générique"],
+      "nb_titres": 20,
+      "duree_moy": "2:20"
+    },
+    {
+      "id": "PL011",
+      "nom": "Famille & Tendresse",
+      "description": "Mélodies affectueuses célébrant les liens familiaux, la douceur du quotidien et les moments précieux.",
+      "tags": ["famille", "tendre", "acoustique", "positif"],
+      "ambiances": ["tendre", "chaleureux", "joyeux"],
+      "saisons": ["toutes"],
+      "evenements": ["fête-des-mères", "fête-des-pères", "noël"],
+      "nb_titres": 15,
+      "duree_moy": "2:50"
+    },
+    {
+      "id": "PL012",
+      "nom": "Voyage & Horizons",
+      "description": "Sonorités world et orchestrales pour évoquer l'aventure, les cultures du monde et l'exploration.",
+      "tags": ["world", "voyage", "aventure", "ethnique"],
+      "ambiances": ["aventureux", "épique", "contemplatif"],
+      "saisons": ["été"],
+      "evenements": ["été", "générique"],
+      "nb_titres": 17,
+      "duree_moy": "3:05"
+    }
+  ]
+}

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – Mon Compte</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E50914;
+  --bg: #141414;
+  --bg2: #1f1f1f;
+  --bg3: #2a2a2a;
+  --bg4: #383838;
+  --text: #ffffff;
+  --text2: #d4d4d4;
+  --muted: #999;
+  --border: rgba(255,255,255,0.12);
+  --green: #2ecc71;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; }
+
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(12,12,12,0.98); backdrop-filter: blur(10px);
+  padding: 0 48px; height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo-mark { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 5px 9px; border-radius: 3px; }
+.logo-name { font-size: 14px; font-weight: 600; letter-spacing: 2px; color: var(--text); }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.user-name { font-size: 13px; font-weight: 500; color: var(--text2); display: none; }
+.btn-sm { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); padding: 7px 14px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; border-radius: 4px; transition: all 0.15s; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+.btn-sm:hover { border-color: #555; color: var(--text); }
+.btn-red-sm { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-red-sm:hover { background: #c4070f; border-color: #c4070f; color: #fff; }
+
+/* AUTH SCREEN */
+#auth-screen {
+  padding-top: 100px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 28px; min-height: 100vh;
+  background: linear-gradient(180deg, #080808 0%, var(--bg) 50%);
+}
+.auth-tabs { display: flex; background: var(--bg3); border-radius: 6px; padding: 4px; }
+.auth-tab { background: none; border: none; color: var(--muted); padding: 9px 26px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
+.auth-tab.active { background: var(--red); color: #fff; }
+
+.auth-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 40px; width: 100%; max-width: 420px; }
+.auth-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.auth-sub { font-size: 12px; color: var(--muted); margin-bottom: 28px; line-height: 1.5; }
+
+.form-group { margin-bottom: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; color: var(--text2); text-transform: uppercase; margin-bottom: 6px; }
+input, select { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 11px 14px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 13px; outline: none; transition: border-color 0.2s; letter-spacing: 0; }
+input:focus, select:focus { border-color: var(--red); }
+input::placeholder { color: var(--muted); }
+input[type="password"] { letter-spacing: 2px; }
+select { cursor: pointer; }
+select option { background: var(--bg3); }
+
+.btn-submit { width: 100%; background: var(--red); color: #fff; border: none; padding: 13px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; border-radius: 4px; text-transform: uppercase; transition: background 0.15s; margin-top: 8px; }
+.btn-submit:hover { background: #c4070f; }
+.btn-submit:disabled { background: var(--bg4); color: var(--muted); cursor: not-allowed; }
+
+.auth-error { font-size: 11px; color: var(--red); margin-top: 10px; min-height: 16px; }
+.auth-success { font-size: 11px; color: var(--green); margin-top: 10px; min-height: 16px; }
+.auth-link { font-size: 11px; color: var(--muted); text-align: center; margin-top: 16px; }
+.auth-link a { color: #888; text-decoration: none; }
+.auth-link a:hover { color: var(--text); }
+
+/* DASHBOARD */
+#dashboard-screen { display: none; padding-top: 88px; min-height: 100vh; }
+
+.dash-hero { padding: 32px 48px 0; background: linear-gradient(180deg, #0a0a0a 0%, var(--bg) 100%); }
+.dash-welcome { font-size: 10px; color: var(--red); font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 10px; }
+.dash-name { font-size: 30px; font-weight: 700; margin-bottom: 6px; }
+.dash-meta { font-size: 12px; color: var(--muted); padding-bottom: 32px; }
+
+.dash-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 24px 48px; }
+.stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; display: flex; align-items: center; gap: 18px; cursor: pointer; transition: all 0.2s; }
+.stat-card:hover { border-color: rgba(229,9,20,0.5); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.stat-icon { font-size: 26px; }
+.stat-num { font-size: 26px; font-weight: 700; color: var(--red); line-height: 1; }
+.stat-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; text-transform: uppercase; }
+
+.dash-tabs { padding: 0 48px; display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+.dash-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); padding: 14px 20px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; margin-bottom: -1px; }
+.dash-tab:hover { color: var(--text2); }
+.dash-tab.active { color: var(--text); border-bottom-color: var(--red); }
+
+.tab-content { padding: 32px 48px 120px; display: none; }
+.tab-content.active { display: block; }
+
+/* FAVORITES */
+.fav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.fav-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: border-color 0.2s; }
+.fav-card:hover { border-color: rgba(229,9,20,0.3); }
+.fav-note { width: 38px; height: 38px; background: rgba(229,9,20,0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; color: var(--red); }
+.fav-info { flex: 1; min-width: 0; }
+.fav-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.fav-playlist { font-size: 11px; color: var(--muted); }
+.fav-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.icon-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 32px; height: 32px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.icon-btn:hover { border-color: var(--text2); color: var(--text); }
+.icon-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+/* DOWNLOADS */
+.dl-list { display: flex; flex-direction: column; gap: 8px; }
+.dl-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; }
+.dl-info { flex: 1; min-width: 0; }
+.dl-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.dl-meta { font-size: 11px; color: var(--muted); }
+.dl-date { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+.redl-btn { background: none; border: 1px solid var(--border); color: var(--text2); padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-family: 'Montserrat', sans-serif; transition: all 0.15s; flex-shrink: 0; white-space: nowrap; }
+.redl-btn:hover { border-color: #555; color: var(--text); }
+
+/* PROJECTS */
+.proj-header-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.proj-header-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); }
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.proj-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; transition: all 0.2s; }
+.proj-card:hover { border-color: rgba(229,9,20,0.3); transform: translateY(-2px); }
+.proj-name { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.proj-desc { font-size: 12px; color: var(--muted); margin-bottom: 16px; min-height: 18px; }
+.proj-footer { display: flex; align-items: center; justify-content: space-between; }
+.proj-date { font-size: 11px; color: var(--muted); }
+.proj-new { background: none; border: 2px dashed rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 13px; font-family: 'Montserrat', sans-serif; transition: all 0.2s; flex-direction: column; min-height: 130px; }
+.proj-new:hover { border-color: var(--red); color: var(--text2); }
+.proj-new-icon { font-size: 30px; }
+
+/* MODAL */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; }
+.modal.open { display: flex; }
+.modal-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 36px; width: 100%; max-width: 440px; margin: 0 16px; }
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+.btn-cancel { flex: 1; background: none; border: 1px solid var(--border); color: var(--text2); padding: 11px; font-family: 'Montserrat', sans-serif; font-size: 12px; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
+.btn-cancel:hover { border-color: #555; }
+.btn-create { flex: 2; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 70px 20px; color: var(--muted); }
+.empty-icon { font-size: 52px; margin-bottom: 18px; opacity: 0.5; }
+.empty-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text2); }
+.empty-sub { font-size: 12px; line-height: 1.7; }
+.empty-sub a { color: var(--red); text-decoration: none; }
+.empty-sub a:hover { text-decoration: underline; }
+
+.loading-msg { text-align: center; padding: 40px; color: var(--muted); font-size: 12px; letter-spacing: 2px; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--bg3); border: 1px solid rgba(229,9,20,0.3); color: var(--text); padding: 10px 22px; border-radius: 20px; font-size: 12px; opacity: 0; transition: all 0.3s; z-index: 9999; pointer-events: none; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+footer { text-align: center; padding: 24px; font-size: 11px; color: #555; border-top: 1px solid var(--border); }
+footer a { color: #666; text-decoration: none; }
+footer a:hover { color: #888; }
+
+@media (max-width: 768px) {
+  header { padding: 0 16px; }
+  #auth-screen { padding: 88px 16px 40px; }
+  .auth-box { padding: 28px 20px; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .dash-hero, .dash-stats, .dash-tabs { padding-left: 16px; padding-right: 16px; }
+  .tab-content { padding: 24px 16px 80px; }
+  .dash-stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">ORIGINAL SCORES MUSIC</div>
+  </a>
+  <div class="header-right">
+    <span class="user-name" id="header-username"></span>
+    <a class="btn-sm" href="index.html">← Catalogue</a>
+    <button class="btn-sm btn-red-sm" id="btn-logout" style="display:none" onclick="logout()">Déconnexion</button>
+  </div>
+</header>
+
+<!-- ===================== AUTH SCREEN ===================== -->
+<div id="auth-screen">
+  <div class="auth-tabs">
+    <button class="auth-tab active" id="tab-login-btn" onclick="switchAuthTab('login')">Connexion</button>
+    <button class="auth-tab" id="tab-register-btn" onclick="switchAuthTab('register')">Créer un compte</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="auth-box" id="login-box">
+    <h2 class="auth-title">Bienvenue</h2>
+    <p class="auth-sub">Connectez-vous pour accéder à vos favoris, téléchargements et projets.</p>
+    <div class="form-group">
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" placeholder="jean@production.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label for="login-password">Mot de passe</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="auth-error" id="login-error"></div>
+    <button class="btn-submit" id="btn-login" onclick="doLogin()">Se connecter</button>
+    <p class="auth-link">Pas encore de compte ? <a href="#" onclick="switchAuthTab('register');return false;">Créer un compte</a></p>
+    <p class="auth-link"><a href="index.html">← Retour au catalogue</a></p>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="auth-box" id="register-box" style="display:none">
+    <h2 class="auth-title">Créer un compte</h2>
+    <p class="auth-sub">Accédez à votre espace personnel : favoris, téléchargements et projets.</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="reg-prenom">Prénom *</label>
+        <input type="text" id="reg-prenom" placeholder="Jean" autocomplete="given-name">
+      </div>
+      <div class="form-group">
+        <label for="reg-nom">Nom *</label>
+        <input type="text" id="reg-nom" placeholder="Dupont" autocomplete="family-name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="reg-email">Email *</label>
+      <input type="email" id="reg-email" placeholder="jean@production.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label for="reg-societe">Société / Production *</label>
+      <input type="text" id="reg-societe" placeholder="Les Films du Monde">
+    </div>
+    <div class="form-group">
+      <label for="reg-metier">Métier *</label>
+      <select id="reg-metier">
+        <option value="" disabled selected>Sélectionnez votre métier</option>
+        <option value="Monteur">Monteur</option>
+        <option value="Réalisateur">Réalisateur</option>
+        <option value="Producteur">Producteur</option>
+        <option value="Directeur artistique">Directeur artistique</option>
+        <option value="Superviseur musical">Superviseur musical</option>
+        <option value="Chef de projet">Chef de projet</option>
+        <option value="Autre">Autre</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="reg-password">Mot de passe * (min. 6 caractères)</label>
+      <input type="password" id="reg-password" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <div class="form-group">
+      <label for="reg-confirm">Confirmer le mot de passe *</label>
+      <input type="password" id="reg-confirm" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+    </div>
+    <div class="auth-error" id="register-error"></div>
+    <div class="auth-success" id="register-success"></div>
+    <button class="btn-submit" id="btn-register" onclick="doRegister()">Créer mon compte</button>
+    <p class="auth-link">Déjà un compte ? <a href="#" onclick="switchAuthTab('login');return false;">Se connecter</a></p>
+  </div>
+</div>
+
+<!-- ===================== DASHBOARD ===================== -->
+<div id="dashboard-screen">
+
+  <div class="dash-hero">
+    <div class="dash-welcome">Espace Client OSM</div>
+    <div class="dash-name" id="dash-name">Bienvenue</div>
+    <div class="dash-meta" id="dash-meta"></div>
+  </div>
+
+  <div class="dash-stats">
+    <div class="stat-card" onclick="switchDashTab('favoris')">
+      <div class="stat-icon">♥</div>
+      <div>
+        <div class="stat-num" id="stat-fav">—</div>
+        <div class="stat-label">Favoris</div>
+      </div>
+    </div>
+    <div class="stat-card" onclick="switchDashTab('telechargements')">
+      <div class="stat-icon">⬇</div>
+      <div>
+        <div class="stat-num" id="stat-dl">—</div>
+        <div class="stat-label">Téléchargements</div>
+      </div>
+    </div>
+    <div class="stat-card" onclick="switchDashTab('projets')">
+      <div class="stat-icon">📁</div>
+      <div>
+        <div class="stat-num" id="stat-proj">—</div>
+        <div class="stat-label">Projets</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-tabs">
+    <button class="dash-tab active" data-tab="favoris" onclick="switchDashTab('favoris')">♥ Favoris</button>
+    <button class="dash-tab" data-tab="telechargements" onclick="switchDashTab('telechargements')">⬇ Téléchargements</button>
+    <button class="dash-tab" data-tab="projets" onclick="switchDashTab('projets')">📁 Projets</button>
+  </div>
+
+  <div id="tab-favoris" class="tab-content active">
+    <div class="loading-msg">· · · Chargement</div>
+  </div>
+
+  <div id="tab-telechargements" class="tab-content">
+    <div class="loading-msg">· · · Chargement</div>
+  </div>
+
+  <div id="tab-projets" class="tab-content">
+    <div class="proj-header-bar">
+      <span class="proj-header-title">Mes Projets</span>
+      <button class="btn-sm btn-red-sm" onclick="openProjModal()">+ Nouveau projet</button>
+    </div>
+    <div id="proj-grid" class="proj-grid">
+      <div class="loading-msg">· · · Chargement</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL NEW PROJECT -->
+<div class="modal" id="modal-project">
+  <div class="modal-box">
+    <div class="modal-title">Nouveau projet</div>
+    <div class="form-group">
+      <label for="proj-name-input">Nom du projet *</label>
+      <input type="text" id="proj-name-input" placeholder="Mon film 2026">
+    </div>
+    <div class="form-group">
+      <label for="proj-desc-input">Description</label>
+      <input type="text" id="proj-desc-input" placeholder="Chaîne, date de livraison, notes...">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeProjModal()">Annuler</button>
+      <button class="btn-submit btn-create" onclick="createProject()">Créer le projet</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  © 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp;
+  <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp;
+  <a href="tel:+33682985752">06 82 98 57 52</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null;
+let currentProfile = null;
+
+// ── INIT ──────────────────────────────────────────────────────────
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) {
+    await loadUser(session.user);
+  }
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (session?.user) await loadUser(session.user);
+    else showAuth();
+  });
+}
+
+async function loadUser(user) {
+  currentUser = user;
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).single();
+  currentProfile = profile;
+  showDashboard();
+}
+
+// ── AUTH SCREEN ───────────────────────────────────────────────────
+function showAuth() {
+  currentUser = null; currentProfile = null;
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('dashboard-screen').style.display = 'none';
+  document.getElementById('header-username').style.display = 'none';
+  document.getElementById('btn-logout').style.display = 'none';
+}
+
+function switchAuthTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('login-box').style.display = isLogin ? 'block' : 'none';
+  document.getElementById('register-box').style.display = isLogin ? 'none' : 'block';
+  document.getElementById('tab-login-btn').classList.toggle('active', isLogin);
+  document.getElementById('tab-register-btn').classList.toggle('active', !isLogin);
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('btn-login');
+
+  errEl.textContent = '';
+  if (!email || !password) { errEl.textContent = 'Veuillez remplir tous les champs.'; return; }
+
+  btn.disabled = true; btn.textContent = 'Connexion en cours...';
+
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+
+  btn.disabled = false; btn.textContent = 'Se connecter';
+  if (error) {
+    errEl.textContent = error.message.includes('Invalid') ? 'Email ou mot de passe incorrect.' : error.message;
+  }
+}
+
+// ── REGISTER ──────────────────────────────────────────────────────
+async function doRegister() {
+  const prenom = document.getElementById('reg-prenom').value.trim();
+  const nom = document.getElementById('reg-nom').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const societe = document.getElementById('reg-societe').value.trim();
+  const metier = document.getElementById('reg-metier').value;
+  const password = document.getElementById('reg-password').value;
+  const confirm = document.getElementById('reg-confirm').value;
+  const errEl = document.getElementById('register-error');
+  const okEl = document.getElementById('register-success');
+  const btn = document.getElementById('btn-register');
+
+  errEl.textContent = ''; okEl.textContent = '';
+  if (!prenom || !nom || !email || !societe || !metier || !password) {
+    errEl.textContent = 'Veuillez remplir tous les champs obligatoires.'; return;
+  }
+  if (password.length < 6) { errEl.textContent = 'Mot de passe : 6 caractères minimum.'; return; }
+  if (password !== confirm) { errEl.textContent = 'Les mots de passe ne correspondent pas.'; return; }
+
+  btn.disabled = true; btn.textContent = 'Création en cours...';
+
+  const { data, error } = await sb.auth.signUp({
+    email, password,
+    options: { data: { prenom, nom, societe, metier } }
+  });
+
+  if (error) {
+    btn.disabled = false; btn.textContent = 'Créer mon compte';
+    errEl.textContent = error.message; return;
+  }
+
+  // Upsert profile (fallback if trigger not set)
+  if (data?.user) {
+    await sb.from('profiles').upsert({ id: data.user.id, email, prenom, nom, societe, metier });
+  }
+
+  btn.disabled = false; btn.textContent = 'Créer mon compte';
+
+  if (data?.session) {
+    // Auto-logged in (email confirmation disabled)
+  } else {
+    okEl.textContent = 'Compte créé ! Vérifiez votre email pour confirmer.';
+    btn.textContent = 'Vérifiez votre email';
+    btn.disabled = true;
+  }
+}
+
+// ── LOGOUT ────────────────────────────────────────────────────────
+async function logout() {
+  await sb.auth.signOut();
+  window.location.href = 'index.html';
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────
+function showDashboard() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('dashboard-screen').style.display = 'block';
+
+  const profile = currentProfile;
+  const meta = currentUser?.user_metadata;
+  const prenom = profile?.prenom || meta?.prenom || '';
+  const nom = profile?.nom || meta?.nom || '';
+  const fullName = [prenom, nom].filter(Boolean).join(' ') || currentUser?.email || '';
+  const societe = profile?.societe || meta?.societe || '';
+  const metier = profile?.metier || meta?.metier || '';
+
+  document.getElementById('dash-name').textContent = fullName;
+  document.getElementById('dash-meta').textContent = [societe, metier].filter(Boolean).join(' · ');
+  document.getElementById('header-username').textContent = `👤 ${fullName}`;
+  document.getElementById('header-username').style.display = 'inline';
+  document.getElementById('btn-logout').style.display = 'inline-flex';
+
+  loadFavorites();
+  loadDownloads();
+  loadProjects();
+}
+
+function switchDashTab(tab) {
+  document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.dash-tab[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+}
+
+// ── FAVORITES ─────────────────────────────────────────────────────
+async function loadFavorites() {
+  if (!currentUser) return;
+  const { data: favs } = await sb.from('favorites')
+    .select('*').eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  document.getElementById('stat-fav').textContent = favs?.length ?? 0;
+  const container = document.getElementById('tab-favoris');
+
+  if (!favs?.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">♥</div><div class="empty-title">Aucun favori enregistré</div><div class="empty-sub">Dans le <a href="index.html">catalogue</a>, cliquez sur ♥ pour sauvegarder vos morceaux préférés.</div></div>`;
+    return;
+  }
+
+  container.innerHTML = `<div class="fav-grid">${favs.map(f => `
+    <div class="fav-card" data-id="${f.id}">
+      <div class="fav-note">♪</div>
+      <div class="fav-info">
+        <div class="fav-title" title="${escHtml(f.track_title)}">${escHtml(f.track_title || 'Sans titre')}</div>
+        <div class="fav-playlist">${escHtml(f.track_playlist || '')}</div>
+      </div>
+      <div class="fav-actions">
+        <button class="icon-btn" onclick="openInCatalogue('${encodeURIComponent(f.track_url || '')}','${encodeURIComponent(f.track_title || '')}')" title="Écouter dans le catalogue">▶</button>
+        <button class="icon-btn" onclick="redownload('${encodeURIComponent(f.track_url || '')}','${encodeURIComponent(f.track_title || '')}')" title="Télécharger">⬇</button>
+        <button class="icon-btn danger" onclick="removeFav('${f.id}')" title="Retirer des favoris">✕</button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+async function removeFav(id) {
+  await sb.from('favorites').delete().eq('id', id);
+  showToast('Retiré des favoris');
+  loadFavorites();
+}
+
+function openInCatalogue(encUrl, encTitle) {
+  const url = decodeURIComponent(encUrl);
+  const title = decodeURIComponent(encTitle);
+  if (url) {
+    sessionStorage.setItem('osm_autoplay_url', url);
+    sessionStorage.setItem('osm_autoplay_title', title);
+    window.location.href = 'index.html';
+  }
+}
+
+function redownload(encUrl, encTitle) {
+  const url = decodeURIComponent(encUrl);
+  const title = decodeURIComponent(encTitle);
+  if (!url) return;
+  const a = document.createElement('a');
+  a.href = url.replace('/upload/', '/upload/fl_attachment/');
+  a.download = title + '.mp3'; a.target = '_blank'; a.click();
+}
+
+// ── DOWNLOADS ─────────────────────────────────────────────────────
+async function loadDownloads() {
+  if (!currentUser) return;
+  const { data: dls } = await sb.from('downloads')
+    .select('*').eq('user_id', currentUser.id)
+    .order('downloaded_at', { ascending: false });
+
+  document.getElementById('stat-dl').textContent = dls?.length ?? 0;
+  const container = document.getElementById('tab-telechargements');
+
+  if (!dls?.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">⬇</div><div class="empty-title">Aucun téléchargement</div><div class="empty-sub">Vos téléchargements depuis le <a href="index.html">catalogue</a> apparaîtront ici.</div></div>`;
+    return;
+  }
+
+  container.innerHTML = `<div class="dl-list">${dls.map(d => `
+    <div class="dl-item">
+      <div style="font-size:20px;color:var(--muted)">🎵</div>
+      <div class="dl-info">
+        <div class="dl-title" title="${escHtml(d.track_title)}">${escHtml(d.track_title || 'Sans titre')}</div>
+        <div class="dl-meta">${escHtml(d.track_playlist || '')}</div>
+      </div>
+      <div class="dl-date">${fmtDate(d.downloaded_at)}</div>
+      <button class="redl-btn" onclick="redownload('${encodeURIComponent(d.track_url || '')}','${encodeURIComponent(d.track_title || '')}')">⬇ Re-télécharger</button>
+    </div>`).join('')}</div>`;
+}
+
+// ── PROJECTS ──────────────────────────────────────────────────────
+async function loadProjects() {
+  if (!currentUser) return;
+  const { data: projs } = await sb.from('projects')
+    .select('*').eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  document.getElementById('stat-proj').textContent = projs?.length ?? 0;
+  const grid = document.getElementById('proj-grid');
+
+  const newBtn = `<button class="proj-new" onclick="openProjModal()"><div class="proj-new-icon">+</div><div>Nouveau projet</div></button>`;
+
+  if (!projs?.length) { grid.innerHTML = newBtn; return; }
+
+  grid.innerHTML = projs.map(p => `
+    <div class="proj-card">
+      <div class="proj-name">${escHtml(p.name)}</div>
+      <div class="proj-desc">${escHtml(p.description || '')}</div>
+      <div class="proj-footer">
+        <span class="proj-date">${fmtDate(p.created_at)}</span>
+        <button class="icon-btn danger" onclick="deleteProject('${p.id}')" title="Supprimer">🗑</button>
+      </div>
+    </div>`).join('') + newBtn;
+}
+
+async function deleteProject(id) {
+  if (!confirm('Supprimer ce projet ?')) return;
+  await sb.from('projects').delete().eq('id', id);
+  showToast('Projet supprimé');
+  loadProjects();
+}
+
+function openProjModal() { document.getElementById('modal-project').classList.add('open'); }
+function closeProjModal() { document.getElementById('modal-project').classList.remove('open'); }
+
+async function createProject() {
+  const name = document.getElementById('proj-name-input').value.trim();
+  const desc = document.getElementById('proj-desc-input').value.trim();
+  if (!name) { showToast('Donnez un nom au projet'); return; }
+
+  const { error } = await sb.from('projects').insert({ user_id: currentUser.id, name, description: desc });
+  if (!error) {
+    closeProjModal();
+    document.getElementById('proj-name-input').value = '';
+    document.getElementById('proj-desc-input').value = '';
+    showToast('Projet créé !');
+    loadProjects();
+  } else {
+    showToast('Erreur : ' + error.message);
+  }
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────
+function fmtDate(str) {
+  if (!str) return '';
+  return new Date(str).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+document.getElementById('modal-project').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-project')) closeProjModal();
+});
+
+init();
+</script>
+</body>
+</html>

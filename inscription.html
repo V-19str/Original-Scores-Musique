@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – Inscription</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E50914;
+  --bg: #141414;
+  --bg2: #1f1f1f;
+  --bg3: #2a2a2a;
+  --bg4: #383838;
+  --text: #ffffff;
+  --text2: #cccccc;
+  --muted: #888;
+  --border: rgba(255,255,255,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Montserrat', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+header {
+  background: rgba(14,14,14,0.98);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo-mark { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 5px 9px; border-radius: 3px; }
+.logo-name { font-size: 14px; font-weight: 600; letter-spacing: 2px; color: var(--text); }
+.btn-login {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text2); padding: 8px 18px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 500;
+  cursor: pointer; border-radius: 4px; text-decoration: none;
+  transition: all 0.15s;
+}
+.btn-login:hover { border-color: #555; color: var(--text); }
+
+/* MAIN */
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  background: linear-gradient(180deg, #0a0a0a 0%, var(--bg) 60%);
+}
+
+.form-container {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 48px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.form-header { text-align: center; margin-bottom: 36px; }
+.form-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 4px; color: var(--red); text-transform: uppercase; margin-bottom: 12px; }
+.form-title { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+.form-sub { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.5; }
+
+.form-group { margin-bottom: 18px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--text2); text-transform: uppercase; margin-bottom: 6px; }
+input, select, textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--red);
+  background: var(--bg4);
+}
+input::placeholder, textarea::placeholder { color: var(--muted); }
+select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+select option { background: var(--bg3); }
+textarea { resize: vertical; min-height: 80px; }
+
+.form-divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+.btn-submit {
+  width: 100%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+  margin-top: 8px;
+}
+.btn-submit:hover { background: #c4070f; }
+.btn-submit:disabled { background: var(--bg4); color: var(--muted); cursor: not-allowed; }
+
+.form-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* SUCCESS */
+.success-screen {
+  display: none;
+  text-align: center;
+  padding: 20px 0;
+}
+.success-icon {
+  width: 60px; height: 60px;
+  background: rgba(46,204,113,0.15);
+  border: 2px solid #2ecc71;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 24px;
+}
+.success-title { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+.success-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+.btn-back-home {
+  display: inline-block;
+  background: var(--red);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: background 0.15s;
+}
+.btn-back-home:hover { background: #c4070f; }
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 11px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--text2); }
+
+@media (max-width: 600px) {
+  header { padding: 0 20px; }
+  .form-container { padding: 32px 24px; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">Vladimir Streiff</div>
+  </a>
+  <a class="btn-login" href="index.html">← Retour au catalogue</a>
+</header>
+
+<main>
+  <div class="form-container">
+
+    <div id="form-section">
+      <div class="form-header">
+        <div class="form-eyebrow">Accès Professionnel</div>
+        <h1 class="form-title">Demande d'accès</h1>
+        <p class="form-sub">Remplissez ce formulaire pour accéder au catalogue OSM.<br>Vous recevrez vos identifiants sous 24h.</p>
+      </div>
+
+      <form id="inscription-form" action="https://formspree.io/f/xbdqdrkq" method="POST">
+
+        <input type="hidden" name="_subject" value="Nouvelle demande d'accès OSM">
+        <input type="hidden" name="_replyto" id="reply-to">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="prenom">Prénom *</label>
+            <input type="text" id="prenom" name="prenom" placeholder="Jean" required>
+          </div>
+          <div class="form-group">
+            <label for="nom">Nom *</label>
+            <input type="text" id="nom" name="nom" placeholder="Dupont" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email professionnel *</label>
+          <input type="email" id="email" name="email" placeholder="jean.dupont@production.com" required oninput="document.getElementById('reply-to').value=this.value">
+        </div>
+
+        <div class="form-group">
+          <label for="telephone">Téléphone</label>
+          <input type="tel" id="telephone" name="telephone" placeholder="+33 6 00 00 00 00">
+        </div>
+
+        <div class="form-group">
+          <label for="societe">Société / Production *</label>
+          <input type="text" id="societe" name="societe" placeholder="Les Films du Monde" required>
+        </div>
+
+        <div class="form-group">
+          <label for="metier">Métier *</label>
+          <select id="metier" name="metier" required>
+            <option value="" disabled selected>Sélectionnez votre métier</option>
+            <option value="Monteur">Monteur</option>
+            <option value="Réalisateur">Réalisateur</option>
+            <option value="Producteur">Producteur</option>
+            <option value="Directeur artistique">Directeur artistique</option>
+            <option value="Superviseur musical">Superviseur musical</option>
+            <option value="Chef de projet">Chef de projet</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="projet">Projet en cours (optionnel)</label>
+          <input type="text" id="projet" name="projet" placeholder="Nom du film, série, publicité...">
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message (optionnel)</label>
+          <textarea id="message" name="message" placeholder="Précisez vos besoins, le type de musique recherché..."></textarea>
+        </div>
+
+        <hr class="form-divider">
+
+        <button type="submit" class="btn-submit" id="submit-btn">
+          Envoyer ma demande
+        </button>
+
+        <p class="form-note">
+          Vos données sont utilisées uniquement pour vous donner accès au catalogue OSM.<br>
+          Aucune donnée n'est partagée avec des tiers.
+        </p>
+
+      </form>
+    </div>
+
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title">Demande envoyée !</h2>
+      <p class="success-sub">
+        Merci pour votre intérêt.<br>
+        Vladimir Streiff vous contactera sous 24h<br>
+        pour vous donner accès au catalogue OSM.
+      </p>
+      <a class="btn-back-home" href="index.html">← Retour à l'accueil</a>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp; <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp; <a href="tel:+33682985752">06 82 98 57 52</a></p>
+</footer>
+
+<script>
+document.getElementById('inscription-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours...';
+
+  const formData = new FormData(this);
+
+  try {
+    const response = await fetch(this.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Envoyer ma demande';
+      alert('Une erreur est survenue. Veuillez réessayer ou nous contacter directement.');
+    }
+  } catch (error) {
+    btn.disabled = false;
+    btn.textContent = 'Envoyer ma demande';
+    alert('Une erreur est survenue. Veuillez réessayer.');
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – À propos</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E50914;
+  --bg: #141414;
+  --bg2: #1f1f1f;
+  --bg3: #2a2a2a;
+  --text: #ffffff;
+  --text2: #cccccc;
+  --muted: #888;
+  --border: rgba(255,255,255,0.1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; }
+
+header {
+  background: rgba(12,12,12,0.98);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px; height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo-mark { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 5px 9px; border-radius: 3px; }
+.logo-name { font-size: 14px; font-weight: 600; letter-spacing: 2px; color: var(--text); }
+.btn-back { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); padding: 8px 16px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; border-radius: 4px; text-decoration: none; transition: all 0.15s; }
+.btn-back:hover { border-color: #555; color: var(--text); }
+
+/* HERO */
+.hero {
+  padding: 80px 48px 60px;
+  background: linear-gradient(180deg, #080808 0%, var(--bg) 100%);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.hero-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 5px; color: var(--red); text-transform: uppercase; margin-bottom: 16px; }
+.hero-title { font-size: clamp(28px, 4vw, 48px); font-weight: 700; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 24px; }
+.hero-title span { color: var(--red); }
+.hero-text { font-size: 14px; font-weight: 300; color: var(--text2); line-height: 1.8; margin-bottom: 16px; }
+.hero-concept {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin-top: 24px;
+}
+.hero-concept p { font-size: 13px; color: var(--text2); line-height: 1.7; font-weight: 300; }
+.hero-concept strong { color: var(--text); font-weight: 600; }
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.stat {
+  background: var(--bg2);
+  padding: 28px 20px;
+  text-align: center;
+}
+.stat-number { font-size: 32px; font-weight: 700; color: var(--red); margin-bottom: 4px; }
+.stat-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+/* CONTACT */
+.contact-block { margin-top: 32px; display: flex; flex-direction: column; gap: 10px; }
+.contact-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text2); }
+.contact-item a { color: var(--text2); text-decoration: none; transition: color 0.15s; }
+.contact-item a:hover { color: var(--red); }
+
+/* LOGOS */
+.logos-section { padding: 60px 48px 0; max-width: 1200px; margin: 0 auto; }
+.logos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin-top: 24px; }
+.logo-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 10px; display: flex; align-items: center; justify-content: center; aspect-ratio: 2/1; transition: border-color 0.2s, transform 0.2s; }
+.logo-box:hover { border-color: #444; transform: translateY(-2px); }
+.logo-box span { font-weight: 900; letter-spacing: 1px; font-family: 'Montserrat', sans-serif; }
+
+/* REFERENCES */
+.references { padding: 60px 48px; max-width: 1200px; margin: 0 auto; }
+.section-title { font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--text2); margin-bottom: 32px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+
+.channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 48px; }
+.channel-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+.channel-block:hover { border-color: #444; }
+.channel-name {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.channel-shows { list-style: none; }
+.channel-shows li {
+  font-size: 11px;
+  color: var(--text2);
+  padding: 4px 0;
+  font-weight: 300;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  line-height: 1.4;
+}
+.channel-shows li:last-child { border-bottom: none; }
+
+/* CTA */
+.cta-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 60px 48px;
+  text-align: center;
+}
+.cta-title { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+.cta-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; font-weight: 300; }
+.cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-primary { background: var(--red); color: #fff; border: none; padding: 14px 28px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; border-radius: 4px; text-decoration: none; text-transform: uppercase; transition: background 0.15s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary:hover { background: #c4070f; }
+.btn-secondary { background: transparent; color: var(--text2); border: 1px solid var(--border); padding: 14px 28px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 2px; cursor: pointer; border-radius: 4px; text-decoration: none; text-transform: uppercase; transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-secondary:hover { border-color: #555; color: var(--text); }
+
+footer { text-align: center; padding: 24px; font-size: 11px; color: #555; border-top: 1px solid var(--border); }
+footer a { color: #555; text-decoration: none; }
+
+@media (max-width: 900px) {
+  header { padding: 0 20px; }
+  .hero { grid-template-columns: 1fr; padding: 60px 20px 40px; gap: 40px; }
+  .references { padding: 40px 20px; }
+  .cta-section { padding: 40px 20px; }
+  .stats { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">Vladimir Streiff</div>
+  </a>
+  <a class="btn-back" href="index.html">← Catalogue</a>
+</header>
+
+<div style="background: linear-gradient(180deg, #080808 0%, #141414 100%);">
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow">Supervision Musicale</div>
+      <h1 class="hero-title">Original <span>Scores</span> Music</h1>
+      <p class="hero-text">
+        Nous travaillons avec une équipe de plusieurs musiciens et compositeurs pour mettre à disposition un catalogue de morceaux originaux triés par style, émotion et genre — adaptés à tous les besoins de l'image.
+      </p>
+      <p class="hero-text">
+        Nos musiques accompagnent des documentaires, longs métrages, reportages et émissions sur toutes les grandes chaînes françaises : France 2, TF1, M6, ARTE, Canal+, C8 et bien d'autres.
+      </p>
+
+      <div class="hero-concept">
+        <p><strong>Notre concept :</strong> mettre notre musique à disposition des monteurs, réalisateurs et producteurs <strong>gratuitement</strong>, puis récupérer les droits auprès de la SACEM en fonction des diffusions.</p>
+        <br>
+        <p>Tous les morceaux sont composés et détenus par notre équipe. Nous nous rémunérons en droits d'auteurs compositeurs, selon les diffusions de vos projets.</p>
+      </div>
+
+      <div class="contact-block">
+        <div class="contact-item">📞 <a href="tel:+33682985752">06 82 98 57 52</a></div>
+        <div class="contact-item">✉ <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">2849</div>
+          <div class="stat-label">Morceaux</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">28</div>
+          <div class="stat-label">Playlists</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Original</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="logos-section">
+  <div class="section-title">Ils nous font confiance</div>
+  <div class="logos-grid">
+    <div class="logo-box"><span style="font-size:18px;color:#E50914;">TF1</span></div>
+    <div class="logo-box"><span style="font-size:11px;color:#0055A5;">FRANCE 2</span></div>
+    <div class="logo-box"><span style="font-size:11px;color:#EE6600;">FRANCE 3</span></div>
+    <div class="logo-box"><span style="font-size:11px;color:#E50914;">FRANCE 5</span></div>
+    <div class="logo-box"><span style="font-size:18px;color:#fff;">M6</span></div>
+    <div class="logo-box"><span style="font-size:13px;color:#fff;letter-spacing:3px;">ARTE</span></div>
+    <div class="logo-box">
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="width:12px;height:12px;background:#E50914;border-radius:2px;flex-shrink:0;"></div>
+        <span style="font-size:11px;color:#fff;">CANAL+</span>
+      </div>
+    </div>
+    <div class="logo-box"><span style="font-size:16px;color:#FF6600;">C8</span></div>
+    <div class="logo-box"><span style="font-size:11px;color:#FF6600;">CSTAR</span></div>
+    <div class="logo-box"><span style="font-size:9px;color:#0077CC;">RMC DÉCOUVERTE</span></div>
+    <div class="logo-box"><span style="font-size:14px;color:#fff;">TMC</span></div>
+    <div class="logo-box"><span style="font-size:14px;color:#FFD700;">TFX</span></div>
+    <div class="logo-box"><span style="font-size:14px;color:#CC0000;">W9</span></div>
+    <div class="logo-box"><span style="font-size:10px;color:#00AAFF;">USHUAÏA TV</span></div>
+    <div class="logo-box"><span style="font-size:10px;color:#888;">CINÉMA</span></div>
+  </div>
+</div>
+
+<div class="references">
+  <div class="section-title">Nos réalisations</div>
+
+  <div class="channels-grid">
+
+    <div class="channel-block">
+      <div class="channel-name">France 2</div>
+      <ul class="channel-shows">
+        <li>Cash Investigation – Panama Papers, Paradise Papers, Implants, Plastique...</li>
+        <li>Complément d'Enquête – Lafarge, Nucléaire, Dubaï, Climato-sceptiques...</li>
+        <li>Envoyé Spécial – Monsanto Papers, Russie Kompromat, Afghanes, Oligarques...</li>
+        <li>Stupéfiant ! – Allen Jones, Houellebecq, Ibiza l'île hippie</li>
+        <li>Infrarouge – Clandestins, Michel Catalano</li>
+        <li>Quand les urgences ne répondent plus</li>
+        <li>Apocalypse – Prémont, commune alsacienne</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">TF1</div>
+      <ul class="channel-shows">
+        <li>50' Inside – Tahiti, Maroc, Philippines, Annecy...</li>
+        <li>7 à 8 – Portrait Murielle Bolle, Miss Univers Salvador...</li>
+        <li>Grands Reportages – Affaire Marguerite Lagrave, Affaire Troadec</li>
+        <li>La France en Bleu</li>
+        <li>Les Battements du Cœur des Restos</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">M6</div>
+      <ul class="channel-shows">
+        <li>Zone Interdite – Gaza, Îles de rêve, Enfants maltraités...</li>
+        <li>Enquête Exclusive – Gaza</li>
+        <li>Salon de l'Agriculture – Le grand retour</li>
+        <li>Monde Secret d'un Refuge pour Animaux</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">ARTE</div>
+      <ul class="channel-shows">
+        <li>Avortement, les croisés contre-attaquent</li>
+        <li>Rhino Dollars</li>
+        <li>Madagascar – La forêt aux esprits</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">Canal+</div>
+      <ul class="channel-shows">
+        <li>Sélectionneurs</li>
+        <li>Canal+ Afrique – Rendez-vous au Nord Bénin</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">C8 / CStar</div>
+      <ul class="channel-shows">
+        <li>100 Jours avec les Gendarmes de l'Autoroute</li>
+        <li>Les Fachos vont-ils conquérir l'Amérique ?</li>
+        <li>Mélenchon est-il vraiment un Insoumis ?</li>
+        <li>Trump est-il vraiment fini ?</li>
+        <li>100 Jours avec la Police de Marseille</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">France 3</div>
+      <ul class="channel-shows">
+        <li>Cette Semaine Là – Yvan Colonna, JFK...</li>
+        <li>Vieilles Canailles</li>
+        <li>Dernière Saison</li>
+        <li>Étoile Normande</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">RMC Découverte</div>
+      <ul class="channel-shows">
+        <li>Génie Français – Le Barrage de tous les Records</li>
+        <li>100 Jours avec les Gendarmes de Bourgogne</li>
+        <li>Accidents de la Route</li>
+        <li>Immersion dans une Méga Fourrière</li>
+        <li>Top Mechanic</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">Cinéma</div>
+      <ul class="channel-shows">
+        <li>Moby Dick</li>
+        <li>L'Étreinte</li>
+        <li>Mamma Weed</li>
+        <li>La Daronne</li>
+        <li>Les Films du Lendemain</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">TMC / TFX / W9</div>
+      <ul class="channel-shows">
+        <li>Martin Weil</li>
+        <li>Nicolas Canteloup – 20 ans de regard sur l'actualité</li>
+        <li>Wedding Planners</li>
+        <li>Chroniques Criminelles – Maureen Jacquier</li>
+        <li>Héritage de Johnny Hallyday</li>
+        <li>Urgences – La vie au bout du fil</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">France Ô / France 5 / Ushuaïa</div>
+      <ul class="channel-shows">
+        <li>Fenua Aihere – Le Cœur de Tahiti</li>
+        <li>Mozambique</li>
+        <li>Saint-Germain-des-Prés – Paradis Perdu</li>
+        <li>Hine Tai A – Chroniques d'une famille de pêcheurs</li>
+      </ul>
+    </div>
+
+    <div class="channel-block">
+      <div class="channel-name">Trek / Autres</div>
+      <ul class="channel-shows">
+        <li>Maewan – Freeride aux Kouriles</li>
+        <li>Guadeloupe La Première – Nos Voisins Olympiques</li>
+        <li>Numéro 23 – Homophobie, de Victimes à Combattants</li>
+        <li>Internet – Le Village by CA</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="cta-section">
+  <h2 class="cta-title">Accédez au catalogue</h2>
+  <p class="cta-sub">2849 morceaux originaux disponibles gratuitement pour vos projets</p>
+  <div class="cta-buttons">
+    <a class="btn-primary" href="login.html">🎵 Accéder au catalogue</a>
+    <a class="btn-secondary" href="inscription.html">✚ Demander un accès</a>
+    <a class="btn-secondary" href="mailto:vladimirstreiff@gmail.com">✉ Nous contacter</a>
+  </div>
+</div>
+
+<footer>
+  © 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp;
+  <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp;
+  <a href="tel:+33682985752">06 82 98 57 52</a>
+</footer>
+
+</body>
+</html>
