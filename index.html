@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OSM – Original Scores Music</title>
 <meta name="description" content="Original Scores Music — Musique originale pour l'image. Cinéma, Télévision, Publicité. Plus de 2560 titres disponibles en licence.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#FF5500">
+<link rel="canonical" href="https://osm-music.fr/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://osm-music.fr/">
+<meta property="og:title" content="OSM – Original Scores Music">
+<meta property="og:description" content="Musique originale pour l'image. Cinéma, Télévision, Publicité. Plus de 2560 titres disponibles en licence.">
+<meta property="og:image" content="https://osm-music.fr/osm_linkedin_banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OSM – Original Scores Music">
+<meta name="twitter:description" content="Musique originale pour l'image. Cinéma, Télévision, Publicité.">
+<meta name="twitter:image" content="https://osm-music.fr/osm_linkedin_banner.png">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <script>
 (function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
@@ -462,7 +474,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   .pl-nav,.tag-nav,.tracks-section{padding-left:16px;padding-right:16px}
   .tracks-header{display:none}
   .track{grid-template-columns:36px 1fr auto 34px 34px}
-  .track-badge,.track-duration,.track-bpm,.track-fav{display:none}
+  .track-badge,.track-duration,.track-bpm{display:none}
   .duration-filters{padding:8px 16px 4px}
   .recommends-wrap{padding:40px 16px}
   .services-strip{padding:32px 16px}
@@ -901,19 +913,19 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
         <div><div class="p-title" id="p-title">—</div><div class="p-playlist" id="p-playlist">—</div></div>
       </div>
       <div class="player-btns">
-        <button class="btn-extra" id="btn-shuffle" onclick="toggleShuffle()" title="Lecture aléatoire">⇄</button>
-        <button class="btn-ctrl" onclick="prevTrack()" title="Précédent">⏮</button>
-        <button class="btn-play-main" id="btn-play" onclick="togglePlay()" title="Lire">▶</button>
-        <button class="btn-ctrl" onclick="nextTrack()" title="Suivant">⏭</button>
-        <button class="btn-extra" id="btn-repeat" onclick="toggleRepeat()" title="Répéter">↺</button>
-        <button class="btn-mute" id="btn-mute" onclick="toggleMute()" title="Couper / remettre le son">🔊</button>
+        <button class="btn-extra" id="btn-shuffle" onclick="toggleShuffle()" title="Lecture aléatoire" aria-label="Lecture aléatoire">⇄</button>
+        <button class="btn-ctrl" onclick="prevTrack()" title="Précédent" aria-label="Précédent">⏮</button>
+        <button class="btn-play-main" id="btn-play" onclick="togglePlay()" title="Lire" aria-label="Lire">▶</button>
+        <button class="btn-ctrl" onclick="nextTrack()" title="Suivant" aria-label="Suivant">⏭</button>
+        <button class="btn-extra" id="btn-repeat" onclick="toggleRepeat()" title="Répéter" aria-label="Répéter">↺</button>
+        <button class="btn-mute" id="btn-mute" onclick="toggleMute()" title="Couper / remettre le son" aria-label="Couper / remettre le son">🔊</button>
       </div>
       <div class="player-right">
         <div class="volume-wrap">
           <span class="vol-icon" onclick="toggleMute()">🔊</span>
           <input type="range" class="vol-slider" id="vol-slider" min="0" max="100" value="100" oninput="setVolume(this.value)">
         </div>
-        <button class="player-dl" onclick="downloadCurrent()" title="Télécharger">⬇ Télécharger</button>
+        <button class="player-dl" onclick="downloadCurrent()" title="Télécharger" aria-label="Télécharger">⬇ Télécharger</button>
       </div>
     </div>
     <div class="wf-bar">
@@ -982,14 +994,14 @@ ws.on('timeupdate', (t)=>{
   if(dur) document.getElementById('time-dur').textContent=fmt2(dur);
 });
 ws.on('finish', ()=>{
-  const _bp=document.getElementById('btn-play'); _bp.textContent='▶'; _bp.title='Lire';
+  const _bp=document.getElementById('btn-play'); _bp.textContent='▶'; _bp.title='Lire'; _bp.setAttribute('aria-label','Lire');
   if(bgMode){
     const candidates=RECOMMENDS_CONFIG.map(cfg=>allTracks.find(t=>t.playlistLabel===cfg.playlist)).filter(Boolean);
     if(candidates.length){const nx=candidates[Math.floor(Math.random()*candidates.length)];setTimeout(()=>autoPlayBg(nx.id),400);}
   }else{nextTrack();}
 });
-ws.on('play',   ()=>{ const b=document.getElementById('btn-play'); b.textContent='⏸'; b.title='Pause'; });
-ws.on('pause',  ()=>{ const b=document.getElementById('btn-play'); b.textContent='▶'; b.title='Lire'; });
+ws.on('play',   ()=>{ const b=document.getElementById('btn-play'); b.textContent='⏸'; b.title='Pause'; b.setAttribute('aria-label','Pause'); });
+ws.on('pause',  ()=>{ const b=document.getElementById('btn-play'); b.textContent='▶'; b.title='Lire'; b.setAttribute('aria-label','Lire'); });
 
 /* ── WAVEFORM BARS (FranceTV Synchro style) ── */
 (function(){
@@ -1265,9 +1277,9 @@ function renderDetailTracks(){
       <div class="pd-thumb" style="background-image:url('${photo}')"></div>
       <div class="pd-track-title">${t.title}</div>
       <div class="pd-track-dur">${fmt(t.duration)}</div>
-      <button class="pd-track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFavDetail('${t.id}',${i})" title="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}">♥</button>
-      <button class="pd-track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien">🔗</button>
-      <button class="pd-track-btn" onclick="event.stopPropagation();downloadDetailTrack(${i})" title="Télécharger">⬇</button>
+      <button class="pd-track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFavDetail('${t.id}',${i})" title="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}" aria-label="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}">♥</button>
+      <button class="pd-track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien" aria-label="Copier le lien">🔗</button>
+      <button class="pd-track-btn" onclick="event.stopPropagation();downloadDetailTrack(${i})" title="Télécharger" aria-label="Télécharger">⬇</button>
     </div>`).join('');
 }
 
@@ -1513,10 +1525,10 @@ function renderTracks(){
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
       <div class="track-bpm">${t.bpm||'—'}</div>
-      <button class="track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFav('${t.id}')" title="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}">♥</button>
-      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien">🔗</button>
-      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueTrack(${i})" title="${qIds.has(t.id)?'Retirer de ma liste':'Ajouter à ma liste'}">${qIds.has(t.id)?'✓':'+'}</button>
-      <button class="track-btn" onclick="event.stopPropagation();downloadTrack(${i})" title="Télécharger">⬇</button>
+      <button class="track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFav('${t.id}')" title="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}" aria-label="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}">♥</button>
+      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien" aria-label="Copier le lien">🔗</button>
+      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueTrack(${i})" title="${qIds.has(t.id)?'Retirer de ma liste':'Ajouter à ma liste'}" aria-label="${qIds.has(t.id)?'Retirer de ma liste':'Ajouter à ma liste'}">${qIds.has(t.id)?'✓':'+'}</button>
+      <button class="track-btn" onclick="event.stopPropagation();downloadTrack(${i})" title="Télécharger" aria-label="Télécharger">⬇</button>
     </div>`).join('');
   if(visibleCount<filteredTracks.length){
     const remaining=filteredTracks.length-visibleCount;
@@ -1768,10 +1780,10 @@ function renderFavoris(){
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
       <div class="track-bpm">${t.bpm||'—'}</div>
-      <button class="track-btn track-fav faved" onclick="event.stopPropagation();toggleFav('${t.id}')" title="Retirer des favoris">♥</button>
-      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien">🔗</button>
-      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueFavTrack('${t.id}')" title="${qIds.has(t.id)?'Retirer de ma liste':'Ajouter à ma liste'}">${qIds.has(t.id)?'✓':'+'}</button>
-      <button class="track-btn" onclick="event.stopPropagation();downloadFavTrack('${t.id}')" title="Télécharger">⬇</button>
+      <button class="track-btn track-fav faved" onclick="event.stopPropagation();toggleFav('${t.id}')" title="Retirer des favoris" aria-label="Retirer des favoris">♥</button>
+      <button class="track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien" aria-label="Copier le lien">🔗</button>
+      <button class="track-btn${qIds.has(t.id)?' active':''}" onclick="event.stopPropagation();toggleQueueFavTrack('${t.id}')" title="${qIds.has(t.id)?'Retirer de ma liste':'Ajouter à ma liste'}" aria-label="${qIds.has(t.id)?'Retirer de ma liste':'Ajouter à ma liste'}">${qIds.has(t.id)?'✓':'+'}</button>
+      <button class="track-btn" onclick="event.stopPropagation();downloadFavTrack('${t.id}')" title="Télécharger" aria-label="Télécharger">⬇</button>
     </div>`).join('');
 }
 function playFavTrack(id){
@@ -1903,6 +1915,15 @@ function showDlGate(){
 }
 
 osmInit();
+
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea,select,[contenteditable]')) return;
+  const active = document.getElementById('player').classList.contains('visible');
+  if (e.code === 'Space') { e.preventDefault(); if (active) togglePlay(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); if (active) ws.skip(-10); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); if (active) ws.skip(10); }
+  else if (e.key === 'm' || e.key === 'M') { if (active) toggleMute(); }
+});
 </script>
 
 <button id="bg-speaker" onclick="toggleMute()" title="Couper / remettre le son">🔊</button>
