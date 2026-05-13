@@ -3,541 +3,632 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSM – Espace Client</title>
+<title>OSM – Mon Espace Client</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script>(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<script>(function(){const t=localStorage.getItem('osm-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <style>
 :root {
   --red: #E50914;
-  --bg: #f0f0f0;
-  --bg2: #e8e8e8;
-  --bg3: #dedede;
-  --border: rgba(0,0,0,0.12);
-  --muted: #777;
-  --card-bg: rgba(255,255,255,0.97);
-  --card-text: #111;
-}
-[data-theme="dark"] {
   --bg: #141414;
   --bg2: #1f1f1f;
   --bg3: #2a2a2a;
-  --border: rgba(255,255,255,0.1);
-  --muted: #999;
-  --card-bg: rgba(20,20,20,0.96);
-  --card-text: #ffffff;
+  --bg4: #333;
+  --text: #fff;
+  --text2: #d4d4d4;
+  --muted: #888;
+  --border: rgba(255,255,255,0.12);
+  --card-bg: #1f1f1f;
+  --input-bg: #2a2a2a;
+}
+[data-theme="light"] {
+  --bg: #f0f0f0;
+  --bg2: #e8e8e8;
+  --bg3: #dedede;
+  --bg4: #ccc;
+  --text: #111;
+  --text2: #333;
+  --muted: #666;
+  --border: rgba(0,0,0,0.12);
+  --card-bg: rgba(255,255,255,0.97);
+  --input-bg: #e8e8e8;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--card-text);
-  transition: background 0.2s, color 0.2s;
-  font-family: 'Montserrat', sans-serif;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 32px;
-  position: relative;
-  overflow: hidden;
-}
-.bg-overlay {
-  position: fixed;
-  inset: 0;
-  background: url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&q=80') center/cover;
-  opacity: 0.08;
-  pointer-events: none;
-}
+body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; transition: background 0.2s, color 0.2s; }
 
-/* LOGO */
-.logo { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
-.logo-mark {
-  background: var(--red);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 6px 10px;
-  border-radius: 3px;
+/* ── HEADER ─────────────────────────────────────── */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(12,12,12,0.95); backdrop-filter: blur(12px);
+  padding: 0 48px; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
 }
-.logo-name { font-size: 16px; font-weight: 600; letter-spacing: 3px; }
+[data-theme="light"] header { background: rgba(240,240,240,0.96); }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 5px 8px; border-radius: 3px; }
+.logo-name { font-size: 13px; font-weight: 600; letter-spacing: 2px; color: var(--text); }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.user-name { font-size: 12px; font-weight: 500; color: var(--text2); display: none; }
+.btn-sm { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); padding: 7px 13px; font-family: 'Montserrat', sans-serif; font-size: 11px; cursor: pointer; border-radius: 4px; transition: all 0.15s; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+.btn-sm:hover { border-color: #555; color: var(--text); }
+.btn-red { background: var(--red); border-color: var(--red); color: #fff !important; }
+.btn-red:hover { background: #c4070f; border-color: #c4070f; }
 
-/* BADGE RÔLE */
-.role-badge {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: -20px;
+/* ── AUTH SCREEN ─────────────────────────────────── */
+#auth-screen {
+  padding-top: 96px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 24px; min-height: 100vh;
+  background: linear-gradient(180deg, #0a0a0a 0%, var(--bg) 60%);
 }
-.role-badge::before,
-.role-badge::after {
-  content: '';
-  width: 28px;
-  height: 1px;
-  background: var(--border);
-}
+[data-theme="light"] #auth-screen { background: linear-gradient(180deg, #e0e0e0 0%, var(--bg) 60%); }
+.bg-overlay { position: fixed; inset: 0; background: url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&q=80') center/cover; opacity: 0.05; pointer-events: none; z-index: 0; }
 
-/* CARD */
-.box {
-  position: relative;
-  z-index: 1;
-  background: var(--card-bg);
-  color: var(--card-text);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 40px;
-  width: 380px;
-  text-align: center;
-  backdrop-filter: blur(16px);
-}
-.box-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(229, 9, 20, 0.12);
-  border: 1px solid rgba(229, 9, 20, 0.3);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-}
-.box-icon svg { color: var(--red); }
-.box-title {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-.box-sub { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
+.auth-tabs { display: flex; background: var(--bg3); border-radius: 6px; padding: 4px; position: relative; z-index: 1; }
+.auth-tab { background: none; border: none; color: var(--muted); padding: 9px 24px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
+.auth-tab.active { background: var(--red); color: #fff; }
 
-/* FORM */
-.field { margin-bottom: 14px; text-align: left; }
-.field label {
-  display: block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 7px;
+.auth-box {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+  padding: 40px; width: 100%; max-width: 420px;
+  backdrop-filter: blur(16px); position: relative; z-index: 1;
 }
-.field input {
-  width: 100%;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 12px 16px;
-  color: var(--card-text);
-  font-family: 'Montserrat', sans-serif;
-  font-size: 13px;
-  outline: none;
-  transition: border-color 0.2s;
-  letter-spacing: 0.5px;
+.auth-icon { width: 44px; height: 44px; background: rgba(229,9,20,0.12); border: 1px solid rgba(229,9,20,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 20px; }
+.auth-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; text-align: center; }
+.auth-sub { font-size: 12px; color: var(--muted); margin-bottom: 28px; line-height: 1.5; text-align: center; }
+
+.field { margin-bottom: 15px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.field input, .field select {
+  width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 4px;
+  padding: 11px 14px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 13px;
+  outline: none; transition: border-color 0.2s;
 }
-.field input:focus { border-color: var(--red); }
-.field input::placeholder { color: #555; }
-.field input[type="password"] { letter-spacing: 4px; }
+.field input:focus, .field select:focus { border-color: var(--red); }
+.field input::placeholder { color: var(--muted); }
+.field input[type="password"] { letter-spacing: 3px; }
 .field input[type="password"]::placeholder { letter-spacing: 0.5px; }
+.field select option { background: var(--bg3); color: var(--text); }
 
-/* FORGOT */
-.forgot {
-  text-align: right;
-  margin-top: -8px;
-  margin-bottom: 20px;
-}
-.forgot a {
-  font-size: 10px;
-  color: var(--muted);
-  text-decoration: none;
-  letter-spacing: 0.5px;
-  transition: color 0.15s;
-}
-.forgot a:hover { color: #fff; }
-
-/* BUTTON */
 .btn-submit {
-  width: 100%;
-  background: var(--red);
-  color: #fff;
-  border: none;
-  padding: 13px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  cursor: pointer;
-  border-radius: 4px;
-  text-transform: uppercase;
-  transition: background 0.15s, transform 0.15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  width: 100%; background: var(--red); color: #fff; border: none; padding: 13px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  cursor: pointer; border-radius: 4px; text-transform: uppercase; transition: background 0.15s, transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px;
 }
 .btn-submit:hover { background: #c4070f; transform: translateY(-1px); }
-.btn-submit:active { transform: translateY(0); }
-.btn-submit.loading { opacity: 0.7; pointer-events: none; }
-.spinner {
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255,255,255,0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  display: none;
-}
+.btn-submit:disabled { background: var(--bg4); color: var(--muted); cursor: not-allowed; transform: none; }
+.spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* MESSAGES */
-.error-msg {
-  font-size: 11px;
-  color: var(--red);
-  margin-top: 12px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 9px 12px;
-  background: rgba(229, 9, 20, 0.08);
-  border: 1px solid rgba(229, 9, 20, 0.2);
-  border-radius: 4px;
-  letter-spacing: 0.3px;
-}
-.success-msg {
-  font-size: 11px;
-  color: #4caf50;
-  margin-top: 12px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 9px 12px;
-  background: rgba(76, 175, 80, 0.08);
-  border: 1px solid rgba(76, 175, 80, 0.2);
-  border-radius: 4px;
-  letter-spacing: 0.3px;
-}
+.auth-msg { font-size: 11px; margin-top: 10px; min-height: 16px; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 8px 12px; border-radius: 4px; display: none; }
+.auth-error { color: var(--red); background: rgba(229,9,20,0.08); border: 1px solid rgba(229,9,20,0.2); }
+.auth-ok { color: #4caf50; background: rgba(76,175,80,0.08); border: 1px solid rgba(76,175,80,0.2); }
 
-/* DIVIDER */
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 20px 0;
-  color: #444;
-  font-size: 10px;
-  letter-spacing: 1px;
-}
-.divider::before, .divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
+.auth-link { font-size: 11px; color: var(--muted); text-align: center; margin-top: 16px; }
+.auth-link a { color: #888; text-decoration: none; }
+.auth-link a:hover { color: var(--text); }
 
-/* SESSION INFO */
-.session-info {
-  display: none;
-  text-align: left;
-  margin-bottom: 20px;
-  padding: 12px 14px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-}
-.session-info .si-label {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 4px;
-}
-.session-info .si-user {
-  font-size: 13px;
-  font-weight: 600;
-  color: #fff;
-}
+/* ── DASHBOARD ───────────────────────────────────── */
+#dashboard-screen { display: none; padding-top: 80px; min-height: 100vh; }
 
-/* FOOTER LINKS */
-.footer-links {
-  position: relative;
-  z-index: 1;
-  font-size: 11px;
-  color: #555;
-  display: flex;
-  gap: 20px;
-}
-.footer-links a {
-  color: #555;
-  text-decoration: none;
-  transition: color 0.15s;
-  letter-spacing: 0.5px;
-}
-.footer-links a:hover { color: #999; }
+.dash-hero { padding: 32px 48px 0; background: linear-gradient(180deg, #090909 0%, var(--bg) 100%); }
+[data-theme="light"] .dash-hero { background: linear-gradient(180deg, #d8d8d8 0%, var(--bg) 100%); }
+.dash-eyebrow { font-size: 10px; color: var(--red); font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 10px; }
+.dash-name { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+.dash-meta { font-size: 12px; color: var(--muted); padding-bottom: 28px; }
 
-/* LOCKED OVERLAY */
-.lockout-overlay {
-  display: none;
-  background: rgba(229, 9, 20, 0.06);
-  border: 1px solid rgba(229, 9, 20, 0.2);
-  border-radius: 4px;
-  padding: 16px;
-  text-align: center;
-  margin-top: 12px;
+.dash-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 48px; }
+.stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px 22px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.2s; }
+.stat-card:hover { border-color: rgba(229,9,20,0.5); transform: translateY(-2px); }
+.stat-icon { font-size: 24px; }
+.stat-num { font-size: 26px; font-weight: 700; color: var(--red); line-height: 1; }
+.stat-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 3px; text-transform: uppercase; }
+
+.dash-tabs { padding: 0 48px; display: flex; border-bottom: 1px solid var(--border); }
+.dash-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); padding: 13px 18px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; margin-bottom: -1px; }
+.dash-tab:hover { color: var(--text2); }
+.dash-tab.active { color: var(--text); border-bottom-color: var(--red); }
+
+.tab-pane { padding: 28px 48px 100px; display: none; }
+.tab-pane.active { display: block; }
+
+/* Favorites */
+.fav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 10px; }
+.fav-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 13px 15px; display: flex; align-items: center; gap: 12px; transition: border-color 0.2s; }
+.fav-card:hover { border-color: rgba(229,9,20,0.3); }
+.fav-note { width: 36px; height: 36px; background: rgba(229,9,20,0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--red); flex-shrink: 0; }
+.fav-info { flex: 1; min-width: 0; }
+.fav-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.fav-pl { font-size: 11px; color: var(--muted); }
+.fav-actions { display: flex; gap: 5px; flex-shrink: 0; }
+.icon-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 30px; height: 30px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.icon-btn:hover { border-color: #555; color: var(--text); }
+.icon-btn.del:hover { border-color: var(--red); color: var(--red); }
+
+/* Downloads */
+.dl-list { display: flex; flex-direction: column; gap: 8px; }
+.dl-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 13px 16px; display: flex; align-items: center; gap: 14px; }
+.dl-info { flex: 1; min-width: 0; }
+.dl-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.dl-sub { font-size: 11px; color: var(--muted); }
+.dl-date { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+.redl-btn { background: none; border: 1px solid var(--border); color: var(--text2); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-family: 'Montserrat', sans-serif; transition: all 0.15s; flex-shrink: 0; white-space: nowrap; }
+.redl-btn:hover { border-color: #555; }
+
+/* Projects */
+.proj-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.proj-bar-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); }
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
+.proj-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px; transition: all 0.2s; }
+.proj-card:hover { border-color: rgba(229,9,20,0.3); transform: translateY(-2px); }
+.proj-name { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.proj-desc { font-size: 12px; color: var(--muted); margin-bottom: 14px; min-height: 17px; }
+.proj-foot { display: flex; align-items: center; justify-content: space-between; }
+.proj-date { font-size: 11px; color: var(--muted); }
+.proj-new-btn { background: none; border: 2px dashed rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 13px; font-family: 'Montserrat', sans-serif; transition: all 0.2s; flex-direction: column; min-height: 120px; }
+.proj-new-btn:hover { border-color: var(--red); color: var(--text2); }
+
+/* Modal */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; }
+.modal.open { display: flex; }
+.modal-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 34px; width: 100%; max-width: 420px; margin: 0 16px; }
+.modal-title { font-size: 17px; font-weight: 700; margin-bottom: 22px; }
+.modal-btns { display: flex; gap: 10px; margin-top: 22px; }
+.btn-cancel { flex: 1; background: none; border: 1px solid var(--border); color: var(--text2); padding: 11px; font-family: 'Montserrat', sans-serif; font-size: 12px; cursor: pointer; border-radius: 4px; }
+.btn-cancel:hover { border-color: #555; }
+
+/* Empty & loading */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+.empty-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text2); }
+.empty-sub { font-size: 12px; line-height: 1.7; }
+.empty-sub a { color: var(--red); text-decoration: none; }
+.loading-state { text-align: center; padding: 40px; color: var(--muted); font-size: 12px; letter-spacing: 2px; }
+
+/* Toast */
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--bg3); border: 1px solid rgba(229,9,20,0.3); color: var(--text); padding: 10px 22px; border-radius: 20px; font-size: 12px; opacity: 0; transition: all 0.3s; z-index: 9999; pointer-events: none; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+footer { text-align: center; padding: 22px; font-size: 11px; color: #555; border-top: 1px solid var(--border); }
+footer a { color: #666; text-decoration: none; }
+
+@media (max-width: 768px) {
+  header { padding: 0 16px; }
+  #auth-screen { padding: 84px 16px 40px; }
+  .auth-box { padding: 28px 20px; }
+  .field-row { grid-template-columns: 1fr; gap: 0; }
+  .dash-hero, .dash-stats, .dash-tabs { padding-left: 16px; padding-right: 16px; }
+  .tab-pane { padding: 24px 16px 80px; }
+  .dash-stats { grid-template-columns: 1fr; }
 }
-.lockout-overlay .lock-icon { font-size: 22px; margin-bottom: 8px; }
-.lockout-overlay .lock-title {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 4px;
-}
-.lockout-overlay .lock-sub { font-size: 11px; color: var(--muted); }
-#countdown { font-weight: 600; color: #fff; }
-.back-btn{position:fixed;top:16px;left:16px;background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:7px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;border-radius:4px;text-decoration:none;z-index:10;transition:all 0.15s;letter-spacing:0.3px}
-.back-btn:hover{border-color:#888;color:var(--card-text)}
 </style>
 </head>
 <body>
 
-<a class="back-btn" href="index.html">← Retour à l'accueil</a>
 <div class="bg-overlay"></div>
 
-<div class="logo">
-  <div class="logo-mark">OSM</div>
-  <div class="logo-name">ORIGINAL SCORES MUSIC</div>
-</div>
-
-<div class="role-badge">Espace Client</div>
-
-<div class="box">
-  <div class="box-icon">
-    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
-    </svg>
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">ORIGINAL SCORES MUSIC</div>
+  </a>
+  <div class="header-right">
+    <span class="user-name" id="header-username"></span>
+    <a class="btn-sm" href="index.html">← Catalogue</a>
+    <button class="btn-sm btn-red" id="btn-logout" style="display:none" onclick="logout()">Déconnexion</button>
   </div>
-  <div class="box-title">Connexion Monteur</div>
-  <div class="box-sub">Accédez à votre espace de synchronisation musicale</div>
+</header>
 
-  <div class="session-info" id="sessionInfo">
-    <div class="si-label">Session active</div>
-    <div class="si-user" id="sessionUser"></div>
+<!-- ══════════════════ AUTH SCREEN ══════════════════ -->
+<div id="auth-screen">
+  <div class="auth-tabs">
+    <button class="auth-tab active" id="tab-btn-login" onclick="switchTab('login')">Connexion</button>
+    <button class="auth-tab" id="tab-btn-register" onclick="switchTab('register')">Créer un compte</button>
   </div>
 
-  <form id="loginForm" onsubmit="return false;">
+  <!-- LOGIN -->
+  <div class="auth-box" id="box-login">
+    <div class="auth-icon">🔐</div>
+    <h2 class="auth-title">Bon retour</h2>
+    <p class="auth-sub">Accédez à votre espace : favoris, téléchargements et projets.</p>
     <div class="field">
-      <label for="email">Adresse e-mail</label>
-      <input type="email" id="email" placeholder="prenom.nom@production.com" autocomplete="email">
+      <label for="l-email">Email</label>
+      <input type="email" id="l-email" placeholder="jean@production.com" autocomplete="email">
     </div>
     <div class="field">
-      <label for="password">Mot de passe</label>
-      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"
-             onkeydown="if(event.key==='Enter')handleLogin()">
+      <label for="l-pw">Mot de passe</label>
+      <input type="password" id="l-pw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <div class="forgot">
-      <a href="#" onclick="showForgot(); return false;">Mot de passe oublié ?</a>
-    </div>
-    <button class="btn-submit" id="submitBtn" onclick="handleLogin()">
-      <span id="btnText">Accéder à mon espace</span>
-      <div class="spinner" id="spinner"></div>
+    <div class="auth-msg auth-error" id="login-err"></div>
+    <button class="btn-submit" id="btn-login" onclick="doLogin()">
+      <span class="spinner" id="sp-login"></span>
+      Se connecter
     </button>
-    <div class="error-msg" id="errorMsg">
-      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-      </svg>
-      <span id="errorText">Identifiants incorrects</span>
-    </div>
-    <div class="lockout-overlay" id="lockoutOverlay">
-      <div class="lock-icon">🔒</div>
-      <div class="lock-title">Compte temporairement bloqué</div>
-      <div class="lock-sub">Trop de tentatives. Réessayez dans <span id="countdown">30</span>s</div>
-    </div>
-  </form>
+    <p class="auth-link">Pas encore de compte ? <a href="#" onclick="switchTab('register');return false;">Créer un compte</a></p>
+    <p class="auth-link"><a href="index.html">← Retour au catalogue</a></p>
+  </div>
 
-  <div class="divider">ou</div>
-
-  <div style="font-size:11px; color: var(--muted); line-height: 1.7;">
-    Pas encore de compte ?<br>
-    <a href="mailto:contact@originalscoresmusic.com" style="color:#888; text-decoration:none; transition:color 0.15s;"
-       onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">
-      Contacter l'équipe OSM
-    </a>
+  <!-- REGISTER -->
+  <div class="auth-box" id="box-register" style="display:none">
+    <div class="auth-icon">✨</div>
+    <h2 class="auth-title">Créer un compte</h2>
+    <p class="auth-sub">Gérez vos favoris, téléchargements et projets en un seul endroit.</p>
+    <div class="field-row">
+      <div class="field">
+        <label for="r-prenom">Prénom *</label>
+        <input type="text" id="r-prenom" placeholder="Jean" autocomplete="given-name">
+      </div>
+      <div class="field">
+        <label for="r-nom">Nom *</label>
+        <input type="text" id="r-nom" placeholder="Dupont" autocomplete="family-name">
+      </div>
+    </div>
+    <div class="field">
+      <label for="r-email">Email *</label>
+      <input type="email" id="r-email" placeholder="jean@production.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label for="r-societe">Société / Production *</label>
+      <input type="text" id="r-societe" placeholder="Les Films du Monde">
+    </div>
+    <div class="field">
+      <label for="r-metier">Métier *</label>
+      <select id="r-metier">
+        <option value="" disabled selected>Sélectionnez</option>
+        <option>Monteur</option><option>Réalisateur</option><option>Producteur</option>
+        <option>Directeur artistique</option><option>Superviseur musical</option>
+        <option>Chef de projet</option><option>Autre</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="r-pw">Mot de passe * (min. 6 car.)</label>
+      <input type="password" id="r-pw" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <div class="field">
+      <label for="r-pw2">Confirmer le mot de passe *</label>
+      <input type="password" id="r-pw2" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+    </div>
+    <div class="auth-msg auth-error" id="reg-err"></div>
+    <div class="auth-msg auth-ok" id="reg-ok"></div>
+    <button class="btn-submit" id="btn-register" onclick="doRegister()">
+      <span class="spinner" id="sp-reg"></span>
+      Créer mon compte
+    </button>
+    <p class="auth-link">Déjà un compte ? <a href="#" onclick="switchTab('login');return false;">Se connecter</a></p>
   </div>
 </div>
 
-<div class="footer-links">
-  <a href="index.html">← Retour au catalogue</a>
-  <a href="apropos.html">À propos</a>
-  <button onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;color:#555;font-size:14px;padding:0;" id="btn-theme" title="Mode clair / sombre">🌙</button>
+<!-- ══════════════════ DASHBOARD ══════════════════ -->
+<div id="dashboard-screen">
+
+  <div class="dash-hero">
+    <div class="dash-eyebrow">Espace Client OSM</div>
+    <div class="dash-name" id="dash-name">Bienvenue</div>
+    <div class="dash-meta" id="dash-meta"></div>
+  </div>
+
+  <div class="dash-stats">
+    <div class="stat-card" onclick="switchDash('favoris')">
+      <div class="stat-icon">♥</div>
+      <div><div class="stat-num" id="sn-fav">—</div><div class="stat-label">Favoris</div></div>
+    </div>
+    <div class="stat-card" onclick="switchDash('telechargements')">
+      <div class="stat-icon">⬇</div>
+      <div><div class="stat-num" id="sn-dl">—</div><div class="stat-label">Téléchargements</div></div>
+    </div>
+    <div class="stat-card" onclick="switchDash('projets')">
+      <div class="stat-icon">📁</div>
+      <div><div class="stat-num" id="sn-proj">—</div><div class="stat-label">Projets</div></div>
+    </div>
+  </div>
+
+  <div class="dash-tabs">
+    <button class="dash-tab active" data-t="favoris" onclick="switchDash('favoris')">♥ Favoris</button>
+    <button class="dash-tab" data-t="telechargements" onclick="switchDash('telechargements')">⬇ Téléchargements</button>
+    <button class="dash-tab" data-t="projets" onclick="switchDash('projets')">📁 Projets</button>
+  </div>
+
+  <div class="tab-pane active" id="pane-favoris"><div class="loading-state">· · · Chargement</div></div>
+  <div class="tab-pane" id="pane-telechargements"><div class="loading-state">· · · Chargement</div></div>
+  <div class="tab-pane" id="pane-projets">
+    <div class="proj-bar">
+      <span class="proj-bar-title">Mes projets</span>
+      <button class="btn-sm btn-red" onclick="openProjModal()">+ Nouveau projet</button>
+    </div>
+    <div id="proj-grid" class="proj-grid"><div class="loading-state">· · · Chargement</div></div>
+  </div>
+
 </div>
 
+<!-- Modal Nouveau Projet -->
+<div class="modal" id="modal-proj">
+  <div class="modal-box">
+    <div class="modal-title">Nouveau projet</div>
+    <div class="field">
+      <label for="pn-name">Nom du projet *</label>
+      <input type="text" id="pn-name" placeholder="Mon film 2026">
+    </div>
+    <div class="field">
+      <label for="pn-desc">Description</label>
+      <input type="text" id="pn-desc" placeholder="Chaîne, date de livraison, notes...">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeProjModal()">Annuler</button>
+      <button class="btn-submit" style="flex:2" onclick="createProject()">Créer le projet</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  © 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp;
+  <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp;
+  <a href="tel:+33682985752">06 82 98 57 52</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-// Comptes monteurs (en production : remplacer par un backend sécurisé)
-const MONTEURS = [
-  { email: 'monteur@osm.fr',        password: 'osm2026',   name: 'Monteur OSM',      role: 'senior' },
-  { email: 'demo@osm.fr',           password: 'demo1234',  name: 'Démo Monteur',     role: 'demo'   },
-];
+const SURL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
+const SKEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+const sb = supabase.createClient(SURL, SKEY);
 
-const MAX_ATTEMPTS = 5;
-const LOCKOUT_SECONDS = 30;
-let attempts = 0;
-let lockedUntil = null;
+let me = null, myProfile = null;
 
-function handleLogin() {
-  if (isLocked()) return;
+// ── INIT ──────────────────────────────────────────
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) await setUser(session.user);
 
-  const email    = document.getElementById('email').value.trim().toLowerCase();
-  const password = document.getElementById('password').value;
-  const btn      = document.getElementById('submitBtn');
-  const spinner  = document.getElementById('spinner');
-  const btnText  = document.getElementById('btnText');
+  sb.auth.onAuthStateChange(async (_, session) => {
+    if (session?.user) await setUser(session.user);
+    else showAuth();
+  });
+}
 
-  clearMessages();
+async function setUser(user) {
+  me = user;
+  const { data: p } = await sb.from('profiles').select('*').eq('id', user.id).single();
+  myProfile = p;
+  showDash();
+}
 
-  if (!email || !password) {
-    showError('Veuillez remplir tous les champs');
+// ── AUTH ──────────────────────────────────────────
+function showAuth() {
+  me = null; myProfile = null;
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('dashboard-screen').style.display = 'none';
+  document.getElementById('header-username').style.display = 'none';
+  document.getElementById('btn-logout').style.display = 'none';
+}
+
+function switchTab(t) {
+  const isL = t === 'login';
+  document.getElementById('box-login').style.display = isL ? 'block' : 'none';
+  document.getElementById('box-register').style.display = isL ? 'none' : 'block';
+  document.getElementById('tab-btn-login').classList.toggle('active', isL);
+  document.getElementById('tab-btn-register').classList.toggle('active', !isL);
+}
+
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pw = document.getElementById('l-pw').value;
+  const errEl = document.getElementById('login-err');
+  setLoading('btn-login', 'sp-login', true);
+  errEl.style.display = 'none';
+
+  if (!email || !pw) { showMsg(errEl, 'Veuillez remplir tous les champs.'); setLoading('btn-login','sp-login',false); return; }
+  const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+  setLoading('btn-login', 'sp-login', false);
+  if (error) showMsg(errEl, error.message.includes('Invalid') ? 'Email ou mot de passe incorrect.' : error.message);
+}
+
+async function doRegister() {
+  const prenom = document.getElementById('r-prenom').value.trim();
+  const nom = document.getElementById('r-nom').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const societe = document.getElementById('r-societe').value.trim();
+  const metier = document.getElementById('r-metier').value;
+  const pw = document.getElementById('r-pw').value;
+  const pw2 = document.getElementById('r-pw2').value;
+  const errEl = document.getElementById('reg-err');
+  const okEl = document.getElementById('reg-ok');
+  errEl.style.display = 'none'; okEl.style.display = 'none';
+
+  if (!prenom||!nom||!email||!societe||!metier||!pw) { showMsg(errEl,'Tous les champs marqués * sont requis.'); return; }
+  if (pw.length < 6) { showMsg(errEl,'Mot de passe : 6 caractères minimum.'); return; }
+  if (pw !== pw2) { showMsg(errEl,'Les mots de passe ne correspondent pas.'); return; }
+
+  setLoading('btn-register','sp-reg',true);
+  const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { prenom, nom, societe, metier } } });
+
+  if (error) { setLoading('btn-register','sp-reg',false); showMsg(errEl, error.message); return; }
+
+  if (data?.user) {
+    await sb.from('profiles').upsert({ id: data.user.id, email, prenom, nom, societe, metier });
+  }
+  setLoading('btn-register','sp-reg',false);
+
+  if (data?.session) {
+    // Auto-connected (no email confirmation needed)
+  } else {
+    showMsg(okEl, '✓ Compte créé ! Vérifiez votre email pour confirmer.');
+    document.getElementById('btn-register').disabled = true;
+    document.getElementById('btn-register').textContent = 'Vérifiez votre email';
+  }
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  window.location.href = 'index.html';
+}
+
+// ── DASHBOARD ─────────────────────────────────────
+function showDash() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('dashboard-screen').style.display = 'block';
+
+  const p = myProfile, m = me?.user_metadata;
+  const prenom = p?.prenom || m?.prenom || '';
+  const nom = p?.nom || m?.nom || '';
+  const fullName = [prenom, nom].filter(Boolean).join(' ') || me?.email || '';
+  const societe = p?.societe || m?.societe || '';
+  const metier = p?.metier || m?.metier || '';
+
+  document.getElementById('dash-name').textContent = fullName;
+  document.getElementById('dash-meta').textContent = [societe, metier].filter(Boolean).join(' · ');
+  document.getElementById('header-username').textContent = `👤 ${fullName}`;
+  document.getElementById('header-username').style.display = 'inline';
+  document.getElementById('btn-logout').style.display = 'inline-flex';
+
+  loadFavs(); loadDls(); loadProjs();
+}
+
+function switchDash(t) {
+  document.querySelectorAll('.dash-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.dash-tab[data-t="${t}"]`).classList.add('active');
+  document.getElementById(`pane-${t}`).classList.add('active');
+}
+
+// ── FAVORITES ─────────────────────────────────────
+async function loadFavs() {
+  if (!me) return;
+  const { data: favs } = await sb.from('favorites').select('*').eq('user_id', me.id).order('created_at', { ascending: false });
+  document.getElementById('sn-fav').textContent = favs?.length ?? 0;
+  const c = document.getElementById('pane-favoris');
+
+  if (!favs?.length) {
+    c.innerHTML = `<div class="empty-state"><div class="empty-icon">♥</div><div class="empty-title">Aucun favori</div><div class="empty-sub">Cliquez sur ♥ dans le <a href="index.html">catalogue</a> pour sauvegarder vos morceaux préférés.</div></div>`;
     return;
   }
-
-  // Loading state
-  btn.classList.add('loading');
-  spinner.style.display = 'block';
-  btnText.style.display = 'none';
-
-  setTimeout(() => {
-    btn.classList.remove('loading');
-    spinner.style.display = 'none';
-    btnText.style.display = 'inline';
-
-    const user = MONTEURS.find(m => m.email === email && m.password === password);
-
-    if (user) {
-      attempts = 0;
-      sessionStorage.setItem('osm_monteur_ok', '1');
-      sessionStorage.setItem('osm_monteur_name', user.name);
-      sessionStorage.setItem('osm_monteur_role', user.role);
-      showSuccess(user.name);
-    } else {
-      attempts++;
-      const remaining = MAX_ATTEMPTS - attempts;
-      if (remaining <= 0) {
-        triggerLockout();
-      } else {
-        showError(
-          remaining === 1
-            ? 'Identifiants incorrects — 1 tentative restante'
-            : `Identifiants incorrects — ${remaining} tentatives restantes`
-        );
-      }
-    }
-  }, 700);
+  c.innerHTML = `<div class="fav-grid">${favs.map(f=>`
+    <div class="fav-card">
+      <div class="fav-note">♪</div>
+      <div class="fav-info">
+        <div class="fav-title" title="${esc(f.track_title)}">${esc(f.track_title||'Sans titre')}</div>
+        <div class="fav-pl">${esc(f.track_playlist||'')}</div>
+      </div>
+      <div class="fav-actions">
+        <button class="icon-btn" onclick="goPlay('${enc(f.track_url)}','${enc(f.track_title)}')" title="Écouter">▶</button>
+        <button class="icon-btn" onclick="redl('${enc(f.track_url)}','${enc(f.track_title)}')" title="Télécharger">⬇</button>
+        <button class="icon-btn del" onclick="delFav('${f.id}')" title="Retirer">✕</button>
+      </div>
+    </div>`).join('')}</div>`;
 }
 
-function showSuccess(name) {
-  const msg = document.getElementById('errorMsg');
-  msg.style.display = 'none';
-  const success = document.createElement('div');
-  success.className = 'success-msg';
-  success.style.display = 'flex';
-  success.innerHTML = `
-    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <polyline points="20 6 9 17 4 12"/>
-    </svg>
-    <span>Connexion réussie — Bienvenue, ${name}</span>`;
-  document.getElementById('loginForm').appendChild(success);
-  setTimeout(() => { window.location.href = 'espace-monteurs.html'; }, 1200);
+async function delFav(id) {
+  await sb.from('favorites').delete().eq('id', id);
+  toast('Retiré des favoris'); loadFavs();
 }
 
-function showError(msg) {
-  const el = document.getElementById('errorMsg');
-  document.getElementById('errorText').textContent = msg;
-  el.style.display = 'flex';
+function goPlay(eUrl, eTitle) {
+  const url = decodeURIComponent(eUrl);
+  if (!url) return;
+  sessionStorage.setItem('osm_autoplay_url', url);
+  sessionStorage.setItem('osm_autoplay_title', decodeURIComponent(eTitle));
+  window.location.href = 'index.html';
 }
 
-function clearMessages() {
-  document.getElementById('errorMsg').style.display = 'none';
+function redl(eUrl, eTitle) {
+  const url = decodeURIComponent(eUrl);
+  if (!url) return;
+  const a = document.createElement('a');
+  a.href = url.replace('/upload/', '/upload/fl_attachment/');
+  a.download = decodeURIComponent(eTitle) + '.mp3'; a.target = '_blank'; a.click();
 }
 
-function isLocked() {
-  if (lockedUntil && Date.now() < lockedUntil) {
-    showError('Compte temporairement bloqué');
-    return true;
-  }
-  return false;
-}
+// ── DOWNLOADS ─────────────────────────────────────
+async function loadDls() {
+  if (!me) return;
+  const { data: dls } = await sb.from('downloads').select('*').eq('user_id', me.id).order('downloaded_at', { ascending: false });
+  document.getElementById('sn-dl').textContent = dls?.length ?? 0;
+  const c = document.getElementById('pane-telechargements');
 
-function triggerLockout() {
-  lockedUntil = Date.now() + LOCKOUT_SECONDS * 1000;
-  attempts = 0;
-  document.getElementById('lockoutOverlay').style.display = 'block';
-  document.getElementById('submitBtn').style.display = 'none';
-  clearMessages();
-
-  let remaining = LOCKOUT_SECONDS;
-  document.getElementById('countdown').textContent = remaining;
-
-  const interval = setInterval(() => {
-    remaining--;
-    document.getElementById('countdown').textContent = remaining;
-    if (remaining <= 0) {
-      clearInterval(interval);
-      lockedUntil = null;
-      document.getElementById('lockoutOverlay').style.display = 'none';
-      document.getElementById('submitBtn').style.display = 'flex';
-    }
-  }, 1000);
-}
-
-function showForgot() {
-  const email = document.getElementById('email').value.trim();
-  if (!email) {
-    showError('Entrez votre e-mail pour réinitialiser le mot de passe');
+  if (!dls?.length) {
+    c.innerHTML = `<div class="empty-state"><div class="empty-icon">⬇</div><div class="empty-title">Aucun téléchargement</div><div class="empty-sub">Vos téléchargements depuis le <a href="index.html">catalogue</a> apparaîtront ici.</div></div>`;
     return;
   }
-  clearMessages();
-  const success = document.createElement('div');
-  success.className = 'success-msg';
-  success.style.cssText = 'display:flex;margin-top:12px;font-size:11px;';
-  success.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-    <span>Instructions envoyées à ${email}</span>`;
-  document.getElementById('loginForm').appendChild(success);
-  setTimeout(() => success.remove(), 4000);
+  c.innerHTML = `<div class="dl-list">${dls.map(d=>`
+    <div class="dl-item">
+      <div style="font-size:20px">🎵</div>
+      <div class="dl-info">
+        <div class="dl-title">${esc(d.track_title||'Sans titre')}</div>
+        <div class="dl-sub">${esc(d.track_playlist||'')}</div>
+      </div>
+      <div class="dl-date">${fmtD(d.downloaded_at)}</div>
+      <button class="redl-btn" onclick="redl('${enc(d.track_url)}','${enc(d.track_title)}')">⬇ Re-télécharger</button>
+    </div>`).join('')}</div>`;
 }
 
-// ── THEME ──
-function toggleTheme() {
-  const html = document.documentElement;
-  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('osm-theme', next);
-  const btn = document.getElementById('btn-theme');
-  if (btn) btn.textContent = next === 'dark' ? '☀' : '🌙';
-}
-(function() {
-  const t = localStorage.getItem('osm-theme') || 'light';
-  const btn = document.getElementById('btn-theme');
-  if (btn) btn.textContent = t === 'dark' ? '☀' : '🌙';
-})();
+// ── PROJECTS ──────────────────────────────────────
+async function loadProjs() {
+  if (!me) return;
+  const { data: projs } = await sb.from('projects').select('*').eq('user_id', me.id).order('created_at', { ascending: false });
+  document.getElementById('sn-proj').textContent = projs?.length ?? 0;
+  const grid = document.getElementById('proj-grid');
+  const newBtn = `<button class="proj-new-btn" onclick="openProjModal()"><div style="font-size:28px">+</div><div>Nouveau projet</div></button>`;
 
-// Vérifier session existante
-window.addEventListener('DOMContentLoaded', () => {
-  const name = sessionStorage.getItem('osm_monteur_name');
-  if (name && sessionStorage.getItem('osm_monteur_ok') === '1') {
-    document.getElementById('sessionInfo').style.display = 'block';
-    document.getElementById('sessionUser').textContent = name;
+  if (!projs?.length) { grid.innerHTML = newBtn; return; }
+
+  grid.innerHTML = projs.map(p=>`
+    <div class="proj-card">
+      <div class="proj-name">${esc(p.name)}</div>
+      <div class="proj-desc">${esc(p.description||'')}</div>
+      <div class="proj-foot">
+        <span class="proj-date">${fmtD(p.created_at)}</span>
+        <button class="icon-btn del" onclick="delProj('${p.id}')" title="Supprimer">🗑</button>
+      </div>
+    </div>`).join('') + newBtn;
+}
+
+async function delProj(id) {
+  if (!confirm('Supprimer ce projet ?')) return;
+  await sb.from('projects').delete().eq('id', id);
+  toast('Projet supprimé'); loadProjs();
+}
+
+function openProjModal() { document.getElementById('modal-proj').classList.add('open'); }
+function closeProjModal() { document.getElementById('modal-proj').classList.remove('open'); }
+
+async function createProject() {
+  const name = document.getElementById('pn-name').value.trim();
+  const desc = document.getElementById('pn-desc').value.trim();
+  if (!name) { toast('Donnez un nom au projet'); return; }
+  const { error } = await sb.from('projects').insert({ user_id: me.id, name, description: desc });
+  if (!error) {
+    closeProjModal();
+    document.getElementById('pn-name').value = '';
+    document.getElementById('pn-desc').value = '';
+    toast('Projet créé !'); loadProjs();
   }
+}
+
+// ── UTILS ─────────────────────────────────────────
+function esc(s) { if(!s)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function enc(s) { return encodeURIComponent(s||''); }
+function fmtD(s) { if(!s)return''; return new Date(s).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function showMsg(el, msg) { el.textContent = msg; el.style.display = 'flex'; }
+function setLoading(btnId, spId, on) {
+  const btn = document.getElementById(btnId);
+  const sp = document.getElementById(spId);
+  btn.disabled = on;
+  sp.style.display = on ? 'block' : 'none';
+}
+
+document.getElementById('modal-proj').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-proj')) closeProjModal();
 });
+
+init();
 </script>
 </body>
 </html>

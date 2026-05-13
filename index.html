@@ -553,6 +553,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   </div>
   <div class="header-right">
     <button class="btn-nav btn-theme" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
+    <div id="osm-auth-nav"><a class="btn-nav" href="login-monteurs.html">👤 Mon compte</a></div>
     <button class="btn-nav" onclick="toggleQueue()" style="position:relative">🎵 Ma liste <span class="queue-badge" id="queue-badge"></span></button>
     <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
   </div>
@@ -1644,7 +1645,15 @@ function playFromQueue(i){
   renderQueueList();
 }
 function copyLink(url){navigator.clipboard.writeText(url).then(()=>{const t=document.getElementById('copy-toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);});}
-function downloadTrack(i){const t=filteredTracks[i];if(!t)return;const a=document.createElement('a');a.href=t.url.replace('/upload/','/upload/fl_attachment/');a.download=t.title+'.mp3';a.target='_blank';a.click();}
+function downloadTrack(i){
+  const t=filteredTracks[i];if(!t)return;
+  const a=document.createElement('a');
+  a.href=t.url.replace('/upload/','/upload/fl_attachment/');
+  a.download=t.title+'.mp3';a.target='_blank';a.click();
+  if(osmUser&&typeof osmSB!=='undefined'){
+    osmSB.from('downloads').insert({user_id:osmUser.id,track_id:t.id||t.title,track_title:t.title,track_playlist:t.playlistLabel,track_url:t.url}).then(()=>{});
+  }
+}
 function downloadCurrent(){
   if(detailIndex>=0&&currentDetailTracks[detailIndex]){downloadDetailTrack(detailIndex);}
   else if(currentIndex>=0)downloadTrack(currentIndex);
@@ -1766,6 +1775,15 @@ function toggleFav(id){
   localStorage.setItem('osm-favs',JSON.stringify([...favorites]));
   updateFavNav();renderTracks();
   if(document.getElementById('view-favoris').classList.contains('active'))renderFavoris();
+  // Sync Supabase quand connecté
+  if(osmUser&&typeof osmSB!=='undefined'){
+    const t=allTracks.find(tr=>tr.id===id);
+    if(favorites.has(id)){
+      osmSB.from('favorites').insert({user_id:osmUser.id,track_id:id,track_title:t?.title,track_playlist:t?.playlistLabel,track_url:t?.url}).then(()=>{});
+    } else {
+      osmSB.from('favorites').delete().eq('user_id',osmUser.id).eq('track_id',id).then(()=>{});
+    }
+  }
 }
 function updateFavNav(){
   const n=favorites.size;
@@ -1889,6 +1907,50 @@ function playRecTrack(id){
   document.getElementById('player').classList.add('visible');
   wsLoad(t.url,parseDur(t.duration));
 }
+</script>
+
+<!-- ── Supabase Auth ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const osmSB = supabase.createClient(
+  'https://ubpmzncfhkohoyfonjbb.supabase.co',
+  'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh'
+);
+let osmUser = null;
+
+async function osmInit() {
+  const { data: { session } } = await osmSB.auth.getSession();
+  if (session?.user) osmApplyUser(session.user);
+  osmSB.auth.onAuthStateChange((_, session) => {
+    if (session?.user) osmApplyUser(session.user);
+    else osmClearUser();
+  });
+  // Auto-play si redirigé depuis favoris
+  const autoUrl = sessionStorage.getItem('osm_autoplay_url');
+  if (autoUrl) {
+    sessionStorage.removeItem('osm_autoplay_url');
+    setTimeout(() => {
+      const idx = allTracks.findIndex(t => t.url === autoUrl);
+      if (idx >= 0) { filteredTracks = allTracks; playTrack(idx); }
+    }, 1200);
+  }
+}
+
+async function osmApplyUser(user) {
+  osmUser = user;
+  const { data: p } = await osmSB.from('profiles').select('prenom,nom').eq('id', user.id).single();
+  const name = p ? [p.prenom, p.nom].filter(Boolean).join(' ') : user.email;
+  const el = document.getElementById('osm-auth-nav');
+  if (el) el.innerHTML = `<a class="btn-nav" href="login-monteurs.html" title="Mon espace client">👤 ${name}</a>`;
+}
+
+function osmClearUser() {
+  osmUser = null;
+  const el = document.getElementById('osm-auth-nav');
+  if (el) el.innerHTML = `<a class="btn-nav" href="login-monteurs.html">👤 Mon compte</a>`;
+}
+
+osmInit();
 </script>
 
 <button id="bg-speaker" onclick="toggleMute()" title="Couper / remettre le son">🔊</button>
