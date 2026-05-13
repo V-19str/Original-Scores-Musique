@@ -16,22 +16,6 @@
 body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden}
 audio{display:none}
 
-/* PW */
-#pw-screen{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:32px}
-.pw-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&q=80') center/cover;opacity:0.15}
-.pw-logo{position:relative;z-index:1;display:flex;align-items:center;gap:12px}
-.pw-mark{background:var(--red);color:#fff;font-size:14px;font-weight:700;letter-spacing:2px;padding:6px 10px;border-radius:3px}
-.pw-name{font-size:16px;font-weight:600;letter-spacing:3px;color:#fff}
-.pw-box{position:relative;z-index:1;background:rgba(20,20,20,0.95);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:40px;width:360px;text-align:center;backdrop-filter:blur(12px)}
-.pw-title{font-size:13px;font-weight:600;letter-spacing:3px;margin-bottom:6px;text-transform:uppercase;color:#fff}
-.pw-sub{font-size:12px;color:#999;margin-bottom:28px}
-.pw-input{width:100%;background:#2a2a2a;border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:12px 16px;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;text-align:center;letter-spacing:4px;outline:none;margin-bottom:14px;transition:border-color 0.2s}
-.pw-input:focus{border-color:var(--red)}
-.pw-btn{width:100%;background:var(--red);color:#fff;border:none;padding:12px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:4px;text-transform:uppercase}
-.pw-btn:hover{background:#cc4400}
-.pw-error{font-size:11px;color:var(--red);margin-top:10px;display:none}
-#main{display:none}
-#main.visible{display:block}
 
 /* HEADER */
 header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
@@ -526,17 +510,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 </head>
 <body>
 
-<div id="pw-screen">
-  <div class="pw-bg"></div>
-  <div class="pw-logo"><div class="pw-mark">OSM</div><div class="pw-name">ORIGINAL SCORES MUSIC</div></div>
-  <div class="pw-box">
-    <div class="pw-title">Accès Privé</div>
-    <div class="pw-sub">Catalogue réservé aux professionnels</div>
-    <input type="password" class="pw-input" id="pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()">
-    <button class="pw-btn" onclick="checkPw()">Accéder au catalogue</button>
-    <div class="pw-error" id="pw-error">Mot de passe incorrect</div>
-  </div>
-</div>
 
 <div id="main">
 <header>
@@ -964,7 +937,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
 
 <script>
-const PASSWORD='osm2026';
 const audio=document.getElementById('audio');
 
 /* ── HERO VIDEO ALÉATOIRE ── */
@@ -1130,18 +1102,6 @@ ws.on('pause',  ()=>{ document.getElementById('btn-play').textContent='▶'; });
   })();
 })();
 
-function checkPw(){
-  if(document.getElementById('pw-input').value===PASSWORD){
-    sessionStorage.setItem('osm_ok','1');
-    document.getElementById('pw-screen').style.display='none';
-    document.getElementById('main').classList.add('visible');
-    loadCatalogue();
-  }else{document.getElementById('pw-error').style.display='block';}
-}
-if(sessionStorage.getItem('osm_ok')==='1'){
-  document.getElementById('pw-screen').style.display='none';
-  document.getElementById('main').classList.add('visible');
-}
 
 const THEMES=[
   {label:"Tension & Action",playlists:[
@@ -1669,11 +1629,7 @@ function downloadCurrent(){
   else if(currentIndex>=0)downloadTrack(currentIndex);
 }
 
-if(sessionStorage.getItem('osm_ok')==='1'){
-  document.getElementById('pw-screen').style.display='none';
-  document.getElementById('main').classList.add('visible');
-  loadCatalogue();
-}
+loadCatalogue();
 
 /* ── THEME TOGGLE ── */
 function toggleTheme(){
