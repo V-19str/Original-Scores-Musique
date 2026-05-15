@@ -12,7 +12,7 @@ BASE      = Path(__file__).parent.parent
 AGENT_DIR = Path(__file__).parent
 
 sys.path.insert(0, str(AGENT_DIR))
-from match_tracks import match_tracks, score_track
+from match_tracks import match_tracks, base_score as score_track, clean_title, mood_tags
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -32,17 +32,10 @@ def accroche_pour(segment: str) -> str:
 def format_tracks_md(tracks: list[dict]) -> str:
     lines = []
     for i, t in enumerate(tracks, 1):
-        EXCLU = {"majeur", "mineur", "graves", "équilibré", "aigus",
-                 "haute énergie", "énergie moyenne", "basse énergie",
-                 "lent", "modéré", "rapide", "très rapide"}
-        NOTES = {"do","ré","mi","fa","sol","la","si"}
-        ambiances = [tag for tag in t.get("tags", [])
-                     if tag not in EXCLU
-                     and not any(tag.startswith(n) for n in NOTES)
-                     and len(tag) > 3]
-        mood = ", ".join(ambiances[:3]) if ambiances else t.get("playlist", "")
+        moods = mood_tags(t)
+        mood  = ", ".join(moods[:3]) if moods else t.get("playlist", "")
         lines.append(
-            f"{i}. **{t['title']}** — {t['bpm']} bpm, {t.get('playlist','')} "
+            f"{i}. **{clean_title(t['title'])}** — {t['bpm']} bpm, {t.get('playlist','')} "
             f"| _{mood}_  \n"
             f"   🎧 {t['url']}"
         )
@@ -119,7 +112,7 @@ def main():
         out_file = output_dir / f"{p['id']}.md"
         out_file.write_text(pitch, encoding="utf-8")
 
-        track_names = [t["title"] for t in get_top3(catalogue_path, p["criteres_matching"])]
+        track_names = [clean_title(t["title"]) for t in get_top3(catalogue_path, p["criteres_matching"])]
 
         print(f"  ✓  {p['boite']} ({p['id']})")
         print(f"     Tracks : {' · '.join(track_names)}")
