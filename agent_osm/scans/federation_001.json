@@ -1,0 +1,101 @@
+{
+  "projets_recents": [
+    {
+      "titre": "Reformed (Le Sens des Choses)",
+      "type": "série",
+      "annee": "2025",
+      "sujet": "Série pour HBO Max, primée Meilleure Actrice à Series Mania pour Elsa Guedj"
+    },
+    {
+      "titre": "Those Who Lived (Les Vivants)",
+      "type": "série",
+      "annee": "2025",
+      "sujet": "Drame sur les survivants des attentats du Bataclan du 13 novembre 2015, par Jean-Xavier de Lestrade"
+    },
+    {
+      "titre": "Ça, c'est Paris !",
+      "type": "série",
+      "annee": "2024",
+      "sujet": "Comédie dramatique avec Monica Bellucci et Alex Lutz dans le rôle d'un manager d'un cabaret familial menacé de vente à une chaîne de supermarchés"
+    },
+    {
+      "titre": "Curfew",
+      "type": "série",
+      "annee": "2024",
+      "sujet": "Thriller imaginant un futur proche où les hommes sont confinés de 19h à 7h pour endiguer la violence contre les femmes"
+    },
+    {
+      "titre": "Log Out (Intraçables)",
+      "type": "série",
+      "annee": "2025",
+      "sujet": "Série TF1/TSR primée Meilleure Musique Originale à Series Mania"
+    },
+    {
+      "titre": "Alter Ego",
+      "type": "série",
+      "annee": "2025",
+      "sujet": "Comédie policière 6x52' avec Eric Cantona et Bruno Sanches, tournée à Marseille pour TF1"
+    },
+    {
+      "titre": "French Lover",
+      "type": "fiction",
+      "annee": "2025",
+      "sujet": "Production pour Netflix labellisée Ecoprod"
+    },
+    {
+      "titre": "The Wages of Fear (Le Salaire de la Peur)",
+      "type": "fiction",
+      "annee": "2024",
+      "sujet": "Film d'action par Julien Leclercq avec Franck Gastambide, n°1 dans 33 pays sur Netflix, librement adapté du roman de Georges Arnaud"
+    },
+    {
+      "titre": "The Agency",
+      "type": "série",
+      "annee": "2024",
+      "sujet": "Série anglophone qui a donné à Federation un fort momentum aux États-Unis"
+    },
+    {
+      "titre": "Money Shot",
+      "type": "série",
+      "annee": "2025",
+      "sujet": "Série comédie 8x25' sur deux femmes lançant une société de porno féministe"
+    }
+  ],
+  "ligne_editoriale": "Studio européen indépendant produisant des fictions premium haut de gamme (séries policières, thrillers, drames historiques et sociétaux, comédies dramatiques) pour broadcasters français et plateformes internationales, avec une ambition d'IP fortes à résonance internationale.",
+  "angle_pitch": "OSM peut accompagner Federation Studios sur ses séries de fiction premium (thrillers, drames sociétaux, comédies dramatiques) avec des musiques originales sur-mesure, alors que le groupe vient justement d'être primé pour Meilleure Musique Originale à Series Mania 2025 — preuve que le score est un levier différenciant pour leurs productions. Notre catalogue couvre aussi bien les ambiances tendues de thrillers (Curfew, The Agency) que les tonalités émotionnelles de drames mémoriels (Those Who Lived) ou élégantes (Ça, c'est Paris).",
+  "criteres_musicaux": {
+    "ambiances": [
+      "dramatique",
+      "tendu",
+      "intense",
+      "mélancolique",
+      "puissant",
+      "sombre",
+      "contemplatif"
+    ],
+    "energie": [
+      "moyenne",
+      "haute"
+    ],
+    "tempo": [
+      "modéré",
+      "rapide"
+    ]
+  },
+  "contact": {
+    "nom": "Thierry Sorel",
+    "role": "Directeur de la Fiction",
+    "email": ""
+  },
+  "sources": [
+    "https://federationstudios.com/",
+    "https://federationstudios.com/news/",
+    "https://federationstudios.com/federation-studios-fiction-series-central-to-broadcasters-announcements-during-series-mania-with-a-standout-eight-titles-distributed-by-the-group/",
+    "https://federationstudios.com/federation-studios-confirms-its-active-commitment-to-sustainable-production/",
+    "https://variety.com/2024/tv/global/the-agency-pascal-breton-federation-studios-1236225832/",
+    "https://deadline.com/2025/01/federation-studios-sale-hundreds-millions-the-agency-next-growth-phase-1236256392/",
+    "https://www.c21media.net/marketplace/federation/programming/685697/",
+    "https://senalnews.com/en/data/federation-studio-france-is-the-largest-production-company-in-france-in-2025",
+    "https://www.allocine.fr/societe/fichesociete-33513/"
+  ]
+}

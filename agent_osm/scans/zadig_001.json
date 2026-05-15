@@ -1,0 +1,84 @@
+{
+  "projets_recents": [
+    {
+      "titre": "Israël/Palestine, l'impossible coexistence ?",
+      "type": "documentaire",
+      "annee": "2024",
+      "sujet": "Série en trois épisodes de Dan Setton sur le conflit israélo-palestinien, des accords d'Oslo à la prise de Gaza par le Hamas"
+    },
+    {
+      "titre": "Les Voisins de la rue Saint-Maur (Vynnyky / Reconstruction faciale)",
+      "type": "documentaire",
+      "annee": "2026",
+      "sujet": "Au centre médical de Vynnyky près de Lviv, des chirurgiens français spécialistes de la reconstruction faciale s'occupent des blessés de guerre ukrainiens"
+    },
+    {
+      "titre": "Homs, retour d'exil (Daham Alasaad)",
+      "type": "documentaire",
+      "annee": "2025",
+      "sujet": "Après douze ans d'exil, le journaliste syrien Daham Alasaad retourne à Homs dévastée, où sunnites, chrétiens et alaouites tentent de revivre ensemble"
+    },
+    {
+      "titre": "Les Amazones de la chanson française (Lucie Cariès)",
+      "type": "documentaire",
+      "annee": "2024",
+      "sujet": "Dans les années 80, Lio, Jeanne Mas, Caroline Loeb, Jil Caplan et d'autres ont dynamité la chanson française avec humour et énergie"
+    },
+    {
+      "titre": "Gene Kelly mène la danse (Claudia Collao)",
+      "type": "documentaire",
+      "annee": "2024",
+      "sujet": "Portrait de Gene Kelly, virtuose du music-hall qui a su 'danser avec la caméra' à Hollywood"
+    },
+    {
+      "titre": "Documentaire de Joanna Grudzińska sur Jedwabne",
+      "type": "documentaire",
+      "annee": "2025",
+      "sujet": "Un homme dénonce les massacres commis par des Polonais contre leurs voisins juifs pendant la guerre"
+    },
+    {
+      "titre": "Hôpital (Didier Cros)",
+      "type": "documentaire",
+      "annee": "2025",
+      "sujet": "Plongée dans un hôpital qui n'est pas tout à fait comme les autres"
+    },
+    {
+      "titre": "Edouard and Charles",
+      "type": "fiction",
+      "annee": "2024",
+      "sujet": "Long-métrage produit par Zadig (sélection Cineuropa 2024)"
+    }
+  ],
+  "ligne_editoriale": " Société indépendante fondée en 2001 produisant des documentaires à visée internationale (investigation, géopolitique, science, découverte, films du réel ancrés dans la société, l'histoire ou la culture) avec une politique d'auteur exigeante, innovante et ouverte sur le monde .",
+  "angle_pitch": "Pitcher OSM comme partenaire musical pour leur ligne documentaire géopolitique et historique forte (Israël/Palestine, Syrie, Ukraine, Pologne, Shoah) en proposant des partitions originales graves, immersives et cinématographiques, ainsi qu'un répertoire plus lumineux/rétro pour leurs portraits culturels (Gene Kelly, chanteuses des années 80). Idéal pour Arte, France 2 et France 5 avec lesquels ils travaillent régulièrement.",
+  "criteres_musicaux": {
+    "ambiances": [
+      "sombre",
+      "dramatique",
+      "mélancolique",
+      "tendu",
+      "contemplatif",
+      "puissant"
+    ],
+    "energie": [
+      "basse",
+      "moyenne"
+    ],
+    "tempo": [
+      "lent",
+      "modéré"
+    ]
+  },
+  "contact": {
+    "nom": "Paul Rozenberg",
+    "role": "Fondateur / Directeur général",
+    "email": "contact@zadigproductions.com"
+  },
+  "sources": [
+    "https://zadigproductions.fr/",
+    "https://www.film-documentaire.fr/4DACTION/w_liste_generique/S_35954_G",
+    "https://cineuropa.org/prodcompany/89816/",
+    "https://www.allocine.fr/societe/fichesociete-13934/",
+    "https://dokweb.net/database/organizations/about/9b423555-215a-4314-a5ec-62e0747a1a36/zadig-productions"
+  ]
+}

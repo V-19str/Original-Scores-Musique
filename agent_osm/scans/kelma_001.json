@@ -1,0 +1,94 @@
+{
+  "projets_recents": [
+    {
+      "titre": "Vœux Charenton-le-Pont 2026",
+      "type": "corporate",
+      "annee": "2026",
+      "sujet": "Film de vœux institutionnels pour la ville de Charenton-le-Pont"
+    },
+    {
+      "titre": "Vœux Bois d'Arcy 2026",
+      "type": "corporate",
+      "annee": "2026",
+      "sujet": "Film de vœux institutionnels pour la municipalité de Bois d'Arcy"
+    },
+    {
+      "titre": "Vœux Chevilly Larue 2026",
+      "type": "corporate",
+      "annee": "2026",
+      "sujet": "Film de vœux institutionnels pour la ville de Chevilly-Larue"
+    },
+    {
+      "titre": "Séminaire MyoTec - Porsche Center",
+      "type": "corporate",
+      "annee": "2025",
+      "sujet": "Aftermovie de séminaire d'entreprise tourné au Porsche Center"
+    },
+    {
+      "titre": "Mews - Apéro des Hôteliers",
+      "type": "corporate",
+      "annee": "2025",
+      "sujet": "Aftermovie événementiel pour Mews, plateforme dédiée à l'hôtellerie"
+    },
+    {
+      "titre": "Institut Océanographique Paul Ricard",
+      "type": "corporate",
+      "annee": "2025",
+      "sujet": "Film institutionnel pour une ONG dédiée à la préservation des océans"
+    },
+    {
+      "titre": "SI Groupe",
+      "type": "corporate",
+      "annee": "2025",
+      "sujet": "Film de marque pour le groupe SI"
+    },
+    {
+      "titre": "Academy de la Formation",
+      "type": "corporate",
+      "annee": "2025",
+      "sujet": "Film de marque pour un organisme de formation professionnelle"
+    },
+    {
+      "titre": "Positiv' Formation",
+      "type": "corporate",
+      "annee": "2025",
+      "sujet": "Film de marque pour un organisme de formation"
+    },
+    {
+      "titre": "MyoTec",
+      "type": "corporate",
+      "annee": "2025",
+      "sujet": "Film de marque court (48s) pour la société MyoTec"
+    }
+  ],
+  "ligne_editoriale": "Agence parisienne de production vidéo qui allie l'exigence esthétique du cinéma au pragmatisme du corporate, avec un storytelling efficace pour entreprises, startups, collectivités et ONG.",
+  "angle_pitch": "OSM peut fournir à Kelma Studio un catalogue de musiques originales 'à l'esthétique cinéma' parfaitement alignées avec leur signature visuelle premium, avec des cues prêts à l'emploi pour films institutionnels, brand content, aftermovies de séminaires et films de vœux municipaux. Argument clé : gain de temps sur leurs livraisons rapides (sous 7 jours) avec une qualité musicale qui hisse leurs visuels au niveau du cinéma.",
+  "criteres_musicaux": {
+    "ambiances": [
+      "lumineux",
+      "positif",
+      "puissant",
+      "épique",
+      "contemplatif",
+      "énergique"
+    ],
+    "energie": [
+      "moyenne",
+      "haute"
+    ],
+    "tempo": [
+      "modéré",
+      "rapide"
+    ]
+  },
+  "contact": {
+    "nom": "Emmanuel",
+    "role": "Contact projets",
+    "email": "emmanuel@kelmastudio.com"
+  },
+  "sources": [
+    "https://www.kelmastudio.com",
+    "https://www.kelmastudio.com/about-1",
+    "https://rocketreach.co/kelma-studio-profile_b68df404c9ab9b81"
+  ]
+}

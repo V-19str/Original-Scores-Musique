@@ -1,0 +1,51 @@
+{
+  "projets_recents": [
+    {
+      "titre": "Portrait d'Hélène Hazera (Judith Abitbol)",
+      "type": "documentaire",
+      "annee": "2026",
+      "sujet": "Portrait intime d'Hélène Hazera, figure des contre-cultures LGBTQ françaises des années 60-90, membre des Gazolines et du FHAR, militante d'Act Up et première journaliste transgenre d'un grand quotidien national (Libération)"
+    },
+    {
+      "titre": "La mécanique des flux / film sur réfugiés en Méditerranée (Shirin Abu Shaqra)",
+      "type": "documentaire",
+      "annee": "2017",
+      "sujet": "Histoire d'amour épistolaire entre une infirmière humanitaire envoyée sauver des réfugiés en mer Méditerranée et son compagnon resté à terre, entre réalité et fiction"
+    },
+    {
+      "titre": "Ede (Judith Abitbol)",
+      "type": "documentaire",
+      "annee": "2016",
+      "sujet": "Portrait sur huit ans d'Ede Bartolozzi, atteinte de la maladie d'Alzheimer, filmée dans son village italien avec sa fille Paola — chronique de la disparition et de l'amour filial"
+    }
+  ],
+  "ligne_editoriale": "Maison indépendante de documentaire d'auteur dirigée par Paola Valentini, dédiée aux portraits intimes au long cours, aux marges, aux contre-cultures et aux figures féminines, en compagnonnage régulier avec la réalisatrice Judith Abitbol.",
+  "angle_pitch": "OSM peut accompagner les documentaires d'auteur de Godot Production avec des musiques originales discrètes, sensibles et mémorielles, pensées pour soutenir des récits intimes au long cours sans jamais surligner l'émotion. Notre catalogue propose des nappes contemplatives, des textures mélancoliques et des pièces piano/cordes parfaites pour les portraits féminins et les films sur la mémoire, la disparition et les contre-cultures.",
+  "criteres_musicaux": {
+    "ambiances": [
+      "mélancolique",
+      "contemplatif",
+      "calme",
+      "lumineux",
+      "dramatique"
+    ],
+    "energie": [
+      "basse",
+      "moyenne"
+    ],
+    "tempo": [
+      "lent",
+      "modéré"
+    ]
+  },
+  "contact": {
+    "nom": "Paola Valentini",
+    "role": "Présidente / Productrice",
+    "email": "paolavalentini@orange.fr"
+  },
+  "sources": [
+    "https://www.film-documentaire.fr/4DACTION/w_liste_generique/S_62640_G",
+    "https://www.manageo.fr/entreprises/753051135.html",
+    "https://www.lascam.fr/actualites-ressources/documentaires-en-salles-avril-2026/"
+  ]
+}

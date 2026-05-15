@@ -1,0 +1,86 @@
+{
+  "projets_recents": [
+    {
+      "titre": "Sorcières, chronique d'un massacre (The Basque Witches' Trial)",
+      "type": "documentaire",
+      "annee": "2025",
+      "sujet": "Réalisé par Marie Thiry, ce documentaire revient sur le procès des sorcières du pays basque en 1609 par le juge inquisiteur Pierre de Lancre, et plus largement sur les 40 à 60 000 personnes condamnées pour sorcellerie en Europe du 15e au 17e siècle."
+    },
+    {
+      "titre": "Ballroom",
+      "type": "série",
+      "annee": "2025",
+      "sujet": "Série documentaire d'Amandine Gay suivant la House of Revlon française (Vinii, Keiona et leurs kids) dans la scène ballroom, entre Ball d'Halloween, Jeux Olympiques et questionnements identitaires queer."
+    },
+    {
+      "titre": "GEN_",
+      "type": "documentaire",
+      "annee": "2025",
+      "sujet": "Film de Gianluca Matarrese présenté en compétition à Sundance 2025, qui suit le Dr. Bini à l'hôpital Niguarda de Milan accueillant parents en quête d'enfants et adolescents en recherche d'identité."
+    },
+    {
+      "titre": "L'Expérience Zola (The Zola Experience)",
+      "type": "documentaire",
+      "annee": "2024",
+      "sujet": "Anne, metteuse en scène, adapte L'Assommoir d'Émile Zola et joue Gervaise ; le film, dans une approche naturaliste, brouille la frontière entre fiction et réel, entre vie et art."
+    },
+    {
+      "titre": "Terry Gilliam, Power to Imagination!",
+      "type": "documentaire",
+      "annee": "2024",
+      "sujet": "Portrait par Benjamin Clavel de l'œuvre du cinéaste Terry Gilliam, à la fois grandiloquente et intime, baroque, burlesque et tragique."
+    },
+    {
+      "titre": "Fengyang / Cité impériale Ming",
+      "type": "documentaire",
+      "annee": "2024",
+      "sujet": "Documentaire de Stéphane Bégoin (co-production France/Chine, 91 min) sur la fastueuse cité impériale chinoise édifiée par Zhu Yuanzhang, fondateur de la dynastie Ming."
+    },
+    {
+      "titre": "On the Way",
+      "type": "documentaire",
+      "annee": "en production",
+      "sujet": "Exploration de la relation entre l'homme et la nature dans les montagnes polonaises des Tatras, autour du tourisme de masse sur le lac dit 'l'œil de la mer'."
+    },
+    {
+      "titre": "Samir fête ses 40 ans",
+      "type": "documentaire",
+      "annee": "en développement",
+      "sujet": "Portrait intime d'un frère handicapé qui célèbre ses 40 ans le 23 août 2025 ; un film sur l'amour familial et la vie."
+    }
+  ],
+  "ligne_editoriale": "Société indépendante fondée en 2009 par Hind Saïh et Dominique Barneaud, spécialisée en documentaires d'auteur et films d'art et essai aux écritures innovantes et démarches engagées, explorant le monde contemporain avec un regard intime, sociétal et international.",
+  "angle_pitch": "OSM peut accompagner Bellota Films sur ses documentaires de création à forte identité d'auteur (sujets sociétaux, historiques, portraits intimes) en proposant un catalogue musical original sur-mesure, capable de soutenir la mise en abîme, le drame intime et les démarches engagées qui caractérisent leurs films primés (Prix Procirep 2025 Documentaire). Idéal pour les coproductions internationales et les films hybrides mêlant réel, archive et animation.",
+  "criteres_musicaux": {
+    "ambiances": [
+      "contemplatif",
+      "mélancolique",
+      "sombre",
+      "dramatique",
+      "intense",
+      "tendu"
+    ],
+    "energie": [
+      "basse",
+      "moyenne"
+    ],
+    "tempo": [
+      "lent",
+      "modéré"
+    ]
+  },
+  "contact": {
+    "nom": "Hind Saïh / Dominique Barneaud",
+    "role": "Producteurs associés / Cofondateurs",
+    "email": "contact@bellotafilms.fr"
+  },
+  "sources": [
+    "https://bellotafilms.fr/en/",
+    "https://bellotafilms.fr/en/catalogue/",
+    "https://bellotafilms.fr/en/films-en-cours/",
+    "https://www.cnc.fr/professionnels/actualites/prix-procirep-2025-trois-societes-de-production-distinguees_2513315",
+    "https://www.film-documentaire.fr/4DACTION/w_liste_generique/S_60347_G",
+    "https://cineuropa.org/prodcompany/257404/",
+    "https://www.allocine.fr/societe/fichesociete-34240/"
+  ]
+}
