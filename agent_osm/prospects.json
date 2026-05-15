@@ -1,0 +1,19 @@
+[
+  {
+    "id": "godot_001",
+    "boite": "Godot Production",
+    "ville": "Paris",
+    "segment": "documentaire",
+    "projet_recent": "L'œuvre invisible (portrait, 2026)",
+    "contact_nom": "",
+    "contact_email": "",
+    "contact_role": "",
+    "criteres_matching": {
+      "ambiances": ["sombre", "mélancolique", "contemplatif"],
+      "energie": ["basse", "moyenne"],
+      "tempo": ["lent", "modéré"],
+      "tonalite_mode": "mineur"
+    },
+    "statut": "a_contacter"
+  }
+]
