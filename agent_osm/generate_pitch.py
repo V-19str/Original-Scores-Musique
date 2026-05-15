@@ -12,7 +12,7 @@ BASE      = Path(__file__).parent.parent
 AGENT_DIR = Path(__file__).parent
 
 sys.path.insert(0, str(AGENT_DIR))
-from match_tracks import match_tracks, base_score as score_track, clean_title, mood_tags
+from match_tracks import match_tracks, base_score as score_track, clean_title, mood_tags, CATALOGUE_UNIQUE
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -43,16 +43,8 @@ def format_tracks_md(tracks: list[dict]) -> str:
 
 
 def get_top3(catalogue_path: str, criteres: dict) -> list[dict]:
-    top10 = match_tracks(catalogue_path, criteres, top_n=10)
-    seen_titles, top3 = set(), []
-    for t in top10:
-        key = t["title"].lower().strip()
-        if key not in seen_titles:
-            seen_titles.add(key)
-            top3.append(t)
-        if len(top3) == 3:
-            break
-    return top3
+    # catalogue_unique.json n'a plus de doublons — on prend directement top 3
+    return match_tracks(catalogue_path, criteres, top_n=3)
 
 
 def generate_pitch(prospect: dict, template: str, catalogue_path: str, nb_tracks: int) -> str:
@@ -88,14 +80,14 @@ def generate_pitch(prospect: dict, template: str, catalogue_path: str, nb_tracks
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    catalogue_path = str(BASE / "catalogue.json")
+    catalogue_path = str(CATALOGUE_UNIQUE)
     prospects_path = AGENT_DIR / "prospects.json"
     template_path  = AGENT_DIR / "pitch_template.md"
     output_dir     = AGENT_DIR / "pitchs_generes"
     output_dir.mkdir(exist_ok=True)
 
-    with open(catalogue_path, encoding="utf-8") as f:
-        nb_tracks = len(json.load(f)["tracks"])
+    with open(str(BASE / "catalogue.json"), encoding="utf-8") as f:
+        nb_tracks = len(json.load(f)["tracks"])  # total site (avec doublons)
 
     with open(prospects_path, encoding="utf-8") as f:
         prospects = json.load(f)

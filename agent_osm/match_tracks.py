@@ -18,7 +18,8 @@ import json
 import statistics
 from pathlib import Path
 
-BASE = Path(__file__).parent.parent
+BASE            = Path(__file__).parent.parent
+CATALOGUE_UNIQUE = Path(__file__).parent / "catalogue_unique.json"
 
 # Normalisation énergie : label prospect → tag catalogue
 ENERGIE_MAP = {
@@ -135,7 +136,7 @@ def match_tracks(catalogue_path: str, criteres: dict, top_n: int = 5) -> list[di
 
 
 if __name__ == "__main__":
-    catalogue = BASE / "catalogue.json"
+    catalogue = CATALOGUE_UNIQUE
     criteres_demo = {
         "ambiances":     ["sombre", "mélancolique"],
         "energie":       ["basse", "moyenne"],
