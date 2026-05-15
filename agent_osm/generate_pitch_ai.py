@@ -33,19 +33,19 @@ MODEL        = "claude-opus-4-7"
 
 JSON_SCHEMA = {
     "type": "object",
+    "additionalProperties": False,
     "properties": {
         "tracks_choisies": {
             "type": "array",
             "items": {
                 "type": "object",
+                "additionalProperties": False,
                 "properties": {
                     "id":     {"type": "string"},
                     "raison": {"type": "string"},
                 },
                 "required": ["id", "raison"],
             },
-            "minItems": 1,
-            "maxItems": TOP_N,
         },
         "pitch_email": {"type": "string"},
     },
@@ -218,11 +218,7 @@ def process_prospect(prospect: dict, catalogue_path: str, output_dir: Path) -> d
         output_config={
             "format": {
                 "type": "json_schema",
-                "json_schema": {
-                    "name": "pitch_selection",
-                    "schema": JSON_SCHEMA,
-                    "strict": True,
-                },
+                "schema": JSON_SCHEMA,
             }
         },
         messages=[{"role": "user", "content": prompt}],
