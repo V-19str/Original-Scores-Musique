@@ -1,5 +1,5 @@
 <!-- Prospect : Godot Production (godot_001) -->
-<!-- Généré le : 2026-05-15 08:43 -->
+<!-- Généré le : 2026-05-15 08:55 -->
 <!-- Modèle : claude-opus-4-7 -->
 <!-- Critères : {'ambiances': ['sombre', 'mélancolique', 'contemplatif'], 'energie': ['basse', 'moyenne'], 'tempo': ['lent', 'modéré'], 'tonalite_mode': 'mineur'} -->
 
@@ -9,12 +9,15 @@
 
 Bonjour,
 
-Nous avons découvert avec intérêt votre prochain documentaire L'œuvre invisible, et son approche sensible du portrait nous a inspiré une sélection sur-mesure issue de notre catalogue OSM.
+J'ai découvert avec intérêt votre projet L'œuvre invisible, ce portrait prévu pour 2026. Sa dimension contemplative m'a inspiré une première sélection issue du catalogue OSM, taillée pour les nuances sombres et mélancoliques de votre documentaire :
 
-Trois pistes nous semblent particulièrement adaptées : « Girl At The Museum » (99 BPM), piano contemplatif tout en retenue ; « Puppet Solo Piano » (99 BPM), pour les moments introspectifs ; et « Seeking The Truth » (103 BPM), plus tendue, parfaite pour les séquences de révélation.
+– Girl At The Museum (99 BPM), piano solo intimiste
+– Seeking The Truth (103 BPM), atmosphère introspective
+– Baltic Moood (103 BPM), folk acoustique tout en retenue
 
-Nous serions ravis d'échanger avec votre équipe et de vous adresser les liens d'écoute.
+Je serais ravi d'échanger avec votre équipe pour affiner ces pistes selon vos séquences clés.
 
+Bien à vous,
 Vladimir — OSM / osm-music.fr
 
 ---
@@ -23,15 +26,15 @@ Vladimir — OSM / osm-music.fr
 
 - **Girl At The Museum Msvc** — 99 bpm, Piano | _mélancolique, sombre_  
   🎧 https://res.cloudinary.com/dtfm2cwm0/video/upload/v1778083248/GIRL_AT_THE_MUSEUM_MSVC_zvw2cn.mp3
-  > Un piano solo contemplatif à 99 BPM, idéal pour évoquer l'intimité d'un portrait et la délicatesse d'une œuvre invisible.
-
-- **Puppet Mvcvm Solo Piano** — 99 bpm, Action | _mélancolique, sombre_  
-  🎧 https://res.cloudinary.com/dtfm2cwm0/video/upload/v1778079235/PUPPET_MVCVM_-_SOLO_PIANO_rrtzoc.mp3
-  > Solo piano mélancolique à 99 BPM, parfait pour les séquences introspectives et les moments de silence chargés d'émotion.
+  > Un piano solo mélancolique à 99 BPM, idéal pour incarner l'intimité contemplative d'un portrait documentaire.
 
 - **Seeking The Truth** — 103 bpm, Atmosphère | _mélancolique, sombre_  
   🎧 https://res.cloudinary.com/dtfm2cwm0/video/upload/v1778080077/SEEKING_THE_TRUTH_ak9nj8.mp3
-  > Atmosphère sombre et tendue à 103 BPM, idéale pour soutenir les passages d'enquête et de révélation propres au documentaire portrait.
+  > Une atmosphère sombre et investigatrice à 103 BPM, parfaite pour souligner la quête et le mystère de L'œuvre invisible.
+
+- **Baltic Moood Rvmr** — 103 bpm, Folk Acoustique | _mélancolique, sombre_  
+  🎧 https://res.cloudinary.com/dtfm2cwm0/video/upload/v1778081653/BALTIC_MOOOD_RVMR_c8azc2.mp3
+  > Une couleur folk acoustique mélancolique à 103 BPM qui apporte une chaleur humaine et organique au récit.
 
 ---
 

@@ -15,5 +15,69 @@
       "tonalite_mode": "mineur"
     },
     "statut": "a_contacter"
+  },
+  {
+    "id": "bellota_001",
+    "boite": "Bellota Films",
+    "ville": "Paris",
+    "segment": "documentaire",
+    "projet_recent": "Lauréate Prix producteur français doc 2024, docs sociétaux et intimistes",
+    "contact_nom": "",
+    "contact_email": "",
+    "contact_role": "",
+    "criteres_matching": {
+      "ambiances": ["sombre", "mélancolique", "lumineux"],
+      "energie": ["basse", "moyenne"],
+      "tempo": ["lent", "modéré"]
+    },
+    "statut": "a_contacter"
+  },
+  {
+    "id": "zadig_001",
+    "boite": "Zadig Productions",
+    "ville": "Paris",
+    "segment": "documentaire",
+    "projet_recent": "~20 docs/an + magazines + fictions TV, gros volume éditorial",
+    "contact_nom": "",
+    "contact_email": "",
+    "contact_role": "",
+    "criteres_matching": {
+      "ambiances": ["positif", "lumineux", "mélancolique"],
+      "energie": ["moyenne"],
+      "tempo": ["modéré"]
+    },
+    "statut": "a_contacter"
+  },
+  {
+    "id": "kelma_001",
+    "boite": "Kelma Studio",
+    "ville": "Paris",
+    "segment": "corporate",
+    "projet_recent": "Films sur-mesure pour entreprises et institutions, brand content",
+    "contact_nom": "",
+    "contact_email": "",
+    "contact_role": "",
+    "criteres_matching": {
+      "ambiances": ["positif", "lumineux", "puissant"],
+      "energie": ["moyenne", "haute"],
+      "tempo": ["modéré", "rapide"]
+    },
+    "statut": "a_contacter"
+  },
+  {
+    "id": "federation_001",
+    "boite": "Federation Studios",
+    "ville": "Paris",
+    "segment": "fiction",
+    "projet_recent": "Séries TV + projets épiques cinéma (Patrouille de France IMAX 2026)",
+    "contact_nom": "",
+    "contact_email": "",
+    "contact_role": "",
+    "criteres_matching": {
+      "ambiances": ["épique", "puissant", "sombre"],
+      "energie": ["haute", "moyenne"],
+      "tempo": ["modéré", "rapide"]
+    },
+    "statut": "a_contacter"
   }
 ]
