@@ -551,6 +551,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   <div class="header-right">
     <button class="btn-nav btn-theme" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
     <div id="osm-auth-nav"><a class="btn-nav" href="login-monteurs.html">👤 Mon compte</a></div>
+    <a id="btn-admin" class="btn-nav" style="border-color:rgba(229,9,20,0.4);color:var(--red)" title="Panneau admin" onclick="window.location.href=osmUser?'admin.html':'login-monteurs.html';return false;" href="#">⚙ Admin</a>
     <button class="btn-nav" onclick="toggleQueue()" style="position:relative">🎵 Ma liste <span class="queue-badge" id="queue-badge"></span></button>
     <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
   </div>
@@ -1998,11 +1999,8 @@ async function osmApplyUser(user) {
   osmUser = user;
   const { data: p } = await osmSB.from('profiles').select('prenom,nom').eq('id', user.id).single();
   const name = p ? [p.prenom, p.nom].filter(Boolean).join(' ') : user.email;
-  const adminLink = user.email === 'vladimirstreiff@gmail.com'
-    ? ' <a class="btn-nav" href="admin.html" style="border-color:rgba(229,9,20,0.4);color:var(--red)" title="Panneau admin">⚙ Admin</a>'
-    : '';
   const el = document.getElementById('osm-auth-nav');
-  if (el) el.innerHTML = `<a class="btn-nav" href="login-monteurs.html" title="Mon espace client">👤 ${name}</a>${adminLink}`;
+  if (el) el.innerHTML = `<a class="btn-nav" href="login-monteurs.html" title="Mon espace client">👤 ${name}</a>`;
 }
 
 function osmClearUser() {

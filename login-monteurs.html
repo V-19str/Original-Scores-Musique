@@ -725,13 +725,7 @@ document.getElementById('modal-proj').addEventListener('click', e => {
 
 // ── ADMIN ─────────────────────────────────────────
 function showAdminDash() {
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('dashboard-screen').style.display = 'none';
-  document.getElementById('admin-screen').style.display = 'block';
-  document.getElementById('header-username').textContent = '⚙ Admin';
-  document.getElementById('header-username').style.display = 'inline';
-  document.getElementById('btn-logout').style.display = 'inline-flex';
-  loadAdminData();
+  window.location.href = 'admin.html';
 }
 
 async function loadAdminData() {
