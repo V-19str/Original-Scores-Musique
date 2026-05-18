@@ -305,6 +305,8 @@ footer a { color: #666; text-decoration: none; }
       <span class="spinner" id="sp-login"></span>
       Se connecter
     </button>
+    <p class="auth-link"><a href="#" onclick="doForgotPassword();return false;" style="color:var(--muted)">Mot de passe oublié ?</a></p>
+    <div class="auth-msg auth-ok" id="forgot-ok"></div>
     <p class="auth-link">Pas encore de compte ? <a href="#" onclick="switchTab('register');return false;">Créer un compte</a></p>
     <p class="auth-link"><a href="index.html">← Retour au catalogue</a></p>
   </div>
@@ -516,6 +518,20 @@ async function doLogin() {
   const { error } = await sb.auth.signInWithPassword({ email, password: pw });
   setLoading('btn-login', 'sp-login', false);
   if (error) showMsg(errEl, error.message.includes('Invalid') ? 'Email ou mot de passe incorrect.' : error.message);
+}
+
+async function doForgotPassword() {
+  const email = document.getElementById('l-email').value.trim();
+  const errEl = document.getElementById('login-err');
+  const okEl = document.getElementById('forgot-ok');
+  errEl.style.display = 'none';
+  okEl.style.display = 'none';
+  if (!email) { showMsg(errEl, 'Entrez votre email d\'abord.'); return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://osm-music.fr/login-monteurs.html'
+  });
+  if (error) { showMsg(errEl, error.message); return; }
+  showMsg(okEl, `Un email de réinitialisation a été envoyé à ${email}. Vérifie ta boîte de réception.`);
 }
 
 async function doRegister() {
