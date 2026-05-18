@@ -121,6 +121,34 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-search-btn{background:var(--grad);color:#fff;border:none;padding:13px 28px;border-radius:40px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;text-transform:uppercase;flex-shrink:0}
 .hero-search-btn:hover{opacity:0.88}
 .hero-search-btn:hover{background:#ff7700}
+.hero-search-btn-ai{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;padding:13px 18px;border-radius:40px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;text-transform:uppercase;flex-shrink:0}
+.hero-search-btn-ai:hover{opacity:0.85}
+.hero-search-btn-ai:disabled{opacity:0.5;cursor:not-allowed}
+/* AI Results Panel */
+#ai-results-panel{display:none;padding:20px 48px 28px;background:var(--bg2);border-bottom:2px solid rgba(124,58,237,0.3)}
+#ai-results-panel.visible{display:block}
+.ai-panel-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px}
+.ai-panel-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#a855f7;margin-bottom:3px}
+.ai-panel-query{font-size:12px;color:var(--muted);font-style:italic}
+.ai-panel-close{background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:11px;padding:5px 10px;border-radius:4px;font-family:'Montserrat',sans-serif;transition:all 0.15s;flex-shrink:0}
+.ai-panel-close:hover{border-color:#555;color:var(--text)}
+.ai-cards{display:flex;flex-direction:column;gap:8px}
+.ai-card{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:grid;grid-template-columns:32px 1fr auto;gap:14px;align-items:center;transition:border-color 0.2s}
+.ai-card:hover{border-color:rgba(124,58,237,0.35)}
+.ai-card-rank{font-size:18px;font-weight:700;color:#a855f7;text-align:center}
+.ai-card-info{min-width:0}
+.ai-card-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.ai-card-meta{font-size:11px;color:var(--muted);margin-bottom:5px}
+.ai-card-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
+.ai-card-tag{background:var(--bg3);padding:2px 7px;border-radius:10px;font-size:10px;color:var(--text2)}
+.ai-card-why{font-size:11px;color:var(--text2);font-style:italic;line-height:1.5}
+.ai-card-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.ai-act-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-family:'Montserrat',sans-serif;white-space:nowrap;transition:all 0.15s;display:inline-flex;align-items:center;gap:4px}
+.ai-act-btn:hover{border-color:#555;color:var(--text)}
+.ai-act-btn.saved{border-color:rgba(124,58,237,0.5);color:#a855f7}
+.ai-loader{text-align:center;padding:32px;color:var(--muted);font-size:12px;letter-spacing:2px}
+.ai-error-msg{color:var(--red);font-size:12px;padding:20px;text-align:center;background:rgba(229,9,20,0.05);border-radius:6px}
+@media(max-width:768px){#ai-results-panel{padding:14px 16px 20px}.ai-card{grid-template-columns:28px 1fr;gap:10px}.ai-card-actions{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}}
 /* Hero suggestions */
 .hero-sug{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.3);padding:6px 0;z-index:200;display:none;max-height:260px;overflow-y:auto}
 .hero-sug.visible{display:block}
@@ -614,6 +642,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
                  onfocus="if(this.value.trim().length>=2)showHeroSug(this.value)"
                  onkeydown="if(event.key==='Enter')heroSearchSubmit()">
           <button class="hero-search-btn" onclick="heroSearchSubmit()">Rechercher</button>
+          <button class="hero-search-btn-ai" id="btn-ai-search" onclick="aiSearch()" title="Recherche en langage naturel par intelligence artificielle">🤖 IA</button>
           <div class="hero-sug" id="hero-sug"></div>
         </div>
         <button class="hero-filter-toggle" id="hero-filter-toggle" onclick="toggleHeroTags()">Mood · Style · Instrument ▾</button>
@@ -888,6 +917,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <!-- MAIN CONTENT -->
     <div class="cat-main">
       <div class="search-active-bar" id="search-active-bar"></div>
+      <div id="ai-results-panel"></div>
       <div id="pl-nav" style="display:none"></div>
       <div id="tag-nav" style="display:none"></div>
       <div class="tracks-section">
@@ -2023,6 +2053,112 @@ function hideDlModal(){
 }
 
 osmInit();
+
+// ── AI Search ────────────────────────────────────────────────────────────────
+// URL à mettre à jour après déploiement Vercel (ex: https://osm-search-api.vercel.app/api/search)
+const AI_SEARCH_URL = 'https://osm-search-api.vercel.app/api/search';
+
+function aiEsc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function aiSearch() {
+  const query = document.getElementById('hero-search-input').value.trim();
+  if (query.length < 3) {
+    alert('Décrivez votre besoin musical en quelques mots pour la recherche IA.');
+    return;
+  }
+  const btn = document.getElementById('btn-ai-search');
+  const panel = document.getElementById('ai-results-panel');
+  btn.disabled = true;
+  btn.textContent = '⏳ …';
+  panel.className = 'visible';
+  panel.innerHTML = '<div class="ai-loader">· · · L\'IA analyse votre demande</div>';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  try {
+    const res = await fetch(AI_SEARCH_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Erreur ${res.status}`);
+    renderAiResults(query, data.results);
+  } catch (e) {
+    panel.innerHTML = `<div class="ai-error-msg">⚠ ${aiEsc(e.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🤖 IA';
+  }
+}
+
+function renderAiResults(query, results) {
+  const panel = document.getElementById('ai-results-panel');
+  if (!results || !results.length) {
+    panel.innerHTML = '<div class="ai-error-msg">Aucun résultat trouvé. Essayez avec d\'autres mots.</div>';
+    return;
+  }
+  const cards = results.map((r, i) => {
+    const tags = (r.tags || []).slice(0, 4).map(t => `<span class="ai-card-tag">${aiEsc(t)}</span>`).join('');
+    const meta = [r.playlist, r.bpm ? r.bpm + ' BPM' : null, r.duration || null].filter(Boolean).join(' · ');
+    const encUrl = encodeURIComponent(r.url || '');
+    const encId  = aiEsc(r.id || '');
+    return `<div class="ai-card">
+      <div class="ai-card-rank">${i + 1}</div>
+      <div class="ai-card-info">
+        <div class="ai-card-title">${aiEsc(r.title)}</div>
+        <div class="ai-card-meta">${aiEsc(meta)}</div>
+        <div class="ai-card-tags">${tags}</div>
+        <div class="ai-card-why">"${aiEsc(r.justification)}"</div>
+      </div>
+      <div class="ai-card-actions">
+        <button class="ai-act-btn" onclick="aiPlay('${encUrl}')" title="Écouter">▶ Écouter</button>
+        <button class="ai-act-btn" id="ai-fav-${encId}" onclick="aiToggleFav('${encId}')" title="Ajouter aux favoris">⭐ Favori</button>
+      </div>
+    </div>`;
+  }).join('');
+  panel.innerHTML = `
+    <div class="ai-panel-hd">
+      <div>
+        <div class="ai-panel-label">✦ Sélection IA</div>
+        <div class="ai-panel-query">« ${aiEsc(query)} »</div>
+      </div>
+      <button class="ai-panel-close" onclick="closeAiResults()">✕ Fermer</button>
+    </div>
+    <div class="ai-cards">${cards}</div>`;
+  // Reflect saved state for tracks already in favorites
+  results.forEach(r => {
+    if (r.id && favorites.has(r.id)) {
+      const b = document.getElementById('ai-fav-' + r.id);
+      if (b) { b.textContent = '★ Sauvegardé'; b.classList.add('saved'); }
+    }
+  });
+}
+
+function closeAiResults() {
+  const panel = document.getElementById('ai-results-panel');
+  panel.className = '';
+  panel.innerHTML = '';
+}
+
+function aiPlay(encUrl) {
+  const url = decodeURIComponent(encUrl);
+  if (!url) return;
+  const idx = allTracks.findIndex(t => t.url === url);
+  if (idx >= 0) { filteredTracks = allTracks; playTrack(idx); }
+}
+
+function aiToggleFav(id) {
+  if (!id) return;
+  toggleFav(id); // reuse existing system (localStorage + Supabase sync)
+  const btn = document.getElementById('ai-fav-' + id);
+  if (btn) {
+    const saved = favorites.has(id);
+    btn.textContent = saved ? '★ Sauvegardé' : '⭐ Favori';
+    btn.classList.toggle('saved', saved);
+  }
+}
 
 document.addEventListener('keydown', e => {
   if (e.target.matches('input,textarea,select,[contenteditable]')) return;
