@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSM – Nouveautés · Coupe du Monde 2026</title>
-<meta name="description" content="Sélection du mois — Rock & Trailer pour la Coupe du Monde 2026. Guitares électriques, orchestrations épiques, rythmiques puissantes.">
+<title>OSM – Actu · Roland Garros 2026</title>
+<meta name="description" content="Sélection du mois — Rock & Trailer pour la Roland Garros 2026. Guitares électriques, orchestrations épiques, rythmiques puissantes.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="theme-color" content="#FF5500">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://osm-music.fr/nouveautes.html">
-<meta property="og:title" content="OSM – Nouveautés">
-<meta property="og:description" content="Sélection du mois — Rock &amp; Trailer pour la Coupe du Monde 2026.">
+<meta property="og:title" content="OSM – Actu">
+<meta property="og:description" content="Sélection du mois — Rock &amp; Trailer pour la Roland Garros 2026.">
 <meta property="og:image" content="https://osm-music.fr/osm_linkedin_banner.png">
 <meta name="twitter:card" content="summary_large_image">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
@@ -43,7 +43,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 /* ── HERO PLEIN ÉCRAN ── */
 .hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:flex-end;justify-content:flex-start;overflow:hidden;padding-top:64px}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1522778526097-ce0a22ceb253?w=1920&q=80') center/cover no-repeat;animation:heroZoom 14s ease-in-out infinite alternate}
+.hero-bg{position:absolute;inset:0;background:url('https://media.cnn.com/api/v1/images/stellar/prod/240924112842-roland-garros-paris-clay-court.jpg') center/cover no-repeat;animation:heroZoom 14s ease-in-out infinite alternate}
 @keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.06)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.96) 0%,rgba(0,0,0,0.6) 45%,rgba(0,0,0,0.15) 100%)}
 .hero-ov2{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.6) 0%,transparent 60%)}
@@ -77,7 +77,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .section-eyebrow::before{content:'';display:block;width:28px;height:2px;background:var(--red)}
 .album-card{display:grid;grid-template-columns:400px 1fr;gap:0;background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.1)}
 .album-photo-wrap{position:relative;overflow:hidden;aspect-ratio:1/1}
-.album-photo{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1522778526097-ce0a22ceb253?w=800&q=80') center/cover;transition:transform .6s ease}
+.album-photo{position:absolute;inset:0;background:url('https://media.cnn.com/api/v1/images/stellar/prod/240924112842-roland-garros-paris-clay-court.jpg') center/cover;transition:transform .6s ease}
 .album-card:hover .album-photo{transform:scale(1.04)}
 .album-photo-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,85,0,.35) 0%,rgba(255,0,110,.2) 100%)}
 .album-photo-badge{position:absolute;top:24px;left:24px;background:var(--red);color:#fff;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:6px 14px;border-radius:20px}
@@ -214,7 +214,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <a class="nav-tab" href="index.html">Accueil</a>
     <a class="nav-tab" href="index.html#playlists">Playlists</a>
     <a class="nav-tab" href="index.html#catalogue">Catalogue</a>
-    <a class="nav-tab active" href="nouveautes.html">Nouveautés</a>
+    <a class="nav-tab active" href="nouveautes.html">Actu</a>
   </nav>
   <div class="header-right">
     <button class="btn-nav" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
@@ -236,7 +236,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   <div class="hero-content">
     <div class="hero-badge"><span class="hero-badge-dot"></span>Sélection du mois</div>
     <h1 class="hero-title">Sélection<br><span>du mois</span></h1>
-    <p class="hero-sub"><strong>Coupe du Monde 2026</strong> — La playlist officielle</p>
+    <p class="hero-sub"><strong>Roland Garros 2026</strong> — La playlist officielle</p>
     <div class="hero-cta">
       <button class="hero-btn hero-btn-red" id="btn-play-all" onclick="playAll()">▶ Tout écouter</button>
       <button class="hero-btn hero-btn-ghost" onclick="scrollToTracks()">↓ Voir les morceaux</button>
@@ -258,11 +258,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       <div class="album-photo-wrap">
         <div class="album-photo"></div>
         <div class="album-photo-ov"></div>
-        <div class="album-photo-badge">Coupe du Monde 2026</div>
+        <div class="album-photo-badge">Roland Garros 2026</div>
       </div>
       <div class="album-info">
         <div class="album-label">Rock &amp; Trailer — Collection Sport</div>
-        <h2 class="album-title">Rock &amp; Trailer<br>Coupe du Monde 2026</h2>
+        <h2 class="album-title">Rock &amp; Trailer<br>Roland Garros 2026</h2>
         <p class="album-desc">Les morceaux les plus percutants de notre catalogue — guitares électriques, orchestrations épiques et rythmiques puissantes pour sublimer les images du sport mondial.</p>
         <div class="album-tags">
           <span class="album-tag">Guitare électrique</span>
