@@ -645,6 +645,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
           <button class="hero-search-btn-ai" id="btn-ai-search" onclick="aiSearch()" title="Recherche en langage naturel par intelligence artificielle">🤖 IA</button>
           <div class="hero-sug" id="hero-sug"></div>
         </div>
+        <div id="ai-results-panel"></div>
         <button class="hero-filter-toggle" id="hero-filter-toggle" onclick="toggleHeroTags()">Mood · Style · Instrument ▾</button>
         <div class="hero-tags-section" id="hero-tags-section">
           <div class="hero-tag-cat">
@@ -917,7 +918,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <!-- MAIN CONTENT -->
     <div class="cat-main">
       <div class="search-active-bar" id="search-active-bar"></div>
-      <div id="ai-results-panel"></div>
       <div id="pl-nav" style="display:none"></div>
       <div id="tag-nav" style="display:none"></div>
       <div class="tracks-section">
