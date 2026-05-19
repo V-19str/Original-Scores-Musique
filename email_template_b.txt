@@ -1,0 +1,18 @@
+SUBJECT: Une sélection musicale sur mesure pour {boite}
+
+Bonjour {prenom},
+
+Je suis Vladimir Streiff, compositeur et fondateur d'OSM (Original Scores Music).
+
+J'ai constitué un catalogue de 2 500 morceaux originaux pensés pour le montage professionnel : cinéma, documentaire, publicité, série TV. Chaque morceau est indexé par mood, BPM et instrument — et une recherche en langage naturel permet de trouver en quelques secondes ce qu'on cherche ("ambiance épique bande-annonce", "piano mélancolique voix off"...).
+
+Ce qui peut intéresser une maison comme {boite} :
+- Musique 100% française, droits d'auteur simplifiés
+- Sélection personnalisée gratuite à partir d'un brief
+- Accès libre et immédiat, sans inscription : osm-music.fr
+
+Si vous avez un projet en cours, je suis disponible pour vous préparer une playlist adaptée.
+
+Cordialement,
+Vladimir Streiff
+OSM - Original Scores Music | osm-music.fr
