@@ -2095,6 +2095,7 @@ async function aiSearch() {
 
 function renderAiResults(query, results) {
   const panel = document.getElementById('ai-results-panel');
+  panel.className = 'visible';
   if (!results || !results.length) {
     panel.innerHTML = '<div class="ai-error-msg">Aucun résultat trouvé. Essayez avec d\'autres mots.</div>';
     return;
