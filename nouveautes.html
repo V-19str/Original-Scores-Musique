@@ -43,7 +43,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 /* ── HERO PLEIN ÉCRAN ── */
 .hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:flex-end;justify-content:flex-start;overflow:hidden;padding-top:64px}
-.hero-bg{position:absolute;inset:0;background:url('https://media.cnn.com/api/v1/images/stellar/prod/240924112842-roland-garros-paris-clay-court.jpg') center/cover no-repeat;animation:heroZoom 14s ease-in-out infinite alternate}
+.hero-bg{position:absolute;inset:0;background:url('roland-garros.jpg') center/cover no-repeat;animation:heroZoom 14s ease-in-out infinite alternate}
 @keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.06)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.96) 0%,rgba(0,0,0,0.6) 45%,rgba(0,0,0,0.15) 100%)}
 .hero-ov2{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.6) 0%,transparent 60%)}
@@ -77,7 +77,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .section-eyebrow::before{content:'';display:block;width:28px;height:2px;background:var(--red)}
 .album-card{display:grid;grid-template-columns:400px 1fr;gap:0;background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.1)}
 .album-photo-wrap{position:relative;overflow:hidden;aspect-ratio:1/1}
-.album-photo{position:absolute;inset:0;background:url('https://media.cnn.com/api/v1/images/stellar/prod/240924112842-roland-garros-paris-clay-court.jpg') center/cover;transition:transform .6s ease}
+.album-photo{position:absolute;inset:0;background:url('roland-garros.jpg') center/cover;transition:transform .6s ease}
 .album-card:hover .album-photo{transform:scale(1.04)}
 .album-photo-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,85,0,.35) 0%,rgba(255,0,110,.2) 100%)}
 .album-photo-badge{position:absolute;top:24px;left:24px;background:var(--red);color:#fff;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:6px 14px;border-radius:20px}
