@@ -54,6 +54,8 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
 .btn-sm:hover { border-color: #555; color: var(--text); }
 .btn-red-sm { background: var(--red); border-color: var(--red); color: #fff; }
 .btn-red-sm:hover { background: #c4070f; }
+.btn-sacem { background: #FF5500; border-color: #FF5500; color: #fff; font-weight: 600; }
+.btn-sacem:hover { background: #cc4400; border-color: #cc4400; color: #fff; }
 
 /* ── STATS BAR ── */
 .stats-bar { padding: 24px 48px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: linear-gradient(180deg,#0a0a0a 0%,var(--bg) 100%); }
@@ -163,6 +165,7 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
     <span class="admin-badge">Panneau Admin</span>
   </div>
   <div class="header-right">
+    <a class="btn-sm btn-sacem" href="admin-sacem.html">📊 Calculateur SACEM</a>
     <button class="btn-sm" onclick="refreshData()">↺ Actualiser</button>
     <a class="btn-sm" href="index.html">← Catalogue</a>
     <button class="btn-sm btn-red-sm" onclick="adminLogout()">Déconnexion</button>
