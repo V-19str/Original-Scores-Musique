@@ -381,8 +381,8 @@ function parseDateValue(d) {
 }
 
 function detectFormat(rows) {
-  // Détecter le format en regardant les premières lignes
-  for (let i = 0; i < Math.min(5, rows.length); i++) {
+  // Détecter le format en parcourant jusqu'à 50 lignes (iNumerica a son header à la ligne 19)
+  for (let i = 0; i < Math.min(50, rows.length); i++) {
     const row = (rows[i] || []).map(c => String(c || '').trim().toUpperCase());
     // EDL DaVinci : "Clip Name" + "Timecode In" + "Duration"
     if (row.includes('CLIP NAME') && (row.includes('TIMECODE IN') || row.includes('DURATION'))) {
