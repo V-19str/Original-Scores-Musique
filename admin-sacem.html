@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OSM Admin — SACEM</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root {
   --orange: #FF5500;
@@ -14,20 +15,13 @@
   --border: #333;
   --text: #f0f0f0;
   --text-dim: #888;
-  --text-light: #b0b0b0;
   --success: #4ade80;
   --warning: #fbbf24;
   --info: #60a5fa;
   --danger: #f87171;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-  min-height: 100vh;
-}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; min-height: 100vh; }
 .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
 .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 40px; max-width: 400px; width: 100%; text-align: center; }
 .login-card h1 { color: var(--orange); font-size: 32px; margin-bottom: 8px; letter-spacing: 2px; }
@@ -38,53 +32,45 @@ body {
 .login-card button:hover { background: var(--orange-dark); }
 .app { max-width: 1200px; margin: 0 auto; padding: 20px; display: none; }
 .app.visible { display: block; }
-.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
 .header-left h1 { color: var(--orange); font-size: 24px; letter-spacing: 2px; }
 .header-left p { color: var(--text-dim); font-size: 12px; margin-top: 2px; }
-.header-right { display: flex; gap: 24px; text-align: right; }
+.header-right { display: flex; gap: 18px; text-align: right; }
 .header-stat { font-size: 11px; color: var(--text-dim); }
 .header-stat strong { display: block; font-size: 20px; color: var(--text); font-weight: 600; }
 .back-link { color: var(--text-dim); font-size: 13px; text-decoration: none; }
 .back-link:hover { color: var(--orange); }
 .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap; }
-.tab { padding: 10px 16px; cursor: pointer; border-radius: 8px; font-size: 13px; color: var(--text-dim); display: flex; align-items: center; gap: 8px; background: transparent; border: none; font-family: inherit; }
+.tab { padding: 10px 16px; cursor: pointer; border-radius: 8px; font-size: 13px; color: var(--text-dim); background: transparent; border: none; font-family: inherit; }
 .tab:hover { background: var(--surface); color: var(--text); }
 .tab.active { background: var(--orange); color: white; font-weight: 500; }
-.tab svg { width: 16px; height: 16px; }
 .view { display: none; }
 .view.active { display: block; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-.card-secondary { background: var(--surface-2); }
 .grid { display: grid; gap: 12px; }
 .grid-3 { grid-template-columns: 1.5fr 1fr 1fr; }
 .grid-3eq { grid-template-columns: 1fr 1fr 1fr; }
 @media (max-width: 700px) { .grid-3, .grid-3eq { grid-template-columns: 1fr; } }
 label { font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-input, select, textarea {
-  width: 100%; padding: 8px 10px; background: var(--bg);
-  border: 1px solid var(--border); border-radius: 6px; color: var(--text);
-  font-size: 13px; font-family: inherit;
-}
+input, select, textarea { width: 100%; padding: 8px 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; font-family: inherit; }
 input:focus, select:focus, textarea:focus { outline: none; border-color: var(--orange); }
-button { padding: 8px 14px; background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+button { padding: 8px 14px; background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; font-family: inherit; }
 button:hover { background: var(--border); }
 button.primary { background: var(--orange); color: white; border-color: var(--orange); font-weight: 500; }
 button.primary:hover { background: var(--orange-dark); border-color: var(--orange-dark); }
-button svg { width: 14px; height: 14px; }
-.drop-zone {
-  border: 2px dashed var(--border); border-radius: 12px; padding: 30px;
-  text-align: center; cursor: pointer; transition: all 0.15s; margin-bottom: 12px;
-}
+button.danger { background: #4a1a1a; color: var(--danger); border-color: #5a1f1f; }
+button.danger:hover { background: #5a1f1f; }
+.drop-zone { border: 2px dashed var(--border); border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.15s; margin-bottom: 12px; }
 .drop-zone:hover, .drop-zone.dragover { border-color: var(--orange); background: rgba(255,85,0,0.05); }
-.drop-zone svg { width: 32px; height: 32px; color: var(--orange); margin-bottom: 8px; }
+.drop-zone .icon { font-size: 32px; color: var(--orange); margin-bottom: 8px; }
 .drop-zone p { font-size: 13px; color: var(--text); margin-bottom: 4px; }
 .drop-zone .hint { font-size: 11px; color: var(--text-dim); }
 .actions { display: flex; gap: 6px; margin: 12px 0; flex-wrap: wrap; }
 .cue-list { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px; margin-bottom: 12px; max-height: 400px; overflow-y: auto; }
-.cue-row { display: grid; grid-template-columns: 1fr 70px 60px 30px; gap: 8px; padding: 6px; align-items: center; font-size: 12px; border-bottom: 1px solid var(--border); }
+.cue-row { display: grid; grid-template-columns: 1fr 70px 60px 40px; gap: 8px; padding: 6px; align-items: center; font-size: 12px; border-bottom: 1px solid var(--border); }
 .cue-row:last-child { border-bottom: none; }
 .cue-row input { padding: 4px 6px; font-size: 11px; }
-.cue-row button { padding: 2px 6px; font-size: 10px; }
+.cue-row button { padding: 4px 8px; font-size: 11px; }
 .pill { font-size: 10px; padding: 2px 6px; border-radius: 100px; font-weight: 500; display: inline-block; }
 .pill-green { background: rgba(74,222,128,0.15); color: var(--success); }
 .pill-amber { background: rgba(251,191,36,0.15); color: var(--warning); }
@@ -101,22 +87,11 @@ button svg { width: 14px; height: 14px; }
 .result-value.main { color: var(--orange); font-size: 24px; }
 .versement { font-size: 12px; color: var(--info); margin: 8px 0; }
 .proj-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 12px; }
-.proj-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
-.proj-meta { font-size: 11px; color: var(--text-dim); }
-.proj-estim { text-align: right; }
-.proj-estim .amount { font-size: 16px; font-weight: 600; color: var(--orange); }
 .track-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 6px; }
-.track-row { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
-.track-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
-.track-meta { font-size: 11px; color: var(--text-dim); }
-.track-revenue { font-size: 15px; font-weight: 600; color: var(--success); white-space: nowrap; }
-.search-input { margin-bottom: 12px; }
-.cat-list { display: flex; flex-direction: column; gap: 3px; max-height: 500px; overflow-y: auto; }
 .cat-row { display: flex; justify-content: space-between; padding: 8px 12px; background: var(--surface-2); border-radius: 4px; font-size: 12px; }
 .empty-state { color: var(--text-dim); text-align: center; padding: 40px 20px; font-size: 13px; }
-details summary { cursor: pointer; padding: 6px 12px; background: var(--surface-2); border-radius: 6px; font-size: 12px; color: var(--text); display: inline-block; }
-.total-line { background: var(--surface-2); padding: 12px; border-radius: 6px; margin-top: 12px; font-size: 13px; }
-.total-line strong { color: var(--orange); font-size: 16px; }
+.toast { position: fixed; bottom: 20px; right: 20px; background: var(--surface-2); border: 1px solid var(--success); color: var(--success); padding: 10px 16px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 9999; }
+.toast.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -126,7 +101,7 @@ details summary { cursor: pointer; padding: 6px 12px; background: var(--surface-
     <h1>OSM ADMIN</h1>
     <p>Outil de calcul SACEM</p>
     <input type="password" id="pwd" placeholder="Mot de passe" autocomplete="off">
-    <button onclick="checkPwd()">Entrer</button>
+    <button id="btn-login">Entrer</button>
     <p id="pwd-err" style="color: var(--danger); margin-top: 8px; display: none; font-size: 12px;">Mot de passe incorrect</p>
   </div>
 </div>
@@ -134,8 +109,8 @@ details summary { cursor: pointer; padding: 6px 12px; background: var(--surface-
 <div class="app" id="app">
   <div class="header">
     <div class="header-left">
-      <h1>OSM ADMIN</h1>
-      <p>Studio de calcul SACEM · <a href="https://osm-music.fr" class="back-link">retour au site</a></p>
+      <h1>OSM ADMIN — SACEM</h1>
+      <p><a href="/admin.html" class="back-link">← Gestion clients</a> · <a href="https://osm-music.fr" class="back-link">site</a></p>
     </div>
     <div class="header-right">
       <div class="header-stat"><strong id="kpi-cat">1271</strong>catalogue</div>
@@ -145,22 +120,10 @@ details summary { cursor: pointer; padding: 6px 12px; background: var(--surface-
   </div>
 
   <div class="tabs">
-    <button class="tab active" data-v="calc">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="12" y1="10" x2="14" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="12" y1="14" x2="14" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="12" y1="18" x2="14" y2="18"/><line x1="16" y1="18" x2="16" y2="18"/></svg>
-      Calculer
-    </button>
-    <button class="tab" data-v="proj">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v13a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7"/><path d="M3 7l3-4h12l3 4"/></svg>
-      Mes projets
-    </button>
-    <button class="tab" data-v="track">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h2m16 0h2M5 5l1.5 1.5m11 0L19 5M5 19l1.5-1.5m11 0L19 19M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/></svg>
-      Tracker TV
-    </button>
-    <button class="tab" data-v="cat">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/><path d="M9 18V6l10-2v12"/></svg>
-      Catalogue
-    </button>
+    <button class="tab active" data-v="calc">📊 Calculer</button>
+    <button class="tab" data-v="proj">📁 Mes projets</button>
+    <button class="tab" data-v="track">📺 Tracker TV</button>
+    <button class="tab" data-v="cat">🎵 Catalogue</button>
   </div>
 
   <div class="view active" data-view="calc">
@@ -220,28 +183,20 @@ details summary { cursor: pointer; padding: 6px 12px; background: var(--surface-
     </div>
 
     <div class="drop-zone" id="drop">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v12m0-12l-4 4m4-4l4 4M5 21h14"/></svg>
-      <p>Glisser un fichier cue sheet (.csv .txt)</p>
-      <p class="hint">ou cliquer pour ouvrir</p>
-      <input type="file" id="file-in" accept=".csv,.txt,.tsv" style="display:none">
+      <div class="icon">📤</div>
+      <p><strong>Glisser un fichier cue sheet</strong></p>
+      <p class="hint">Accepte .xls .xlsx .csv .txt — détection auto des morceaux</p>
+      <input type="file" id="file-in" accept=".csv,.txt,.tsv,.xls,.xlsx" style="display:none">
     </div>
 
     <div class="actions">
-      <button onclick="loadMbappe()" class="primary">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l9-6-9-6v12z"/></svg>
-        Charger Mbappé France 5
-      </button>
-      <button onclick="addRow()">+ Ligne</button>
-      <button onclick="clearAll()">Vider</button>
-      <details>
-        <summary>Coller texte</summary>
-        <textarea id="paste-zone" placeholder="titre,durée_sec,part%" style="width:100%;height:60px;font-family:monospace;font-size:11px;margin-top:6px;"></textarea>
-        <button onclick="parsePaste()" style="margin-top:4px;">Importer</button>
-      </details>
+      <button id="btn-mbappe" class="primary">🔥 Charger Mbappé France 5</button>
+      <button id="btn-add">+ Ligne</button>
+      <button id="btn-clear" class="danger">🗑️ Vider</button>
     </div>
 
     <div class="cue-list" id="cue-list">
-      <p class="empty-state">Clique "Charger Mbappé" ou glisse une cue sheet.</p>
+      <p class="empty-state">Glisse une cue sheet (Excel, CSV, TXT) ou clique "Charger Mbappé".</p>
     </div>
 
     <div class="summary" id="cue-summary" style="display:none;"></div>
@@ -263,28 +218,20 @@ details summary { cursor: pointer; padding: 6px 12px; background: var(--surface-
         </div>
       </div>
       <div class="versement" id="r-versement"></div>
-      <button onclick="saveProject()" class="primary">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        Enregistrer ce projet
-      </button>
+      <button id="btn-save" class="primary">💾 Enregistrer ce projet</button>
     </div>
   </div>
 
-  <div class="view" data-view="proj">
-    <div id="proj-list"></div>
-  </div>
-
-  <div class="view" data-view="track">
-    <p style="font-size:13px; color: var(--text-dim); margin-bottom: 12px;">Tous les programmes où ta musique passe, classés par revenus déjà perçus.</p>
-    <div id="track-list"></div>
-  </div>
-
+  <div class="view" data-view="proj"><div id="proj-list"></div></div>
+  <div class="view" data-view="track"><div id="track-list"></div></div>
   <div class="view" data-view="cat">
-    <input type="text" id="cat-search" placeholder="Chercher dans le catalogue OSM..." class="search-input">
-    <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px;" id="cat-info">Tape au moins 3 caractères pour chercher</p>
-    <div class="cat-list" id="cat-list"></div>
+    <input type="text" id="cat-search" placeholder="Chercher dans le catalogue OSM..." style="margin-bottom: 12px;">
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px;" id="cat-info">Tape au moins 3 caractères</p>
+    <div id="cat-list" style="display:flex;flex-direction:column;gap:3px;max-height:500px;overflow-y:auto;"></div>
   </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 // === DONNÉES SACEM ===
@@ -299,10 +246,11 @@ const CH_LBL = { tf1: 'TF1', fr2: 'France 2', m6: 'M6', fr3: 'France 3', fr5: 'F
 
 let cues = [];
 
+// === LOGIN ===
 function checkPwd() {
   const p = document.getElementById('pwd').value;
   if (p === PASSWORD) {
-    sessionStorage.setItem('osm_auth', '1');
+    try { sessionStorage.setItem('osm_auth', '1'); } catch(e) {}
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').classList.add('visible');
     init();
@@ -311,11 +259,22 @@ function checkPwd() {
   }
 }
 
+document.getElementById('btn-login').addEventListener('click', checkPwd);
 document.getElementById('pwd').addEventListener('keypress', e => { if (e.key === 'Enter') checkPwd(); });
 
-if (sessionStorage.getItem('osm_auth') === '1') {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').classList.add('visible');
+try {
+  if (sessionStorage.getItem('osm_auth') === '1') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+  }
+} catch(e) {}
+
+// === UTILS ===
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
 }
 
 function normalize(s) {
@@ -350,10 +309,24 @@ function findInCat(titre) {
   return { part: 5, match: 'new' };
 }
 
+function tcToSec(tc) {
+  if (!tc && tc !== 0) return 60;
+  const str = String(tc).trim();
+  if (str.includes(':')) {
+    const parts = str.split(':').map(p => parseInt(p) || 0);
+    if (parts.length === 4) return parts[0]*3600 + parts[1]*60 + parts[2];
+    if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
+    if (parts.length === 2) return parts[0]*60 + parts[1];
+  }
+  const n = parseFloat(str);
+  return (isNaN(n) || n <= 0 || n > 7200) ? 60 : n;
+}
+
+// === RENDU ===
 function renderCues() {
   const list = document.getElementById('cue-list');
   if (cues.length === 0) {
-    list.innerHTML = '<p class="empty-state">Clique "Charger Mbappé" ou glisse une cue sheet.</p>';
+    list.innerHTML = '<p class="empty-state">Glisse une cue sheet (Excel, CSV, TXT) ou clique "Charger Mbappé".</p>';
     document.getElementById('cue-summary').style.display = 'none';
     compute();
     return;
@@ -369,10 +342,26 @@ function renderCues() {
     const row = document.createElement('div');
     row.className = 'cue-row';
     row.innerHTML = '<div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + badge + ' <span style="margin-left:6px;">' + (c.titre||'').replace(/</g,'&lt;') + '</span></div>' +
-      '<input type="number" value="' + c.duree + '" min="0" oninput="cues[' + i + '].duree=parseFloat(this.value)||0;compute()" title="Durée sec">' +
-      '<input type="number" value="' + c.part + '" min="0" max="100" step="0.5" oninput="cues[' + i + '].part=parseFloat(this.value)||0;compute()" title="Ma part %">' +
-      '<button onclick="removeCue(' + i + ')">×</button>';
+      '<input type="number" value="' + c.duree + '" min="0" data-i="' + i + '" data-f="duree" class="cue-input" title="Durée sec">' +
+      '<input type="number" value="' + c.part + '" min="0" max="100" step="0.5" data-i="' + i + '" data-f="part" class="cue-input" title="Ma part %">' +
+      '<button data-i="' + i + '" class="cue-del">×</button>';
     list.appendChild(row);
+  });
+  // Brancher les events sur les inputs
+  list.querySelectorAll('.cue-input').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const i = parseInt(e.target.dataset.i);
+      const f = e.target.dataset.f;
+      cues[i][f] = parseFloat(e.target.value) || 0;
+      compute();
+    });
+  });
+  list.querySelectorAll('.cue-del').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const i = parseInt(e.target.dataset.i);
+      cues.splice(i, 1);
+      renderCues();
+    });
   });
   const s = document.getElementById('cue-summary');
   s.style.display = 'block';
@@ -380,12 +369,19 @@ function renderCues() {
   compute();
 }
 
-function removeCue(i) { cues.splice(i, 1); renderCues(); }
-function addRow() { cues.push({ titre: '', duree: 60, part: 5, match: 'new' }); renderCues(); }
-function clearAll() { if (cues.length > 0 && !confirm('Vider ?')) return; cues = []; renderCues(); }
+// === ACTIONS ===
+function clearAll() {
+  cues = [];
+  renderCues();
+  toast('Cue vidée');
+}
+
+function addRow() {
+  cues.push({ titre: 'Nouveau morceau', duree: 60, part: 5, match: 'new' });
+  renderCues();
+}
 
 function loadMbappe() {
-  if (cues.length > 0 && !confirm('Remplacer la cue actuelle ?')) return;
   document.getElementById('p-name').value = 'Doc Mbappé Diplomatie Ballon Rond';
   document.getElementById('p-date').value = '2026-06-02';
   document.getElementById('p-chaine').value = 'fr5';
@@ -394,26 +390,87 @@ function loadMbappe() {
     return { titre: c.titre, duree: c.duree, part: m.part, match: m.match };
   });
   renderCues();
+  toast('Mbappé chargé : ' + cues.length + ' morceaux');
 }
 
-function parsePaste() {
-  const txt = document.getElementById('paste-zone').value.trim();
-  if (!txt) return;
-  txt.split(/[\n\r]+/).forEach(line => {
-    let titre = '', duree = 60, part = null;
-    if (line.includes(',') || line.includes(';') || line.includes('\t')) {
-      const parts = line.split(/[,;\t]/).map(p => p.trim());
-      titre = parts[0]; duree = parseFloat(parts[1]) || 60; part = parseFloat(parts[2]);
-    } else titre = line.trim();
-    if (titre) {
-      const m = findInCat(titre);
-      cues.push({ titre, duree, part: part !== null && !isNaN(part) ? part : m.part, match: m.match });
+// === FICHIERS ===
+function handleFile(f) {
+  const ext = (f.name.split('.').pop() || '').toLowerCase();
+  
+  if (ext === 'xls' || ext === 'xlsx') {
+    // Parser Excel avec SheetJS
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const wb = XLSX.read(data, { type: 'array' });
+        const sheet = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '', raw: false });
+        parseRows(rows, f.name);
+      } catch(err) {
+        toast('Erreur lecture Excel : ' + err.message);
+      }
+    };
+    reader.readAsArrayBuffer(f);
+  } else {
+    // CSV/TXT
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const txt = ev.target.result;
+      const lines = txt.split(/[\n\r]+/);
+      const rows = lines.map(l => l.split(/[,;\t]/));
+      parseRows(rows, f.name);
+    };
+    reader.readAsText(f);
+  }
+}
+
+function parseRows(rows, fname) {
+  const newCues = [];
+  
+  for (const row of rows) {
+    if (!row || !Array.isArray(row)) continue;
+    
+    let titre = '';
+    let duree = 0;
+    let dureeFound = false;
+    
+    for (const cell of row) {
+      const s = String(cell == null ? '' : cell).trim();
+      if (!s) continue;
+      
+      // Détection TC (00:01:23) ou durée numérique
+      if (/^\d{1,2}:\d{2}(:\d{2})?(:\d{2})?$/.test(s)) {
+        const sec = tcToSec(s);
+        if (sec > 0 && sec < 3600) {
+          if (!dureeFound || sec > duree) { duree = sec; dureeFound = true; }
+        }
+      } else if (/^\d+(\.\d+)?$/.test(s)) {
+        const n = parseFloat(s);
+        if (n > 0 && n < 3600 && !dureeFound) { duree = n; dureeFound = true; }
+      } else if (s.length > titre.length && s.length > 3 && !/^[\d\s\-:.,]+$/.test(s) && !/^(START|END|DEBUT|FIN|TC|TIMECODE|MUSIC|MUSIQUE|TITLE|TITRE|COMPOSER|COMPOSITEUR|EDITEUR|PUBLISHER|DURATION|DUREE|TYPE|GENRE)$/i.test(s)) {
+        titre = s;
+      }
     }
-  });
-  document.getElementById('paste-zone').value = '';
+    
+    if (titre && titre.length > 3) {
+      const m = findInCat(titre);
+      newCues.push({ titre, duree: duree || 60, part: m.part, match: m.match });
+    }
+  }
+  
+  if (newCues.length === 0) {
+    toast('Aucun morceau détecté dans ' + fname);
+    return;
+  }
+  
+  cues = newCues;
+  document.getElementById('p-name').value = fname.replace(/\.[^.]+$/, '');
   renderCues();
+  toast(newCues.length + ' morceaux importés depuis ' + fname);
 }
 
+// === CALCUL ===
 function compute() {
   const coef = COEFS[document.getElementById('p-chaine').value];
   const heure = parseFloat(document.getElementById('p-heure').value);
@@ -430,21 +487,20 @@ function compute() {
     const dt = new Date(d);
     const vMois = (dt.getMonth() + 1) <= 6 ? 'janvier' : 'juillet';
     const vAnnee = dt.getFullYear() + 1;
-    document.getElementById('r-versement').innerHTML = '📅 1er versement attendu : <strong>' + vMois + ' ' + vAnnee + '</strong> (~' + Math.round(cumul*0.5).toLocaleString('fr-FR') + ' €)';
+    document.getElementById('r-versement').innerHTML = '📅 1er versement : <strong>' + vMois + ' ' + vAnnee + '</strong> (~' + Math.round(cumul*0.5).toLocaleString('fr-FR') + ' €)';
   } else document.getElementById('r-versement').textContent = '';
 }
 
+// === PROJETS ===
 function saveProject() {
   const name = document.getElementById('p-name').value || 'Sans titre';
   const date = document.getElementById('p-date').value;
-  if (!date) { alert('Mets une date de diffusion'); return; }
+  if (!date) { toast('Mets une date de diffusion'); return; }
+  if (cues.length === 0) { toast('Aucun morceau à enregistrer'); return; }
   const id = 'pr_' + Date.now();
   const project = {
     id, name, date,
     chaine: document.getElementById('p-chaine').value,
-    heure: document.getElementById('p-heure').value,
-    usage: document.getElementById('p-usage').value,
-    diff: document.getElementById('p-diff').value,
     cues: JSON.parse(JSON.stringify(cues)),
     estim: parseInt(document.getElementById('r-mid').textContent.replace(/[^0-9-]/g,'')) || 0,
     saved_at: new Date().toISOString()
@@ -452,7 +508,7 @@ function saveProject() {
   const projects = JSON.parse(localStorage.getItem('osm_projects') || '[]');
   projects.push(project);
   localStorage.setItem('osm_projects', JSON.stringify(projects));
-  alert('✓ Projet enregistré');
+  toast('✓ Projet enregistré');
   updateKpis();
   loadProjects();
 }
@@ -472,31 +528,33 @@ function loadProjects() {
     const card = document.createElement('div');
     card.className = 'proj-card';
     const nbNew = (p.cues||[]).filter(c => c.match === 'new').length;
-    card.innerHTML = '<div style="flex:1;min-width:0;"><div class="proj-name">' + p.name + '</div><div class="proj-meta">' + (CH_LBL[p.chaine]||p.chaine) + ' · ' + p.date + ' · ' + p.cues.length + ' morceaux' + (nbNew > 0 ? ' · ' + nbNew + ' nouveaux' : '') + '</div></div><div class="proj-estim"><div class="amount">' + (p.estim||0).toLocaleString('fr-FR') + ' €</div><button onclick="delProj(\'' + p.id + '\')" style="font-size:10px;padding:2px 6px;margin-top:4px;">Supp</button></div>';
+    card.innerHTML = '<div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:500;margin-bottom:2px;">' + p.name + '</div><div style="font-size:11px;color:var(--text-dim);">' + (CH_LBL[p.chaine]||p.chaine) + ' · ' + p.date + ' · ' + p.cues.length + ' morceaux' + (nbNew > 0 ? ' · ' + nbNew + ' nouveaux' : '') + '</div></div><div style="text-align:right;"><div style="font-size:16px;font-weight:600;color:var(--orange);">' + (p.estim||0).toLocaleString('fr-FR') + ' €</div><button data-id="' + p.id + '" class="proj-del danger" style="font-size:10px;padding:2px 8px;margin-top:4px;">Supp</button></div>';
     c.appendChild(card);
   });
+  c.querySelectorAll('.proj-del').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const id = e.target.dataset.id;
+      const ps = JSON.parse(localStorage.getItem('osm_projects') || '[]');
+      localStorage.setItem('osm_projects', JSON.stringify(ps.filter(p => p.id !== id)));
+      updateKpis();
+      loadProjects();
+      toast('Projet supprimé');
+    });
+  });
   const sum = document.createElement('div');
-  sum.className = 'total-line';
-  sum.innerHTML = 'Total estimé sur ' + projects.length + ' projets : <strong>' + total.toLocaleString('fr-FR') + ' €</strong>';
+  sum.style.cssText = 'background:var(--surface-2);padding:12px;border-radius:6px;margin-top:12px;font-size:13px;';
+  sum.innerHTML = 'Total estimé sur ' + projects.length + ' projets : <strong style="color:var(--orange);font-size:16px;">' + total.toLocaleString('fr-FR') + ' €</strong>';
   c.appendChild(sum);
-}
-
-function delProj(id) {
-  if (!confirm('Supprimer ?')) return;
-  const projects = JSON.parse(localStorage.getItem('osm_projects') || '[]');
-  localStorage.setItem('osm_projects', JSON.stringify(projects.filter(p => p.id !== id)));
-  updateKpis();
-  loadProjects();
 }
 
 function loadTracker() {
   const c = document.getElementById('track-list');
-  c.innerHTML = '';
+  c.innerHTML = '<p style="font-size:13px; color:var(--text-dim); margin-bottom:12px;">Les programmes où ta musique passe, classés par revenus déjà perçus.</p>';
   PROGRAMMES.forEach((p, i) => {
     const card = document.createElement('div');
     card.className = 'track-card';
     const ch = p.chaines.length > 90 ? p.chaines.substring(0,90) + '…' : p.chaines;
-    card.innerHTML = '<div class="track-row"><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;"><span class="pill pill-orange">#' + (i+1) + '</span><div class="track-title" style="overflow:hidden;text-overflow:ellipsis;">' + p.titre + '</div></div><div class="track-meta">' + ch + '</div><div class="track-meta" style="margin-top:2px;">' + p.nb_morceaux + ' morceaux OSM' + (p.realisateur ? ' · ' + p.realisateur : '') + '</div></div><div class="track-revenue">' + p.revenu.toFixed(2) + ' €</div></div>';
+    card.innerHTML = '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;"><div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;"><span class="pill pill-orange">#' + (i+1) + '</span><div style="font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;">' + p.titre + '</div></div><div style="font-size:11px;color:var(--text-dim);">' + ch + '</div><div style="font-size:11px;color:var(--text-dim);margin-top:2px;">' + p.nb_morceaux + ' morceaux OSM' + (p.realisateur ? ' · ' + p.realisateur : '') + '</div></div><div style="font-size:15px;font-weight:600;color:var(--success);white-space:nowrap;">' + p.revenu.toFixed(2) + ' €</div></div>';
     c.appendChild(card);
   });
 }
@@ -523,9 +581,17 @@ function updateKpis() {
   document.getElementById('kpi-proj').textContent = JSON.parse(localStorage.getItem('osm_projects') || '[]').length;
 }
 
+// === INIT ===
 function init() {
   updateKpis();
 
+  // Boutons d'action
+  document.getElementById('btn-mbappe').addEventListener('click', loadMbappe);
+  document.getElementById('btn-add').addEventListener('click', addRow);
+  document.getElementById('btn-clear').addEventListener('click', clearAll);
+  document.getElementById('btn-save').addEventListener('click', saveProject);
+
+  // Onglets
   document.querySelectorAll('.tab').forEach(b => {
     b.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -537,38 +603,41 @@ function init() {
     });
   });
 
+  // Recalcul live
   ['p-chaine','p-heure','p-usage','p-diff','p-date'].forEach(id => {
     document.getElementById(id).addEventListener('change', compute);
     document.getElementById(id).addEventListener('input', compute);
   });
 
+  // Recherche catalogue
   document.getElementById('cat-search').addEventListener('input', e => {
     clearTimeout(catTimer);
     catTimer = setTimeout(() => searchCat(e.target.value), 200);
   });
 
+  // Drag & drop
   const drop = document.getElementById('drop');
   const fi = document.getElementById('file-in');
   drop.addEventListener('click', () => fi.click());
   drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
   drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
-  drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('dragover'); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
-  fi.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+  drop.addEventListener('drop', e => {
+    e.preventDefault();
+    drop.classList.remove('dragover');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+  fi.addEventListener('change', e => {
+    if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+    e.target.value = '';
+  });
 
   renderCues();
 }
 
-function handleFile(f) {
-  const r = new FileReader();
-  r.onload = ev => {
-    document.getElementById('paste-zone').value = ev.target.result;
-    document.querySelector('details').open = true;
-    parsePaste();
-  };
-  r.readAsText(f);
-}
-
-if (sessionStorage.getItem('osm_auth') === '1') init();
+// Auto-init si déjà connecté
+try {
+  if (sessionStorage.getItem('osm_auth') === '1') init();
+} catch(e) {}
 </script>
 </body>
 </html>
