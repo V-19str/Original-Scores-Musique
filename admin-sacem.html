@@ -142,6 +142,10 @@ button.danger:hover { background: #5a1f1f; }
         </div>
         <div><label>Diffusions /3 ans</label><input type="number" id="p-diff" value="2" min="1" max="20"></div>
       </div>
+      <div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button id="btn-ina" style="font-size:12px;">🔎 Vérifier les diffusions sur l'INA</button>
+        <span style="font-size:11px;color:var(--text-dim);">Trouve le nombre de rediffusions, puis saisis-le ci-dessus. Chaque rediff = nouveaux droits.</span>
+      </div>
     </div>
 
     <div class="drop-zone" id="drop">
@@ -760,6 +764,15 @@ function loadRevenus() {
 function updateKpis() { document.getElementById('kpi-cat').textContent = Object.keys(CAT_RICH).length; document.getElementById('kpi-prog').textContent = PROGRAMMES.length; }
 
 
+
+function openINA() {
+  const name = (document.getElementById('p-name').value || '').trim();
+  if (!name) { toast('Renseigne d\'abord le nom du programme'); return; }
+  const q = encodeURIComponent('site:catalogue.ina.fr ' + name);
+  window.open('https://www.google.com/search?q=' + q, '_blank');
+  toast('Recherche INA ouverte');
+}
+
 function exportEstimation() {
   if (cues.length === 0) { toast('Aucune estimation à exporter'); return; }
   const name = document.getElementById('p-name').value || 'Programme sans titre';
@@ -844,6 +857,7 @@ function init() {
   document.getElementById('btn-clear').addEventListener('click', clearAll);
   document.getElementById('btn-save').addEventListener('click', saveProject);
   document.getElementById('btn-export').addEventListener('click', exportEstimation);
+  document.getElementById('btn-ina').addEventListener('click', openINA);
   document.querySelectorAll('.tab').forEach(b => {
     b.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
