@@ -209,6 +209,7 @@ button.danger:hover { background: #5a1f1f; }
   </div>
 
   <div class="view" data-view="progs">
+    <button id="btn-check" class="primary" style="margin-bottom:10px;font-size:12px;">🔍 Détecter les diffusions non payées</button>
     <input type="text" id="progs-search" placeholder="Chercher un programme..." style="margin-bottom: 12px;">
     <div id="progs-list"></div>
   </div>
@@ -249,7 +250,7 @@ const PROJETS_DEMO = [{"id":"demo_vapoteuses","name":"Vapoteuses (Complément d'
 const CATALOGUE = {};
 for (const t in CAT_RICH) { CATALOGUE[t] = CAT_RICH[t].p; }
 
-const COEFS = { tf1: 0.20, fr2: 0.15, m6: 0.16, fr3: 0.06, fr5: 0.08, c8: 0.10, rmcs: 0.06, rmcd: 0.03, arte: 0.05, cstar: 0.05, canalp: 0.15, w9: 0.05, ter6: 0.03, om: 0.02 };
+const COEFS = { tf1: 0.12, fr2: 0.15, m6: 0.12, fr3: 0.07, fr5: 0.02, c8: 0.06, rmcs: 0.07, rmcd: 0.05, arte: 0.02, cstar: 0.03, canalp: 0.20, w9: 0.07, ter6: 0.03, om: 0.02 };
 const CH_LBL = { tf1: 'TF1', fr2: 'France 2', m6: 'M6', fr3: 'France 3', fr5: 'France 5', c8: 'C8', rmcs: 'RMC Story', rmcd: 'RMC Découverte', arte: 'Arte', cstar: 'CStar', canalp: 'Canal+', w9: 'W9/TMC', ter6: '6TER/TFX', om: 'Outre Mer' };
 
 let cues = [];
@@ -976,6 +977,36 @@ document.addEventListener('click', function (e) {
 document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
 
 
+function checkMissing() {
+  const userProjects = JSON.parse(localStorage.getItem('osm_projects') || '[]');
+  const demo = PROJETS_DEMO.map(p => ({ name: p.name, date: p.date, chaine: p.chaine }));
+  const all = demo.concat(userProjects.map(p => ({ name: p.name, date: p.date, chaine: p.chaine })));
+  const now = new Date();
+  let rows = '';
+  let nbAlert = 0, nbWait = 0, nbOk = 0;
+  all.forEach(proj => {
+    const pn = normalize(proj.name);
+    // chercher un programme payé correspondant
+    const match = PROGS_DETAIL.find(x => { const xn = normalize(x.nom); return xn === pn || xn.includes(pn.substring(0, Math.min(pn.length, 18))) || pn.includes(xn.substring(0, Math.min(xn.length, 18))); });
+    const moisEcoules = proj.date ? Math.round((now - new Date(proj.date)) / (1000*60*60*24*30)) : 0;
+    let statut, color, detail;
+    if (match && match.rev > 0) {
+      statut = '✅ Payé'; color = 'var(--success)'; detail = Math.round(match.rev).toLocaleString('fr-FR') + ' € perçus'; nbOk++;
+    } else if (moisEcoules < 12) {
+      statut = '⏳ En attente'; color = 'var(--info)'; detail = 'Diffusé il y a ' + moisEcoules + ' mois — normal, la SACEM paie sur ~3 ans'; nbWait++;
+    } else {
+      statut = '⚠️ À vérifier'; color = 'var(--orange)'; detail = 'Diffusé il y a ' + moisEcoules + ' mois, aucun revenu trouvé — vérifie que la cue sheet a bien été envoyée'; nbAlert++;
+    }
+    rows += '<div class="detail-row"><div class="main"><div class="t">' + escapeHtml(proj.name) + '</div><div class="meta" style="color:' + color + '">' + statut + ' · ' + detail + '</div></div></div>';
+  });
+  let head = '<div class="detail-kpis">';
+  head += '<div class="detail-kpi"><div class="lbl">Payés</div><div class="val" style="color:var(--success)">' + nbOk + '</div></div>';
+  head += '<div class="detail-kpi"><div class="lbl">En attente</div><div class="val" style="color:var(--info)">' + nbWait + '</div></div>';
+  head += '<div class="detail-kpi"><div class="lbl">À vérifier</div><div class="val" style="color:var(--orange)">' + nbAlert + '</div></div></div>';
+  head += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Compare tes cue sheets traitées avec ce que la SACEM t\'a réellement payé. « À vérifier » = diffusé depuis plus d\'un an sans revenu : à relancer.</p>';
+  showDetail('🔍 Détecteur de diffusions non payées', all.length + ' programmes suivis', head + rows);
+}
+
 function init() {
   updateKpis();
   document.getElementById('btn-add').addEventListener('click', addRow);
@@ -1000,6 +1031,7 @@ function init() {
   document.getElementById('cat-search').addEventListener('input', e => { clearTimeout(catTimer); catTimer = setTimeout(() => searchCat(e.target.value), 200); });
   document.getElementById('cat-all').addEventListener('click', () => { catMode='all'; document.getElementById('cat-all').classList.add('primary'); document.getElementById('cat-dormant').classList.remove('primary'); searchCat(document.getElementById('cat-search').value); });
   document.getElementById('cat-dormant').addEventListener('click', () => { catMode='dormant'; document.getElementById('cat-dormant').classList.add('primary'); document.getElementById('cat-all').classList.remove('primary'); showDormants(document.getElementById('cat-search').value); });
+  document.getElementById('btn-check').addEventListener('click', checkMissing);
   document.getElementById('progs-search').addEventListener('input', e => { clearTimeout(progsTimer); progsTimer = setTimeout(() => loadProgrammes(e.target.value), 200); });
   document.getElementById('global-search').addEventListener('input', e => { clearTimeout(globalTimer); globalTimer = setTimeout(() => globalSearch(e.target.value), 200); });
   const drop = document.getElementById('drop'), fi = document.getElementById('file-in');
