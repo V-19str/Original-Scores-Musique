@@ -209,7 +209,6 @@ button.danger:hover { background: #5a1f1f; }
   </div>
 
   <div class="view" data-view="progs">
-    <button id="btn-check" class="primary" style="margin-bottom:10px;font-size:12px;">🔍 Détecter les diffusions non payées</button>
     <input type="text" id="progs-search" placeholder="Chercher un programme..." style="margin-bottom: 12px;">
     <div id="progs-list"></div>
   </div>
@@ -219,6 +218,7 @@ button.danger:hover { background: #5a1f1f; }
     <div class="actions" style="margin:0 0 10px;">
       <button id="cat-all" class="primary" style="font-size:12px;">🎵 Tout le catalogue (1272)</button>
       <button id="cat-dormant" style="font-size:12px;">😴 Dormants jamais diffusés (530)</button>
+      <button onclick="exportDormants()" style="font-size:12px;">📤 Exporter les dormants (démarchage)</button>
     </div>
     <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px;" id="cat-info">Tape au moins 2 caractères, ou clique « Dormants »</p>
     <div id="cat-list" style="display:flex;flex-direction:column;gap:4px;max-height:560px;overflow-y:auto;"></div>
@@ -625,12 +625,70 @@ function compute() {
   } else document.getElementById('r-versement').textContent = '';
 }
 
+
+// ===== REGISTRE DE CUE SHEETS (statuts, ajout manuel, suivi) =====
+const STATUTS = {
+  envoyee:   { label: 'Envoyée — en attente', color: 'var(--info)' },
+  payee:     { label: 'Payée', color: 'var(--success)' },
+  relance:   { label: 'À relancer', color: 'var(--orange)' },
+  pas_diff:  { label: 'Pas encore diffusée', color: 'var(--text-dim)' }
+};
+function getProjects() { return JSON.parse(localStorage.getItem('osm_projects') || '[]'); }
+function setProjects(p) { localStorage.setItem('osm_projects', JSON.stringify(p)); }
+function setProjectStatus(id, st) {
+  const ps = getProjects(); const p = ps.find(x => x.id === id);
+  if (p) { p.statut = st; setProjects(ps); loadProgrammes(document.getElementById('progs-search').value); }
+}
+function deleteProject(id) {
+  setProjects(getProjects().filter(p => p.id !== id));
+  loadProgrammes(document.getElementById('progs-search').value);
+}
+function openAddCuesheet() {
+  let opts = Object.keys(CH_LBL).map(k => '<option value="' + k + '">' + CH_LBL[k] + '</option>').join('');
+  let stOpts = Object.keys(STATUTS).map(k => '<option value="' + k + '">' + STATUTS[k].label + '</option>').join('');
+  const h = '<div style="display:flex;flex-direction:column;gap:12px;">' +
+    '<div><label style="font-size:12px;color:var(--text-dim);">Nom du programme</label><input id="ac-name" type="text" placeholder="Ex: Complément enquête - Vapoteuses" style="width:100%;margin-top:4px;"></div>' +
+    '<div style="display:flex;gap:8px;"><div style="flex:1;"><label style="font-size:12px;color:var(--text-dim);">Chaîne</label><select id="ac-chaine" style="width:100%;margin-top:4px;">' + opts + '</select></div>' +
+    '<div style="flex:1;"><label style="font-size:12px;color:var(--text-dim);">Date diffusion</label><input id="ac-date" type="date" style="width:100%;margin-top:4px;"></div></div>' +
+    '<div style="display:flex;gap:8px;"><div style="flex:1;"><label style="font-size:12px;color:var(--text-dim);">Cue sheet envoyée le</label><input id="ac-envoi" type="date" style="width:100%;margin-top:4px;"></div>' +
+    '<div style="flex:1;"><label style="font-size:12px;color:var(--text-dim);">Nb morceaux OSM</label><input id="ac-nb" type="number" value="0" min="0" style="width:100%;margin-top:4px;"></div></div>' +
+    '<div><label style="font-size:12px;color:var(--text-dim);">Statut</label><select id="ac-statut" style="width:100%;margin-top:4px;">' + stOpts + '</select></div>' +
+    '<div><label style="font-size:12px;color:var(--text-dim);">Note (compositeurs, remarques...)</label><input id="ac-note" type="text" placeholder="Optionnel" style="width:100%;margin-top:4px;"></div>' +
+    '<button class="primary" onclick="saveManualCuesheet()" style="margin-top:4px;">💾 Ajouter au registre</button>' +
+    '</div>';
+  showDetail('➕ Ajouter une cue sheet', 'Suivi manuel — sans importer de fichier', h);
+}
+function saveManualCuesheet() {
+  const name = (document.getElementById('ac-name').value || '').trim();
+  if (!name) { toast('Mets un nom de programme'); return; }
+  const ps = getProjects();
+  ps.push({
+    id: 'pr_' + Date.now(), name,
+    chaine: document.getElementById('ac-chaine').value,
+    date: document.getElementById('ac-date').value,
+    dateEnvoi: document.getElementById('ac-envoi').value,
+    nb: parseInt(document.getElementById('ac-nb').value) || 0,
+    statut: document.getElementById('ac-statut').value,
+    note: (document.getElementById('ac-note').value || '').trim(),
+    estim: 0, manual: true, saved_at: new Date().toISOString()
+  });
+  setProjects(ps);
+  closeDetail(); toast('✓ Ajouté au registre'); updateKpis(); loadProgrammes();
+}
+function exportDormants() {
+  const lines = ['Morceaux OSM jamais diffusés — à repitcher (' + DORMANTS.length + ')', ''];
+  DORMANTS.forEach(t => { const c = (CAT_RICH[t] ? CAT_RICH[t].c : []).filter(x => !/streiff/i.test(x)).join(', '); lines.push(t + (c ? '  [' + c + ']' : '')); });
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'OSM_morceaux_a_repitcher.txt'; a.click();
+  toast('✓ Liste exportée');
+}
+
 function saveProject() {
   const name = document.getElementById('p-name').value || 'Sans titre';
   const date = document.getElementById('p-date').value;
   if (!date) { toast('Mets une date de diffusion'); return; }
   if (cues.length === 0) { toast('Aucun morceau'); return; }
-  const project = { id: 'pr_' + Date.now(), name, date, chaine: document.getElementById('p-chaine').value, cues: JSON.parse(JSON.stringify(cues)), estim: parseInt(document.getElementById('r-mid').textContent.replace(/[^0-9-]/g,'')) || 0, saved_at: new Date().toISOString() };
+  const project = { id: 'pr_' + Date.now(), name, date, chaine: document.getElementById('p-chaine').value, cues: JSON.parse(JSON.stringify(cues)), estim: parseInt(document.getElementById('r-mid').textContent.replace(/[^0-9-]/g,'')) || 0, statut: 'envoyee', dateEnvoi: '', nb: cues.length, saved_at: new Date().toISOString() };
   const projects = JSON.parse(localStorage.getItem('osm_projects') || '[]');
   projects.push(project);
   localStorage.setItem('osm_projects', JSON.stringify(projects));
@@ -644,21 +702,44 @@ function loadProgrammes(filter) {
   const q = (filter || '').toLowerCase().trim();
   let html = '';
 
-  // ===== SECTION 1 : Estimations (cue sheets traités) =====
-  const userProjects = JSON.parse(localStorage.getItem('osm_projects') || '[]');
-  const demo = PROJETS_DEMO.map(p => ({ id: p.id, name: p.name, date: p.date, chaine: p.chaine, estim: p.estim, nb: p.nb, note: p.note, demo: true }));
-  let projects = demo.concat(userProjects.map(p => ({ id:p.id, name:p.name, date:p.date, chaine:p.chaine, estim:p.estim, nb:(p.cues||[]).length, note:null, demo:false })));
+  // ===== SECTION 1 : Registre des cue sheets =====
+  const userProjects = getProjects();
+  const demo = PROJETS_DEMO.map(p => ({ id: p.id, name: p.name, date: p.date, chaine: p.chaine, estim: p.estim, nb: p.nb, note: p.note, statut: 'envoyee', demo: true }));
+  let projects = demo.concat(userProjects.map(p => ({ id:p.id, name:p.name, date:p.date, chaine:p.chaine, estim:p.estim, nb:(p.nb!=null?p.nb:(p.cues||[]).length), note:p.note||null, statut:p.statut||'envoyee', dateEnvoi:p.dateEnvoi, demo:false })));
   if (q) projects = projects.filter(p => p.name.toLowerCase().includes(q));
 
+  // Tableau de bord par statut
+  const counts = { envoyee:0, payee:0, relance:0, pas_diff:0 };
+  projects.forEach(p => { counts[p.statut] = (counts[p.statut]||0) + 1; });
+  html += '<div class="actions" style="margin-bottom:12px;">';
+  html += '<button class="primary" onclick="openAddCuesheet()" style="font-size:12px;">➕ Ajouter une cue sheet</button>';
+  html += '<button onclick="checkMissing()" style="font-size:12px;">🔍 Détecter les non payées</button>';
+  html += '</div>';
   if (projects.length) {
+    html += '<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">';
+    [['envoyee','En attente'],['relance','À relancer'],['payee','Payées'],['pas_diff','Non diffusées']].forEach(([k,lbl]) => {
+      html += '<div style="flex:1;min-width:70px;background:var(--surface-2);border-radius:8px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:' + STATUTS[k].color + ';">' + (counts[k]||0) + '</div><div style="font-size:10px;color:var(--text-dim);">' + lbl + '</div></div>';
+    });
+    html += '</div>';
+
     let totalEstim = projects.reduce((s,p) => s + (p.estim||0), 0);
-    html += '<p class="section-head">📊 Estimations — cue sheets traités (' + projects.length + ')</p>';
+    html += '<p class="section-head">📋 Registre des cue sheets (' + projects.length + ')</p>';
     projects.sort((a,b) => (b.date||'').localeCompare(a.date||''));
     projects.forEach(p => {
-      const demoBadge = p.demo ? '<span class="pill pill-blue" style="margin-left:6px;">cue sheet</span>' : '';
+      const demoBadge = p.demo ? '<span class="pill pill-blue" style="margin-left:6px;">démo</span>' : '';
       const noteHtml = p.note ? '<div style="font-size:10px;color:var(--info);margin-top:2px;">' + p.note + '</div>' : '';
-      const delBtn = p.demo ? '' : '<button data-id="' + p.id + '" class="prog-del danger" style="font-size:10px;padding:2px 8px;margin-top:4px;">Supp</button>';
-      html += '<div class="proj-card"><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:500;margin-bottom:2px;">' + p.name + demoBadge + '</div><div style="font-size:11px;color:var(--text-dim);">' + (CH_LBL[p.chaine]||p.chaine) + ' · ' + (p.date||'') + ' · ' + p.nb + ' morceaux</div>' + noteHtml + '</div><div style="text-align:right;"><div style="font-size:16px;font-weight:600;color:var(--orange);">~' + (p.estim||0).toLocaleString('fr-FR') + ' €</div>' + delBtn + '</div></div>';
+      const stColor = STATUTS[p.statut] ? STATUTS[p.statut].color : 'var(--text-dim)';
+      let stSelect = '';
+      if (!p.demo) {
+        stSelect = '<select onchange="setProjectStatus(\'' + p.id + '\',this.value)" style="font-size:10px;padding:2px 4px;margin-top:4px;">';
+        Object.keys(STATUTS).forEach(k => { stSelect += '<option value="' + k + '"' + (k===p.statut?' selected':'') + '>' + STATUTS[k].label + '</option>'; });
+        stSelect += '</select>';
+      } else {
+        stSelect = '<span style="font-size:10px;color:' + stColor + ';">' + STATUTS[p.statut].label + '</span>';
+      }
+      const delBtn = p.demo ? '' : '<button onclick="deleteProject(\'' + p.id + '\')" class="danger" style="font-size:10px;padding:2px 8px;margin-left:6px;">Suppr</button>';
+      const estimHtml = p.estim ? '<div style="font-size:15px;font-weight:600;color:var(--orange);">~' + p.estim.toLocaleString('fr-FR') + ' €</div>' : '';
+      html += '<div class="proj-card"><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:500;margin-bottom:2px;">' + p.name + demoBadge + '</div><div style="font-size:11px;color:var(--text-dim);">' + (CH_LBL[p.chaine]||p.chaine||'?') + ' · ' + (p.date||'date ?') + ' · ' + (p.nb||0) + ' morceaux</div>' + noteHtml + '<div style="margin-top:4px;">' + stSelect + delBtn + '</div></div><div style="text-align:right;">' + estimHtml + '</div></div>';
     });
     html += '<div style="background:var(--surface-2);padding:10px 12px;border-radius:6px;margin:8px 0 20px;font-size:13px;">Total estimations : <strong style="color:var(--orange);">~' + totalEstim.toLocaleString('fr-FR') + ' €</strong></div>';
   }
@@ -1040,7 +1121,6 @@ function init() {
   document.getElementById('cat-search').addEventListener('input', e => { clearTimeout(catTimer); catTimer = setTimeout(() => searchCat(e.target.value), 200); });
   document.getElementById('cat-all').addEventListener('click', () => { catMode='all'; document.getElementById('cat-all').classList.add('primary'); document.getElementById('cat-dormant').classList.remove('primary'); searchCat(document.getElementById('cat-search').value); });
   document.getElementById('cat-dormant').addEventListener('click', () => { catMode='dormant'; document.getElementById('cat-dormant').classList.add('primary'); document.getElementById('cat-all').classList.remove('primary'); showDormants(document.getElementById('cat-search').value); });
-  document.getElementById('btn-check').addEventListener('click', checkMissing);
   document.getElementById('progs-search').addEventListener('input', e => { clearTimeout(progsTimer); progsTimer = setTimeout(() => loadProgrammes(e.target.value), 200); });
   document.getElementById('global-search').addEventListener('input', e => { clearTimeout(globalTimer); globalTimer = setTimeout(() => globalSearch(e.target.value), 200); });
   const drop = document.getElementById('drop'), fi = document.getElementById('file-in');
