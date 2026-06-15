@@ -140,6 +140,7 @@ button.danger:hover { background: #5a1f1f; }
     <button class="tab" data-v="comps">👥 Compositeurs</button>
     <button class="tab" data-v="rev">💰 Revenus</button>
     <button class="tab" data-v="prev">📅 Prévisions</button>
+        <button class="tab" data-v="detect">📡 Détections</button>
   </div>
 
   <div class="view active" data-view="calc">
@@ -244,6 +245,25 @@ button.danger:hover { background: #5a1f1f; }
     </div>
   </div>
 
+
+ <div class="view" data-view="detect">
+   <div class="card">
+     <p class="section-head">📡 Où sont diffusés tes morceaux</p>
+     <p style="font-size:12px;color:var(--text-dim);margin:0 0 12px;">
+       Détections par empreinte audio (audfprint), croisées avec ton catalogue.
+       Importe le fichier de détections produit par le moteur, ou envoie une capture à analyser.
+       Les lignes <em>exemple</em> ci-dessous montrent le rendu — elles disparaissent dès ton 1er import.
+     </p>
+     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
+       <label class="btn" style="cursor:pointer;">📥 Importer des détections (.json / .csv)
+         <input type="file" id="detect-file" accept=".json,.csv" style="display:none;">
+       </label>
+       <button class="btn" id="detect-clear">🗑️ Vider</button>
+     </div>
+     <div class="grid grid-3" id="detect-stats" style="margin-bottom:14px;"></div>
+     <div id="detect-body"></div>
+   </div>
+ </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -258,7 +278,7 @@ let REVENUS_VERSEMENTS = [{"date":"Oct-18","montant":68.1},{"date":"Janv-19","mo
 let TOTAL_REEL = 136242.41;
 let TOP_MORCEAUX = [{"titre":"MORNING SKANK WUV","revenu":1379.0},{"titre":"CECCHINO","revenu":959.74},{"titre":"LE FOYER RVMR","revenu":954.29},{"titre":"MIMBRANA","revenu":899.17},{"titre":"PROUD FATHER RVMR","revenu":883.34},{"titre":"AVIATORENELLI","revenu":875.95},{"titre":"EMICRITICO","revenu":867.95},{"titre":"AVEDOMATORE","revenu":852.98},{"titre":"SWEET POISON MVCVM","revenu":827.77},{"titre":"GINOFRUTTA","revenu":817.78},{"titre":"PRICESSONO","revenu":807.5},{"titre":"TETTARELLA","revenu":804.99},{"titre":"TELIER RVMR","revenu":781.8},{"titre":"CARRUBUONO","revenu":697.3},{"titre":"PETTORALE","revenu":679.39},{"titre":"FOCOLARE","revenu":652.16},{"titre":"SPECULARE","revenu":626.64},{"titre":"MOLICAVI","revenu":608.68},{"titre":"USATOTILO","revenu":592.96},{"titre":"PORTACHIAVI","revenu":589.63}];
 let CHAINE_REV = [{"chaine":"TF1","revenu":22958.37},{"chaine":"M6","revenu":17272.67},{"chaine":"France 2","revenu":15853.0},{"chaine":"W9","revenu":5036.4},{"chaine":"TMC","revenu":4168.56},{"chaine":"C8","revenu":2811.22},{"chaine":"TFX","revenu":2631.13},{"chaine":"RMC Story","revenu":2248.27},{"chaine":"France 3","revenu":1652.01},{"chaine":"RMC Découverte","revenu":1647.55},{"chaine":"6ter","revenu":1213.0},{"chaine":"Téva","revenu":909.44},{"chaine":"France 5","revenu":758.98},{"chaine":"YouTube","revenu":738.45},{"chaine":"NRJ12","revenu":684.85},{"chaine":"Arte","revenu":462.14},{"chaine":"CStar","revenu":384.73},{"chaine":"Spotify","revenu":269.86},{"chaine":"Chérie 25","revenu":259.36},{"chaine":"Outre-Mer","revenu":210.18},{"chaine":"France 4","revenu":139.44},{"chaine":"Paris Première","revenu":121.63},{"chaine":"Gulli","revenu":43.72},{"chaine":"Deezer","revenu":14.03},{"chaine":"Amazon","revenu":4.55}];
-const TYPES_REV = [{"type":"TV Historique (direct)","revenu":62981.67},{"type":"TV Câble/TNT","revenu":25574.88},{"type":"Web / Streaming","revenu":3522.2},{"type":"Autres","revenu":3383.16},{"type":"Replay (délinéarisé)","revenu":2291.41},{"type":"TV (autres)","revenu":1868.38},{"type":"Copie privée","revenu":1483.12},{"type":"Cinéma","revenu":422.86},{"type":"Radio","revenu":262.9}];
+const TYPES_REV = [{"type": "TV Historique (direct)", "revenu": 68179.88}, {"type": "TV Câble/TNT", "revenu": 27655.52}, {"type": "Web / Streaming", "revenu": 3544.6}, {"type": "Replay (délinéarisé)", "revenu": 2291.41}, {"type": "Étranger", "revenu": 2277.96}, {"type": "Autres / gestion", "revenu": 2092.97}, {"type": "Copie privée", "revenu": 1530.68}, {"type": "Cinéma", "revenu": 396.36}, {"type": "Radio", "revenu": 262.9}, {"type": "Supports enregistrés", "revenu": 94.48}, {"type": "Spectacle", "revenu": 58.16}, {"type": "Sonorisation", "revenu": 24.86}];
 let PIPELINE = {"total_an":24900,"versements":[{"date":"6 juil 2026","montant":8400,"note":"TV historiques+TNT (S2 2025) + rattrapages — le 5 est un dimanche"},{"date":"5 oct 2026","montant":2300,"note":"replay S1 2026 + copie privée (en croissance)"},{"date":"6 janv 2027","montant":13000,"note":"TV S1 2026 — plus grosse répartition"},{"date":"5 avr 2027","montant":1200,"note":"replay S2 2026 + copie privée"}]};
 let DORMANTS = ["A STRIKE RVMR","ACCORDEON NOUS DVC","ACTING RVMR","AD LIB JAZZTIP WUV","ADOME DVC","AERIAN SONATA AVS","AFRICA GOAL JUV","AFRICA MAN JUV","AFRICAN GROUND JUV","AFRICAN SKY JUV","AIR DE RIEN AMBIANT","AIRSTREAM DVC","ALGUERI JUV","ALIUMOS JUV","AMITIES AU BAR AVS","ANOHI DVC","APPEP MVC","ARMANIA","ARPEGE SOFT GUITAR AVS","ARPEGES ET REVES JUV","ARPEGGIA FOLK JUV","ASTRONAUTS","ASTRONUTS","ATMOSPHERE PAD","ATSILOUT DVC","ATTIRANCE","AURORE AVS","BABYL RVMR","BACK PACK RVMR","BALAGAN AVS","BALESTRATUO","BANGA AVS","BANGKOK ALONE DVC","BASIC ROOTS JUV","BASSAR MVC","BASSE TRISTE JUV","BAZARUTO MSVC","BEAT ME","BEIRA MSVC","BERLIN BLUE RVMR","BERTRINANCESOMO JUV","BETEAVON MVC","BIAS TOWARDS","BIG JIM RVMR","BIG UP JAMAICA WUV","BIRDY AVS","BIRONIMA MVCVM","BLACK DEPTH MSVC","BLACK TOUCH DVC","BLAZE RV","BLING MALL","BLOODY WALL ARV","BLUE FLOWER NO VIOLONS RVMR","BLUE SUBMARINE MSVC","BN AVS","BONDA MVCVM","BORDER ARREST RVMR","BOSS OF SAND DVC","BRATISLAVIAN","BREATHE HER RVMR","BRODO MVC","BROKEN NAILS RVMR","BUBBLE RVMR","BUCCOLODAVE JUV","BUDAPEST RINGING ORCHESTRA RVMR","CABRON CAVIAR RV","CAMPIONE ARV","CARE MEAT LA GRENOUILLE","CATCHER DVC","CAYEUX RVMR","CE LA GUERRE DE L INFO SUR LE CLIMAT","CHATEAU LAVANDA","CHERRY RVMR","CHEVALIER DES OMBRES JUV","CHILDISH","CHILL LOUNGE AVS","CHILLING DJ AVS","CHIN CHIN","CLASSICOL JUV","CLIMAT PEPLUM JUV","CLIMAXING JUV","CLOSE CHOICES MSVC","COCO VLADO","CODEC DVC","COEUR EN OR JUV","COLINIUM JUV","COLLECTIVE MELODY","CONNECTIONS RVMR","CONSECRATION","COOL GUITAR AVS","COOL UKULELE AVS","CORNER RENTRANT","CORSICARUM JUV","COURANT ALTERNATIF","COYOD MVC","CRI DE GUERRE JUV","CUBALIBRI VV","CUNNIE DVC","CURLY WIG RVMR","CYBER GUSH MSVC","DAKA DVC","DANCING LIVE JUV","DANGEROUS DEAL MSVC","DASNE MVC","DATI DVC","DEBOULE CJV","DEEP GREEN","DEEPER THAN DEEP MSCV","DEMENCE JUV","DENTRO MVCVM","DESILLUSION","DETECTIVE IN ACTION DVC","DETENT GUITAR AVS","DIGITAL SMOKERS MSVC","DOES IT FLY RVMR","DOLPHINS MSVC","DOLPHINS MVCVM","DOMINIOMUS JUV","DONT FUCK TEETH DVC","DREAMER DVC","DREAMINGIUM JUV","DRIVE HOME RVMR","DROP OFF RVMR","DROPS OF GAS","DRUMSTICKS WUV","DRUNKENNESS DREAMS MSVC","DRYER DVC","DUBBY CHALICE WUV","EASY DRONE 4","EASY DRONE 6","EASY DRONE 7","EASY DRONE 8","EDGE OF THE CLIFF RVMR   ROMY CHELMINSKI","EGYPTIAN DAY DVC","ELECTRONIC SCREAM MSVC","EN LIGNE","ENGAGEMENT RING RVMR","ENJOY THE NOISE","EPEQ MVC","EPICAL AVS","EPIQ MVC","EPOQ MVC","EPRAH MVC","ESPION DVC","ETHNIC JUV","EVIDENCE JUV","EVIL DVC","EVILS SPONGE DVC","FANELO MVCVM","FAR WEST JUV","FAST DRUMMER WUV","FASTER DVC","FAT BLUE RVMR","FAT BLUE VOICES RVMR","FAT RHODES","FIGHT FOR YOU RV","FIMA MVC","FINAL ROUND ARV","FINK PLOYD JUV","FIRAS MVC","FLIP OF NIL DVC","FLIPP DVC","FLODIORINA JUV","FLUTE AFRICAINE JUV","FLUTE AQUATIQUE JUV","FLY IN THE MOTOR","FLYING NIGHTS MSVC","FOLKER DREAMER JUV","FOLKER SOFT GUITAR AVS","FOLKER SWEET GUITAR AVS","FOLKYDDOUSH AVS","FREEDOM GUNMEN WUV","FUNKYONE","FUTUROCK ARGENTINA MSVC","GALAXY IN HILLS MSVC","GENEREUSE","GET READY RVMR","GOT HIM RVMR","GRAVITY BIS AVS","GREAT JOB NO HORNS RVMR","GREEN CREATURE RVMR","GTR JUV","GWO KA CJV","HAPPY GUITAR ARV","HAPPY STEEL","HARD THINKING","HARMONIUM CEREMONIA JUV","HARUT MVCVM","HATA MVC","HATIT MVC","HES NO GOOD","HETE MVC","HIDDEN TIME MSVC","HITI MVC","HITYO MVC","HOBEO MVCVM","HODECH DVC","HOKID MVC","HOLD HER AVS","HOMA DVC","HOMEWORK RVMR","HORMA DVC","HORSESHOES","HOUR RUSH RVMR","HUTU MVC","HYOKU MVC","I AM ME RVMR","IF WHAT FOR AVS","IHLYK MVC","IMMATURE DVC","IMPRESSIONNE DVC","INDIAC DVC","INDIAN SPIRIT DVC","INDIAN TENSION DVC","INDIANA JUV","INQUISITIVE","INTENSE DVC","INTRUSIVE ROBBER MSVC","INTUITION DVC","IRLANDAISIUM JUV","ISETA MVC","ITASE MVC","IVRESSE FLUTIOL JUV","JOJOBAR DVC","JOXOL MVC","JUTOH MVC","KARATEKA DVC","KELUE MVC","KEN DVC","KHOL MVC","KICK AND TOMS WUV","KILL THE VILLAIN","KING OF TUNING MSVC","KINGDOM JUV","LA NYMPHE RVMR","LAHAJ MVC","LAILA AVS","LAMA MVC","LARTEBELO MVCVM","LASCO JUV","LAST ROSE RVMR","LEDABER DVC","LEGENDES AND MEATS","LES FEUILLES CJV","LETE MVC","LETFI MVC","LETHAL ARMY DVC","LIGHTER DVC","LIHOX MVC","LIMA SPRINT RVMR","LINGUINE MVCVM","LIVELY RASTA WUV","LIWI MVC","LOFTHAIR JUV","LOOKING FOR CHARLES","LOOPS 001 MVCVM","LOST GENERATION MSVC","LUEKE MVC","LUNA DVC","LUOSEV MVC","MAD DRUMMING WUV","MAFTEAH DVC","MAIGRET DVC","MALLIAN JUV","MAPUTO MSVC","MASKILON MVC","MASSIVE BAKRA WUV","MATH TEST RVMR","MDF LE PETIT VV","MEAT ME","MEDINA JUV","MEDUSA JUV","MELANCOLIE CJV","MELEKH MVC","MENACE DVC","MERICAL JUV","MEROUSAKE DVC","MIDBAR DVC","MIDINE MVC","MILOG MVC","MIMMO MVCVM","MISRONE DVC","MODE WHITE","MOODY NYLON","MOWA MVC","MUMMIA MVCVM","MUNEA MVC","MUSIRO FACES MSVC","MUTURE JUV","MY MICHELLE PB SAME JUV","MY MUSE IS ELECTRONIC MSVC","MY NAME IS DVC","MY NEM IS","NACCIVO MVCVM","NAMEO MVC","NAMYN MVC","NEMO DVC","NESOCCITA MVCVM","NEUTRAL BALANCE","NEVADA AVS","NEWLOOK","NIGHT RUN","NISI MVC","NO HEROISM","NOF DVC","NORD OUEST","NOSTALGIE","NOUMA MVC","NUSIE MVC","OCEAN DEEP DIVE MSVC","OCEINIC JUV","ODRIW MVC","OLAWA MVCVM","ONCE MORE AVS","ORBITAL RVMR","ORIENT SKATE ARV","ORIENTAL BEAT VOICES JUV","OUEST SIDE DVC","OUMIBA MVC","OUTER GRIN","OVNI TENDER RVMR","OZNAIME DVC","PALMA","PATA MVC","PECHEROUM JUV","PEHE MVC","PHARAON DVC","PIANISME JUV","PIANO SOTTO MSVC","PIZA MVC","PIZE MVC","PIZI MVC","PIZO MVC","PIZZANE RVMR","PIZZICATA JUV","PIZZITKKY JUV","PLACES RV","PLUTOT DVC","POGA AVS","POLAROID RVMR","POPPY DVC","POURQUOI DVC","PRODIJAY RVMR","PROFESSOR GROOVE RVMR","PROMESSE URBAINE","PSHIT DVC","PUQU MVC","PYRAMIDAL DVC","QOXIK MVC","QUICKLY DVC","RAGOUA DVC","RAIN OF PERCS JUV","REVE DE LEZARD ARV","REVERTIGIUM JUV","RICHIE DVC","RIDE GROOVE WUV","RIKIP MVC","RIOPLATENSE JUV","RITTAME","RMVR LA MINEUR","RMVR TUNER POP","ROENOU MVC","ROMANTYK DVC","RUVOR MVC","RVMR SUSPENSE 2","RYPO MVC","SAD JOURNEY MSVC","SAHA MVC","SAMBA DRUMMING WUV","SAMUELSEN RV","SANDOLITA MVCVM","SAPO MVCVM","SATYRE MSVC","SAUVAGE RV","SCAR MVC","SCER MVC","SCHOOL MEMORIES RVMR","SCIENCE PROJECT RVMR","SCIR MVC","SCOOP DIGGER","SCOR MVC","SCUR MVC","SEA ATTACK DVC","SEDH MVC","SEEKING THE TRUTH","SELHAD VV","SENA MSVC","SEPHIROT DVC","SEYE MVC","SHE IS THE ONE MSVC","SHEKETE DVC","SHIHG MVC","SHOUT OFF RVMR","SIANE MVC","SIDE JACK JUV","SIETA MVC","SIMPLE JOY PIANO ONLY RVMR","SIMPLE JOY RVMR","SIMPLE TORCH","SINBRALLI MVCVM","SITI MVC","SKY IS THE LIMIT AVS","SKYFALLER AVS","SLAM SHOT RVMR","SMOOTH DAY","SNOW JOY","SOCIAL CUBA VV","SOMETHING STRONG","SOMEWHERE ELSE MSCV","SOUL AND SKY VV","SOUND ESCAPE AVS","SOXO MVC","SPIGOLATTACCO MVCVM","SPOOKY FUNNY RVMR","STAR WHISH DVC","STILL WATER MSVC","STONE ET SHARON ARV","STRAIGHT UP RVMR","STREET SOUL MSVC","STRESSING LINE JUV","STYLIZER DVC","STYTZ MVC","SUBURBAN HEIST","SUGAR BLAST ARV","SUM OF AVS","SUN BURN BASS AND DARK PIANO ONLY","SUSPENSE UNDERWATER JUV","SUSPENSIVE MSVC","SUSPICIOUS DVC","SUVU MVC","SWEET TACO RVMR","SWING RAGGAMUFFIN WUV","SWISS BORDER","SYNTHE 90 AVS","SYSTEM GOU VV","SYSTEME 80 BASSE ONLY RVMR","TAKE OF SOON","TATOO DVC","TAWA MVC","TAYELETE DVC","TEA TIME TURBULENCE","TECHNOLOGICAL ATTACKS MSVC","TEHE MVC","TENSION CJV","TENSIONARE MVCVM","THE DISTANCE RVMR","THE FIDLE MAN RVMR","THE THEATER INCIDENT","THE YELLOW KNIFE RVMR ROMY CHELMINSKI","THEMASIS JUV","TIESA MVC","TIHI MVC","TIMALA MVCVM","TIMPANI NOTES WUV","TINKER DVC","TIPTOE TRAPEDY","TODA MVC","TOHOT MVC","TOTELITINO MVCVM","TOUTIME DVC","TRAMA MVCVM","TRANCE DECADENCE MSVC","TRAPEDY OPENING","TREE OF LIFE DVC","TREMBLE DVC","TRISTOUNE DVC","TROPENATILO MVCVM","TROUBLE FROM EAST RVMR","TSEVA DVC","TSOUVE DVC","TUFFOVIA","TUHU MVC","TVYX MVC","TWO OF US DVC","TYTYT MVC","UKEL MVC","UKU DJ AVS","UKU LAVA AVS","UKULALA JUV","UNCONTROL DELAY MSVC","UNDERCOVER RVMR","UNDERSKIN MVCVM","UNSAFE BRAZIL WAVES MSVC","UNSTABLE HEAVEN MSVC","UNSTOPPABLE","UOVAPO","UPSIR MVC","URAGANO 2018","UTLAV MVC","VA ET VIENS","VAHIA MVC","VALSE ACOUSTIQUE JUV","VALSEXTERA JUV","VELOM MVC","VETAR MVC","VILANKULO MSVC","VILLAGE PEOPLE DVC","VIOLENT VIOLONS JUV","VIRGULANTE DVC","VIRGULATION DVC","VIRGULATOR DVC","VIRGULAX DVC","VIRGULETTE DVC","VIRGULITE DVC","VIRGULOF DVC","VIRGULOS DVC","VIRSON MSVC","VLYS MVC","VOLUPTUOUS","VOYAGE SOUS LES MERS JUV","WAIAN MVC","WALO VCM","WEDDING DAY DVC","WEDDING DRAMEDY MSVC","WEIRD SENSATION JUV","WHAT THE FOLK JUV","WHEEL DEAL RVMR","WINNER PRIDE RV","WIZZLE DVC","WONDERLAND DVC","WORLD COLLAPSE MSVC","XOTH MVC","YOGA PROJECT VV","YPPAH MVC","ZAMBEZE RIVER MSVC","ZAMBEZIA MSVC","ZION SUFFERER WUV","ZIPE MVC","ZIPI MVC","ZIPO MVC"];
 let DORMANTS_SET = new Set(DORMANTS.map(t => t.toUpperCase()));
@@ -1338,5 +1358,70 @@ init();
   </div>
 </div>
 
+
+<script>
+const DETECTIONS = [
+  {titre:"STRESS_MACHINE_RVMR", chaine:"France 5", date:"2026-06-02", heure:"21:13", duree:42, demo:true},
+  {titre:"DIGITAL_SMOKERS_MSVC", chaine:"France 2", date:"2026-03-19", heure:"23:21", duree:55, demo:true},
+  {titre:"WINNER_PRIDE_RV", chaine:"France 2", date:"2026-06-10", heure:"20:48", duree:31, demo:true}
+];
+function fmtDur(s){ s=Math.round(s||0); return s>=60? (Math.floor(s/60)+"m"+String(s%60).padStart(2,"0")) : (s+"s"); }
+function renderDetections(){
+  const body=document.getElementById('detect-body'), stats=document.getElementById('detect-stats');
+  if(!body) return;
+  const data=DETECTIONS.slice().sort((a,b)=>((b.date||'')+(b.heure||'')).localeCompare((a.date||'')+(a.heure||'')));
+  const isDemo=data.length && data.every(d=>d.demo);
+  const titres=new Set(data.map(d=>d.titre)), chaines={};
+  data.forEach(d=>{ chaines[d.chaine]=(chaines[d.chaine]||0)+1; });
+  stats.innerHTML =
+    '<div class="stat"><strong>'+data.length+'</strong>détections'+(isDemo?' (exemple)':'')+'</div>'+
+    '<div class="stat"><strong>'+titres.size+'</strong>morceaux repérés</div>'+
+    '<div class="stat"><strong>'+Object.keys(chaines).length+'</strong>chaînes</div>';
+  let html='<table style="width:100%;border-collapse:collapse;font-size:13px;">'+
+    '<tr style="text-align:left;color:var(--text-dim);border-bottom:1px solid rgba(255,255,255,.1);">'+
+    '<th style="padding:6px 4px;">Morceau</th><th>Chaîne</th><th>Date</th><th>Heure</th><th>Durée</th></tr>';
+  data.forEach(d=>{
+    html+='<tr style="border-bottom:1px solid rgba(255,255,255,.05);'+(d.demo?'opacity:.55;':'')+'">'+
+      '<td style="padding:6px 4px;font-weight:600;">'+d.titre+'</td>'+
+      '<td>'+d.chaine+'</td><td>'+(d.date||'')+'</td><td>'+(d.heure||'')+'</td>'+
+      '<td>'+fmtDur(d.duree)+'</td></tr>';
+  });
+  html+='</table>';
+  const maxC=Math.max(1,...Object.values(chaines));
+  html+='<p class="section-head" style="margin-top:18px;">Par chaîne</p>';
+  Object.entries(chaines).sort((a,b)=>b[1]-a[1]).forEach(([c,n])=>{
+    html+='<div class="bar-row"><div class="bar-label" style="width:120px;font-size:12px;">'+c+'</div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:'+(n/maxC*100)+'%;"></div></div>'+
+      '<div class="bar-val">'+n+'</div></div>';
+  });
+  body.innerHTML=html;
+}
+function importDetections(file){
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      let arr=[]; const txt=e.target.result.trim();
+      if(file.name.toLowerCase().endsWith('.json')){ arr=JSON.parse(txt); }
+      else { txt.split(/\r?\n/).forEach((line,i)=>{
+          if(!line.trim()) return; const p=line.split(/[;,]/);
+          if(i===0 && /titre/i.test(p[0])) return;
+          arr.push({titre:p[0],chaine:p[1],date:p[2],heure:p[3],duree:parseFloat(p[4])||0});
+        }); }
+      for(let i=DETECTIONS.length-1;i>=0;i--) if(DETECTIONS[i].demo) DETECTIONS.splice(i,1);
+      arr.forEach(d=>DETECTIONS.push(d));
+      renderDetections();
+      const t=document.getElementById('toast'); if(t){t.textContent=arr.length+' détections importées';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+    }catch(err){ alert('Fichier illisible : '+err.message); }
+  };
+  r.readAsText(file);
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  renderDetections();
+  const fi=document.getElementById('detect-file');
+  if(fi) fi.addEventListener('change',e=>{ if(e.target.files[0]) importDetections(e.target.files[0]); });
+  const cl=document.getElementById('detect-clear');
+  if(cl) cl.addEventListener('click',()=>{ DETECTIONS.length=0; renderDetections(); });
+});
+</script>
 </body>
 </html>
