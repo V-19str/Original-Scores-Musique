@@ -261,15 +261,38 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
     <div class="card" style="border:1px solid #44445e;">
       <p class="section-head">🏢 Éditeurs — Catalogue &amp; génération automatique de cue sheets</p>
       <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">1) Importe ton <b>catalogue d'œuvres</b> (CSV, Excel .xlsx/.xls, TSV ou TXT). SANJORA reconnaît tout seul les colonnes : <i>Titre, Durée, ISWC, ISRC, Éditeur, Réf album, Ayant droit, Part %</i>. 2) Importe ton <b>EDL</b> (zone plus bas). 3) Clique sur <b>Générer la cue sheet</b> : SANJORA croise l'EDL avec ton catalogue et sort un <b>Excel prêt à déclarer</b>.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">
+        <button id="cat-model" style="font-size:12px;background:#2a2a40;color:#ccd;border:1px solid #44445e;border-radius:7px;padding:7px 11px;cursor:pointer;">⬇️ Télécharger un modèle de catalogue (Excel)</button>
+        <span style="font-size:11px;color:var(--text-dim);">pour savoir quelles colonnes mettre</span>
+      </div>
       <label id="cat-drop" style="display:block;cursor:pointer;border:2px dashed #5a5a7a;border-radius:10px;padding:16px;text-align:center;color:#ccd;background:rgba(120,120,180,0.05);">
         📚 <b>Glisse ton catalogue ici</b> (CSV / Excel / TSV / TXT) ou clique pour le choisir<input type="file" id="cat-file" accept=".csv,.xls,.xlsx,.tsv,.txt" multiple style="display:none;">
       </label>
       <div id="cat-status" style="margin-top:10px;font-size:12.5px;color:#9aa;"></div>
-      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-        <button class="primary" id="cue-gen" style="font-size:13px;">⚙️ Générer la cue sheet (Excel) depuis l'EDL</button>
-        <span style="font-size:11px;color:var(--text-dim);">nécessite : catalogue importé + EDL importé ci-dessous</span>
+
+      <div style="margin-top:14px;border-top:1px solid #33334d;padding-top:12px;">
+        <div style="font-size:12.5px;color:#ccd;font-weight:600;margin-bottom:8px;">⚙️ Générer la cue sheet à partir de l'EDL</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <label style="font-size:12px;color:var(--text-dim);">Utilisation par défaut :</label>
+          <input id="cue-util" value="S" maxlength="6" style="width:64px;text-align:center;">
+          <span style="font-size:11px;color:var(--text-dim);">(souvent « S » ; « OC » pour génériques/virgules — modifiable ligne par ligne juste après)</span>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <button class="primary" id="cue-gen" style="font-size:13px;">Générer la cue sheet</button>
+          <span style="font-size:11px;color:var(--text-dim);">nécessite : catalogue importé + EDL importé ci-dessous</span>
+        </div>
+        <div id="cue-gen-res" style="margin-top:10px;font-size:12.5px;"></div>
       </div>
-      <div id="cue-gen-res" style="margin-top:10px;font-size:12.5px;"></div>
+
+      <div style="margin-top:14px;border-top:1px solid #33334d;padding-top:12px;">
+        <div style="font-size:12.5px;color:#ccd;font-weight:600;margin-bottom:4px;">💸 Rapport « argent oublié »</div>
+        <p style="font-size:11.5px;color:var(--text-dim);margin:0 0 8px;">Les titres diffusés (dans tes cue sheets / EDL) mais <b>absents de tes relevés SACEM</b> — donc des droits peut-être non perçus. Nécessite : relevés + cue sheets importés.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button id="oubli-xls" style="font-size:12px;background:#2a2a40;color:#ccd;border:1px solid #44445e;border-radius:7px;padding:7px 11px;cursor:pointer;">📊 Exporter en Excel</button>
+          <button id="oubli-pdf" style="font-size:12px;background:#2a2a40;color:#ccd;border:1px solid #44445e;border-radius:7px;padding:7px 11px;cursor:pointer;">🖨️ Imprimer / PDF</button>
+        </div>
+        <div id="oubli-res" style="margin-top:8px;font-size:12px;"></div>
+      </div>
     </div>
     <div class="card">
       <p class="section-head">📥 Importe tes cue sheets (pour calibrer & repérer l'argent oublié)</p>
@@ -1771,149 +1794,159 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 </script>
 <script>
-/* ÉDITEURS : import catalogue (CSV/Excel/TSV/TXT) + génération automatique de cue sheet depuis l'EDL */
+/* ÉDITEURS : catalogue multi-formats + cue sheet auto (aperçu éditable) + rapport "argent oublié" + modèle */
 (function(){
   window.__CATALOG = window.__CATALOG || {};
+  window.__CUEROWS = [];
   function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim(); }
-  function nkey(s){ return norm(s); }
-  function durToSec(v){
-    v=String(v||'').trim(); if(!v) return 0;
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function durToSec(v){ v=String(v||'').trim(); if(!v) return 0;
     if(v.indexOf(':')>=0){ var p=v.split(':').map(function(x){return parseInt(x,10)||0;});
-      if(p.length===3) return p[0]*3600+p[1]*60+p[2];
-      if(p.length===2) return p[0]*60+p[1]; }
-    return parseFloat(v.replace(',','.'))||0;
-  }
+      if(p.length===3) return p[0]*3600+p[1]*60+p[2]; if(p.length===2) return p[0]*60+p[1]; }
+    return parseFloat(v.replace(',','.'))||0; }
   function secToMmss(sec){ sec=Math.round(sec||0); var m=Math.floor(sec/60), s=sec%60; return m+':'+(s<10?'0':'')+s; }
+  function findCol(H,keys){ for(var i=0;i<H.length;i++){ var h=norm(H[i]); for(var k=0;k<keys.length;k++){ if(h.indexOf(keys[k])>=0) return i; } } return -1; }
 
-  function findCol(headers, keys){
-    for(var i=0;i<headers.length;i++){ var h=norm(headers[i]);
-      for(var k=0;k<keys.length;k++){ if(h.indexOf(keys[k])>=0) return i; } }
-    return -1;
-  }
-  function rowsToCatalog(rows){
-    if(!rows||!rows.length) return 0;
-    // trouve la ligne d'en-tête (celle qui contient "titre"/"title")
-    var hr=0;
-    for(var r=0;r<Math.min(rows.length,8);r++){ if(findCol(rows[r],['titre','title','oeuvre','morceau'])>=0){ hr=r; break; } }
+  /* ---------- IMPORT CATALOGUE ---------- */
+  function rowsToCatalog(rows){ if(!rows||!rows.length) return 0;
+    var hr=0; for(var r=0;r<Math.min(rows.length,8);r++){ if(findCol(rows[r],['titre','title','oeuvre','morceau'])>=0){ hr=r; break; } }
     var H=rows[hr];
-    var ci={
-      titre: findCol(H,['titre','title','oeuvre','morceau']),
-      duree: findCol(H,['duree','duration','minutage']),
-      iswc:  findCol(H,['iswc']),
-      isrc:  findCol(H,['isrc']),
-      editeur: findCol(H,['editeur','publisher','edition']),
-      album: findCol(H,['album','reference','ref alb','disque']),
-      ayant: findCol(H,['ayant','compositeur','auteur','composer','author','interprete','artiste','artist']),
-      part:  findCol(H,['part','pourcent','share','quote','%'])
-    };
-    if(ci.titre<0) return 0;
-    var added=0;
-    for(var i=hr+1;i<rows.length;i++){ var row=rows[i]; if(!row) continue;
-      var titre=String(row[ci.titre]||'').trim(); if(!titre) continue;
-      var key=titre.toUpperCase().trim();
-      var e={ titre:titre,
-        duree: ci.duree>=0?durToSec(row[ci.duree]):0,
-        iswc:  ci.iswc>=0?String(row[ci.iswc]||'').trim():'',
-        isrc:  ci.isrc>=0?String(row[ci.isrc]||'').trim():'',
-        editeur: ci.editeur>=0?String(row[ci.editeur]||'').trim():'',
-        album: ci.album>=0?String(row[ci.album]||'').trim():'',
-        ayant: ci.ayant>=0?String(row[ci.ayant]||'').trim():'',
-        part:  ci.part>=0?(parseFloat(String(row[ci.part]||'').replace(',','.'))||0):0
-      };
-      window.__CATALOG[key]=e; added++;
-    }
-    return added;
-  }
+    var ci={ titre:findCol(H,['titre','title','oeuvre','morceau']), duree:findCol(H,['duree','duration','minutage']),
+      iswc:findCol(H,['iswc']), isrc:findCol(H,['isrc']), editeur:findCol(H,['editeur','publisher','edition']),
+      album:findCol(H,['album','reference','ref alb','disque']), ayant:findCol(H,['ayant','compositeur','auteur','composer','author','interprete','artiste','artist']),
+      part:findCol(H,['part','pourcent','share','quote','%']) };
+    if(ci.titre<0) return 0; var added=0;
+    for(var i=hr+1;i<rows.length;i++){ var row=rows[i]; if(!row) continue; var titre=String(row[ci.titre]||'').trim(); if(!titre) continue;
+      window.__CATALOG[titre.toUpperCase().trim()]={ titre:titre,
+        duree: ci.duree>=0?durToSec(row[ci.duree]):0, iswc: ci.iswc>=0?String(row[ci.iswc]||'').trim():'',
+        isrc: ci.isrc>=0?String(row[ci.isrc]||'').trim():'', editeur: ci.editeur>=0?String(row[ci.editeur]||'').trim():'',
+        album: ci.album>=0?String(row[ci.album]||'').trim():'', ayant: ci.ayant>=0?String(row[ci.ayant]||'').trim():'',
+        part: ci.part>=0?(parseFloat(String(row[ci.part]||'').replace(',','.'))||0):0 };
+      added++; }
+    return added; }
   function parseCatFile(file){ return new Promise(function(resolve){
     var ext=(file.name.split('.').pop()||'').toLowerCase(), fr=new FileReader();
-    if(ext==='xls'||ext==='xlsx'){
-      fr.onload=function(){ try{
-        var wb=XLSX.read(new Uint8Array(fr.result),{type:'array'});
-        var ws=wb.Sheets[wb.SheetNames[0]];
+    if(ext==='xls'||ext==='xlsx'){ fr.onload=function(){ try{
+        var wb=XLSX.read(new Uint8Array(fr.result),{type:'array'}); var ws=wb.Sheets[wb.SheetNames[0]];
         var rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''}).map(function(rw){return rw.map(function(c){return String(c);});});
-        resolve(rowsToCatalog(rows));
-      }catch(e){ resolve(0); } };
-      fr.readAsArrayBuffer(file);
-    } else {
-      fr.onload=function(){ var txt=fr.result;
-        var first=(txt.split(/\r?\n/)[0]||'');
-        var delim = (first.split(';').length>=first.split('\t').length && first.split(';').length>=first.split(',').length)?';'
-                  : (first.split('\t').length>=first.split(',').length?'\t':',');
+        resolve(rowsToCatalog(rows)); }catch(e){ resolve(0); } }; fr.readAsArrayBuffer(file);
+    } else { fr.onload=function(){ var txt=fr.result; var first=(txt.split(/\r?\n/)[0]||'');
+        var delim=(first.split(';').length>=first.split('\t').length && first.split(';').length>=first.split(',').length)?';':(first.split('\t').length>=first.split(',').length?'\t':',');
         var rows=txt.split(/\r?\n/).filter(function(l){return l.trim().length;}).map(function(l){return l.split(delim).map(function(c){return c.replace(/^"|"$/g,'').trim();});});
-        resolve(rowsToCatalog(rows));
-      };
-      fr.readAsText(file);
-    }
+        resolve(rowsToCatalog(rows)); }; fr.readAsText(file); }
   }); }
-
-  function mirrorToRich(){
-    try{ if(typeof CAT_RICH==='undefined') return;
-      for(var k in window.__CATALOG){ var e=window.__CATALOG[k];
-        if(!CAT_RICH[k]) CAT_RICH[k]={p:e.part||0, c:e.ayant?[e.ayant]:[]}; }
-      var kc=document.getElementById('kpi-cat'); if(kc) kc.textContent=Object.keys(CAT_RICH).length||'—';
-      var ca=document.getElementById('cat-all'); if(ca) ca.textContent='🎵 Tout le catalogue ('+Object.keys(CAT_RICH).length+')';
-    }catch(e){}
-  }
   function saveCatalog(){ try{ localStorage.setItem('sanjora_catalog', JSON.stringify(window.__CATALOG)); }catch(e){} }
-  function catStatus(){
-    var n=Object.keys(window.__CATALOG).length, el=document.getElementById('cat-status');
-    if(el) el.innerHTML = n? ('📚 <b style="color:#7ddf9f;">'+n+' œuvre(s)</b> dans ton catalogue (enregistré sur cet ordinateur).')
-                            : 'Aucun catalogue importé pour l\'instant.';
-  }
-  async function handleCatalog(files){
-    var total=0;
-    for(var i=0;i<files.length;i++){ total+=await parseCatFile(files[i]); }
-    mirrorToRich(); saveCatalog(); catStatus();
-    var el=document.getElementById('cat-status');
-    if(el) el.innerHTML += ' &nbsp;✓ '+total+' ligne(s) importée(s).';
-  }
+  function catStatus(extra){ var n=Object.keys(window.__CATALOG).length, el=document.getElementById('cat-status');
+    if(el) el.innerHTML=(n? ('📚 <b style="color:#7ddf9f;">'+n+' œuvre(s)</b> dans ton catalogue (enregistré sur cet ordinateur).') : 'Aucun catalogue importé pour l\'instant.')+(extra||''); }
+  async function handleCatalog(files){ var total=0; for(var i=0;i<files.length;i++){ total+=await parseCatFile(files[i]); } saveCatalog(); catStatus(' &nbsp;✓ '+total+' ligne(s) importée(s).'); }
 
-  function generateCueSheet(){
+  /* ---------- 1) MODÈLE DE CATALOGUE TÉLÉCHARGEABLE ---------- */
+  function downloadModel(){ try{
+    var cols=['Titre','Durée','ISWC','ISRC','Éditeur','Réf album','Ayant droit','Part %'];
+    var ex=[['Lever de soleil','2:34','T-123.456.789-0','FR-XYZ-2400001','Éditions Amour Passion','MOM_A1023','DUPONT Jean / MARTIN Claire',50],
+            ['Course poursuite','0:48','T-987.654.321-0','FR-XYZ-2400002','Éditions Amour Passion','MOM_A1044','DURAND Paul',100],
+            ['Pluie sur la ville','3:12','','','Éditions Amour Passion','MOM_A1051','DUPONT Jean',25]];
+    var ws=XLSX.utils.aoa_to_sheet([cols].concat(ex));
+    ws['!cols']=[{wch:26},{wch:9},{wch:18},{wch:16},{wch:24},{wch:13},{wch:30},{wch:8}];
+    var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Catalogue'); XLSX.writeFile(wb,'modele_catalogue.xlsx');
+  }catch(e){ alert('Impossible de générer le modèle.'); } }
+
+  /* ---------- 3) CUE SHEET : aperçu éditable (colonne Utilisations) ---------- */
+  function catMatch(title){ var tn=norm(title);
+    for(var k in window.__CATALOG){ var cn=norm(window.__CATALOG[k].titre);
+      if(cn && (cn===tn || cn.indexOf(tn)>=0 || tn.indexOf(cn)>=0)) return window.__CATALOG[k]; }
+    return null; }
+  function buildCueRows(){ var cues=(window.__CUES||[]); var def=(document.getElementById('cue-util')||{}).value||'S';
+    return cues.map(function(c){ var f=catMatch(c.title); var dur=c.dur||(f?f.duree:0)||0;
+      return { dur:secToMmss(dur), titre:f?f.titre:c.title, ayant:f?f.ayant:'', editeur:f?f.editeur:'',
+               iswc:f?f.iswc:'', album:f?f.album:'', isrc:f?f.isrc:'', util:def, found:!!f }; }); }
+  function renderCuePreview(){
     var res=document.getElementById('cue-gen-res');
-    var cues=(window.__CUES||[]);
-    if(!cues.length){ if(res) res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord un EDL dans la zone ci-dessous.</span>'; return; }
-    if(!Object.keys(window.__CATALOG).length){ if(res) res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord ton catalogue (ci-dessus) pour remplir ISWC, ISRC, éditeur, etc.</span>'; return; }
-    var catKeys=Object.keys(window.__CATALOG);
-    var catNorm=catKeys.map(function(k){return {k:k, n:nkey(window.__CATALOG[k].titre)};});
+    if(!(window.__CUES||[]).length){ res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord un EDL dans la zone ci-dessous.</span>'; return; }
+    if(!Object.keys(window.__CATALOG).length){ res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord ton catalogue (ci-dessus) pour remplir ISWC, ISRC, éditeur, etc.</span>'; return; }
+    var rows=buildCueRows(); window.__CUEROWS=rows;
+    var matched=rows.filter(function(r){return r.found;}).length, miss=rows.length-matched;
+    var h='<div style="margin-bottom:6px;">✓ <b>'+rows.length+'</b> ligne(s) · <b style="color:#7ddf9f;">'+matched+' retrouvée(s)</b>'+(miss?(' · <span style="color:#ffb347;">'+miss+' sans correspondance</span>'):'')+'. Vérifie la colonne <b>Utilisations</b>, puis télécharge.</div>';
+    h+='<div style="max-height:240px;overflow:auto;border:1px solid #33334d;border-radius:8px;"><table style="width:100%;border-collapse:collapse;font-size:11px;">';
+    h+='<tr style="position:sticky;top:0;background:#23233a;color:#ccd;"><th style="padding:5px;text-align:left;">Durée</th><th style="padding:5px;text-align:left;">Titre</th><th style="padding:5px;text-align:left;">Éditeur</th><th style="padding:5px;text-align:left;">ISWC</th><th style="padding:5px;text-align:left;">Util.</th></tr>';
+    rows.forEach(function(r,i){ h+='<tr style="border-top:1px solid #2a2a40;'+(r.found?'':'background:rgba(255,179,71,0.07);')+'">'
+      +'<td style="padding:4px 5px;color:#9aa;">'+esc(r.dur)+'</td>'
+      +'<td style="padding:4px 5px;color:#dde;">'+esc(r.titre)+(r.found?'':' <span style="color:#ffb347;">⚠</span>')+'</td>'
+      +'<td style="padding:4px 5px;color:#9aa;">'+esc(r.editeur)+'</td>'
+      +'<td style="padding:4px 5px;color:#9aa;">'+esc(r.iswc)+'</td>'
+      +'<td style="padding:4px 5px;"><input id="util-'+i+'" value="'+esc(r.util)+'" maxlength="6" style="width:52px;text-align:center;font-size:11px;padding:2px;"></td></tr>'; });
+    h+='</table></div>';
+    h+='<div style="margin-top:10px;"><button class="primary" id="cue-dl" style="font-size:13px;">⬇️ Télécharger l\'Excel</button></div>';
+    res.innerHTML=h;
+    var dl=document.getElementById('cue-dl'); if(dl) dl.addEventListener('click', downloadCueXlsx);
+  }
+  function downloadCueXlsx(){ var rows=window.__CUEROWS||[]; if(!rows.length) return;
+    rows.forEach(function(r,i){ var el=document.getElementById('util-'+i); if(el) r.util=el.value||'S'; });
     var header=['Durée','Titre','Ayant Droit','Éditeur','Code ISWC','Réf Album','Code ISRC','Utilisations'];
-    var aoa=[header]; var matched=0, miss=0;
-    cues.forEach(function(c){
-      var tn=nkey(c.title), found=null;
-      for(var i=0;i<catNorm.length;i++){ var cn=catNorm[i].n;
-        if(cn && (cn===tn || cn.indexOf(tn)>=0 || tn.indexOf(cn)>=0)){ found=window.__CATALOG[catNorm[i].k]; break; } }
-      var dur=c.dur || (found?found.duree:0) || 0;
-      if(found){ matched++;
-        aoa.push([ secToMmss(dur), found.titre, found.ayant||'', found.editeur||'', found.iswc||'', found.album||'', found.isrc||'', 'S' ]);
-      } else { miss++;
-        aoa.push([ secToMmss(dur), c.title, '', '', '', '', '', 'S' ]);
-      }
-    });
-    try{
-      var ws=XLSX.utils.aoa_to_sheet(aoa);
+    var aoa=[header].concat(rows.map(function(r){ return [r.dur,r.titre,r.ayant,r.editeur,r.iswc,r.album,r.isrc,r.util]; }));
+    try{ var ws=XLSX.utils.aoa_to_sheet(aoa);
       ws['!cols']=[{wch:8},{wch:34},{wch:24},{wch:20},{wch:18},{wch:16},{wch:18},{wch:12}];
-      var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Cue sheet');
-      XLSX.writeFile(wb,'cue_sheet.xlsx');
-      if(res) res.innerHTML='✅ Cue sheet générée : <b>'+(aoa.length-1)+'</b> ligne(s) · <b style="color:#7ddf9f;">'+matched+' retrouvée(s)</b> dans le catalogue'+(miss?(' · <span style="color:#ffb347;">'+miss+' sans correspondance (à compléter à la main)</span>'):'')+'. Le fichier Excel vient d\'être téléchargé.';
-    }catch(e){ if(res) res.innerHTML='<span style="color:#ff7a7a;">Erreur à la génération du fichier Excel.</span>'; }
+      var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Cue sheet'); XLSX.writeFile(wb,'cue_sheet.xlsx');
+    }catch(e){ alert('Erreur à la génération de l\'Excel.'); } }
+
+  /* ---------- 2) RAPPORT "ARGENT OUBLIÉ" (basé sur les RELEVÉS uniquement) ---------- */
+  function computeMissing(){
+    var cues=(window.__CUES||[]); var relKeys=(typeof CAT_RICH!=='undefined')?Object.keys(CAT_RICH).map(norm):[];
+    var seen={}, out=[];
+    cues.forEach(function(c){ var tn=norm(c.title); if(!tn||seen[tn]) return; seen[tn]=1;
+      var found=relKeys.some(function(rk){ return rk && (rk===tn||rk.indexOf(tn)>=0||tn.indexOf(rk)>=0); });
+      if(!found){ var f=catMatch(c.title);
+        out.push({ titre:f?f.titre:c.title, dur:secToMmss(c.dur||(f?f.duree:0)||0),
+          iswc:f?f.iswc:'', isrc:f?f.isrc:'', editeur:f?f.editeur:'', album:f?f.album:'', ayant:f?f.ayant:'' }); } });
+    return { rows:out, hasReleves:relKeys.length>0 }; }
+  function exportOubliXlsx(){ var res=document.getElementById('oubli-res'); var m=computeMissing();
+    if(!(window.__CUES||[]).length){ res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord tes cue sheets / EDL.</span>'; return; }
+    if(!m.hasReleves){ res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord tes relevés SACEM (en haut de page) pour savoir ce qui manque.</span>'; return; }
+    if(!m.rows.length){ res.innerHTML='<span style="color:#7ddf9f;">✓ Rien d\'oublié : tous les titres diffusés sont dans tes relevés.</span>'; return; }
+    var header=['Titre','Durée','Code ISWC','Code ISRC','Éditeur','Réf Album','Ayant Droit','Statut'];
+    var aoa=[header].concat(m.rows.map(function(r){ return [r.titre,r.dur,r.iswc,r.isrc,r.editeur,r.album,r.ayant,'À réclamer']; }));
+    try{ var ws=XLSX.utils.aoa_to_sheet(aoa);
+      ws['!cols']=[{wch:34},{wch:8},{wch:18},{wch:18},{wch:22},{wch:14},{wch:24},{wch:14}];
+      var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Argent oublié'); XLSX.writeFile(wb,'argent_oublie.xlsx');
+      res.innerHTML='✅ <b>'+m.rows.length+'</b> titre(s) diffusé(s) absent(s) de tes relevés — fichier Excel téléchargé. <span style="color:var(--text-dim);">(Estimation à vérifier auprès de la SACEM.)</span>';
+    }catch(e){ res.innerHTML='<span style="color:#ff7a7a;">Erreur à la génération de l\'Excel.</span>'; } }
+  function exportOubliPdf(){ var res=document.getElementById('oubli-res'); var m=computeMissing();
+    if(!(window.__CUES||[]).length){ res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord tes cue sheets / EDL.</span>'; return; }
+    if(!m.hasReleves){ res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord tes relevés SACEM (en haut de page).</span>'; return; }
+    var rowsHtml=m.rows.length? m.rows.map(function(r){ return '<tr><td>'+esc(r.titre)+'</td><td>'+esc(r.dur)+'</td><td>'+esc(r.iswc)+'</td><td>'+esc(r.isrc)+'</td><td>'+esc(r.editeur)+'</td><td>'+esc(r.ayant)+'</td></tr>'; }).join('')
+      : '<tr><td colspan="6">Rien d\'oublié : tout est déclaré.</td></tr>';
+    var d=new Date().toLocaleDateString('fr-FR');
+    var doc='<!doctype html><html><head><meta charset="utf-8"><title>Rapport argent oublie</title>'
+      +'<style>body{font-family:Arial,sans-serif;color:#222;margin:30px;}h1{font-size:20px;color:#5D6B5A;}p{font-size:12px;color:#555;}'
+      +'table{border-collapse:collapse;width:100%;margin-top:14px;font-size:12px;}th{background:#5D6B5A;color:#fff;text-align:left;padding:6px;}'
+      +'td{border-bottom:1px solid #ddd;padding:6px;}small{color:#888;}</style></head><body>'
+      +'<h1>Rapport « argent oublié » — titres diffusés non déclarés</h1>'
+      +'<p>Édité le '+d+' · '+m.rows.length+' titre(s) diffusé(s) mais absent(s) des relevés SACEM. Estimation à vérifier auprès de la SACEM.</p>'
+      +'<table><tr><th>Titre</th><th>Durée</th><th>ISWC</th><th>ISRC</th><th>Éditeur</th><th>Ayant droit</th></tr>'+rowsHtml+'</table>'
+      +'<p style="margin-top:20px;"><small>Généré par SANJORA — données traitées localement.</small></p>'
+      +'<script>window.onload=function(){window.print();}<\/script></body></html>';
+    var w=window.open('','_blank'); if(!w){ res.innerHTML='<span style="color:#ffb347;">Autorise les fenêtres pop-up pour imprimer/enregistrer en PDF.</span>'; return; }
+    w.document.open(); w.document.write(doc); w.document.close();
+    res.innerHTML='🖨️ Fenêtre d\'impression ouverte — choisis « Enregistrer en PDF » dans la boîte d\'impression.';
   }
 
+  /* ---------- WIRING ---------- */
   function init(){
-    var cf=document.getElementById('cat-file');
-    if(cf) cf.addEventListener('change', function(e){ if(e.target.files.length) handleCatalog(Array.from(e.target.files)); });
+    var cf=document.getElementById('cat-file'); if(cf) cf.addEventListener('change', function(e){ if(e.target.files.length) handleCatalog(Array.from(e.target.files)); });
     var cd=document.getElementById('cat-drop');
     if(cd){ ['dragover','dragenter'].forEach(function(ev){cd.addEventListener(ev,function(e){e.preventDefault();cd.style.background='rgba(120,120,180,0.18)';});});
       ['dragleave','dragend'].forEach(function(ev){cd.addEventListener(ev,function(e){e.preventDefault();cd.style.background='rgba(120,120,180,0.05)';});});
       cd.addEventListener('drop',function(e){e.preventDefault();cd.style.background='rgba(120,120,180,0.05)';var fs=Array.from(e.dataTransfer.files||[]);if(fs.length)handleCatalog(fs);}); }
-    var gb=document.getElementById('cue-gen'); if(gb) gb.addEventListener('click', generateCueSheet);
-    // restauration du catalogue enregistré
-    setTimeout(function(){
-      try{ var c=JSON.parse(localStorage.getItem('sanjora_catalog')||'null'); if(c){ window.__CATALOG=c; mirrorToRich(); } }catch(e){}
-      catStatus();
-    }, 300);
+    var mb=document.getElementById('cat-model'); if(mb) mb.addEventListener('click', downloadModel);
+    var gb=document.getElementById('cue-gen'); if(gb) gb.addEventListener('click', renderCuePreview);
+    var ox=document.getElementById('oubli-xls'); if(ox) ox.addEventListener('click', exportOubliXlsx);
+    var op=document.getElementById('oubli-pdf'); if(op) op.addEventListener('click', exportOubliPdf);
+    setTimeout(function(){ try{ var c=JSON.parse(localStorage.getItem('sanjora_catalog')||'null'); if(c){ window.__CATALOG=c; } }catch(e){} catStatus(); }, 300);
   }
   if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded', init);
 })();
 </script>
+
 
 </body>
 </html>
