@@ -294,6 +294,12 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
         <div id="oubli-res" style="margin-top:8px;font-size:12px;"></div>
       </div>
     </div>
+    <div class="card" style="border:1px solid #44445e;">
+      <p class="section-head">📡 Couverture du catalogue — suivi de tes droits</p>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">Mesure quelle part de ton catalogue touche réellement des droits (d'après tes relevés), repère les œuvres « dormantes » et les diffusions non déclarées. <i>Importe tes relevés (et, si tu es éditeur, ton catalogue + tes cue sheets) pour un calcul complet.</i></p>
+      <button class="primary" id="cov-calc" style="font-size:13px;">📊 Calculer ma couverture</button>
+      <div id="cov-res" style="margin-top:12px;font-size:12.5px;"></div>
+    </div>
     <div class="card">
       <p class="section-head">📥 Importe tes cue sheets (pour calibrer & repérer l'argent oublié)</p>
       <div style="background:rgba(255,179,71,0.12);border-left:3px solid #ffb347;padding:9px 12px;border-radius:6px;font-size:12.5px;color:#9a6a1a;line-height:1.5;margin-bottom:10px;">⚠️ <b>Surtout pour les éditeurs</b> — et à faire seulement APRÈS avoir importé tes relevés SACEM (encadré en haut de la page). Sans relevés, l'analyse des cue sheets ne donnera rien : SANJORA n'aurait aucun catalogue auquel les comparer.</div>
@@ -1930,6 +1936,41 @@ document.addEventListener('DOMContentLoaded',()=>{
     res.innerHTML='🖨️ Fenêtre d\'impression ouverte — choisis « Enregistrer en PDF » dans la boîte d\'impression.';
   }
 
+  /* ---------- COUVERTURE DU CATALOGUE ---------- */
+  function renderCoverage(){
+    var res=document.getElementById('cov-res'); if(!res) return;
+    var activeSet={}, nActive=0;
+    if(typeof CAT_RICH!=='undefined'){ for(var k in CAT_RICH){ var n=norm(k); if(n&&!activeSet[n]){activeSet[n]=1;nActive++;} } }
+    if(!nActive){ res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord tes relevés SACEM (en haut de page) pour mesurer ta couverture.</span>'; return; }
+    var catSet={}, nCat=0;
+    for(var ck in window.__CATALOG){ var cn=norm(window.__CATALOG[ck].titre); if(cn&&!catSet[cn]){catSet[cn]=1;nCat++;} }
+    var uni={}; Object.keys(activeSet).forEach(function(x){uni[x]=1;}); Object.keys(catSet).forEach(function(x){uni[x]=1;});
+    var total=Object.keys(uni).length;
+    var dormList=Object.keys(catSet).filter(function(x){return !activeSet[x];});
+    var nDorm=dormList.length;
+    var taux=total? Math.round(nActive/total*100):0;
+    var cues=(window.__CUES||[]); var seen={}, nDiff=0; cues.forEach(function(c){var t=norm(c.title); if(t&&!seen[t]){seen[t]=1;nDiff++;}});
+    var miss=computeMissing(); var nOubli=miss.hasReleves?miss.rows.length:0; var nMatch=nDiff-nOubli;
+
+    var bar='<div style="background:#23233a;border-radius:8px;height:14px;overflow:hidden;margin:6px 0 4px;"><div style="height:100%;width:'+taux+'%;background:linear-gradient(90deg,#7ddf9f,#5fc77f);"></div></div>';
+    var h='<div style="font-size:13px;color:#fff;font-weight:700;">Taux de suivi : '+taux+'%</div>'+bar;
+    h+='<div style="font-size:12px;color:#ccd;margin-bottom:10px;"><b>'+nActive+'</b> œuvre(s) touchent des droits'+(nCat?(' · <b>'+total+'</b> au catalogue · <b style="color:#ffb347;">'+nDorm+' dormante(s)</b>'):'')+'.</div>';
+    if(nDiff){
+      h+='<div style="font-size:12px;color:#ccd;border-top:1px solid #2a2a40;padding-top:8px;"><b>'+nDiff+'</b> titre(s) diffusé(s) repéré(s) dans tes cue sheets · <b style="color:#7ddf9f;">'+nMatch+' déclaré(s)</b>'+(nOubli?(' · <b style="color:#ffb347;">'+nOubli+' possiblement non déclaré(s)</b> (argent oublié)'):'')+'.</div>';
+    } else {
+      h+='<div style="font-size:11.5px;color:var(--text-dim);border-top:1px solid #2a2a40;padding-top:8px;">Importe tes cue sheets / EDL pour repérer en plus les diffusions non déclarées.</div>';
+    }
+    if(nDorm){
+      h+='<div style="margin-top:10px;font-size:12px;color:#ccd;">Œuvres dormantes (au catalogue mais jamais vues dans tes relevés) :</div>';
+      h+='<ul style="font-size:11.5px;color:#ffd9a0;margin:6px 0 0;max-height:140px;overflow:auto;padding-left:18px;">'+dormList.slice(0,40).map(function(x){
+        var titre=x; for(var ck in window.__CATALOG){ if(norm(window.__CATALOG[ck].titre)===x){titre=window.__CATALOG[ck].titre;break;} }
+        return '<li>'+esc(titre)+'</li>';
+      }).join('')+'</ul>';
+    }
+    h+='<div style="margin-top:10px;font-size:11px;color:var(--text-dim);">Estimation indicative, calée sur tes relevés — à affiner en important plus d\'historique.</div>';
+    res.innerHTML=h;
+  }
+
   /* ---------- WIRING ---------- */
   function init(){
     var cf=document.getElementById('cat-file'); if(cf) cf.addEventListener('change', function(e){ if(e.target.files.length) handleCatalog(Array.from(e.target.files)); });
@@ -1941,7 +1982,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     var gb=document.getElementById('cue-gen'); if(gb) gb.addEventListener('click', renderCuePreview);
     var ox=document.getElementById('oubli-xls'); if(ox) ox.addEventListener('click', exportOubliXlsx);
     var op=document.getElementById('oubli-pdf'); if(op) op.addEventListener('click', exportOubliPdf);
-    setTimeout(function(){ try{ var c=JSON.parse(localStorage.getItem('sanjora_catalog')||'null'); if(c){ window.__CATALOG=c; } }catch(e){} catStatus(); }, 300);
+    var cc=document.getElementById('cov-calc'); if(cc) cc.addEventListener('click', renderCoverage);
+    setTimeout(function(){ try{ var c=JSON.parse(localStorage.getItem('sanjora_catalog')||'null'); if(c){ window.__CATALOG=c; } }catch(e){} catStatus(); try{renderCoverage();}catch(e){} }, 350);
   }
   if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded', init);
 })();
