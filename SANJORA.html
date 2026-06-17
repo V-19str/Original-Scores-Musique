@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSM Admin — SACEM</title>
+<title>SANJORA — Estimation de droits SACEM</title>
 <style>
 :root { --orange: #E50914; --orange-dark: #B30710; --bg: #0a0a0a; --surface: #1a1a1a; --surface-2: #252525; --border: #333; --text: #f0f0f0; --text-dim: #888; --success: #4ade80; --warning: #fbbf24; --info: #60a5fa; --danger: #f87171; --purple: #c084fc; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -189,7 +189,24 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
   <div style="background:linear-gradient(135deg,#1c1c2e,#23233a);border:1px solid #33334d;border-radius:14px;padding:22px 24px;">
    <div style="font-size:12px;color:#ff7a00;font-weight:800;letter-spacing:1px;">SANJORA</div>
    <h2 id="imp-h2" style="margin:6px 0 6px;color:#fff;font-size:21px;">Tes droits d&#39;auteur SACEM, enfin clairs.</h2>
-   <p id="imp-intro" style="margin:0 0 16px;color:#aab;font-size:14px;line-height:1.55;">Dépose tes relevés de répartition SACEM (PDF). SANJORA lit tout automatiquement et t&#39;affiche tes <b>revenus</b>, ton <b>catalogue avec tes parts</b>, et tes <b>prochaines échéances</b>. <b style="color:#7ddf9f;">Tout reste sur ton ordinateur — rien n&#39;est envoyé en ligne.</b></p>
+   <p id="imp-intro" style="margin:0 0 16px;color:#aab;font-size:14px;line-height:1.55;">Dépose tes relevés de répartition SACEM (PDF). SANJORA lit tout automatiquement et t&#39;affiche tes <b>revenus</b>, ton <b>catalogue avec tes parts</b>, et surtout une <b>prévision de tes revenus futurs</b>. <b style="color:#7ddf9f;">Tout reste sur ton ordinateur — rien n&#39;est envoyé en ligne.</b></p>
+   <div style="background:rgba(255,122,0,0.05);border:1px solid #44445e;border-radius:12px;padding:14px 16px;margin:0 0 16px;">
+     <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">📖 Mode d'emploi</div>
+     <p style="margin:0 0 12px;font-size:13px;color:#aab;line-height:1.5;">Glisse-dépose tes relevés SACEM : SANJORA analyse tout seul et <b style="color:#fff;">prédit tes revenus futurs</b>, au plus près de ton historique réel.</p>
+     <div style="background:rgba(255,122,0,0.10);border:1px solid #ff7a00;border-radius:8px;padding:9px 12px;margin-bottom:12px;font-size:12.5px;color:#ffd9a0;line-height:1.5;"><b>La base, pour tout le monde :</b> importe d'abord tes relevés de répartition SACEM (PDF), juste en dessous. SANJORA en tire ton catalogue, tes parts, tes co-compositeurs et ton historique. <b>Sans eux, l'outil n'a aucune donnée et ne peut rien calculer.</b></div>
+     <div style="display:flex;gap:12px;flex-wrap:wrap;">
+       <div style="flex:1;min-width:220px;background:rgba(120,120,180,0.07);border:1px solid #44445e;border-radius:10px;padding:12px 14px;">
+         <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">👤 Tu es compositeur</div>
+         <div style="font-size:12.5px;color:#ccd;line-height:1.55;">Tu vois tes <b>revenus par œuvre</b>, ton <b>catalogue avec tes parts</b>, et surtout la <b>prévision de tes prochains versements</b> SACEM.</div>
+       </div>
+       <div style="flex:1;min-width:220px;background:rgba(120,120,180,0.07);border:1px solid #44445e;border-radius:10px;padding:12px 14px;">
+         <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;">🏢 Tu es éditeur</div>
+         <div style="font-size:12.5px;color:#ccd;line-height:1.55;">Tu gères ton <b>catalogue SACEM</b>, tu suis les revenus, et tu utilises l'<b>analyse des cue sheets / EDL</b> pour repérer les titres diffusés mais <b>non déclarés</b> (droits à récupérer).</div>
+       </div>
+     </div>
+     <div style="background:rgba(125,223,159,0.10);border-left:3px solid #7ddf9f;padding:9px 12px;border-radius:6px;font-size:12.5px;color:#bfe9cf;line-height:1.5;margin-top:12px;">✅ <b>Et c'est réaliste :</b> la prévision s'appuie sur les <b>barèmes de répartition SACEM les plus établis</b>, calés sur ton historique réel. Plus tu importes d'années de relevés, plus c'est précis. <span style="color:#9aa;">(Ça reste une estimation sérieuse, jamais un montant garanti.)</span></div>
+   </div>
+
    <label id="dropzone" style="display:block;cursor:pointer;border:2px dashed #ff7a00;border-radius:12px;padding:24px;text-align:center;color:#fff;background:rgba(255,122,0,0.06);transition:background .15s;">
      <div style="font-size:28px;">📄</div>
      <div style="font-size:15px;margin-top:6px;"><b>Glisse tes PDF ici</b> &nbsp;ou&nbsp; clique pour les choisir</div>
@@ -216,12 +233,16 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
   <div class="header">
     <div class="header-left">
       <h1>SANJORA</h1>
-      <p style="color:#9aa;font-size:13px;">Tes droits d'auteur SACEM, enfin clairs</p>
+      <p style="color:#9aa;font-size:13px;">Vos droits d'auteur SACEM, enfin clairs · vos données restent sur votre ordinateur</p>
     </div>
     <div class="header-right">
       <div class="header-stat"><strong id="kpi-cat">—</strong>catalogue</div>
       
       <div class="header-stat"><strong id="kpi-rev">—</strong>perçu</div>
+      <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;margin-left:8px;">
+        <span id="save-indicator" style="font-size:11px;color:#7ddf9f;white-space:nowrap;">🔒 100% local</span>
+        <a onclick="sanjoraReset()" style="font-size:11px;color:#9aa;cursor:pointer;text-decoration:underline;">Effacer mes données</a>
+      </div>
     </div>
   </div>
 
@@ -237,8 +258,22 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
   </div>
 
   <div class="view" data-view="calc">
+    <div class="card" style="border:1px solid #44445e;">
+      <p class="section-head">🏢 Éditeurs — Catalogue &amp; génération automatique de cue sheets</p>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">1) Importe ton <b>catalogue d'œuvres</b> (CSV, Excel .xlsx/.xls, TSV ou TXT). SANJORA reconnaît tout seul les colonnes : <i>Titre, Durée, ISWC, ISRC, Éditeur, Réf album, Ayant droit, Part %</i>. 2) Importe ton <b>EDL</b> (zone plus bas). 3) Clique sur <b>Générer la cue sheet</b> : SANJORA croise l'EDL avec ton catalogue et sort un <b>Excel prêt à déclarer</b>.</p>
+      <label id="cat-drop" style="display:block;cursor:pointer;border:2px dashed #5a5a7a;border-radius:10px;padding:16px;text-align:center;color:#ccd;background:rgba(120,120,180,0.05);">
+        📚 <b>Glisse ton catalogue ici</b> (CSV / Excel / TSV / TXT) ou clique pour le choisir<input type="file" id="cat-file" accept=".csv,.xls,.xlsx,.tsv,.txt" multiple style="display:none;">
+      </label>
+      <div id="cat-status" style="margin-top:10px;font-size:12.5px;color:#9aa;"></div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <button class="primary" id="cue-gen" style="font-size:13px;">⚙️ Générer la cue sheet (Excel) depuis l'EDL</button>
+        <span style="font-size:11px;color:var(--text-dim);">nécessite : catalogue importé + EDL importé ci-dessous</span>
+      </div>
+      <div id="cue-gen-res" style="margin-top:10px;font-size:12.5px;"></div>
+    </div>
     <div class="card">
       <p class="section-head">📥 Importe tes cue sheets (pour calibrer & repérer l'argent oublié)</p>
+      <div style="background:rgba(255,179,71,0.12);border-left:3px solid #ffb347;padding:9px 12px;border-radius:6px;font-size:12.5px;color:#9a6a1a;line-height:1.5;margin-bottom:10px;">⚠️ <b>Surtout pour les éditeurs</b> — et à faire seulement APRÈS avoir importé tes relevés SACEM (encadré en haut de la page). Sans relevés, l'analyse des cue sheets ne donnera rien : SANJORA n'aurait aucun catalogue auquel les comparer.</div>
       <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">Formats : <b>EDL</b> ou <b>Excel iNumerica</b>. SANJORA lit tes diffusions, en déduit ta valeur de base €/diffusion à partir de tes vrais droits, et repère les titres diffusés <b>absents de tes relevés</b> (droits à réclamer). Tout reste sur ton ordinateur.</p>
       <label id="est-cue-drop" style="display:block;cursor:pointer;border:2px dashed #5a5a7a;border-radius:10px;padding:16px;text-align:center;color:#ccd;background:rgba(120,120,180,0.05);">
         📄 <b>Glisse tes cue sheets ici</b> ou clique pour les choisir<input type="file" id="est-cue-file" accept=".edl,.xls,.xlsx,.csv" multiple style="display:none;">
@@ -278,7 +313,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
   </div>
 
   <div class="view" data-view="cat">
-    <input type="text" id="cat-search" placeholder="Chercher dans le catalogue OSM (titre)..." style="margin-bottom: 10px;">
+    <input type="text" id="cat-search" placeholder="Chercher dans votre catalogue (titre)..." style="margin-bottom: 10px;">
     <div class="actions" style="margin:0 0 10px;">
       <button id="cat-all" class="primary" style="font-size:12px;">🎵 Tout le catalogue</button>
       <button id="cat-dormant" style="font-size:12px;">😴 Dormants jamais diffusés</button>
@@ -800,7 +835,7 @@ function openAddCuesheet() {
     '<div style="display:flex;gap:8px;"><div style="flex:1;"><label style="font-size:12px;color:var(--text-dim);">Chaîne</label><select id="ac-chaine" style="width:100%;margin-top:4px;">' + opts + '</select></div>' +
     '<div style="flex:1;"><label style="font-size:12px;color:var(--text-dim);">Date diffusion</label><input id="ac-date" type="date" style="width:100%;margin-top:4px;"></div></div>' +
     '<div style="display:flex;gap:8px;"><div style="flex:1;"><label style="font-size:12px;color:var(--text-dim);">Cue sheet envoyée le</label><input id="ac-envoi" type="date" style="width:100%;margin-top:4px;"></div>' +
-    '<div style="flex:1;"><label style="font-size:12px;color:var(--text-dim);">Nb morceaux OSM</label><input id="ac-nb" type="number" value="0" min="0" style="width:100%;margin-top:4px;"></div></div>' +
+    '<div style="flex:1;"><label style="font-size:12px;color:var(--text-dim);">Nb de titres</label><input id="ac-nb" type="number" value="0" min="0" style="width:100%;margin-top:4px;"></div></div>' +
     '<div><label style="font-size:12px;color:var(--text-dim);">Statut</label><select id="ac-statut" style="width:100%;margin-top:4px;">' + stOpts + '</select></div>' +
     '<div><label style="font-size:12px;color:var(--text-dim);">Note (compositeurs, remarques...)</label><input id="ac-note" type="text" placeholder="Optionnel" style="width:100%;margin-top:4px;"></div>' +
     '<button class="primary" onclick="saveManualCuesheet()" style="margin-top:4px;">💾 Ajouter au registre</button>' +
@@ -825,17 +860,17 @@ function saveManualCuesheet() {
   closeDetail(); toast('✓ Ajouté au registre'); updateKpis(); loadProgrammes();
 }
 function exportDormants() {
-  const lines = ['Morceaux OSM jamais diffusés — à repitcher (' + DORMANTS.length + ')', ''];
+  const lines = ['Titres jamais diffusés — à repitcher (' + DORMANTS.length + ')', ''];
   DORMANTS.forEach(t => { const c = (CAT_RICH[t] ? CAT_RICH[t].c : []).filter(x => !/streiff/i.test(x)).join(', '); lines.push(t + (c ? '  [' + c + ']' : '')); });
   const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'OSM_morceaux_a_repitcher.txt'; a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'titres_a_repitcher.txt'; a.click();
   toast('✓ Liste exportée');
 }
 function exportRegistre() {
   const data = { version: 1, exported: new Date().toISOString(), projects: getProjects() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = 'OSM_registre_cuesheets_' + new Date().toISOString().slice(0,10) + '.json'; a.click();
+  a.download = 'registre_cuesheets_' + new Date().toISOString().slice(0,10) + '.json'; a.click();
   toast('✓ Registre sauvegardé');
 }
 function importRegistre(file) {
@@ -1001,7 +1036,7 @@ function loadComps() {
   const compositeurs = COMPS_REVENU.filter(x => x.type !== 'editeur');
   const editeurs = COMPS_REVENU.filter(x => x.type === 'editeur');
   const max = compositeurs.length ? compositeurs[0].revenu : 1;
-  let html = '<p class="section-head">Revenus SACEM estimés par compositeur OSM</p>';
+  let html = '<p class="section-head">Revenus SACEM estimés par compositeur</p>';
   html += '<p style="font-size:11px;color:var(--text-dim);margin-bottom:14px;">Extrapolé depuis les clés de répartition sur 31 rions (≈100% de tes versements). Pour chaque œuvre, le pot total est réparti entre cosignataires selon leurs parts SACEM.</p>';
   compositeurs.forEach(comp => {
     if (comp.revenu < 1) return;
@@ -1114,16 +1149,16 @@ function exportEstimation() {
     '<style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1a1a1a;max-width:800px;margin:30px auto;padding:0 20px;}h1{color:#E50914;font-size:22px;margin-bottom:4px;}.sub{color:#666;font-size:13px;margin-bottom:24px;}table{width:100%;border-collapse:collapse;font-size:12px;margin:16px 0;}th,td{padding:6px 8px;border-bottom:1px solid #eee;text-align:left;}th{background:#f5f5f5;font-size:11px;text-transform:uppercase;color:#888;}.cards{display:flex;gap:12px;margin:20px 0;}.card{flex:1;border:1px solid #ddd;border-radius:8px;padding:14px;text-align:center;}.card.main{border:2px solid #E50914;}.card .lbl{font-size:11px;color:#888;}.card .val{font-size:22px;font-weight:700;margin-top:4px;}.card.main .val{color:#E50914;}.foot{margin-top:24px;font-size:11px;color:#999;border-top:1px solid #eee;padding-top:12px;}@media print{body{margin:0;}}</style>' +
     '</head><body>' +
     '<h1>Estimation de droits SACEM</h1>' +
-    '<div class="sub">OSM Music · établie le ' + today + '</div>' +
+    '<div class="sub">SANJORA · établie le ' + today + '</div>' +
     '<table><tr><td style="border:none;color:#888;width:140px;">Programme</td><td style="border:none;font-weight:600;">' + name + '</td></tr>' +
     '<tr><td style="border:none;color:#888;">Chaîne</td><td style="border:none;">' + chaine + '</td></tr>' +
     '<tr><td style="border:none;color:#888;">Date de diffusion</td><td style="border:none;">' + date + '</td></tr>' +
-    '<tr><td style="border:none;color:#888;">Morceaux OSM</td><td style="border:none;">' + cues.length + ' titres · ' + (totalDur/60).toFixed(1) + ' min · ' + nbIn + ' au catalogue</td></tr></table>' +
+    '<tr><td style="border:none;color:#888;">Titres</td><td style="border:none;">' + cues.length + ' titres · ' + (totalDur/60).toFixed(1) + ' min · ' + nbIn + ' au catalogue</td></tr></table>' +
     '<div class="cards"><div class="card"><div class="lbl">Estimation basse</div><div class="val">' + low + '</div></div>' +
     '<div class="card main"><div class="lbl">Médiane (3 ans)</div><div class="val">' + mid + '</div></div>' +
     '<div class="card"><div class="lbl">Estimation haute</div><div class="val">' + high + '</div></div></div>' +
     '<table><thead><tr><th>#</th><th>Titre</th><th>Compositeur(s)</th><th style="text-align:right;">Durée</th><th style="text-align:right;">Part</th></tr></thead><tbody>' + rows + '</tbody></table>' +
-    '<div class="foot">Estimation indicative calculée par l\'outil OSM SACEM, calibrée sur les revenus réels. Les montants définitifs dépendent du nombre réel de diffusions et des barèmes SACEM en vigueur.</div>' +
+    '<div class="foot">Estimation indicative calculée par SANJORA, calibrée sur les revenus réels. Les montants définitifs dépendent du nombre réel de diffusions et des barèmes SACEM en vigueur.</div>' +
     '<script>setTimeout(function(){window.print();},300);<\/script>' +
     '</body></html>');
   w.document.close();
@@ -1263,7 +1298,7 @@ function openComp(nom) {
     h += '<div class="detail-row clickable" data-act="oeuvre" data-id="' + attr(o.tn) + '"><div class="main"><div class="t">' + escapeHtml(o.t) + '</div></div><div style="text-align:right;white-space:nowrap;">' + (o.p != null ? '<span class="pill pill-blue">' + o.p + '%</span> ' : '') + (o.r > 0 ? '<strong style="color:var(--success)">' + Math.round(o.r).toLocaleString('fr-FR') + ' €</strong>' : '<span style="color:var(--text-dim);font-size:11px">dormant</span>') + '</div></div>';
   });
   if (list.length > 120) h += '<p style="font-size:11px;color:var(--text-dim);padding:8px;">... +' + (list.length - 120) + ' autres</p>';
-  showDetail(nom, 'Compositeur OSM', h);
+  showDetail(nom, 'Compositeur', h);
 }
 
 document.addEventListener('click', function (e) {
@@ -1539,7 +1574,29 @@ document.addEventListener('DOMContentLoaded',()=>{
       sampleCat:(typeof CAT_RICH!=='undefined'?Object.entries(CAT_RICH).slice(0,5):[]),
       types:(typeof TYPES_REV!=='undefined'?TYPES_REV:[]),
       versements:(typeof REVENUS_VERSEMENTS!=='undefined'?REVENUS_VERSEMENTS:[])};
+    saveSanjora();
   }
+
+  // ===== Sauvegarde automatique (localStorage, 100% sur l'ordinateur du client) =====
+  function saveSanjora(){
+    try{
+      localStorage.setItem('sanjora_data', JSON.stringify({
+        v:1,
+        releves: window.__RELEVES || [],
+        cues:    window.__CUES    || [],
+        cueprog: window.__CUEPROG || []
+      }));
+      var s=document.getElementById('save-indicator');
+      if(s) s.textContent='🔒 Enregistré sur cet ordinateur · ' +
+        new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    }catch(e){}
+  }
+  window.sanjoraReset=function(){
+    if(confirm("Effacer toutes les données importées (relevés, cue sheets) de cet ordinateur ?\nLe registre des cue sheets ajoutées manuellement n'est pas concerné.")){
+      try{localStorage.removeItem('sanjora_data');}catch(e){}
+      location.reload();
+    }
+  };
 
   async function handlePDFs(files){
     const bar=document.getElementById('imp-status'); let ok=0,ko=0;
@@ -1561,11 +1618,29 @@ document.addEventListener('DOMContentLoaded',()=>{
       ' — '+Object.keys(CAT_RICH).length+' œuvres · '+(TOTAL_REEL||0).toLocaleString('fr-FR')+' € brut cumulé';
   }
   function setup(){
+    // ===== Restauration automatique des données enregistrées =====
+    try{
+      var __sd=JSON.parse(localStorage.getItem('sanjora_data')||'null');
+      if(__sd){
+        if(Array.isArray(__sd.cues))    window.__CUES    = __sd.cues;
+        if(Array.isArray(__sd.cueprog)) window.__CUEPROG = __sd.cueprog;
+        if(Array.isArray(__sd.releves) && __sd.releves.length){
+          window.__RELEVES = __sd.releves;
+          aggregate(); // reconstruit catalogue, revenus, prévisions, calibration
+          ['imp-intro','imp-help'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+          var h2=document.getElementById('imp-h2'); if(h2){h2.textContent='✓ Tes relevés sont importés (restaurés)';h2.style.fontSize='18px';}
+          var bar=document.getElementById('imp-status');
+          if(bar) bar.textContent='🔒 '+__sd.releves.length+' relevé(s) restauré(s) depuis cet ordinateur · '+
+            (typeof CAT_RICH!=='undefined'?Object.keys(CAT_RICH).length:0)+' œuvres';
+        }
+        if((window.__CUES||[]).length && window.renderCueResults) try{renderCueResults();}catch(e){}
+      }
+    }catch(e){}
     if(typeof pdfjsLib!=='undefined'&&pdfjsLib.GlobalWorkerOptions){
       var wEl=document.getElementById('pdf-worker-src');
       if(wEl){ try{ var blob=new Blob([wEl.textContent],{type:'application/javascript'}); pdfjsLib.GlobalWorkerOptions.workerSrc=URL.createObjectURL(blob); }catch(e){} }
     }
-    var ec=document.getElementById('est-calib'); if(ec) ec.innerHTML='💡 La valeur de base se calibrera automatiquement quand tu importeras tes cue sheets. En attendant, saisis-la à la main.';
+    var ec=document.getElementById('est-calib'); if(ec) ec.innerHTML='💡 Vos imports sont enregistrés automatiquement sur cet ordinateur — rien ne part en ligne. La valeur de base se calibre quand vous importez vos cue sheets.';
     var cf=document.getElementById('est-cue-file');
     if(cf) cf.addEventListener('change', function(e){ if(e.target.files.length) handleCues(Array.from(e.target.files)); });
     var cdz=document.getElementById('est-cue-drop');
@@ -1645,6 +1720,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     window.__CUEPROG=(window.__CUEPROG||[]).concat(programs);
     var sumDiff=window.__CUEPROG.reduce(function(s,p){return s+(p.diff||0);},0);
     if(sumDiff>0){ var ed=document.getElementById('est-diff'); if(ed) ed.value=sumDiff; }
+    saveSanjora();
     renderCueResults();
   }
   window.renderCueResults=function(){
@@ -1694,5 +1770,150 @@ document.addEventListener('DOMContentLoaded',()=>{
 })();
 
 </script>
+<script>
+/* ÉDITEURS : import catalogue (CSV/Excel/TSV/TXT) + génération automatique de cue sheet depuis l'EDL */
+(function(){
+  window.__CATALOG = window.__CATALOG || {};
+  function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim(); }
+  function nkey(s){ return norm(s); }
+  function durToSec(v){
+    v=String(v||'').trim(); if(!v) return 0;
+    if(v.indexOf(':')>=0){ var p=v.split(':').map(function(x){return parseInt(x,10)||0;});
+      if(p.length===3) return p[0]*3600+p[1]*60+p[2];
+      if(p.length===2) return p[0]*60+p[1]; }
+    return parseFloat(v.replace(',','.'))||0;
+  }
+  function secToMmss(sec){ sec=Math.round(sec||0); var m=Math.floor(sec/60), s=sec%60; return m+':'+(s<10?'0':'')+s; }
+
+  function findCol(headers, keys){
+    for(var i=0;i<headers.length;i++){ var h=norm(headers[i]);
+      for(var k=0;k<keys.length;k++){ if(h.indexOf(keys[k])>=0) return i; } }
+    return -1;
+  }
+  function rowsToCatalog(rows){
+    if(!rows||!rows.length) return 0;
+    // trouve la ligne d'en-tête (celle qui contient "titre"/"title")
+    var hr=0;
+    for(var r=0;r<Math.min(rows.length,8);r++){ if(findCol(rows[r],['titre','title','oeuvre','morceau'])>=0){ hr=r; break; } }
+    var H=rows[hr];
+    var ci={
+      titre: findCol(H,['titre','title','oeuvre','morceau']),
+      duree: findCol(H,['duree','duration','minutage']),
+      iswc:  findCol(H,['iswc']),
+      isrc:  findCol(H,['isrc']),
+      editeur: findCol(H,['editeur','publisher','edition']),
+      album: findCol(H,['album','reference','ref alb','disque']),
+      ayant: findCol(H,['ayant','compositeur','auteur','composer','author','interprete','artiste','artist']),
+      part:  findCol(H,['part','pourcent','share','quote','%'])
+    };
+    if(ci.titre<0) return 0;
+    var added=0;
+    for(var i=hr+1;i<rows.length;i++){ var row=rows[i]; if(!row) continue;
+      var titre=String(row[ci.titre]||'').trim(); if(!titre) continue;
+      var key=titre.toUpperCase().trim();
+      var e={ titre:titre,
+        duree: ci.duree>=0?durToSec(row[ci.duree]):0,
+        iswc:  ci.iswc>=0?String(row[ci.iswc]||'').trim():'',
+        isrc:  ci.isrc>=0?String(row[ci.isrc]||'').trim():'',
+        editeur: ci.editeur>=0?String(row[ci.editeur]||'').trim():'',
+        album: ci.album>=0?String(row[ci.album]||'').trim():'',
+        ayant: ci.ayant>=0?String(row[ci.ayant]||'').trim():'',
+        part:  ci.part>=0?(parseFloat(String(row[ci.part]||'').replace(',','.'))||0):0
+      };
+      window.__CATALOG[key]=e; added++;
+    }
+    return added;
+  }
+  function parseCatFile(file){ return new Promise(function(resolve){
+    var ext=(file.name.split('.').pop()||'').toLowerCase(), fr=new FileReader();
+    if(ext==='xls'||ext==='xlsx'){
+      fr.onload=function(){ try{
+        var wb=XLSX.read(new Uint8Array(fr.result),{type:'array'});
+        var ws=wb.Sheets[wb.SheetNames[0]];
+        var rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''}).map(function(rw){return rw.map(function(c){return String(c);});});
+        resolve(rowsToCatalog(rows));
+      }catch(e){ resolve(0); } };
+      fr.readAsArrayBuffer(file);
+    } else {
+      fr.onload=function(){ var txt=fr.result;
+        var first=(txt.split(/\r?\n/)[0]||'');
+        var delim = (first.split(';').length>=first.split('\t').length && first.split(';').length>=first.split(',').length)?';'
+                  : (first.split('\t').length>=first.split(',').length?'\t':',');
+        var rows=txt.split(/\r?\n/).filter(function(l){return l.trim().length;}).map(function(l){return l.split(delim).map(function(c){return c.replace(/^"|"$/g,'').trim();});});
+        resolve(rowsToCatalog(rows));
+      };
+      fr.readAsText(file);
+    }
+  }); }
+
+  function mirrorToRich(){
+    try{ if(typeof CAT_RICH==='undefined') return;
+      for(var k in window.__CATALOG){ var e=window.__CATALOG[k];
+        if(!CAT_RICH[k]) CAT_RICH[k]={p:e.part||0, c:e.ayant?[e.ayant]:[]}; }
+      var kc=document.getElementById('kpi-cat'); if(kc) kc.textContent=Object.keys(CAT_RICH).length||'—';
+      var ca=document.getElementById('cat-all'); if(ca) ca.textContent='🎵 Tout le catalogue ('+Object.keys(CAT_RICH).length+')';
+    }catch(e){}
+  }
+  function saveCatalog(){ try{ localStorage.setItem('sanjora_catalog', JSON.stringify(window.__CATALOG)); }catch(e){} }
+  function catStatus(){
+    var n=Object.keys(window.__CATALOG).length, el=document.getElementById('cat-status');
+    if(el) el.innerHTML = n? ('📚 <b style="color:#7ddf9f;">'+n+' œuvre(s)</b> dans ton catalogue (enregistré sur cet ordinateur).')
+                            : 'Aucun catalogue importé pour l\'instant.';
+  }
+  async function handleCatalog(files){
+    var total=0;
+    for(var i=0;i<files.length;i++){ total+=await parseCatFile(files[i]); }
+    mirrorToRich(); saveCatalog(); catStatus();
+    var el=document.getElementById('cat-status');
+    if(el) el.innerHTML += ' &nbsp;✓ '+total+' ligne(s) importée(s).';
+  }
+
+  function generateCueSheet(){
+    var res=document.getElementById('cue-gen-res');
+    var cues=(window.__CUES||[]);
+    if(!cues.length){ if(res) res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord un EDL dans la zone ci-dessous.</span>'; return; }
+    if(!Object.keys(window.__CATALOG).length){ if(res) res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord ton catalogue (ci-dessus) pour remplir ISWC, ISRC, éditeur, etc.</span>'; return; }
+    var catKeys=Object.keys(window.__CATALOG);
+    var catNorm=catKeys.map(function(k){return {k:k, n:nkey(window.__CATALOG[k].titre)};});
+    var header=['Durée','Titre','Ayant Droit','Éditeur','Code ISWC','Réf Album','Code ISRC','Utilisations'];
+    var aoa=[header]; var matched=0, miss=0;
+    cues.forEach(function(c){
+      var tn=nkey(c.title), found=null;
+      for(var i=0;i<catNorm.length;i++){ var cn=catNorm[i].n;
+        if(cn && (cn===tn || cn.indexOf(tn)>=0 || tn.indexOf(cn)>=0)){ found=window.__CATALOG[catNorm[i].k]; break; } }
+      var dur=c.dur || (found?found.duree:0) || 0;
+      if(found){ matched++;
+        aoa.push([ secToMmss(dur), found.titre, found.ayant||'', found.editeur||'', found.iswc||'', found.album||'', found.isrc||'', 'S' ]);
+      } else { miss++;
+        aoa.push([ secToMmss(dur), c.title, '', '', '', '', '', 'S' ]);
+      }
+    });
+    try{
+      var ws=XLSX.utils.aoa_to_sheet(aoa);
+      ws['!cols']=[{wch:8},{wch:34},{wch:24},{wch:20},{wch:18},{wch:16},{wch:18},{wch:12}];
+      var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Cue sheet');
+      XLSX.writeFile(wb,'cue_sheet.xlsx');
+      if(res) res.innerHTML='✅ Cue sheet générée : <b>'+(aoa.length-1)+'</b> ligne(s) · <b style="color:#7ddf9f;">'+matched+' retrouvée(s)</b> dans le catalogue'+(miss?(' · <span style="color:#ffb347;">'+miss+' sans correspondance (à compléter à la main)</span>'):'')+'. Le fichier Excel vient d\'être téléchargé.';
+    }catch(e){ if(res) res.innerHTML='<span style="color:#ff7a7a;">Erreur à la génération du fichier Excel.</span>'; }
+  }
+
+  function init(){
+    var cf=document.getElementById('cat-file');
+    if(cf) cf.addEventListener('change', function(e){ if(e.target.files.length) handleCatalog(Array.from(e.target.files)); });
+    var cd=document.getElementById('cat-drop');
+    if(cd){ ['dragover','dragenter'].forEach(function(ev){cd.addEventListener(ev,function(e){e.preventDefault();cd.style.background='rgba(120,120,180,0.18)';});});
+      ['dragleave','dragend'].forEach(function(ev){cd.addEventListener(ev,function(e){e.preventDefault();cd.style.background='rgba(120,120,180,0.05)';});});
+      cd.addEventListener('drop',function(e){e.preventDefault();cd.style.background='rgba(120,120,180,0.05)';var fs=Array.from(e.dataTransfer.files||[]);if(fs.length)handleCatalog(fs);}); }
+    var gb=document.getElementById('cue-gen'); if(gb) gb.addEventListener('click', generateCueSheet);
+    // restauration du catalogue enregistré
+    setTimeout(function(){
+      try{ var c=JSON.parse(localStorage.getItem('sanjora_catalog')||'null'); if(c){ window.__CATALOG=c; mirrorToRich(); } }catch(e){}
+      catStatus();
+    }, 300);
+  }
+  if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
 </body>
 </html>
