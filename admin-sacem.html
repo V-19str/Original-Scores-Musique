@@ -189,6 +189,7 @@ button.danger:hover { background: #5a1f1f; }
 
     <div class="cue-list" id="cue-list"><p class="empty-state">Glisse une cue sheet (iNumerica/EDL DaVinci/CSV).</p></div>
     <div class="summary" id="cue-summary" style="display:none;"></div>
+    <div id="cue-verif" style="font-size:12.5px;"></div>
 
     <div class="results">
       <p class="results-title">Estimation droits — calibrée sur tes €/diffusion réels (pots SACEM inclus)</p>
@@ -230,8 +231,29 @@ button.danger:hover { background: #5a1f1f; }
   </div>
 
   <div class="view" data-view="comps"><div id="comps-list"></div></div>
-  <div class="view" data-view="rev"><div id="rev-list"></div></div>
+  <div class="view" data-view="rev">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
+      <button class="btn" id="rapport-annuel" style="font-size:12px;cursor:pointer;background:#2a2a40;color:#ccd;border:1px solid #44445e;border-radius:7px;padding:7px 12px;">📄 Rapport annuel (PDF)</button>
+    </div>
+    <div id="rev-list"></div>
+  </div>
   <div class="view" data-view="prev">
+    <div class="card">
+      <p class="section-head">🎯 Simulateur « Et si ? » — estime le revenu d'un placement</p>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">Avant de placer un morceau : combien ça peut rapporter ?</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:12px;">
+        <label style="font-size:12px;color:#ccd;">Chaîne<br><select id="sim-ch" style="padding:5px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:13px;width:140px;"></select></label>
+        <label style="font-size:12px;color:#ccd;">Type de programme<br><select id="sim-type" style="padding:5px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:13px;width:160px;">
+          <option value="260">Quotidienne (260 ép/an)</option><option value="52">Hebdomadaire (52 ép/an)</option><option value="24">Bi-mensuelle (24 ép/an)</option>
+          <option value="10">Mini-série (10 ép)</option><option value="6">Unitaire / Doc (6 diff)</option><option value="1">1 seule diffusion</option>
+          <option value="0">Nombre personnalisé ↓</option></select></label>
+        <label style="font-size:12px;color:#ccd;">Nb diffusions<br><input type="number" id="sim-diff" value="260" min="1" style="padding:5px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:13px;width:80px;"></label>
+        <label style="font-size:12px;color:#ccd;">Durée morceau (s)<br><input type="number" id="sim-dur" value="60" min="1" style="padding:5px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:13px;width:80px;"></label>
+        <label style="font-size:12px;color:#ccd;">Ta part (%)<br><input type="number" id="sim-part" value="100" min="1" max="100" style="padding:5px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:13px;width:70px;"></label>
+        <button id="sim-calc" style="font-size:13px;height:34px;cursor:pointer;background:#ff7a00;color:#fff;border:none;border-radius:7px;padding:0 14px;">💰 Calculer</button>
+      </div>
+      <div id="sim-res" style="font-size:13px;"></div>
+    </div>
     <div class="card">
       <p class="section-head">📅 Tes prochains versements SACEM — anticipés sur 5 ans d'historique réel</p>
       <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px;">Projection calée sur ta saisonnalité mesurée (relevé de compte 2021→2026). Paiement le 5 du mois, décalé au 1er jour ouvré suivant si week-end/férié.</p>
@@ -644,6 +666,7 @@ function renderCues() {
   const s = document.getElementById('cue-summary');
   s.style.display = 'block';
   s.innerHTML = cues.length + ' morceaux · ' + (totalDur/60).toFixed(1) + ' min · <span style="color:var(--success);">' + nbIn + ' dans catalogue</span> · <span style="color:var(--warning);">' + nbNew + ' nouveaux (5%)</span>';
+  try{ verifCueSheet(); }catch(e){}
   compute();
 }
 
@@ -1345,7 +1368,105 @@ function init() {
   renderCues();
 }
 
+/* ===== SIMULATEUR « ET SI » (perso) ===== */
+function initSimulateur(){
+  var sel=document.getElementById('sim-ch'); if(!sel) return;
+  sel.innerHTML=Object.keys(CH_LBL).map(function(k){return '<option value="'+k+'">'+CH_LBL[k]+'</option>';}).join('');
+  var tp=document.getElementById('sim-type');
+  if(tp) tp.addEventListener('change',function(){ var v=parseInt(this.value), di=document.getElementById('sim-diff'); if(v>0&&di) di.value=v; });
+}
+function simuler(){
+  var ch=document.getElementById('sim-ch').value, diff=parseInt(document.getElementById('sim-diff').value)||1;
+  var dur=parseInt(document.getElementById('sim-dur').value)||60, part=parseInt(document.getElementById('sim-part').value)||100;
+  var res=document.getElementById('sim-res'), bm=VALDIFF[CH_LBL[ch]];
+  var coef=COEFS[ch]||0.05, estHisto=HISTORIQUES.includes(ch), mult=estHisto?1.5:1;
+  var parDiff=coef*dur*mult*(part/100), bmVal=bm?bm.vd*(part/100):0;
+  var best=Math.max(parDiff,bmVal), low=Math.round(best*diff*0.5), mid=Math.round(best*diff), high=Math.round(best*diff*1.8);
+  var h='<div style="background:#1a1a2e;border:1px solid #44445e;border-radius:10px;padding:14px;">';
+  h+='<div style="font-size:14px;color:#fff;font-weight:700;margin-bottom:10px;">'+diff+' diffusion(s) sur '+CH_LBL[ch]+' · morceau '+dur+'s · '+part+'% de part</div>';
+  h+='<div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:10px;">';
+  h+='<div style="text-align:center;"><div style="font-size:11px;color:#9aa;">Prudent</div><div style="font-size:22px;font-weight:700;color:#ffb347;">'+low.toLocaleString('fr-FR')+' €</div></div>';
+  h+='<div style="text-align:center;"><div style="font-size:11px;color:#9aa;">Estimé</div><div style="font-size:26px;font-weight:700;color:#7ddf9f;">'+mid.toLocaleString('fr-FR')+' €</div></div>';
+  h+='<div style="text-align:center;"><div style="font-size:11px;color:#9aa;">Optimiste</div><div style="font-size:22px;font-weight:700;color:#6db3f2;">'+high.toLocaleString('fr-FR')+' €</div></div></div>';
+  h+='<div style="font-size:12px;color:#9aa;">≈ '+Math.round(best).toLocaleString('fr-FR')+' € par diffusion';
+  if(bm) h+=' (réf. mesurée : '+bmVal.toFixed(1)+' €)';
+  h+='</div>';
+  if(diff>=52) h+='<div style="font-size:11px;color:#ffd9a0;margin-top:6px;">📅 Versements étalés sur 12 à 18 mois (grosses échéances janvier/juillet).</div>';
+  h+='<div style="font-size:10.5px;color:var(--text-dim);margin-top:8px;">Estimation indicative · tes barèmes mesurés · varie selon créneau, genre et répartition.</div></div>';
+  res.innerHTML=h;
+}
+
+/* ===== VÉRIFICATEUR DE CUE SHEETS (perso) ===== */
+function verifCueSheet(){
+  var el=document.getElementById('cue-verif'); if(!el) return;
+  if(!cues.length){el.innerHTML='';return;}
+  var nMissDur=0,nNew=0,nMissPart=0,totalPart=0;
+  cues.forEach(function(c){
+    if(!c.duree||c.duree<=0) nMissDur++;
+    if(c.match==='new') nNew++;
+    if(!c.part||c.part<=0) nMissPart++;
+    totalPart+=(c.part||0);
+  });
+  var issues=[],warnings=[],ok=[];
+  if(nNew) warnings.push('⚠️ <b>'+nNew+'</b> titre(s) hors catalogue (nouveaux ou non reconnus)');
+  if(nMissDur) issues.push('❌ <b>'+nMissDur+'</b> sans durée (la SACEM calcule à la seconde)');
+  if(nMissPart) warnings.push('⚠️ <b>'+nMissPart+'</b> sans part renseignée');
+  if(!issues.length&&!warnings.length) ok.push('✅ <b>Cue sheet complète</b> — prête à déclarer');
+  var score=100; score-=nMissDur*10; score-=nNew*5; score-=nMissPart*4;
+  score=Math.max(0,Math.min(100,score));
+  var color=score>=80?'#7ddf9f':score>=50?'#ffb347':'#ff6b6b';
+  var h='<div style="background:#1a1a2e;border:1px solid #44445e;border-radius:10px;padding:12px;margin-top:10px;">';
+  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="font-size:13px;font-weight:700;color:#fff;">🔍 Vérification</span>';
+  h+='<span style="background:#23233a;border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:'+color+';">'+score+'/100</span></div>';
+  if(issues.length) h+=issues.join('<br>')+'<br>';
+  if(warnings.length) h+=warnings.join('<br>')+'<br>';
+  if(ok.length) h+=ok.join('<br>');
+  h+='</div>';
+  el.innerHTML=h;
+}
+
+/* ===== RAPPORT ANNUEL PDF (perso) ===== */
+function rapportAnnuel(){
+  var now=new Date(), year=now.getFullYear()-1, nbOeuvres=Object.keys(CAT_RICH).length;
+  var topOeuvres=[]; for(var k in OEUVRES_DETAIL){var o=OEUVRES_DETAIL[k];topOeuvres.push({t:o.t,r:o.r});}
+  topOeuvres.sort(function(a,b){return b.r-a.r;});
+  var top10=topOeuvres.slice(0,10), totalAn=0;
+  REVENUS_ANNEE.forEach(function(a){if(parseInt(a.annee)===year)totalAn=a.revenu;});
+  if(!totalAn&&REVENUS_ANNEE.length) totalAn=REVENUS_ANNEE[REVENUS_ANNEE.length-1].revenu;
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var h='<html><head><meta charset="utf-8"><title>Rapport Diapason '+year+'</title>'
+  +'<style>body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;color:#222;line-height:1.6;}'
+  +'h1{color:#1a1a2e;border-bottom:3px solid #ff7a00;padding-bottom:10px;}h2{color:#ff7a00;margin-top:30px;}'
+  +'.kpi{display:inline-block;background:#f5f5ff;border:1px solid #ddd;border-radius:10px;padding:15px 25px;margin:8px;text-align:center;}'
+  +'.kpi .v{font-size:28px;font-weight:700;color:#1a1a2e;}.kpi .l{font-size:12px;color:#666;}'
+  +'table{width:100%;border-collapse:collapse;margin:10px 0;}th,td{padding:8px 12px;border-bottom:1px solid #eee;text-align:left;font-size:13px;}'
+  +'th{background:#f5f5ff;font-weight:600;}.ft{margin-top:40px;padding-top:15px;border-top:1px solid #ddd;font-size:11px;color:#999;text-align:center;}'
+  +'@media print{body{margin:20px;}}</style></head><body>'
+  +'<h1>Rapport annuel SACEM — OSM</h1>'
+  +'<p style="color:#666;">Généré le '+now.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})+'</p>'
+  +'<div style="text-align:center;margin:20px 0;">'
+  +'<div class="kpi"><div class="v">'+Math.round(totalAn).toLocaleString('fr-FR')+' €</div><div class="l">Revenus '+year+'</div></div>'
+  +'<div class="kpi"><div class="v">'+nbOeuvres+'</div><div class="l">Œuvres au catalogue</div></div>';
+  if(REVENUS_ANNEE.length>=2){var prev=REVENUS_ANNEE[REVENUS_ANNEE.length-2].revenu;var evol=prev?Math.round((totalAn-prev)/prev*100):0;
+    h+='<div class="kpi"><div class="v" style="color:'+(evol>=0?'#2a9d4e':'#d32f2f')+';">'+(evol>=0?'+':'')+evol+'%</div><div class="l">Évolution</div></div>';}
+  h+='</div><h2>Top 10 des œuvres</h2><table><tr><th>#</th><th>Titre</th><th style="text-align:right;">Revenu</th></tr>';
+  top10.forEach(function(o,i){h+='<tr><td>'+(i+1)+'</td><td>'+esc(o.t)+'</td><td style="text-align:right;font-weight:600;">'+Math.round(o.r).toLocaleString('fr-FR')+' €</td></tr>';});
+  h+='</table>';
+  if(REVENUS_ANNEE.length>1){h+='<h2>Évolution annuelle</h2><table><tr><th>Année</th><th style="text-align:right;">Revenu brut</th></tr>';
+    REVENUS_ANNEE.forEach(function(a){h+='<tr><td>'+a.annee+'</td><td style="text-align:right;font-weight:600;">'+Math.round(a.revenu).toLocaleString('fr-FR')+' €</td></tr>';});h+='</table>';}
+  if(typeof TYPES_REV!=='undefined'&&TYPES_REV.length){h+='<h2>Par type de diffusion</h2><table><tr><th>Type</th><th style="text-align:right;">Revenu</th></tr>';
+    TYPES_REV.forEach(function(t){h+='<tr><td>'+esc(t.type)+'</td><td style="text-align:right;">'+Math.round(t.revenu).toLocaleString('fr-FR')+' €</td></tr>';});h+='</table>';}
+  h+='<div class="ft">Rapport généré par <b>Diapason Admin</b> — OSM · Original Scores Music<br>Document interne. Seuls les relevés SACEM officiels font foi.</div>';
+  h+='<script>window.onload=function(){window.print();}<\/script></body></html>';
+  var w=window.open('','_blank'); if(w){w.document.write(h);w.document.close();}
+}
+
 init();
+setTimeout(function(){
+  try{ initSimulateur(); }catch(e){}
+  var sc=document.getElementById('sim-calc'); if(sc) sc.addEventListener('click', simuler);
+  var ra=document.getElementById('rapport-annuel'); if(ra) ra.addEventListener('click', rapportAnnuel);
+},200);
 </script>
 
 <div class="detail-overlay" id="detail-overlay" onclick="if(event.target===this)closeDetail()">
