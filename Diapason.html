@@ -237,6 +237,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
   <div class="header">
     <div class="header-left">
       <h1>Diapason</h1>
+      <p style="color:#ff7a00;font-size:13px;font-style:italic;font-weight:600;margin-bottom:2px;">Tout le monde se met au Diapason</p>
       <p style="color:#9aa;font-size:13px;">Anticipez vos droits SACEM · 100 % confidentiel, 100 % sur votre ordinateur</p>
     </div>
     <div class="header-right">
@@ -339,11 +340,6 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
     <div id="global-results"><p class="empty-state">Tape pour chercher dans ton catalogue, tes programmes et tes compositeurs.</p></div>
   </div>
 
-  <div class="view" data-view="progs">
-    <input type="text" id="progs-search" placeholder="Chercher un programme..." style="margin-bottom: 12px;">
-    <div id="progs-list"></div>
-  </div>
-
   <div class="view" data-view="cat">
     <input type="text" id="cat-search" placeholder="Chercher dans votre catalogue (titre)..." style="margin-bottom: 10px;">
     <div class="actions" style="margin:0 0 10px;">
@@ -393,24 +389,6 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
   </div>
 
 
- <div class="view" data-view="detect">
-   <div class="card">
-     <p class="section-head">📡 Où sont diffusés tes morceaux</p>
-     <p style="font-size:12px;color:var(--text-dim);margin:0 0 12px;">
-       Détections par empreinte audio (audfprint), croisées avec ton catalogue.
-       Importe le fichier de détections produit par le moteur, ou envoie une capture à analyser.
-       Les lignes <em>exemple</em> ci-dessous montrent le rendu — elles disparaissent dès ton 1er import.
-     </p>
-     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
-       <label class="btn" style="cursor:pointer;">📥 Importer des détections (.json / .csv)
-         <input type="file" id="detect-file" accept=".json,.csv" style="display:none;">
-       </label>
-       <button class="btn" id="detect-clear">🗑️ Vider</button>
-     </div>
-     <div class="grid grid-3" id="detect-stats" style="margin-bottom:14px;"></div>
-     <div id="detect-body"></div>
-   </div>
- </div>
 </div>
 
 <div style="margin-top:40px;padding:20px;border-top:1px solid #2a2a40;text-align:center;font-size:11px;color:#667;">
@@ -482,8 +460,7 @@ function normalize(s) {
 
 function cleanTitle(t) {
   let n = normalize(t);
-  n = n.replace(/^MBAPP+E[_\s]*MR[_\s]*\d*[_\s]*/i, '').replace(/^MBAPP+E[_\s]*RC[_\s]*\d*[_\s]*/i, '').replace(/^MBAPP+E[_\s]*/i, '')
-       .replace(/\(.*?\)/g, '').replace(/_(JORDAN SETI|ROTARY DUBZ|ROMAN CHELMINSKI|PR IGNATIUS|MR|RC)$/i, '')
+  n = n.replace(/\(.*?\)/g, '')
        .replace(/[-–]\s*(RITHMIC VERSION|FULL VERSION|BASS&DRUMS|KEYS ONLY|GTR ONLY|HARMONY|NO DRUMS|NO HORNS|PIANO ONLY|PIZZ ONLY|STRINGS|STEM)/gi, '')
        .replace(/(BASS&DRUMS|KEYS ONLY|GTR ONLY|HARMONY|NO DRUMS|NO HORNS|PIANO ONLY|PIZZ ONLY|STRINGS|STEM)/gi, '')
        .replace(/\.(MP3|WAV|AIF|AIFF|M4A|FLAC)(\.NEW\.\d+)?$/i, '')
@@ -555,33 +532,23 @@ function isVideoClip(name) {
 }
 
 function extractComposerFromName(name) {
-  // Ex : "STICA MVCVM_JORDAN SETI" → titre "STICA MVCVM", compositeur "JORDAN SETI"
-  // Ex : "MBAPPÉ_MR_002_FOOT GAME" → titre "MBAPPÉ MR 002 FOOT GAME" (MR = Mathieu Rabaté inferré)
+  // Extrait le compositeur quand le nom de fichier suit le format "TITRE_COMPOSITEUR"
   let title = name.replace(/\.(MP3|WAV|AIF|AIFF|M4A|FLAC)(\.NEW\.\d+)?$/i, '');
-  
+
   const upper = title.toUpperCase();
   const composers = [];
   let cleanTitle = title;
-  
+
   for (const c of OSM_COMPOSERS) {
-    if (upper.includes(c)) {
+    if (c && upper.includes(c)) {
       composers.push(c);
-      // Retirer le compositeur du titre
       const re = new RegExp('[_\\-\\s]*' + c.replace(/\s/g, '\\s*') + '[_\\-\\s]*', 'gi');
       cleanTitle = cleanTitle.replace(re, ' ');
     }
   }
-  
+
   cleanTitle = cleanTitle.replace(/[_]+/g, ' ').replace(/\s+/g, ' ').trim();
-  
-  // Détection MR / RC en début (Mathieu Rabaté / Roman Chelminski Mbappé)
-  if (/^MBAPP[EÉ][_\s]*MR[_\s]/i.test(name) && !composers.includes('MATHIEU RABATE')) {
-    composers.push('MATHIEU RABATE');
-  }
-  if (/^MBAPP[EÉ][_\s]*RC[_\s]/i.test(name) && !composers.includes('ROMAN CHELMINSKI')) {
-    composers.push('ROMAN CHELMINSKI');
-  }
-  
+
   return { titre: cleanTitle, compositeurs: composers.join(', ') };
 }
 
@@ -896,11 +863,11 @@ function getProjects() { return JSON.parse(localStorage.getItem('osm_projects') 
 function setProjects(p) { localStorage.setItem('osm_projects', JSON.stringify(p)); }
 function setProjectStatus(id, st) {
   const ps = getProjects(); const p = ps.find(x => x.id === id);
-  if (p) { p.statut = st; setProjects(ps); loadProgrammes(document.getElementById('progs-search').value); }
+  if (p) { p.statut = st; setProjects(ps); loadProgrammes((document.getElementById('progs-search')||{}).value); }
 }
 function deleteProject(id) {
   setProjects(getProjects().filter(p => p.id !== id));
-  loadProgrammes(document.getElementById('progs-search').value);
+  loadProgrammes((document.getElementById('progs-search')||{}).value);
 }
 function openAddCuesheet() {
   let opts = Object.keys(CH_LBL).map(k => '<option value="' + k + '">' + CH_LBL[k] + '</option>').join('');
@@ -982,6 +949,7 @@ function saveProject() {
 let progsTimer;
 function loadProgrammes(filter) {
   const c = document.getElementById('progs-list');
+  if (!c) return;
   const q = (filter || '').toLowerCase().trim();
   let html = '';
 
@@ -1055,7 +1023,7 @@ function loadProgrammes(filter) {
     btn.addEventListener('click', e => {
       const ps = JSON.parse(localStorage.getItem('osm_projects') || '[]');
       localStorage.setItem('osm_projects', JSON.stringify(ps.filter(p => p.id !== e.target.dataset.id)));
-      loadProgrammes(document.getElementById('progs-search').value);
+      loadProgrammes((document.getElementById('progs-search')||{}).value);
     });
   });
 }
@@ -1511,11 +1479,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Mon nom — chargement et sauvegarde
   const mnI=document.getElementById('my-name');
   if(mnI){ mnI.value=MY_NAME; mnI.addEventListener('input',function(){ MY_NAME=this.value.trim(); localStorage.setItem('diapason_myname',MY_NAME); }); }
-  renderDetections();
-  const fi=document.getElementById('detect-file');
-  if(fi) fi.addEventListener('change',e=>{ if(e.target.files[0]) importDetections(e.target.files[0]); });
-  const cl=document.getElementById('detect-clear');
-  if(cl) cl.addEventListener('click',()=>{ DETECTIONS.length=0; renderDetections(); });
 });
 </script>
 <script>
