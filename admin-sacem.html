@@ -133,17 +133,17 @@ button.danger:hover { background: #5a1f1f; }
   </div>
 
   <div class="tabs">
-    <button class="tab active" data-v="calc">📊 Calculer</button>
-    <button class="tab" data-v="search">🔍 Recherche</button>
-    <button class="tab" data-v="progs">📺 Mes programmes</button>
+    <button class="tab active" data-v="rev">💰 Tableau de bord</button>
     <button class="tab" data-v="cat">🎵 Catalogue</button>
-    <button class="tab" data-v="comps">👥 Compositeurs</button>
-    <button class="tab" data-v="rev">💰 Revenus</button>
-    <button class="tab" data-v="prev">📅 Prévisions</button>
-        <button class="tab" data-v="detect">📡 Détections</button>
+    <button class="tab" data-v="comps">👥 Ayants droit</button>
+    <button class="tab" data-v="prev">📅 Anticipation</button>
+    <button class="tab" data-v="calc">🔎 Audit</button>
+    <button class="tab" data-v="progs">📺 Mes programmes</button>
+    <button class="tab" data-v="detect">📡 Détections</button>
+    <button class="tab" data-v="search">🔍 Recherche</button>
   </div>
 
-  <div class="view active" data-view="calc">
+  <div class="view" data-view="calc">
     <div class="card">
       <div class="grid grid-3" style="margin-bottom: 12px;">
         <div><label>Programme</label><input type="text" id="p-name" placeholder="auto-rempli depuis le fichier"></div>
@@ -231,7 +231,7 @@ button.danger:hover { background: #5a1f1f; }
   </div>
 
   <div class="view" data-view="comps"><div id="comps-list"></div></div>
-  <div class="view" data-view="rev">
+  <div class="view active" data-view="rev">
     <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
       <button class="btn" id="rapport-annuel" style="font-size:12px;cursor:pointer;background:#2a2a40;color:#ccd;border:1px solid #44445e;border-radius:7px;padding:7px 12px;">📄 Rapport annuel (PDF)</button>
     </div>
@@ -965,7 +965,7 @@ function loadComps() {
   const compositeurs = COMPS_REVENU.filter(x => x.type !== 'editeur');
   const editeurs = COMPS_REVENU.filter(x => x.type === 'editeur');
   const max = compositeurs.length ? compositeurs[0].revenu : 1;
-  let html = '<p class="section-head">Revenus SACEM estimés par compositeur OSM</p>';
+  let html = '<p class="section-head">Revenus SACEM par ayant droit (compositeurs OSM)</p>';
   html += '<p style="font-size:11px;color:var(--text-dim);margin-bottom:14px;">Extrapolé depuis les clés de répartition sur 31 rions (≈100% de tes versements). Pour chaque œuvre, le pot total est réparti entre cosignataires selon leurs parts SACEM.</p>';
   compositeurs.forEach(comp => {
     if (comp.revenu < 1) return;
@@ -1464,6 +1464,7 @@ function rapportAnnuel(){
 init();
 setTimeout(function(){
   try{ initSimulateur(); }catch(e){}
+  try{ loadRevenus(); }catch(e){}
   var sc=document.getElementById('sim-calc'); if(sc) sc.addEventListener('click', simuler);
   var ra=document.getElementById('rapport-annuel'); if(ra) ra.addEventListener('click', rapportAnnuel);
 },200);
