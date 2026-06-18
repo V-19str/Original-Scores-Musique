@@ -281,11 +281,31 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
           <span style="font-size:11px;color:var(--text-dim);">(souvent « S » ; « OC » pour génériques/virgules — modifiable ligne par ligne juste après)</span>
         </div>
         <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <label style="font-size:12px;color:var(--text-dim);">Gabarit diffuseur :</label>
+          <select id="cue-tpl" style="font-size:12px;padding:5px 8px;">
+            <option value="ftv">France TV / iNumerica</option>
+            <option value="sacem">SACEM générique (compositeur / auteur séparés)</option>
+            <option value="intl">International / Netflix (CISAC, en anglais)</option>
+          </select>
+          <span style="font-size:11px;color:var(--text-dim);">l'Excel téléchargé s'adapte aux colonnes du gabarit choisi</span>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <label style="font-size:12px;color:var(--text-dim);">Production :</label>
+          <input id="cue-prod" placeholder="Ex : Feti'i Family S02" style="flex:1;min-width:180px;">
+          <span style="font-size:11px;color:var(--text-dim);">(facultatif — pour regrouper tes cue sheets par production)</span>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
           <button class="primary" id="cue-gen" style="font-size:13px;">Générer la cue sheet</button>
           <span style="font-size:11px;color:var(--text-dim);">nécessite : catalogue importé + EDL importé ci-dessous</span>
         </div>
         <div id="cue-gen-res" style="margin-top:10px;font-size:12.5px;"></div>
         <div id="cue-verif" style="margin-top:10px;font-size:12.5px;"></div>
+      </div>
+
+      <div id="prod-block" style="margin-top:14px;border-top:1px solid #33334d;padding-top:12px;">
+        <div style="font-size:12.5px;color:#ccd;font-weight:600;margin-bottom:4px;">🎬 Mes productions</div>
+        <p style="font-size:11.5px;color:var(--text-dim);margin:0 0 8px;">Chaque cue sheet générée peut être enregistrée dans une production. Tu retrouves ici tes productions avec le nombre de cue sheets, de titres et la durée totale. Tout reste sur ton ordinateur.</p>
+        <div id="prod-list"></div>
       </div>
 
       <div style="margin-top:14px;border-top:1px solid #33334d;padding-top:12px;">
@@ -307,9 +327,9 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
     <div class="card">
       <p class="section-head">📥 Importe tes cue sheets (pour calibrer & repérer l'argent oublié)</p>
       <div style="background:rgba(255,179,71,0.12);border-left:3px solid #ffb347;padding:9px 12px;border-radius:6px;font-size:12.5px;color:#9a6a1a;line-height:1.5;margin-bottom:10px;">⚠️ <b>Surtout pour les éditeurs</b> — et à faire seulement APRÈS avoir importé tes relevés SACEM (encadré en haut de la page). Sans relevés, l'analyse des cue sheets ne donnera rien : Diapason n'aurait aucun catalogue auquel les comparer.</div>
-      <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">Formats : <b>EDL</b> ou <b>Excel iNumerica</b>. Diapason lit tes diffusions, en déduit ta valeur de base €/diffusion à partir de tes vrais droits, et repère les titres diffusés <b>absents de tes relevés</b> (droits à réclamer). Tout reste sur ton ordinateur.</p>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">Formats : <b>EDL</b> (DaVinci, Avid, Premiere, Final Cut), <b>ALE</b> (Avid), <b>FCPXML</b> (Final Cut), <b>XML</b> (Premiere) ou <b>Excel iNumerica</b>. Diapason lit tes diffusions, en déduit ta valeur de base €/diffusion à partir de tes vrais droits, et repère les titres diffusés <b>absents de tes relevés</b> (droits à réclamer). Tout reste sur ton ordinateur.</p>
       <label id="est-cue-drop" style="display:block;cursor:pointer;border:2px dashed #5a5a7a;border-radius:10px;padding:16px;text-align:center;color:#ccd;background:rgba(120,120,180,0.05);">
-        📄 <b>Glisse tes cue sheets ici</b> ou clique pour les choisir<input type="file" id="est-cue-file" accept=".edl,.xls,.xlsx,.csv" multiple style="display:none;">
+        📄 <b>Glisse tes cue sheets ici</b> ou clique pour les choisir<input type="file" id="est-cue-file" accept=".edl,.ale,.fcpxml,.xml,.txt,.xls,.xlsx,.csv" multiple style="display:none;">
       </label>
       <div style="margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <label style="font-size:12px;color:var(--text-dim);">Nombre total de diffusions :</label>
@@ -1704,21 +1724,107 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // ================= CUE SHEETS (EDL / Excel iNumerica) =================
   window.__CUES = window.__CUES || [];
-  function tcSec(tc){ var p=tc.split(':'); return (+p[0])*3600+(+p[1])*60+(+p[2])+(+p[3])/25; }
+  function tcSec(tc, fps){ fps=fps||25; var p=String(tc||'').replace(/;/g,':').split(':').map(function(x){return parseInt(x,10)||0;});
+    if(p.length===4) return p[0]*3600+p[1]*60+p[2]+p[3]/fps;
+    if(p.length===3) return p[0]*3600+p[1]*60+p[2];
+    if(p.length===2) return p[0]*60+p[1];
+    return parseFloat(tc)||0; }
   function cnorm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim(); }
+  var AUDIO_EXT_RE=/\.(aif|aiff|wav|bwf|mp3|m4a|flac|ogg|aac|caf)\b.*$/i;
+  var MEDIA_EXT_RE=/\.(aif|aiff|wav|bwf|mp3|m4a|flac|ogg|aac|caf|mov|mp4|mxf|avi|mkv|r3d)\b.*$/i;
+  function cleanCueName(s){ return String(s||'').replace(MEDIA_EXT_RE,'').replace(/_/g,' ').replace(/\s{2,}/g,' ').trim(); }
 
+  /* ===== CHANTIER 1 : import EDL multi-formats (DaVinci, Avid, Premiere, Final Cut) ===== */
+  // CMX3600 — format texte exporté par DaVinci Resolve, Avid Media Composer, Premiere Pro, Final Cut Pro 7
+  function detectFps(txt){
+    if(/\bFCM:\s*DROP\s*FRAME/i.test(txt)) return 29.97;
+    var m=txt.match(/\b(23\.9\d?|24|25|29\.9\d?|30|50|59\.9\d?|60)\b\s*(?:fps|ips|i\/s)?/i);
+    if(m){ var f=parseFloat(m[1]); if([23.9,23.98,24,25,29.9,29.97,30,50,59.94,60].indexOf(f)>=0 || (f>=23&&f<=60)) return f; }
+    return 25;
+  }
   function parseEDLText(txt){
-    var cues=[], cur=null, seen={};
-    var ev=/^\d{6}\s+(\S+)\s+(?:A\d+|AA|V|B)\s+\S+\s+(\d\d:\d\d:\d\d:\d\d)\s+(\d\d:\d\d:\d\d:\d\d)\s+(\d\d:\d\d:\d\d:\d\d)\s+(\d\d:\d\d:\d\d:\d\d)/;
+    var fps=detectFps(txt), cues=[], cur=null, seen={};
+    // evt#  reel  track(V/A/A2/AA/A2V/B/NONE)  trans  srcIn srcOut recIn recOut
+    var ev=/^\s*\d{2,6}\s+(\S+)\s+\S+\s+\S+\s+(\d\d[:;]\d\d[:;]\d\d[:;]\d\d)\s+(\d\d[:;]\d\d[:;]\d\d[:;]\d\d)\s+(\d\d[:;]\d\d[:;]\d\d[:;]\d\d)\s+(\d\d[:;]\d\d[:;]\d\d[:;]\d\d)/;
     txt.split(/\r?\n/).forEach(function(L){
-      L=L.trim(); var m=L.match(ev);
-      if(m){ var key=m[2]+m[3]; if(seen[key]){ cur=null; return; } seen[key]=1;
-        cur={title:m[1].replace(/_/g,' ').trim(), dur:Math.round((tcSec(m[3])-tcSec(m[2]))*10)/10}; cues.push(cur);
-      } else if(cur && /^\*\s*(FROM CLIP NAME|SOURCE FILE)/i.test(L)){
-        var nm=L.replace(/^[^:]*:\s*/,'').replace(/\.(AIF|WAV|MP3|BWF)\b.*$/i,'').trim(); if(nm) cur.title=nm;
+      var t=L.trim(); var m=t.match(ev);
+      if(m){
+        var key=m[2]+m[3]+m[1]; if(seen[key]){ cur=null; return; } seen[key]=1;
+        var dur=Math.round((tcSec(m[3],fps)-tcSec(m[2],fps))*10)/10;            // durée source
+        if(dur<=0) dur=Math.round((tcSec(m[5],fps)-tcSec(m[4],fps))*10)/10;     // sinon durée timeline
+        var reel=cleanCueName(m[1]);
+        cur={title:reel, dur:dur>0?dur:0, _gen:/^(ax|bl|blk|black|tape|reel\d*|\d+)$/i.test(reel)};
+        cues.push(cur);
+      } else if(cur && /^\*\s*(FROM\s+CLIP\s+NAME|SOURCE\s+FILE|CLIP\s+NAME|FROM\s+FILE)\b/i.test(t)){
+        var nm=cleanCueName(t.replace(/^\*\s*[^:]*:\s*/,'')); if(nm && nm.length>1){ cur.title=nm; cur._gen=false; }
       }
     });
-    return {cues:cues, diffusions:0, meta:{}};
+    return { cues: cues.filter(function(c){return c.title && c.title.length>1 && !c._gen;})
+                       .map(function(c){return {title:c.title, dur:c.dur};}),
+             diffusions:0, meta:{} };
+  }
+  // ALE — Avid Log Exchange (export natif Avid Media Composer), tabulé
+  function parseALE(txt){
+    var lines=txt.split(/\r?\n/), cols=null, inData=false, cues=[];
+    for(var i=0;i<lines.length;i++){
+      var raw=lines[i], tag=raw.trim().toLowerCase();
+      if(tag==='column'){ for(var j=i+1;j<lines.length;j++){ if(lines[j].trim()){ cols=lines[j].split('\t').map(function(s){return s.trim().toLowerCase();}); i=j; break; } } continue; }
+      if(tag==='data'){ inData=true; continue; }
+      if(inData && cols && raw.trim()){
+        var cells=raw.split('\t'), rec={};
+        cols.forEach(function(c,idx){ rec[c]=(cells[idx]||'').trim(); });
+        var title=rec['name']||rec['source file']||rec['clip name']||rec['tape']||'';
+        var durStr=rec['duration']||rec['source duration']||rec['length']||'';
+        var dur=durStr.indexOf(':')>=0?Math.round(tcSec(durStr)*10)/10:(parseFloat(String(durStr).replace(',','.'))||0);
+        if(title) cues.push({title:cleanCueName(title), dur:dur});
+      }
+    }
+    return {cues:cues.filter(function(c){return c.title&&c.title.length>1;}), diffusions:0, meta:{}};
+  }
+  // FCPXML — Final Cut Pro X
+  function fcpDur(s){ if(!s) return 0; s=String(s).trim();
+    var m=s.match(/^(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)s$/); if(m){ var d=parseFloat(m[2]); return d?Math.round(parseFloat(m[1])/d*10)/10:0; }
+    var m2=s.match(/^(\d+(?:\.\d+)?)s$/); if(m2) return Math.round(parseFloat(m2[1])*10)/10;
+    return parseFloat(s)||0; }
+  function parseFCPXML(txt){
+    var cues=[];
+    try{
+      var doc=new DOMParser().parseFromString(txt,'application/xml');
+      if(doc.querySelector('parsererror')) return {cues:[],diffusions:0,meta:{}};
+      var nodes=doc.querySelectorAll('asset-clip, clip, audio, ref-clip, sync-clip, mc-clip');
+      var seen={};
+      Array.prototype.forEach.call(nodes,function(n){
+        var name=n.getAttribute('name')||''; if(!name) return;
+        var d=fcpDur(n.getAttribute('duration')||'');
+        var key=name+'|'+d; if(seen[key]) return; seen[key]=1;
+        cues.push({title:cleanCueName(name), dur:d});
+      });
+    }catch(e){}
+    return {cues:cues.filter(function(c){return c.title&&c.title.length>1;}), diffusions:0, meta:{}};
+  }
+  // FCP7 / Premiere Pro XML (xmeml)
+  function parseFCP7XML(txt){
+    var cues=[];
+    try{
+      var doc=new DOMParser().parseFromString(txt,'application/xml');
+      if(doc.querySelector('parsererror')) return {cues:[],diffusions:0,meta:{}};
+      var tbEl=doc.querySelector('sequence rate timebase, rate timebase');
+      var gtb=tbEl?(parseFloat(tbEl.textContent)||25):25;
+      var clipNodes=doc.querySelectorAll('audio clipitem');
+      if(!clipNodes.length) clipNodes=doc.querySelectorAll('clipitem');
+      var seen={};
+      Array.prototype.forEach.call(clipNodes,function(ci){
+        var nameEl=ci.querySelector('name'); var name=nameEl?nameEl.textContent.trim():''; if(!name) return;
+        var tbLocal=ci.querySelector('rate timebase'); var tb=tbLocal?(parseFloat(tbLocal.textContent)||gtb):gtb;
+        var dur=0, durEl=ci.querySelector('duration');
+        if(durEl){ dur=(parseFloat(durEl.textContent)||0)/tb; }
+        else { var inEl=ci.querySelector('in'), outEl=ci.querySelector('out'); if(inEl&&outEl) dur=((parseFloat(outEl.textContent)||0)-(parseFloat(inEl.textContent)||0))/tb; }
+        dur=Math.round(dur*10)/10;
+        var key=name+'|'+dur; if(seen[key]) return; seen[key]=1;
+        cues.push({title:cleanCueName(name), dur:dur>0?dur:0});
+      });
+    }catch(e){}
+    return {cues:cues.filter(function(c){return c.title&&c.title.length>1;}), diffusions:0, meta:{}};
   }
   function parseInumRows(rows){
     function low(s){return String(s||'').toLowerCase();}
@@ -1741,16 +1847,24 @@ document.addEventListener('DOMContentLoaded',()=>{
     var diff=parseInt(metaVal('nombre de diffusion'))||0;
     return {cues:cues, diffusions:diff, meta:{genre:metaVal('genre'), chaine:metaVal('diffuseur')||metaVal('chaine')}};
   }
+  function sniffCueText(txt, name){
+    var ext=(name.split('.').pop()||'').toLowerCase();
+    var head=txt.slice(0,2000);
+    if(ext==='ale' || /^\uFEFF?\s*Heading\b/i.test(head)) return parseALE(txt);
+    if(ext==='fcpxml' || /<fcpxml/i.test(head)) return parseFCPXML(txt);
+    if(/<xmeml/i.test(head)) return parseFCP7XML(txt);
+    if(ext==='xml'){ var a=parseFCPXML(txt); if(a.cues.length) return a; return parseFCP7XML(txt); }
+    if(ext==='csv'){ var rows=txt.split(/\r?\n/).map(function(l){return l.split(/[;\t,]/);}); return parseInumRows(rows); }
+    return parseEDLText(txt); // .edl, .txt et tout texte CMX3600 (DaVinci/Avid/Premiere/FCP7)
+  }
   function parseCueFile(file){ return new Promise(function(resolve){
     var name=file.name, ext=(name.split('.').pop()||'').toLowerCase(), fr=new FileReader();
-    if(ext==='edl'){ fr.onload=function(){ var r=parseEDLText(fr.result); r.name=name; resolve(r); }; fr.readAsText(file); }
-    else if(ext==='xls'||ext==='xlsx'){ fr.onload=function(){ try{
+    if(ext==='xls'||ext==='xlsx'){ fr.onload=function(){ try{
         var wb=XLSX.read(new Uint8Array(fr.result),{type:'array'}); var ws=wb.Sheets[wb.SheetNames[0]];
         var rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''}).map(function(rw){return rw.map(function(c){return String(c);});});
         var r=parseInumRows(rows); r.name=name; resolve(r);
       }catch(e){ resolve({cues:[],diffusions:0,meta:{},name:name}); } }; fr.readAsArrayBuffer(file); }
-    else if(ext==='csv'){ fr.onload=function(){ var rows=fr.result.split(/\r?\n/).map(function(l){return l.split(/[;\t,]/);}); var r=parseInumRows(rows); r.name=name; resolve(r); }; fr.readAsText(file); }
-    else resolve({cues:[],diffusions:0,meta:{},name:name});
+    else { fr.onload=function(){ var r; try{ r=sniffCueText(fr.result, name); }catch(e){ r={cues:[],diffusions:0,meta:{}}; } r.name=name; resolve(r); }; fr.readAsText(file); }
   }); }
   async function handleCues(files){
     var allCues=[], totalDiff=0, programs=[];
@@ -1925,8 +2039,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     return null; }
   function buildCueRows(){ var cues=(window.__CUES||[]); var def=(document.getElementById('cue-util')||{}).value||'S';
     return cues.map(function(c){ var f=catMatch(c.title); var dur=c.dur||(f?f.duree:0)||0;
-      return { dur:secToMmss(dur), titre:f?f.titre:c.title, ayant:f?(f.ayants&&f.ayants.length?f.ayants.map(function(a){return a.nom+(a.role?' ('+a.role+')':'')+(a.part?' '+a.part+'%':'');}).join(', '):f.ayant):'', editeur:f?f.editeur:'',
-               iswc:f?f.iswc:'', album:f?f.album:'', isrc:f?f.isrc:'', util:def, found:!!f }; }); }
+      return { dur:secToMmss(dur), durSec:dur, titre:f?f.titre:c.title,
+               ayant:f?(f.ayants&&f.ayants.length?f.ayants.map(function(a){return a.nom+(a.role?' ('+a.role+')':'')+(a.part?' '+a.part+'%':'');}).join(', '):f.ayant):'',
+               ayants:(f&&f.ayants&&f.ayants.length)?f.ayants:(f&&f.ayant?[{nom:f.ayant,role:'',part:f.part||0}]:[]),
+               editeur:f?f.editeur:'', iswc:f?f.iswc:'', album:f?f.album:'', isrc:f?f.isrc:'', util:def, found:!!f }; }); }
   function renderCuePreview(){
     var res=document.getElementById('cue-gen-res');
     if(!(window.__CUES||[]).length){ res.innerHTML='<span style="color:#ffb347;">⚠️ Importe d\'abord un EDL dans la zone ci-dessous.</span>'; return; }
@@ -1943,17 +2059,118 @@ document.addEventListener('DOMContentLoaded',()=>{
       +'<td style="padding:4px 5px;color:#9aa;">'+esc(r.iswc)+'</td>'
       +'<td style="padding:4px 5px;"><input id="util-'+i+'" value="'+esc(r.util)+'" maxlength="6" style="width:52px;text-align:center;font-size:11px;padding:2px;"></td></tr>'; });
     h+='</table></div>';
-    h+='<div style="margin-top:10px;"><button class="primary" id="cue-dl" style="font-size:13px;">⬇️ Télécharger l\'Excel</button></div>';
+    h+='<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"><button class="primary" id="cue-dl" style="font-size:13px;">⬇️ Télécharger l\'Excel</button>'
+      +'<button id="cue-saveprod" style="font-size:13px;background:#2a2a40;color:#ccd;border:1px solid #44445e;border-radius:7px;padding:8px 12px;cursor:pointer;">🎬 Enregistrer dans la production</button></div>';
     res.innerHTML=h;
     var dl=document.getElementById('cue-dl'); if(dl) dl.addEventListener('click', downloadCueXlsx);
+    var sp=document.getElementById('cue-saveprod'); if(sp) sp.addEventListener('click', saveCueToProd);
   }
+  /* ===== CHANTIER 4 : gabarits de cue sheet par diffuseur =====
+     Le contenu d'une cue sheet est largement standardisé (titre, ayants droit, durée, ISWC/ISRC, usage).
+     Ces gabarits sont des points de départ alignés sur les usages SACEM / France TV / CISAC.
+     Pour ajouter un diffuseur : copier un bloc ci-dessous et l'ajouter au <select id="cue-tpl">. */
+  function rolesOf(row, re){ return (row.ayants||[]).filter(function(a){return re.test((a.role||'').toLowerCase());}).map(function(a){return a.nom;}); }
+  function comps(row){ var c=rolesOf(row,/compos|music|^c$/); if(!c.length){ var au=rolesOf(row,/auteur|author|parolier|lyric|^a$/); var ed=rolesOf(row,/editeur|edition|publish/); c=(row.ayants||[]).filter(function(a){return au.indexOf(a.nom)<0 && ed.indexOf(a.nom)<0;}).map(function(a){return a.nom;}); } return c.join(', '); }
+  function auths(row){ return rolesOf(row,/auteur|author|parolier|lyric|^a$/).join(', '); }
+  function editorsOf(row){ var e=rolesOf(row,/editeur|edition|publish/); return e.length?e.join(', '):(row.editeur||''); }
+  var CUE_TEMPLATES={
+    ftv:{ filename:'cue_sheet_francetv.xlsx',
+      cols:[ {h:'Durée',w:8,get:function(r){return r.dur;}},
+             {h:'Titre',w:34,get:function(r){return r.titre;}},
+             {h:'Ayant Droit',w:26,get:function(r){return r.ayant;}},
+             {h:'Éditeur',w:22,get:function(r){return r.editeur;}},
+             {h:'Code ISWC',w:18,get:function(r){return r.iswc;}},
+             {h:'Réf Album',w:16,get:function(r){return r.album;}},
+             {h:'Code ISRC',w:18,get:function(r){return r.isrc;}},
+             {h:'Utilisations',w:12,get:function(r){return r.util;}} ] },
+    sacem:{ filename:'cue_sheet_sacem.xlsx',
+      cols:[ {h:'Titre',w:34,get:function(r){return r.titre;}},
+             {h:'Compositeur(s)',w:24,get:function(r){return comps(r);}},
+             {h:'Auteur(s)',w:24,get:function(r){return auths(r);}},
+             {h:'Éditeur(s)',w:22,get:function(r){return editorsOf(r);}},
+             {h:'Durée',w:8,get:function(r){return r.dur;}},
+             {h:'Code ISWC',w:18,get:function(r){return r.iswc;}},
+             {h:'Code ISRC',w:18,get:function(r){return r.isrc;}},
+             {h:'Utilisation',w:12,get:function(r){return r.util;}} ] },
+    intl:{ filename:'cue_sheet_international.xlsx',
+      cols:[ {h:'Cue No.',w:8,get:function(r,i){return i+1;}},
+             {h:'Cue Title',w:34,get:function(r){return r.titre;}},
+             {h:'Composer(s)',w:24,get:function(r){return comps(r);}},
+             {h:'Author(s)',w:24,get:function(r){return auths(r);}},
+             {h:'Publisher(s)',w:22,get:function(r){return editorsOf(r);}},
+             {h:'Use',w:8,get:function(r){return r.util;}},
+             {h:'Duration',w:10,get:function(r){return r.dur;}},
+             {h:'ISWC',w:18,get:function(r){return r.iswc;}},
+             {h:'ISRC',w:18,get:function(r){return r.isrc;}} ] }
+  };
+  /* ===== CHANTIER 2 : gestion multi-productions ===== */
+  function getProds(){ try{ return JSON.parse(localStorage.getItem('diapason_prods')||'[]'); }catch(e){ return []; } }
+  function setProds(p){ try{ localStorage.setItem('diapason_prods', JSON.stringify(p)); }catch(e){} }
+  function saveCueToProd(){
+    var rows=window.__CUEROWS||[]; if(!rows.length){ alert('Génère d\'abord une cue sheet.'); return; }
+    rows.forEach(function(r,i){ var el=document.getElementById('util-'+i); if(el) r.util=el.value||'S'; });
+    var nameInput=(document.getElementById('cue-prod')||{}).value||'';
+    var prodName=(nameInput.trim())|| (prompt('Nom de la production :','Sans titre')||'').trim();
+    if(!prodName) return;
+    var prods=getProds();
+    var prod=null; for(var i=0;i<prods.length;i++){ if(prods[i].name.toLowerCase()===prodName.toLowerCase()){ prod=prods[i]; break; } }
+    if(!prod){ prod={id:'prod_'+Date.now(), name:prodName, created:new Date().toISOString(), cuesheets:[]}; prods.push(prod); }
+    var dureeSec=rows.reduce(function(s,r){return s+(r.durSec||0);},0);
+    var nbFound=rows.filter(function(r){return r.found;}).length;
+    var fichier=(window.__CUEPROG&&window.__CUEPROG.length?window.__CUEPROG[window.__CUEPROG.length-1].name:'')||'cue sheet';
+    prod.cuesheets.push({ id:'cs_'+Date.now(), fichier:fichier, tpl:(document.getElementById('cue-tpl')||{}).value||'ftv',
+      date:new Date().toISOString(), nbTitres:rows.length, nbFound:nbFound, dureeSec:Math.round(dureeSec),
+      rows:JSON.parse(JSON.stringify(rows)) });
+    setProds(prods); renderProds();
+    var pb=document.getElementById('prod-block'); if(pb) pb.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function delCuesheet(prodId, csId){ var prods=getProds();
+    for(var i=0;i<prods.length;i++){ if(prods[i].id===prodId){ prods[i].cuesheets=prods[i].cuesheets.filter(function(c){return c.id!==csId;}); if(!prods[i].cuesheets.length){ prods.splice(i,1); } break; } }
+    setProds(prods); renderProds(); }
+  function delProd(prodId){ if(!confirm('Supprimer cette production et toutes ses cue sheets enregistrées ?')) return;
+    setProds(getProds().filter(function(p){return p.id!==prodId;})); renderProds(); }
+  function redownloadCue(prodId, csId){ var prods=getProds();
+    for(var i=0;i<prods.length;i++){ if(prods[i].id===prodId){ for(var j=0;j<prods[i].cuesheets.length;j++){ if(prods[i].cuesheets[j].id===csId){
+      var cs=prods[i].cuesheets[j]; window.__CUEROWS=cs.rows; var sel=document.getElementById('cue-tpl'); if(sel&&cs.tpl) sel.value=cs.tpl; downloadCueXlsx(); return; } } } } }
+  window.delCuesheet=delCuesheet; window.delProd=delProd; window.redownloadCue=redownloadCue;
+  function renderProds(){ var c=document.getElementById('prod-list'); if(!c) return;
+    var prods=getProds();
+    if(!prods.length){ c.innerHTML='<p style="font-size:12px;color:var(--text-dim);">Aucune production enregistrée. Génère une cue sheet et clique « Enregistrer dans la production ».</p>'; return; }
+    var html='';
+    prods.sort(function(a,b){return (b.created||'').localeCompare(a.created||'');});
+    prods.forEach(function(p){
+      var nbCs=p.cuesheets.length;
+      var totTitres=p.cuesheets.reduce(function(s,cs){return s+(cs.nbTitres||0);},0);
+      var totDuree=p.cuesheets.reduce(function(s,cs){return s+(cs.dureeSec||0);},0);
+      var min=Math.floor(totDuree/60), sec=totDuree%60;
+      html+='<div style="background:#1a1a2e;border:1px solid #44445e;border-radius:10px;padding:12px;margin-bottom:10px;">';
+      html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">';
+      html+='<div><div style="font-size:14px;font-weight:600;color:#fff;">🎬 '+esc(p.name)+'</div>';
+      html+='<div style="font-size:11px;color:var(--text-dim);margin-top:3px;">'+nbCs+' cue sheet(s) · '+totTitres+' titre(s) · '+min+' min '+(sec<10?'0':'')+sec+' s au total</div></div>';
+      html+='<button onclick="delProd(\''+p.id+'\')" style="font-size:10px;background:#3a1a1a;color:#f99;border:1px solid #663;border-radius:6px;padding:3px 8px;cursor:pointer;">Suppr.</button></div>';
+      html+='<div style="margin-top:8px;display:flex;flex-direction:column;gap:5px;">';
+      p.cuesheets.slice().sort(function(a,b){return (b.date||'').localeCompare(a.date||'');}).forEach(function(cs){
+        var d=cs.date?new Date(cs.date).toLocaleDateString('fr-FR'):'';
+        html+='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;background:#23233a;border-radius:7px;padding:6px 9px;font-size:11.5px;">';
+        html+='<div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#dde;">'+esc(cs.fichier)+' <span style="color:var(--text-dim);">· '+cs.nbTitres+' titres · '+cs.nbFound+' retrouvés · '+d+'</span></div>';
+        html+='<button onclick="redownloadCue(\''+p.id+'\',\''+cs.id+'\')" style="font-size:10px;background:#2a2a40;color:#ccd;border:1px solid #44445e;border-radius:6px;padding:3px 7px;cursor:pointer;">⬇️ Excel</button>';
+        html+='<button onclick="delCuesheet(\''+p.id+'\',\''+cs.id+'\')" style="font-size:10px;background:#2a2a40;color:#f99;border:1px solid #44445e;border-radius:6px;padding:3px 7px;cursor:pointer;">×</button></div>';
+      });
+      html+='</div></div>';
+    });
+    c.innerHTML=html;
+  }
+  window.renderProds=renderProds;
+
   function downloadCueXlsx(){ var rows=window.__CUEROWS||[]; if(!rows.length) return;
     rows.forEach(function(r,i){ var el=document.getElementById('util-'+i); if(el) r.util=el.value||'S'; });
-    var header=['Durée','Titre','Ayant Droit','Éditeur','Code ISWC','Réf Album','Code ISRC','Utilisations'];
-    var aoa=[header].concat(rows.map(function(r){ return [r.dur,r.titre,r.ayant,r.editeur,r.iswc,r.album,r.isrc,r.util]; }));
+    var tplKey=(document.getElementById('cue-tpl')||{}).value||'ftv';
+    var tpl=CUE_TEMPLATES[tplKey]||CUE_TEMPLATES.ftv;
+    var header=tpl.cols.map(function(c){return c.h;});
+    var aoa=[header].concat(rows.map(function(r,i){ return tpl.cols.map(function(c){ return c.get(r,i); }); }));
     try{ var ws=XLSX.utils.aoa_to_sheet(aoa);
-      ws['!cols']=[{wch:8},{wch:34},{wch:24},{wch:20},{wch:18},{wch:16},{wch:18},{wch:12}];
-      var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Cue sheet'); XLSX.writeFile(wb,'cue_sheet.xlsx');
+      ws['!cols']=tpl.cols.map(function(c){return {wch:c.w};});
+      var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Cue sheet'); XLSX.writeFile(wb,tpl.filename);
     }catch(e){ alert('Erreur à la génération de l\'Excel.'); } }
 
   /* ---------- 2) RAPPORT "ARGENT OUBLIÉ" (basé sur les RELEVÉS uniquement) ---------- */
@@ -2147,6 +2364,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     var sc=document.getElementById('sim-calc'); if(sc) sc.addEventListener('click', simuler);
     var ra=document.getElementById('rapport-annuel'); if(ra) ra.addEventListener('click', rapportAnnuel);
     initSimulateur();
+    try{ renderProds(); }catch(e){}
     setTimeout(function(){ try{ var c=JSON.parse(localStorage.getItem('diapason_catalog')||'null'); if(c){ window.__CATALOG=c; } }catch(e){} catStatus(); try{renderCoverage();}catch(e){} }, 350);
   }
   if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded', init);
