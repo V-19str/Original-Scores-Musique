@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – Finalisez votre inscription</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#FF5500">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>(function(){const t=localStorage.getItem('osm-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<style>
+:root {
+  --red: #E50914;
+  --bg: #141414;
+  --bg2: #1f1f1f;
+  --bg3: #2a2a2a;
+  --bg4: #333;
+  --text: #fff;
+  --text2: #d4d4d4;
+  --muted: #888;
+  --border: rgba(255,255,255,0.12);
+  --card-bg: #1f1f1f;
+  --input-bg: #2a2a2a;
+}
+[data-theme="light"] {
+  --bg: #f0f0f0;
+  --bg2: #e8e8e8;
+  --bg3: #dedede;
+  --bg4: #ccc;
+  --text: #111;
+  --text2: #333;
+  --muted: #666;
+  --border: rgba(0,0,0,0.12);
+  --card-bg: rgba(255,255,255,0.97);
+  --input-bg: #e8e8e8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; transition: background 0.2s, color 0.2s; }
+
+/* ── HEADER ─────────────────────────────────────── */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(12,12,12,0.95); backdrop-filter: blur(12px);
+  padding: 0 48px; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="light"] header { background: rgba(240,240,240,0.96); }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 5px 8px; border-radius: 3px; }
+.logo-name { font-size: 13px; font-weight: 600; letter-spacing: 2px; color: var(--text); }
+.btn-sm { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); padding: 7px 13px; font-family: 'Montserrat', sans-serif; font-size: 11px; cursor: pointer; border-radius: 4px; transition: all 0.15s; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+.btn-sm:hover { border-color: #555; color: var(--text); }
+
+/* ── AUTH SCREEN ─────────────────────────────────── */
+#auth-screen {
+  padding: 96px 16px 40px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 24px; min-height: 100vh;
+  background: linear-gradient(180deg, #0a0a0a 0%, var(--bg) 60%);
+}
+[data-theme="light"] #auth-screen { background: linear-gradient(180deg, #e0e0e0 0%, var(--bg) 60%); }
+
+.auth-box {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+  padding: 40px; width: 100%; max-width: 420px;
+  backdrop-filter: blur(16px); position: relative; z-index: 1;
+}
+.auth-icon { width: 44px; height: 44px; background: rgba(229,9,20,0.12); border: 1px solid rgba(229,9,20,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 20px; }
+.auth-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; text-align: center; }
+.auth-sub { font-size: 12px; color: var(--muted); margin-bottom: 28px; line-height: 1.5; text-align: center; }
+
+.field { margin-bottom: 15px; }
+.field label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.field input {
+  width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 4px;
+  padding: 11px 14px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 13px;
+  outline: none; transition: border-color 0.2s;
+}
+.field input:focus { border-color: var(--red); }
+.field input::placeholder { color: var(--muted); letter-spacing: 0.5px; }
+.field input[type="password"] { letter-spacing: 3px; }
+.field input[type="password"]::placeholder { letter-spacing: 0.5px; }
+
+.btn-submit {
+  width: 100%; background: var(--red); color: #fff; border: none; padding: 13px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  cursor: pointer; border-radius: 4px; text-transform: uppercase; transition: background 0.15s, transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px;
+}
+.btn-submit:hover { background: #c4070f; transform: translateY(-1px); }
+.btn-submit:disabled { background: var(--bg4); color: var(--muted); cursor: not-allowed; transform: none; }
+.spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.auth-msg { font-size: 11px; margin-top: 10px; min-height: 16px; align-items: center; justify-content: center; gap: 5px; padding: 8px 12px; border-radius: 4px; display: none; text-align: center; }
+.auth-error { color: var(--red); background: rgba(229,9,20,0.08); border: 1px solid rgba(229,9,20,0.2); }
+.auth-ok { color: #4caf50; background: rgba(76,175,80,0.08); border: 1px solid rgba(76,175,80,0.2); }
+
+.auth-link { font-size: 11px; color: var(--muted); text-align: center; margin-top: 16px; }
+.auth-link a { color: #888; text-decoration: none; }
+.auth-link a:hover { color: var(--text); }
+
+.loading-dots { text-align: center; color: var(--muted); font-size: 13px; padding: 20px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <span class="logo-mark">OSM</span>
+    <span class="logo-name">ORIGINAL SCORES MUSIC</span>
+  </a>
+  <a class="btn-sm" href="index.html">← Retour au catalogue</a>
+</header>
+
+<div id="auth-screen">
+
+  <!-- ÉTAT : vérification du lien -->
+  <div class="auth-box" id="box-loading">
+    <div class="auth-icon">⏳</div>
+    <h2 class="auth-title">Finalisez votre inscription</h2>
+    <p class="auth-sub">Vérification de votre lien d'invitation…</p>
+    <div class="loading-dots">· · ·</div>
+  </div>
+
+  <!-- ÉTAT : choix du mot de passe -->
+  <div class="auth-box" id="box-form" style="display:none">
+    <div class="auth-icon">🔑</div>
+    <h2 class="auth-title">Finalisez votre inscription</h2>
+    <p class="auth-sub" id="form-sub">Choisissez votre mot de passe pour activer votre accès à Original Scores Music.</p>
+    <div class="field">
+      <label for="pw">Mot de passe (min. 8 caractères)</label>
+      <input type="password" id="pw" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <div class="field">
+      <label for="pw2">Confirmer le mot de passe</label>
+      <input type="password" id="pw2" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')finaliser()">
+    </div>
+    <div class="auth-msg auth-error" id="form-err"></div>
+    <div class="auth-msg auth-ok" id="form-ok"></div>
+    <button class="btn-submit" id="btn-finaliser" onclick="finaliser()">
+      <span class="spinner" id="sp-finaliser"></span>
+      Activer mon compte
+    </button>
+  </div>
+
+  <!-- ÉTAT : lien invalide -->
+  <div class="auth-box" id="box-invalid" style="display:none">
+    <div class="auth-icon">⚠️</div>
+    <h2 class="auth-title">Lien invalide ou expiré</h2>
+    <p class="auth-sub">Ce lien d'invitation n'est plus valide.<br>Contactez OSM pour recevoir une nouvelle invitation.</p>
+    <p class="auth-link"><a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a></p>
+    <p class="auth-link"><a href="login-monteurs.html">Déjà un compte ? Se connecter</a></p>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SURL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
+const SKEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+const sb = supabase.createClient(SURL, SKEY);
+
+let inviteSession = null;
+let settled = false;
+
+function show(id) {
+  ['box-loading','box-form','box-invalid'].forEach(b => {
+    document.getElementById(b).style.display = (b === id) ? 'block' : 'none';
+  });
+}
+
+function showMsg(el, msg) { el.textContent = msg; el.style.display = 'flex'; }
+
+function setLoading(on) {
+  document.getElementById('btn-finaliser').disabled = on;
+  document.getElementById('sp-finaliser').style.display = on ? 'block' : 'none';
+}
+
+// Le lien d'invitation Supabase arrive avec un token dans l'URL (hash).
+// supabase-js le détecte automatiquement et ouvre une session temporaire.
+function onSession(session) {
+  if (settled) return;
+  if (session?.user) {
+    settled = true;
+    inviteSession = session;
+    const email = session.user.email;
+    if (email) document.getElementById('form-sub').textContent =
+      `Choisissez votre mot de passe pour activer l'accès de ${email}.`;
+    show('box-form');
+    document.getElementById('pw').focus();
+  }
+}
+
+sb.auth.onAuthStateChange((_event, session) => onSession(session));
+
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  onSession(session);
+  // Si aucune session d'invitation n'a été détectée, on affiche l'erreur.
+  setTimeout(() => { if (!settled) show('box-invalid'); }, 1500);
+})();
+
+async function finaliser() {
+  const pw = document.getElementById('pw').value;
+  const pw2 = document.getElementById('pw2').value;
+  const errEl = document.getElementById('form-err');
+  const okEl = document.getElementById('form-ok');
+  errEl.style.display = 'none'; okEl.style.display = 'none';
+
+  if (!inviteSession) { showMsg(errEl, 'Session d\'invitation introuvable. Rechargez le lien reçu par email.'); return; }
+  if (pw.length < 8) { showMsg(errEl, 'Mot de passe : 8 caractères minimum.'); return; }
+  if (pw !== pw2) { showMsg(errEl, 'Les mots de passe ne correspondent pas.'); return; }
+
+  setLoading(true);
+  const { error } = await sb.auth.updateUser({ password: pw });
+  setLoading(false);
+
+  if (error) { showMsg(errEl, error.message); return; }
+
+  showMsg(okEl, '✓ Compte activé ! Bienvenue chez Original Scores Music. Redirection…');
+  document.getElementById('btn-finaliser').disabled = true;
+  setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+}
+</script>
+
+</body>
+</html>

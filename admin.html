@@ -309,6 +309,27 @@ grant execute on function public.get_admin_data(text) to anon;</div>
   </div>
 </div>
 
+<!-- APPROUVER UN CLIENT -->
+<div class="clients-section" style="margin-bottom:22px">
+  <div class="section-title">Approuver un client</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end">
+    <div style="flex:2;min-width:220px">
+      <label style="display:block;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Email du client *</label>
+      <input type="email" id="approve-email" class="search-admin" style="width:100%" placeholder="client@production.com" onkeydown="if(event.key==='Enter')approveClient()">
+    </div>
+    <div style="flex:1;min-width:130px">
+      <label style="display:block;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Prénom</label>
+      <input type="text" id="approve-prenom" class="search-admin" style="width:100%" placeholder="Jean">
+    </div>
+    <div style="flex:1;min-width:130px">
+      <label style="display:block;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Nom</label>
+      <input type="text" id="approve-nom" class="search-admin" style="width:100%" placeholder="Dupont">
+    </div>
+    <button class="pw-btn" id="approve-btn" style="width:auto;white-space:nowrap;padding:11px 20px" onclick="approveClient()">✅ Approuver et envoyer l'invitation</button>
+  </div>
+  <div id="approve-result" style="font-size:12px;margin-top:10px;display:none;padding:8px 12px;border-radius:4px"></div>
+</div>
+
 <!-- CONTROLS -->
 <div class="controls">
   <input type="text" class="search-admin" id="search-input" placeholder="Rechercher un client..." oninput="filterClients()">
@@ -542,6 +563,63 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── APPROBATION CLIENT (invitation Supabase) ──────────────────────
+function showApproveResult(msg, ok) {
+  const el = document.getElementById('approve-result');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.color = ok ? '#4caf50' : 'var(--red)';
+  el.style.background = ok ? 'rgba(76,175,80,0.08)' : 'rgba(229,9,20,0.08)';
+  el.style.border = '1px solid ' + (ok ? 'rgba(76,175,80,0.25)' : 'rgba(229,9,20,0.25)');
+}
+
+async function approveClient() {
+  const email = document.getElementById('approve-email').value.trim();
+  const prenom = document.getElementById('approve-prenom').value.trim();
+  const nom = document.getElementById('approve-nom').value.trim();
+  const btn = document.getElementById('approve-btn');
+  document.getElementById('approve-result').style.display = 'none';
+
+  if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    showApproveResult('Entrez un email valide.', false); return;
+  }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session || session.user?.email !== ADMIN_EMAIL) {
+    showApproveResult('Session admin introuvable. Reconnectez-vous.', false); return;
+  }
+
+  btn.disabled = true;
+  const label = btn.textContent;
+  btn.textContent = 'Envoi…';
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/inviter-client`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+        'apikey': SUPABASE_KEY,
+      },
+      body: JSON.stringify({ email, prenom, nom }),
+    });
+    const out = await res.json().catch(() => ({}));
+    if (res.ok) {
+      showApproveResult(`✓ Invitation envoyée à ${email}.`, true);
+      document.getElementById('approve-email').value = '';
+      document.getElementById('approve-prenom').value = '';
+      document.getElementById('approve-nom').value = '';
+      showToast('Invitation envoyée');
+    } else {
+      showApproveResult(`Erreur : ${out.error || out.message || res.statusText || 'échec de l\'invitation.'}`, false);
+    }
+  } catch (e) {
+    showApproveResult(`Erreur réseau : ${e.message}`, false);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = label;
+  }
 }
 </script>
 </body>
