@@ -415,7 +415,6 @@ const sb = supabase.createClient(SURL, SKEY);
 
 let me = null, myProfile = null;
 const ADMIN_EMAIL = 'vladimirstreiff@gmail.com';
-const ADMIN_RPC_PWD = 'OSM_ADMIN_2026';
 let allProfiles = [], allFavorites = [], allDownloads = [], activeAdminFilter = 'all';
 
 // ── INIT ──────────────────────────────────────────
@@ -650,7 +649,8 @@ function showAdminDash() {
 
 async function loadAdminData() {
   document.getElementById('admin-clients-list').innerHTML = '<div class="admin-loading">· · · Chargement des données clients</div>';
-  const { data, error } = await sb.rpc('get_admin_data', { admin_pwd: ADMIN_RPC_PWD });
+  // Sans argument : la fonction lit l'email dans le JWT de la session.
+  const { data, error } = await sb.rpc('get_admin_data');
   if (error) {
     document.getElementById('admin-clients-list').innerHTML = `<div class="admin-empty-msg">Erreur : ${esc(error.message)}</div>`;
     return;

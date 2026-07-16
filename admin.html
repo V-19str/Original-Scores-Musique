@@ -251,11 +251,14 @@ create or replace trigger on_auth_user_created
   for each row execute function public.handle_new_user();
 
 -- 8. Fonction admin (contourne RLS avec mot de passe)
-create or replace function public.get_admin_data(admin_pwd text)
+create or replace function public.get_admin_data()
 returns json language plpgsql security definer
 set search_path = public, auth as $$
 begin
-  if admin_pwd != 'OSM_ADMIN_2026' then
+  -- L'email vient du JWT verifie par PostgREST : il ne peut pas etre forge
+  -- sans le secret du projet. Ne jamais revenir a un mot de passe en argument,
+  -- il serait lisible dans le JavaScript de cette page.
+  if coalesce(auth.jwt() ->> 'email', '') <> 'vladimirstreiff@gmail.com' then
     raise exception 'Accès refusé';
   end if;
   return (
@@ -284,7 +287,12 @@ begin
   );
 end; $$;
 
-grant execute on function public.get_admin_data(text) to anon;</div>
+revoke all on function public.get_admin_data() from public, anon;
+grant execute on function public.get_admin_data() to authenticated;
+
+-- Supprime l'ancienne version protegee par mot de passe : c'est cette ligne
+-- qui ferme la faille.
+drop function if exists public.get_admin_data(text);</div>
     <button class="copy-sql-btn" onclick="copySQL()">Copier le SQL</button>
   </div>
 </div>
@@ -355,7 +363,6 @@ const SUPABASE_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const ADMIN_EMAIL = 'vladimirstreiff@gmail.com';
-const ADMIN_RPC_PWD = 'OSM_ADMIN_2026'; // transmis côté serveur uniquement
 
 let allProfiles = [], allFavorites = [], allDownloads = [];
 let activeFilter = 'all';
@@ -411,7 +418,8 @@ initAdmin();
 async function loadAdminData() {
   document.getElementById('clients-list').innerHTML = '<div class="loading-msg">· · · Chargement des données clients</div>';
 
-  const { data, error } = await sb.rpc('get_admin_data', { admin_pwd: ADMIN_RPC_PWD });
+  // Sans argument : la fonction lit l'email dans le JWT de la session.
+  const { data, error } = await sb.rpc('get_admin_data');
 
   if (error) {
     if (error.message.includes('does not exist') || error.message.includes('function')) {
