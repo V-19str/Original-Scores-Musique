@@ -1949,6 +1949,42 @@ audio.addEventListener('loadedmetadata',()=>{
   }
 });
 
+/* ── LOG DES ÉCOUTES ──
+   Un seul hook sur l'élément <audio>, plutôt qu'un appel dans chacun des cinq
+   points d'entrée (playTrack, playTrackById, playDetailTrack, playFromQueue,
+   autoPlayBg) : tout passe par ce même élément.
+   Une écoute n'est comptée qu'après PLAY_LOG_SECS secondes réellement jouées,
+   et une seule fois par titre chargé. Sans ce seuil, parcourir la liste ou
+   l'autoplay d'ambiance rempliraient la table de bruit. */
+const PLAY_LOG_SECS=5;
+let playLoggedSrc=null;  // dernière src loguée, pour ne pas compter deux fois
+let playTickSrc=null;    // src en cours de comptage
+let playSecs=0;          // secondes réellement écoutées sur cette src
+let playLastTime=0;
+
+function trackFromSrc(src){
+  if(!src)return null;
+  const clean=src.split('?')[0];
+  return allTracks.find(t=>t.url&&t.url.split('?')[0]===clean)||null;
+}
+function logPlay(){
+  if(bgMode)return;  // autoplay d'ambiance : ce n'est pas une écoute choisie
+  if(!osmUser||typeof osmSB==='undefined')return;
+  const src=audio.currentSrc||audio.src||'';
+  if(!src||src===playLoggedSrc)return;
+  const t=trackFromSrc(src);if(!t)return;
+  playLoggedSrc=src;
+  osmSB.from('plays').insert({user_id:osmUser.id,track_id:t.id||t.title,track_title:t.title,track_playlist:t.playlistLabel,track_url:t.url}).then(()=>{});
+}
+audio.addEventListener('timeupdate',()=>{
+  const src=audio.currentSrc||audio.src||'';
+  if(src!==playTickSrc){playTickSrc=src;playSecs=0;playLastTime=audio.currentTime;return;}
+  const d=audio.currentTime-playLastTime;
+  playLastTime=audio.currentTime;
+  if(d>0&&d<2)playSecs+=d;  // écarte les sauts : clic sur la waveform, boucle
+  if(playSecs>=PLAY_LOG_SECS)logPlay();
+});
+
 function toggleQueue(){document.getElementById('queue-panel').classList.toggle('visible');}
 function toggleQueueTrack(i){
   const t=filteredTracks[i];if(!t)return;
