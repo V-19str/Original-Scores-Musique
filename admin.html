@@ -58,7 +58,9 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
 .btn-sacem:hover { background: #cc4400; border-color: #cc4400; color: #fff; }
 
 /* ── STATS BAR ── */
-.stats-bar { padding: 24px 48px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: linear-gradient(180deg,#0a0a0a 0%,var(--bg) 100%); }
+/* auto-fit plutôt qu'un nombre de colonnes fige : la barre est passee de 4 a 5
+   tuiles avec les ecoutes, et s'adaptera a la suivante sans retoucher le CSS. */
+.stats-bar { padding: 24px 48px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; background: linear-gradient(180deg,#0a0a0a 0%,var(--bg) 100%); }
 .stat-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
 .stat-num { font-size: 28px; font-weight: 700; color: var(--red); }
 .stat-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
@@ -77,7 +79,10 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
 
 .client-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
 .client-card:hover { border-color: rgba(229,9,20,0.25); }
-.client-header { padding: 16px 20px; display: grid; grid-template-columns: auto 1fr auto auto auto auto; align-items: center; gap: 16px; cursor: pointer; }
+/* Une colonne par element : avatar, infos, metier, les 3 badges (favoris,
+   telechargements, ecoutes), date, chevron. Sans cela, les elements en trop
+   basculent sur une 2e ligne sous l'avatar. */
+.client-header { padding: 16px 20px; display: grid; grid-template-columns: auto 1fr auto auto auto auto auto auto; align-items: center; gap: 16px; cursor: pointer; }
 .client-avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(229,9,20,0.15); border: 1px solid rgba(229,9,20,0.3); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: var(--red); flex-shrink: 0; }
 .client-info { min-width: 0; }
 .client-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
@@ -108,6 +113,25 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
 .mini-track-date { font-size: 11px; color: var(--muted); flex-shrink: 0; }
 .detail-empty { padding: 20px; text-align: center; color: var(--muted); font-size: 12px; }
 
+/* ── ACTIVITÉ ── */
+.act-section { padding: 0 48px 22px; }
+.act-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 12px; align-items: start; }
+.act-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+.act-card-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.act-list { max-height: 340px; overflow-y: auto; }
+.act-row { display: flex; align-items: center; gap: 10px; padding: 7px 6px; border-radius: 4px; transition: background 0.1s; }
+.act-row:hover { background: var(--bg3); }
+.act-icon { font-size: 12px; width: 18px; text-align: center; flex-shrink: 0; }
+.act-icon.play { color: var(--green); }
+.act-icon.dl { color: var(--red); }
+.act-main { flex: 1; min-width: 0; }
+.act-title { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.act-sub { font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.act-when { font-size: 10px; color: var(--muted); flex-shrink: 0; text-align: right; }
+.act-rank { font-size: 11px; color: var(--muted); min-width: 18px; text-align: center; flex-shrink: 0; }
+.act-count { font-size: 10px; color: var(--text2); flex-shrink: 0; white-space: nowrap; }
+.act-empty { padding: 24px; text-align: center; color: var(--muted); font-size: 12px; }
+
 /* ── SETUP PANEL ── */
 .setup-panel { margin: 24px 48px; background: rgba(229,9,20,0.06); border: 1px solid rgba(229,9,20,0.25); border-radius: 8px; overflow: hidden; }
 .setup-header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
@@ -129,8 +153,9 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
 
 @media (max-width: 900px) {
   header { padding: 0 16px; }
-  .stats-bar, .controls, .clients-section { padding-left: 16px; padding-right: 16px; }
+  .stats-bar, .controls, .clients-section, .act-section { padding-left: 16px; padding-right: 16px; }
   .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .act-grid { grid-template-columns: 1fr; }
   .client-header { grid-template-columns: auto 1fr auto; }
   .client-metier, .client-date { display: none; }
 }
@@ -211,7 +236,16 @@ create table if not exists public.downloads (
   downloaded_at timestamptz default now()
 );
 
--- 4. Table projets
+-- 4. Table écoutes
+create table if not exists public.plays (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users on delete cascade not null,
+  track_id text not null, track_title text,
+  track_playlist text, track_url text,
+  played_at timestamptz default now()
+);
+
+-- 5. Table projets
 create table if not exists public.projects (
   id uuid default gen_random_uuid() primary key,
   user_id uuid references auth.users on delete cascade not null,
@@ -219,19 +253,21 @@ create table if not exists public.projects (
   created_at timestamptz default now()
 );
 
--- 5. Activer RLS
+-- 6. Activer RLS
 alter table public.profiles enable row level security;
 alter table public.favorites enable row level security;
 alter table public.downloads enable row level security;
+alter table public.plays enable row level security;
 alter table public.projects enable row level security;
 
--- 6. Politiques RLS (utilisateur voit ses propres données)
+-- 7. Politiques RLS (utilisateur voit ses propres données)
 create policy "profiles_own" on public.profiles for all using (auth.uid() = id);
 create policy "favorites_own" on public.favorites for all using (auth.uid() = user_id);
 create policy "downloads_own" on public.downloads for all using (auth.uid() = user_id);
+create policy "plays_own" on public.plays for all using (auth.uid() = user_id);
 create policy "projects_own" on public.projects for all using (auth.uid() = user_id);
 
--- 7. Trigger auto-création profil à l'inscription
+-- 8. Trigger auto-création profil à l'inscription
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
@@ -250,49 +286,19 @@ create or replace trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
--- 8. Fonction admin (contourne RLS avec mot de passe)
-create or replace function public.get_admin_data()
-returns json language plpgsql security definer
-set search_path = public, auth as $$
-begin
-  -- L'email vient du JWT verifie par PostgREST : il ne peut pas etre forge
-  -- sans le secret du projet. Ne jamais revenir a un mot de passe en argument,
-  -- il serait lisible dans le JavaScript de cette page.
-  if coalesce(auth.jwt() ->> 'email', '') <> 'vladimirstreiff@gmail.com' then
-    raise exception 'Accès refusé';
-  end if;
-  return (
-    select json_build_object(
-      'profiles', (
-        select coalesce(json_agg(
-          json_build_object(
-            'id', p.id, 'email', p.email,
-            'prenom', p.prenom, 'nom', p.nom,
-            'societe', p.societe, 'metier', p.metier,
-            'created_at', p.created_at,
-            'last_sign_in', u.last_sign_in_at
-          ) order by p.created_at desc
-        ), '[]'::json)
-        from profiles p left join auth.users u on u.id = p.id
-      ),
-      'favorites', (
-        select coalesce(json_agg(row_to_json(f.*) order by f.created_at desc), '[]'::json)
-        from favorites f
-      ),
-      'downloads', (
-        select coalesce(json_agg(row_to_json(d.*) order by d.downloaded_at desc), '[]'::json)
-        from downloads d
-      )
-    )
-  );
-end; $$;
-
-revoke all on function public.get_admin_data() from public, anon;
-grant execute on function public.get_admin_data() to authenticated;
-
--- Supprime l'ancienne version protegee par mot de passe : c'est cette ligne
--- qui ferme la faille.
-drop function if exists public.get_admin_data(text);</div>
+-- 9. Fonctions admin : get_admin_data() et get_client_activity()
+--    (+ la table nouveaux_titres, utilisée par l'ajout de morceaux)
+--
+-- Elles ne sont PAS reproduites ici. Elles vivent dans les fichiers de
+-- migration du depot, qui font foi :
+--
+--   supabase/migrations/20260716120000_get_admin_data_jwt.sql
+--   supabase/migrations/20260716130000_plays_et_nouveaux_titres.sql
+--
+-- Executer ces fichiers dans l'ordre, dans le SQL Editor. Ce panneau en a
+-- longtemps garde une copie ; elle a fini par diverger, et la recopier ici
+-- reviendrait a ecraser la version a jour par une plus ancienne au premier
+-- clic sur « Copier le SQL ». Une seule source de verite.</div>
     <button class="copy-sql-btn" onclick="copySQL()">Copier le SQL</button>
   </div>
 </div>
@@ -312,8 +318,31 @@ drop function if exists public.get_admin_data(text);</div>
     <div class="stat-label">Téléchargements total</div>
   </div>
   <div class="stat-box">
+    <div class="stat-num" id="stat-plays">—</div>
+    <div class="stat-label">Écoutes total</div>
+  </div>
+  <div class="stat-box">
     <div class="stat-num" id="stat-today">—</div>
     <div class="stat-label">Téléchargements aujourd'hui</div>
+  </div>
+</div>
+
+<!-- ACTIVITÉ -->
+<div class="act-section">
+  <div class="section-title">Activité</div>
+  <div class="act-grid">
+    <div class="act-card">
+      <div class="act-card-title"><span>Derniers évènements</span><span style="letter-spacing:0;text-transform:none;font-weight:400">▶ écoute · ⬇ téléchargement</span></div>
+      <div class="act-list" id="act-feed"><div class="act-empty">—</div></div>
+    </div>
+    <div class="act-card">
+      <div class="act-card-title"><span>Top titres</span></div>
+      <div class="act-list" id="act-top"><div class="act-empty">—</div></div>
+    </div>
+    <div class="act-card">
+      <div class="act-card-title"><span>Activité par client</span></div>
+      <div class="act-list" id="act-clients"><div class="act-empty">—</div></div>
+    </div>
   </div>
 </div>
 
@@ -344,6 +373,7 @@ drop function if exists public.get_admin_data(text);</div>
   <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">Tous</button>
   <button class="filter-btn" data-filter="favorites" onclick="setFilter('favorites',this)">Avec favoris</button>
   <button class="filter-btn" data-filter="downloads" onclick="setFilter('downloads',this)">Avec DL</button>
+  <button class="filter-btn" data-filter="plays" onclick="setFilter('plays',this)">Avec écoutes</button>
 </div>
 
 <!-- CLIENTS -->
@@ -364,8 +394,14 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const ADMIN_EMAIL = 'vladimirstreiff@gmail.com';
 
-let allProfiles = [], allFavorites = [], allDownloads = [];
+let allProfiles = [], allFavorites = [], allDownloads = [], allPlays = [], topTracks = [];
 let activeFilter = 'all';
+
+// Detail d'un client (favoris/telechargements/ecoutes complets), charge a la
+// demande au depliage de sa fiche et garde en cache pour les depliages
+// suivants. get_admin_data ne renvoie que les 200 ecoutes les plus recentes :
+// tout charger d'entree n'aurait servi qu'a ralentir l'ouverture du dashboard.
+const clientDetailCache = {};
 
 // ── AUTH ──────────────────────────────────────────────────────────
 async function checkAdmin() {
@@ -434,32 +470,114 @@ async function loadAdminData() {
   allProfiles = data?.profiles || [];
   allFavorites = data?.favorites || [];
   allDownloads = data?.downloads || [];
+  allPlays = data?.plays || [];
+  topTracks = data?.top_tracks || [];
 
   updateStats();
+  renderActivity();
   renderClients();
 }
 
-function refreshData() { loadAdminData(); }
+function refreshData() {
+  Object.keys(clientDetailCache).forEach(k => delete clientDetailCache[k]);
+  loadAdminData();
+}
 
 function updateStats() {
   const today = new Date().toISOString().slice(0, 10);
   const todayDls = allDownloads.filter(d => (d.downloaded_at || '').slice(0, 10) === today);
 
+  // allPlays est plafonnee a 200 lignes : le total vient de la somme des
+  // compteurs par client, que Postgres calcule sur la table entiere.
+  const totalPlays = allProfiles.reduce((s, p) => s + (p.nb_plays || 0), 0);
+
   document.getElementById('stat-clients').textContent = allProfiles.length;
   document.getElementById('stat-favs').textContent = allFavorites.length;
   document.getElementById('stat-dls').textContent = allDownloads.length;
+  document.getElementById('stat-plays').textContent = totalPlays;
   document.getElementById('stat-today').textContent = todayDls.length;
+}
+
+// ── ACTIVITÉ ──────────────────────────────────────────────────────
+function clientName(uid) {
+  const p = allProfiles.find(x => x.id === uid);
+  if (!p) return 'Client inconnu';
+  return [p.prenom, p.nom].filter(Boolean).join(' ') || p.email || 'Client';
+}
+
+function renderActivity() {
+  renderFeed();
+  renderTopTracks();
+  renderClientActivity();
+}
+
+// Flux fusionne ecoutes + telechargements, le plus recent d'abord.
+function renderFeed() {
+  const events = [
+    ...allPlays.map(p => ({ kind: 'play', at: p.played_at, title: p.track_title, playlist: p.track_playlist, uid: p.user_id })),
+    ...allDownloads.map(d => ({ kind: 'dl', at: d.downloaded_at, title: d.track_title, playlist: d.track_playlist, uid: d.user_id })),
+  ].filter(e => e.at).sort((a, b) => (a.at < b.at ? 1 : -1)).slice(0, 60);
+
+  const el = document.getElementById('act-feed');
+  if (!events.length) { el.innerHTML = '<div class="act-empty">Aucune activité pour le moment</div>'; return; }
+
+  el.innerHTML = events.map(e => `
+    <div class="act-row">
+      <div class="act-icon ${e.kind}">${e.kind === 'play' ? '▶' : '⬇'}</div>
+      <div class="act-main">
+        <div class="act-title">${escHtml(e.title || 'Sans titre')}</div>
+        <div class="act-sub">${escHtml(clientName(e.uid))}${e.playlist ? ' · ' + escHtml(e.playlist) : ''}</div>
+      </div>
+      <div class="act-when">${fmtDateTime(e.at)}</div>
+    </div>`).join('');
+}
+
+function renderTopTracks() {
+  const el = document.getElementById('act-top');
+  if (!topTracks.length) { el.innerHTML = '<div class="act-empty">Aucune activité pour le moment</div>'; return; }
+
+  el.innerHTML = topTracks.map((t, i) => `
+    <div class="act-row">
+      <div class="act-rank">${i + 1}</div>
+      <div class="act-main">
+        <div class="act-title">${escHtml(t.track_title || t.track_id || 'Sans titre')}</div>
+        <div class="act-sub">${escHtml(t.track_playlist || '')}</div>
+      </div>
+      <div class="act-count">▶ ${t.nb_plays || 0} · ⬇ ${t.nb_downloads || 0}</div>
+    </div>`).join('');
+}
+
+function renderClientActivity() {
+  const el = document.getElementById('act-clients');
+  const actifs = allProfiles
+    .filter(p => (p.nb_plays || 0) + (p.nb_downloads || 0) > 0)
+    .sort((a, b) => (a.last_activity || '') < (b.last_activity || '') ? 1 : -1);
+
+  if (!actifs.length) { el.innerHTML = '<div class="act-empty">Aucun client actif pour le moment</div>'; return; }
+
+  el.innerHTML = actifs.map(p => `
+    <div class="act-row">
+      <div class="act-main">
+        <div class="act-title">${escHtml([p.prenom, p.nom].filter(Boolean).join(' ') || p.email || 'Client')}</div>
+        <div class="act-sub">${p.last_activity ? 'Dernière activité ' + fmtDateTime(p.last_activity) : '—'}</div>
+      </div>
+      <div class="act-count">▶ ${p.nb_plays || 0} · ⬇ ${p.nb_downloads || 0}</div>
+    </div>`).join('');
 }
 
 // ── RENDER ────────────────────────────────────────────────────────
 function renderClients() {
   const query = document.getElementById('search-input').value.toLowerCase().trim();
 
+  // Les filtres et les compteurs s'appuient sur les nb_* calcules par Postgres
+  // plutot que sur la longueur des tableaux : ils restent justes meme quand la
+  // RPC ne renvoie qu'un echantillon recent (cas des ecoutes).
   let profiles = allProfiles.filter(p => {
     const text = [p.prenom, p.nom, p.email, p.societe, p.metier].join(' ').toLowerCase();
     if (query && !text.includes(query)) return false;
-    if (activeFilter === 'favorites') return allFavorites.some(f => f.user_id === p.id);
-    if (activeFilter === 'downloads') return allDownloads.some(d => d.user_id === p.id);
+    if (activeFilter === 'favorites') return (p.nb_favorites || 0) > 0;
+    if (activeFilter === 'downloads') return (p.nb_downloads || 0) > 0;
+    if (activeFilter === 'plays') return (p.nb_plays || 0) > 0;
     return true;
   });
 
@@ -475,10 +593,10 @@ function renderClients() {
   }
 
   document.getElementById('clients-list').innerHTML = profiles.map(p => {
-    const favs = allFavorites.filter(f => f.user_id === p.id);
-    const dls = allDownloads.filter(d => d.user_id === p.id);
+    const nbFavs = p.nb_favorites || 0, nbDls = p.nb_downloads || 0, nbPlays = p.nb_plays || 0;
     const initials = [(p.prenom || '?')[0], (p.nom || '')[0]].join('').toUpperCase();
     const fullName = [p.prenom, p.nom].filter(Boolean).join(' ') || p.email;
+    const loading = '<div class="detail-empty">· · · Chargement</div>';
 
     return `<div class="client-card" id="card-${p.id}">
       <div class="client-header" onclick="toggleCard('${p.id}')">
@@ -489,26 +607,27 @@ function renderClients() {
           <div class="client-societe">${escHtml(p.societe || '')}</div>
         </div>
         <div class="client-metier">${escHtml(p.metier || '—')}</div>
-        <div class="client-badge ${favs.length ? 'has-data' : ''}">♥ ${favs.length}</div>
-        <div class="client-badge ${dls.length ? 'has-data' : ''}">⬇ ${dls.length}</div>
+        <div class="client-badge ${nbFavs ? 'has-data' : ''}">♥ ${nbFavs}</div>
+        <div class="client-badge ${nbDls ? 'has-data' : ''}">⬇ ${nbDls}</div>
+        <div class="client-badge ${nbPlays ? 'has-data' : ''}">▶ ${nbPlays}</div>
         <div class="client-date">${fmtDate(p.created_at)}<br><span style="font-size:10px;color:#555">${p.last_sign_in ? 'Vu ' + fmtDate(p.last_sign_in) : 'Jamais connecté'}</span></div>
         <div class="client-toggle">▼</div>
       </div>
       <div class="client-detail" id="detail-${p.id}">
         <div class="detail-tabs">
-          <button class="detail-tab active" data-uid="${p.id}" data-panel="favs" onclick="switchDetail(this,'${p.id}','favs')">♥ Favoris (${favs.length})</button>
-          <button class="detail-tab" data-uid="${p.id}" data-panel="dls" onclick="switchDetail(this,'${p.id}','dls')">⬇ Téléchargements (${dls.length})</button>
+          <button class="detail-tab active" data-uid="${p.id}" data-panel="favs" onclick="switchDetail(this,'${p.id}','favs')">♥ Favoris (${nbFavs})</button>
+          <button class="detail-tab" data-uid="${p.id}" data-panel="dls" onclick="switchDetail(this,'${p.id}','dls')">⬇ Téléchargements (${nbDls})</button>
+          <button class="detail-tab" data-uid="${p.id}" data-panel="plays" onclick="switchDetail(this,'${p.id}','plays')">▶ Écoutes (${nbPlays})</button>
         </div>
-        <div class="detail-panel active" id="panel-favs-${p.id}">
-          ${renderMiniTracks(favs, 'fav')}
-        </div>
-        <div class="detail-panel" id="panel-dls-${p.id}">
-          ${renderMiniTracks(dls, 'dl')}
-        </div>
+        <div class="detail-panel active" id="panel-favs-${p.id}">${loading}</div>
+        <div class="detail-panel" id="panel-dls-${p.id}">${loading}</div>
+        <div class="detail-panel" id="panel-plays-${p.id}">${loading}</div>
       </div>
     </div>`;
   }).join('');
 }
+
+const MINI_DATE_FIELD = { fav: 'created_at', dl: 'downloaded_at', play: 'played_at' };
 
 function renderMiniTracks(tracks, type) {
   if (!tracks.length) return `<div class="detail-empty">Aucun enregistrement</div>`;
@@ -519,13 +638,49 @@ function renderMiniTracks(tracks, type) {
         <div class="mini-track-title">${escHtml(t.track_title || 'Sans titre')}</div>
         <div class="mini-track-playlist">${escHtml(t.track_playlist || '')}</div>
       </div>
-      <div class="mini-track-date">${fmtDate(type === 'fav' ? t.created_at : t.downloaded_at)}</div>
+      <div class="mini-track-date">${fmtDateTime(t[MINI_DATE_FIELD[type]])}</div>
     </div>`).join('') + (tracks.length > 50 ? `<div class="detail-empty">+${tracks.length - 50} autres...</div>` : '');
 }
 
 function toggleCard(id) {
   const card = document.getElementById('card-' + id);
+  const willOpen = !card.classList.contains('open');
   card.classList.toggle('open');
+  if (willOpen) loadClientDetail(id);
+}
+
+// Charge le detail d'un client au premier depliage de sa fiche.
+async function loadClientDetail(id) {
+  const cached = clientDetailCache[id];
+  if (cached === 'loading') return;
+  if (cached) { fillClientPanels(id, cached); return; }
+
+  clientDetailCache[id] = 'loading';
+  const { data, error } = await sb.rpc('get_client_activity', { client_id: id });
+
+  if (error) {
+    delete clientDetailCache[id];  // laisse une nouvelle tentative possible
+    ['favs', 'dls', 'plays'].forEach(panel => {
+      const el = document.getElementById(`panel-${panel}-${id}`);
+      if (el) el.innerHTML = `<div class="detail-empty">Erreur : ${escHtml(error.message)}</div>`;
+    });
+    return;
+  }
+
+  clientDetailCache[id] = data;
+  fillClientPanels(id, data);
+}
+
+function fillClientPanels(id, d) {
+  const panels = {
+    favs: renderMiniTracks(d?.favorites || [], 'fav'),
+    dls: renderMiniTracks(d?.downloads || [], 'dl'),
+    plays: renderMiniTracks(d?.plays || [], 'play'),
+  };
+  Object.entries(panels).forEach(([panel, html]) => {
+    const el = document.getElementById(`panel-${panel}-${id}`);
+    if (el) el.innerHTML = html;
+  });
 }
 
 function switchDetail(btn, uid, panel) {
@@ -560,6 +715,13 @@ function copySQL() {
 function fmtDate(str) {
   if (!str) return '—';
   return new Date(str).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+// L'heure compte dans les flux d'activite : deux ecoutes du meme jour ne se
+// distinguent pas avec la seule date.
+function fmtDateTime(str) {
+  if (!str) return '—';
+  return new Date(str).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
 
 function escHtml(s) {
