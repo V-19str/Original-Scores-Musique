@@ -1,5 +1,22 @@
 name: Generate Catalogue
 
+# ⚠ NE PAS LANCER EN L'ETAT — declenchement manuel uniquement, volontairement.
+#
+# fetch_catalogue.py deduit la playlist de chaque piste depuis `asset_folder`
+# et son titre depuis `display_name`. La migration vers dtfm2cwm0 a televerse
+# les assets avec `public_id` seul : ces deux champs sont vides sur le compte
+# de destination. Lance tel quel, le script classerait les 2564 pistes en
+# "Divers", perdrait les titres, et l'etape "Commit catalogue.json" ci-dessous
+# pousserait le resultat automatiquement — ecrasant le catalogue en production.
+#
+# Avant de relancer ce workflow, il faut soit repeupler asset_folder/display_name
+# sur Cloudinary, soit reecrire la derivation playlist/titre a partir du
+# public_id (qui contient encore le chemin d'origine), et valider le resultat
+# sur un echantillon.
+#
+# Aucun declencheur automatique n'est defini (ni schedule, ni push) : c'est
+# intentionnel, ne pas en ajouter tant que ce qui precede n'est pas regle.
+
 on:
   workflow_dispatch:
 
