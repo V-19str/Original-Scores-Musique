@@ -18,6 +18,12 @@ jobs:
         run: pip install requests
 
       - name: Fetch Cloudinary catalogue
+        env:
+          # A definir dans Settings > Secrets and variables > Actions.
+          # CLOUDINARY_CLOUD_NAME est optionnel : le script retombe sur dtfm2cwm0.
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         run: python3 fetch_catalogue.py
 
       - name: Commit catalogue.json

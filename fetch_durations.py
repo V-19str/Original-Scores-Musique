@@ -12,7 +12,7 @@ Usage:
     python fetch_durations.py
 """
 
-import json, math, sys, time
+import json, math, os, sys, time
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
@@ -20,9 +20,17 @@ from requests.auth import HTTPBasicAuth
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-DST_CLOUD  = "dtfm2cwm0"
-DST_KEY    = "645955733157556"
-DST_SECRET = "RB6VjSQe802PqJ7FA8cjQ-n0Qqg"
+
+def env(name: str, default: str | None = None) -> str:
+    value = os.environ.get(name) or default
+    if not value:
+        sys.exit(f"Variable d'environnement manquante : {name}")
+    return value
+
+
+DST_CLOUD  = env("CLOUDINARY_CLOUD_NAME", "dtfm2cwm0")
+DST_KEY    = env("CLOUDINARY_API_KEY")
+DST_SECRET = env("CLOUDINARY_API_SECRET")
 
 AUTH    = HTTPBasicAuth(DST_KEY, DST_SECRET)
 API_URL = f"https://api.cloudinary.com/v1_1/{DST_CLOUD}/resources/video/upload"

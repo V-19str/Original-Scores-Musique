@@ -1,9 +1,17 @@
-import requests, json, re
+import os, sys, requests, json, re
 from requests.auth import HTTPBasicAuth
 
-CLOUD_NAME = "dqfogw7sg"
-API_KEY    = "968571581867276"
-API_SECRET = "4O-X2gHhbCCud7Yppkpe38TxhTc"
+
+def env(name: str, default: str | None = None) -> str:
+    value = os.environ.get(name) or default
+    if not value:
+        sys.exit(f"Variable d'environnement manquante : {name}")
+    return value
+
+
+CLOUD_NAME = env("CLOUDINARY_CLOUD_NAME", "dtfm2cwm0")
+API_KEY    = env("CLOUDINARY_API_KEY")
+API_SECRET = env("CLOUDINARY_API_SECRET")
 auth = HTTPBasicAuth(API_KEY, API_SECRET)
 
 LABELS = {
