@@ -1,0 +1,20 @@
+# https://osm-music.fr/robots.txt
+
+User-agent: *
+Allow: /
+
+# Outils internes et etapes de flux : aucune valeur pour la recherche.
+#
+# Attention : Disallow empeche l'exploration, pas l'indexation. Une URL deja
+# connue de Google peut rester affichee sans snippet. Pour un retrait effectif,
+# ajouter <meta name="robots" content="noindex"> sur la page ET la laisser
+# exploitable le temps que Google repasse — un Disallow pose trop tot empeche
+# justement de voir le noindex.
+Disallow: /admin.html
+Disallow: /admin-sacem.html
+Disallow: /Diapason.html
+Disallow: /SANJORA.html
+Disallow: /finaliser-inscription.html
+Disallow: /qrcode.html
+
+Sitemap: https://osm-music.fr/sitemap.xml
