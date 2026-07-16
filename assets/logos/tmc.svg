@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xml:space="preserve"
+   width="597"
+   height="231"
+   style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+   viewBox="0 0 597 231"
+   id="svg1337"
+   sodipodi:version="0.32"
+   inkscape:version="0.43"
+   sodipodi:docname="tmc.svg"
+   version="1.0"
+   sodipodi:docbase="E:\Documents and Settings\Administrator\Desktop">
+<sodipodi:namedview
+   inkscape:window-height="540"
+   inkscape:window-width="853"
+   inkscape:pageshadow="2"
+   inkscape:pageopacity="0.0"
+   borderopacity="1.0"
+   bordercolor="#666666"
+   pagecolor="#ffffff"
+   id="base"
+   inkscape:zoom="1"
+   inkscape:cx="329.50528"
+   inkscape:cy="131.31666"
+   inkscape:window-x="66"
+   inkscape:window-y="87"
+   inkscape:current-layer="svg1337" />
+ <defs
+   id="defs1339">
+  <style
+   type="text/css"
+   id="style1341">
+   
+    .fil0 {fill:#3EAADB}
+   
+  </style>
+ 
+ </defs>
+  <metadata
+   id="ID_0">
+   <odm
+   name="Descrizione"
+   value="Logo TMC"
+   type="0"
+   id="odm1344" />
+  <rdf:RDF><cc:Work
+     rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>TMC_logo</dc:title><dc:creator><cc:Agent><dc:title>Angelo Romano</dc:title></cc:Agent></dc:creator><dc:rights><cc:Agent><dc:title>Fr</dc:title></cc:Agent></dc:rights></cc:Work></rdf:RDF></metadata>
+ 
+<g
+   inkscape:groupmode="layer"
+   id="layer1"
+   inkscape:label="TMCLayer" /><path
+   style="fill:#3eaadb"
+   d="M 566.81818,220 C 503.59655,219.81358 438.68326,196.81432 438.70657,115.77082 C 438.68547,34.731786 505.39065,10.224987 566.81818,10.334483 L 566.81818,78.491086 C 540.20969,77.048837 502.92306,77.563765 501.97709,115.18116 C 502.92306,152.80102 540.20969,153.31597 566.81818,151.8737 L 566.81818,220 L 566.81818,220 z M 427.00769,218.88175 L 354.73166,218.88175 L 354.73166,156.08401 L 304.93302,218.70004 L 247.64577,218.70004 L 247.64577,133.58576 L 181.60971,218.70004 L 138.95004,218.70004 L 65.905096,218.70004 L 65.905096,151.72473 L 65.905096,77.479857 L 25,77.479857 L 25,13.20036 L 180.82912,13.20036 L 180.82912,77.479857 L 138.95004,77.479857 L 138.95004,151.72473 L 247.64577,12.513111 L 304.93302,12.513111 L 304.93302,75.268686 L 354.73166,12.694854 L 427.00769,12.694854 L 427.00769,218.88175 L 427.00769,218.88175 z "
+   class="fil0"
+   id="tmc" /></svg>
