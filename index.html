@@ -1436,7 +1436,6 @@ function renderPlaylists(){
             <div class="pl-name">${p.label}</div>
             <div class="pl-desc">${p.desc}</div>
             <div class="pl-meta">
-              <span class="pl-count-badge">${counts[p.label]||0} morceaux</span>
               <div class="pl-tags-row">${p.tags.slice(0,3).map(t=>`<span class="pl-tag">${t}</span>`).join('')}</div>
             </div>
           </div>
@@ -1454,7 +1453,6 @@ function openPlaylistDetail(label){
   document.getElementById('pd-title').textContent=info.label;
   document.getElementById('pd-genres').textContent=info.genres;
   document.getElementById('pd-desc').textContent=info.desc;
-  document.getElementById('pd-count').textContent=`${tracks.length} morceaux`;
   document.getElementById('pd-tags').innerHTML=info.tags.map(t=>`<span class="pd-tag">${t}</span>`).join('');
   renderDetailTracks();
   showView('playlist-detail');
@@ -1507,13 +1505,13 @@ function renderNavPills(){
   const nav=document.getElementById('pl-nav');nav.innerHTML='';
   const all=document.createElement('button');
   all.className='pl-pill active';all.dataset.label='';
-  all.innerHTML=`Tout <span class="pl-count-pill">${allTracks.length}</span>`;
+  all.textContent='Tout';
   all.onclick=()=>selectFolder(null,all);nav.appendChild(all);
   THEMES.forEach(theme=>theme.playlists.forEach(p=>{
     if(!counts[p.label])return;
     const btn=document.createElement('button');
     btn.className='pl-pill';btn.dataset.label=p.label;
-    btn.innerHTML=`${p.label} <span class="pl-count-pill">${counts[p.label]||0}</span>`;
+    btn.textContent=p.label;
     btn.onclick=()=>selectFolder(p.label,btn);nav.appendChild(btn);
   }));
   renderCatPlaylists(counts);
@@ -1525,14 +1523,14 @@ function renderCatPlaylists(counts){
   container.innerHTML='';
   const allBtn=document.createElement('button');
   allBtn.className='cat-pl-btn pl-pill active';
-  allBtn.innerHTML=`<span>Tout le catalogue</span><span class="cat-pl-count">${allTracks.length}</span>`;
+  allBtn.innerHTML=`<span>Tout le catalogue</span>`;
   allBtn.onclick=()=>selectFolder(null,allBtn);
   container.appendChild(allBtn);
   THEMES.forEach(theme=>theme.playlists.forEach(p=>{
     if(!counts[p.label])return;
     const btn=document.createElement('button');
     btn.className='cat-pl-btn pl-pill';
-    btn.innerHTML=`<span>${p.label}</span><span class="cat-pl-count">${counts[p.label]||0}</span>`;
+    btn.innerHTML=`<span>${p.label}</span>`;
     btn.onclick=()=>selectFolder(p.label,btn);
     container.appendChild(btn);
   }));
