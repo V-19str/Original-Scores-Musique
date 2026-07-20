@@ -150,6 +150,12 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
 .recl-select { background: var(--bg4); border: 1px solid var(--border); color: var(--text); padding: 6px 8px; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 11px; cursor: pointer; outline: none; max-width: 150px; }
 @media (max-width: 700px) { .recl-row { grid-template-columns: 1fr; } .recl-actions { justify-content: flex-start; } }
 
+/* ── DEMANDES D'ACCÈS ── */
+.req-badge { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 9px; margin-left: 6px; vertical-align: middle; }
+.req-badge.pending { background: rgba(243,156,18,0.16); color: var(--yellow); }
+.req-badge.invited { background: rgba(52,152,219,0.16); color: #3498db; }
+.req-badge.active { background: rgba(46,204,113,0.16); color: var(--green); }
+
 /* ── SETUP PANEL ── */
 .setup-panel { margin: 24px 48px; background: rgba(229,9,20,0.06); border: 1px solid rgba(229,9,20,0.25); border-radius: 8px; overflow: hidden; }
 .setup-header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
@@ -364,6 +370,15 @@ create or replace trigger on_auth_user_created
   </div>
 </div>
 
+<!-- DEMANDES D'ACCÈS -->
+<div class="clients-section" style="margin-bottom:22px">
+  <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <span>Demandes d'accès (inscriptions)</span>
+    <span id="req-summary" style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:none;font-weight:400"></span>
+  </div>
+  <div id="req-list"><div class="loading-msg">· · · Chargement des demandes</div></div>
+</div>
+
 <!-- APPROUVER UN CLIENT -->
 <div class="clients-section" style="margin-bottom:22px">
   <div class="section-title">Approuver un client</div>
@@ -524,6 +539,7 @@ async function loadAdminData() {
   updateStats();
   renderActivity();
   renderClients();
+  reqInit();
 }
 
 function refreshData() {
@@ -838,6 +854,106 @@ async function approveClient() {
     btn.disabled = false;
     btn.textContent = label;
   }
+}
+
+// ── DEMANDES D'ACCÈS (inscriptions) ───────────────────────────────
+// Les demandes déposées via inscription.html arrivent dans access_requests.
+// Statut : pending -> invited (invitation envoyée) ; « actif » est déduit quand
+// un profil existe avec le même email.
+let reqRows = [];
+
+async function reqInit() {
+  const el = document.getElementById('req-list');
+  const { data, error } = await sb.from('access_requests').select('*').order('created_at', { ascending: false });
+  if (error) {
+    if (error.message.includes('does not exist') || error.message.includes('relation')) {
+      el.innerHTML = `<div class="detail-empty">⚙ La table access_requests n'est pas encore créée (exécutez la migration 20260720140000_access_requests.sql).</div>`;
+    } else {
+      el.innerHTML = `<div class="empty-msg">Erreur : ${escHtml(error.message)}</div>`;
+    }
+    return;
+  }
+  reqRows = data || [];
+  renderReqs();
+}
+
+function reqStatus(r) {
+  const active = allProfiles.some(p => (p.email || '').toLowerCase() === (r.email || '').toLowerCase());
+  if (active) return 'active';
+  return r.status || 'pending';
+}
+
+function renderReqs() {
+  const el = document.getElementById('req-list');
+  const summary = document.getElementById('req-summary');
+  if (!reqRows.length) {
+    el.className = '';
+    el.innerHTML = '<div class="detail-empty">Aucune demande pour le moment.</div>';
+    if (summary) summary.textContent = '';
+    return;
+  }
+  const pending = reqRows.filter(r => reqStatus(r) === 'pending').length;
+  if (summary) summary.textContent = `${reqRows.length} demande${reqRows.length > 1 ? 's' : ''} · ${pending} en attente`;
+  el.className = 'recl-list';
+  const labels = { pending: 'En attente', invited: 'Invité', active: 'Actif' };
+  el.innerHTML = reqRows.map(r => {
+    const st = reqStatus(r);
+    const name = [r.prenom, r.nom].filter(Boolean).join(' ') || r.email;
+    const meta = [r.email, r.societe, r.metier].filter(Boolean).map(escHtml).join(' · ');
+    return `<div class="recl-row">
+      <div class="recl-info">
+        <div class="recl-title">${escHtml(name)} <span class="req-badge ${st}">${labels[st]}</span></div>
+        <div class="recl-move">${meta} · ${fmtDateTime(r.created_at)}</div>
+        ${r.projet ? `<div class="recl-move" style="margin-top:3px;color:var(--muted)">Projet : ${escHtml(r.projet)}</div>` : ''}
+        ${r.message ? `<div class="recl-move" style="margin-top:3px;color:var(--muted)">« ${escHtml(r.message)} »</div>` : ''}
+        ${r.telephone ? `<div class="recl-move" style="margin-top:3px;color:var(--muted)">☎ ${escHtml(r.telephone)}</div>` : ''}
+      </div>
+      <div class="recl-actions">
+        ${st === 'active' ? '' : `<button class="recl-btn ok" onclick="reqApprove('${escAttr(r.id)}')">✅ Approuver</button>`}
+        <button class="recl-btn no" onclick="reqDelete('${escAttr(r.id)}')" title="Supprimer la demande">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Approuve depuis une demande : réutilise l'Edge Function inviter-client puis
+// passe le statut à « invited ».
+async function reqApprove(id) {
+  const r = reqRows.find(x => x.id === id);
+  if (!r) return;
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session || session.user?.email !== ADMIN_EMAIL) { showToast('Session admin introuvable. Reconnectez-vous.'); return; }
+  showToast('Envoi de l\'invitation…');
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/inviter-client`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+        'apikey': SUPABASE_KEY,
+      },
+      body: JSON.stringify({ email: r.email, prenom: r.prenom || '', nom: r.nom || '' }),
+    });
+    const out = await res.json().catch(() => ({}));
+    if (res.ok) {
+      await sb.from('access_requests').update({ status: 'invited' }).eq('id', id);
+      r.status = 'invited';
+      renderReqs();
+      showToast(`Invitation envoyée à ${r.email}`);
+    } else {
+      showToast('Erreur : ' + (out.error || out.message || res.statusText || 'échec de l\'invitation.'));
+    }
+  } catch (e) {
+    showToast('Erreur réseau : ' + e.message);
+  }
+}
+
+async function reqDelete(id) {
+  const { error } = await sb.from('access_requests').delete().eq('id', id);
+  if (error) { showToast('Erreur : ' + error.message); return; }
+  reqRows = reqRows.filter(x => x.id !== id);
+  renderReqs();
+  showToast('Demande supprimée');
 }
 
 // ── RECLASSEMENT ──────────────────────────────────────────────────

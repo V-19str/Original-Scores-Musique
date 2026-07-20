@@ -287,7 +287,10 @@ footer a:hover { color: var(--text2); }
   <p>© 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp; <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp; <a href="tel:+33682985752">06 82 98 57 52</a></p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+const osmSB = supabase.createClient('https://ubpmzncfhkohoyfonjbb.supabase.co', 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh');
+
 document.getElementById('inscription-form').addEventListener('submit', async function(e) {
   e.preventDefault();
   const btn = document.getElementById('submit-btn');
@@ -295,6 +298,22 @@ document.getElementById('inscription-form').addEventListener('submit', async fun
   btn.textContent = 'Envoi en cours...';
 
   const formData = new FormData(this);
+
+  // Enregistre la demande en base : visible dans l'admin (Demandes d'accès) et
+  // déclenche l'email Brevo à l'administrateur via le webhook Supabase.
+  // Non bloquant : Formspree reste le canal d'email principal.
+  try {
+    await osmSB.from('access_requests').insert({
+      email: (document.getElementById('email').value || '').trim(),
+      prenom: (document.getElementById('prenom').value || '').trim(),
+      nom: (document.getElementById('nom').value || '').trim(),
+      telephone: (document.getElementById('telephone').value || '').trim(),
+      societe: (document.getElementById('societe').value || '').trim(),
+      metier: document.getElementById('metier').value || '',
+      projet: (document.getElementById('projet').value || '').trim(),
+      message: (document.getElementById('message').value || '').trim(),
+    });
+  } catch (err) { /* ignore : la demande passe quand même par Formspree */ }
 
   try {
     const response = await fetch(this.action, {
