@@ -111,6 +111,7 @@ header {
     <span class="logo-mark">OSM</span>
     <span class="logo-name">ORIGINAL SCORES MUSIC</span>
   </a>
+  <span data-osm-langpicker></span>
   <a class="btn-sm" href="index.html">← Retour au catalogue</a>
 </header>
 
@@ -224,6 +225,25 @@ async function finaliser() {
   setTimeout(() => { window.location.href = 'index.html'; }, 1800);
 }
 </script>
+
+<script>window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP||{}, {
+  "← Retour au catalogue": "← Back to catalogue",
+  "Finalisez votre inscription": "Complete your registration",
+  "Vérification de votre lien d'invitation…": "Verifying your invitation link…",
+  "Choisissez votre mot de passe pour activer votre accès à Original Scores Music.": "Choose your password to activate your access to Original Scores Music.",
+  "Mot de passe (min. 8 caractères)": "Password (min. 8 characters)",
+  "Confirmer le mot de passe": "Confirm password",
+  "Activer mon compte": "Activate my account",
+  "Lien invalide ou expiré": "Invalid or expired link",
+  "Ce lien d'invitation n'est plus valide.": "This invitation link is no longer valid.",
+  "Contactez OSM pour recevoir une nouvelle invitation.": "Contact OSM to receive a new invitation.",
+  "Déjà un compte ? Se connecter": "Already have an account? Log in",
+  "Session d'invitation introuvable. Rechargez le lien reçu par email.": "Invitation session not found. Reload the link received by email.",
+  "Mot de passe : 8 caractères minimum.": "Password: 8 characters minimum.",
+  "Les mots de passe ne correspondent pas.": "The passwords do not match.",
+  "✓ Compte activé ! Bienvenue chez Original Scores Music. Redirection…": "✓ Account activated! Welcome to Original Scores Music. Redirecting…"
+});</script>
+<script src="assets/i18n.js"></script>
 
 </body>
 </html>

@@ -18,7 +18,7 @@
 .theme-opt:hover{background:var(--bg3);color:var(--text)}
 .theme-opt.active{color:var(--text);font-weight:600;background:var(--bg2)}
 .theme-sw{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);flex-shrink:0}
-:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.2s,color 0.2s}
 
 header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
@@ -94,6 +94,7 @@ footer a:hover{color:var(--red)}
     <a class="btn-nav" href="nouveautes.html">⭐ Actu</a>
     <a class="btn-nav" href="television.html">Télévision</a>
     <a class="btn-nav" href="service.html">Sélection sur mesure</a>
+    <span data-osm-langpicker></span>
     <div class="theme-picker" id="theme-picker">
       <button class="btn-nav" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true">🎨</button>
       <div class="theme-menu" id="theme-menu">
@@ -302,6 +303,142 @@ document.addEventListener('click',function(e){
 });
 markActiveTheme();
 </script>
+
+<script>
+window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP || {}, {
+  /* En-tete / navigation */
+  "← Retour à l'accueil": "← Back to home",
+  "⭐ Actu": "⭐ News",
+  "Télévision": "Television",
+  "Sélection sur mesure": "Custom selection",
+  "Choisir un thème": "Choose a theme",
+  "Clair": "Light",
+  "Sombre": "Dark",
+  "Crème": "Cream",
+  "Nuit bleue": "Blue night",
+
+  /* Hero */
+  "Guide d'utilisation": "User guide",
+  "Comment utiliser": "How to use",
+  "Tout ce que vous devez savoir pour rechercher, écouter, télécharger et utiliser nos musiques originales dans vos projets.": "Everything you need to know to search, listen to, download and use our original music in your projects.",
+
+  /* Intitules de sections */
+  "Recherche": "Search",
+  "Trouver la musique parfaite": "Find the perfect track",
+  "Écoute": "Listening",
+  "Prévisualiser un morceau": "Preview a track",
+  "Téléchargement": "Download",
+  "Exporter un morceau": "Export a track",
+  "Conseils": "Tips",
+  "Astuces pour mieux chercher": "Tips for better searching",
+
+  /* Titres d'etapes */
+  "Recherche par mot-clé simple": "Simple keyword search",
+  "Recherche multi-mots-clés": "Multi-keyword search",
+  "Naviguer par playlist ou par tag": "Browse by playlist or tag",
+  "Cliquer sur un titre pour l'écouter": "Click a track to play it",
+  "Contrôles du player": "Player controls",
+  "Bouton télécharger sur la piste": "Download button on the track",
+  "Téléchargement depuis le player": "Download from the player",
+  "Utilisation en montage": "Use in editing",
+
+  /* Fragments communs */
+  "ou": "or",
+  ". Ex :": ". e.g.",
+
+  /* Recherche - etape 1 */
+  "Tapez un mot dans la barre de recherche en haut à droite :": "Type a word into the search bar at the top right:",
+  "émotion": "emotion",
+  "genre musical": "musical genre",
+  "ambiance": "mood",
+  ". Les résultats s'affichent instantanément.": ". The results appear instantly.",
+
+  /* Recherche - etape 2 */
+  "Combinez plusieurs mots séparés par des espaces pour affiner votre recherche. Ex :": "Combine several words separated by spaces to refine your search. e.g.",
+  ". Le catalogue retourne uniquement les titres correspondant à": ". The catalogue returns only the tracks matching",
+  "tous": "all",
+  "les mots saisis — plus les mots, plus la recherche est précise.": "the words entered — the more words you add, the more precise the search.",
+
+  /* Recherche - etape 3 */
+  "Utilisez l'onglet": "Use the",
+  "pour explorer nos 28 univers musicaux classés par thème (action, mélancolie, world, électro…). Dans l'onglet": "tab to explore our 28 musical worlds sorted by theme (action, melancholy, world, electro…). In the",
+  ", filtrez par genre avec les pilules colorées ou affinez par tag thématique.": " tab, filter by genre using the coloured pills or refine by thematic tag.",
+
+  /* Ecoute - etape 1 */
+  "Un clic sur n'importe quel titre lance la lecture dans le": "Clicking any track starts playback in the",
+  "player en bas de page": "player at the bottom of the page",
+  ". La forme d'onde rouge s'anime et vous pouvez cliquer n'importe où sur la barre de progression pour naviguer dans le morceau.": ". The red waveform animates and you can click anywhere on the progress bar to move through the track.",
+
+  /* Ecoute - etape 2 */
+  "Le player propose : lecture/pause, passage au titre suivant/précédent, répétition en boucle, et réglage du volume. Le bouton": "The player offers: play/pause, skip to the next/previous track, loop repeat, and volume control. The",
+  "🎵 Ma liste": "🎵 My list",
+  "affiche la file d'attente — ajoutez des titres avec le": "button shows the queue — add tracks with the",
+  "pour les écouter à la suite.": "to play them one after another.",
+
+  /* Telechargement - etape 1 */
+  "Le téléchargement est réservé aux comptes pro :": "Downloading is reserved for pro accounts:",
+  "faites votre demande d'accès": "request access",
+  ", elle est validée manuellement et vous recevez vos identifiants sous 24h. Une fois connecté, cliquez sur l'icône": ", it is approved manually and you receive your credentials within 24h. Once logged in, click the",
+  "sur chaque ligne de titre pour télécharger le fichier audio. Le fichier est fourni en qualité broadcast (WAV ou MP3 haute qualité selon la piste).": "icon on each track row to download the audio file. The file is delivered in broadcast quality (WAV or high-quality MP3 depending on the track).",
+
+  /* Telechargement - etape 2 */
+  "Le bouton": "The",
+  "Télécharger": "Download",
+  "dans le player en bas de page permet d'exporter le morceau en cours d'écoute directement.": "button in the player at the bottom of the page lets you export the track currently playing directly.",
+
+  /* Telechargement - etape 3 */
+  "Nos musiques sont": "Our music is",
+  "gratuites pour le montage": "free to use in editing",
+  ". Nous récupérons nos droits directement auprès de la SACEM en fonction des diffusions. Aucune licence à payer à l'avance — vous montez librement, nous déclarons à la diffusion.": ". We collect our royalties directly from SACEM based on broadcasts. No licence to pay upfront — you edit freely, we declare on broadcast.",
+
+  /* Conseils - carte 1 */
+  "Cherchez par émotion": "Search by emotion",
+  "Essayez": "Try",
+  "mélancolie": "melancholy",
+  "espoir": "hope",
+  "énergie": "energy",
+  "mystère": "mystery",
+  ". Les titres sont tagués par ressenti pour faciliter la recherche au montage.": ". Tracks are tagged by feel to make searching easier while editing.",
+
+  /* Conseils - carte 2 */
+  "Cherchez par instrument": "Search by instrument",
+  "Tapez": "Type",
+  "cordes": "strings",
+  "guitare": "guitar",
+  "percussions": "percussion",
+  "orchestre": "orchestra",
+  "synthé": "synth",
+  "… pour cibler rapidement la texture sonore dont vous avez besoin.": "… to quickly target the sound texture you need.",
+
+  /* Conseils - carte 3 */
+  "Cherchez par univers": "Search by world",
+  "africain": "African",
+  "électro": "electro",
+  "épique": "epic",
+  "minimaliste": "minimalist",
+  "— les playlists thématiques sont aussi un excellent point de départ.": "— the themed playlists are also an excellent starting point.",
+
+  /* Conseils - carte 4 */
+  "Plus vous combinez de mots, plus le résultat est précis.": "The more words you combine, the more precise the result.",
+  "donnera des résultats très différents de": "will give very different results from",
+
+  /* Conseils - carte 5 */
+  "Utilisez \"Ma liste\"": "Use \"My list\"",
+  "Ajoutez vos favoris avec le bouton": "Add your favourites with the",
+  "pour constituer une liste d'écoute. Pratique pour comparer plusieurs titres avant de faire votre choix définitif.": "button to build a playlist. Handy for comparing several tracks before making your final choice.",
+
+  /* Conseils - carte 6 */
+  "Copiez le lien d'un titre": "Copy a track's link",
+  "sur chaque piste copie un lien direct vers ce morceau. Partagez-le facilement avec vos collègues réalisateurs ou producteurs.": "button on each track copies a direct link to this track. Share it easily with your director or producer colleagues.",
+
+  /* Bandeau contact */
+  "Besoin d'une sélection sur mesure ?": "Need a custom selection?",
+  "Notre équipe sélectionne manuellement les musiques les plus adaptées à votre projet : envoyez-nous votre dossier (sujet, ambiance recherchée, durée, diffusion prévue) et nous vous proposons une short-list sous 24h.": "Our team manually selects the music best suited to your project: send us your brief (subject, desired mood, duration, planned broadcast) and we send you a short-list within 24h.",
+  "Demander une sélection": "Request a selection",
+  "✉ Écrire directement": "✉ Write to us directly"
+});
+</script>
+<script src="assets/i18n.js"></script>
 
 </body>
 </html>

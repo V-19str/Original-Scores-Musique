@@ -144,6 +144,7 @@ footer a{color:#666;text-decoration:none}
     <a class="nav-tab active" href="nouveautes.html">Nouveautés</a>
   </nav>
   <div style="display:flex;align-items:center;gap:10px">
+    <span data-osm-langpicker></span>
     <a class="btn-nav" href="index.html">← Accueil</a>
     <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
   </div>
@@ -322,5 +323,36 @@ document.getElementById('prog-bar-outer').addEventListener('click',function(e){
 });
 function fmt(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.toString().padStart(2,'0')}`;}
 </script>
+
+<script>window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP||{}, {
+  "Accueil": "Home",
+  "Catalogue": "Catalog",
+  "Nouveautés": "New Releases",
+  "← Accueil": "← Home",
+  "Sélection du mois — Juin 2026": "Selection of the Month — June 2026",
+  "Coupe du": "World",
+  "Monde": "Cup",
+  "La sélection OSM pour le plus grand événement sportif de la planète — guitares électriques, orchestrations épiques et rythmiques puissantes.": "The OSM selection for the planet's biggest sporting event — electric guitars, epic orchestrations and powerful rhythms.",
+  "▶ Tout écouter": "▶ Play all",
+  "↓ Voir les morceaux": "↓ View tracks",
+  "Sélection Coupe du Monde": "World Cup Selection",
+  "Des musiques taillées pour les séquences à haute intensité : montages sportifs, moments de victoire, climax dramatiques. Tout ce qu'il faut pour sublimer les images du mondial.": "Music built for high-intensity sequences: sports montages, moments of victory, dramatic climaxes. Everything you need to elevate the World Cup's imagery.",
+  "Tous": "All",
+  "Morceaux": "Tracks",
+  "· · · Chargement": "· · · Loading",
+  "Afficher plus": "Show more",
+  "Erreur de chargement.": "Loading error.",
+  "Aucun morceau.": "No tracks.",
+  "Aléatoire": "Shuffle",
+  "Précédent": "Previous",
+  "Suivant": "Next",
+  "Répéter": "Repeat",
+  "⬇ Télécharger": "⬇ Download",
+  "Copier": "Copy",
+  "Télécharger": "Download",
+  "🔗 Lien copié !": "🔗 Link copied!",
+  "Qui sommes-nous ?": "About us"
+});</script>
+<script src="assets/i18n.js"></script>
 </body>
 </html>

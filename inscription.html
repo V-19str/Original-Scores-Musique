@@ -184,7 +184,10 @@ footer a:hover { color: var(--text2); }
     <div class="logo-mark">OSM</div>
     <div class="logo-name">Vladimir Streiff</div>
   </a>
-  <a class="btn-login" href="login-monteurs.html">🔑 J'ai déjà un accès</a>
+  <span style="display:flex;align-items:center;gap:14px;">
+    <span data-osm-langpicker></span>
+    <a class="btn-login" href="login-monteurs.html">🔑 J'ai déjà un accès</a>
+  </span>
 </header>
 
 <main>
@@ -315,6 +318,44 @@ document.getElementById('inscription-form').addEventListener('submit', async fun
   }
 });
 </script>
+
+<script>window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP||{}, {
+  "🔑 J'ai déjà un accès": "🔑 I already have access",
+  "Accès Professionnel": "Professional Access",
+  "Demande d'accès": "Access request",
+  "L'accès au catalogue est réservé aux professionnels de l'image. Faites votre demande ci-dessous — chaque demande est validée manuellement.": "Access to the catalog is reserved for image professionals. Submit your request below — each request is reviewed manually.",
+  "Vous recevrez vos identifiants par email sous 24h.": "You will receive your credentials by email within 24h.",
+  "Prénom *": "First name *",
+  "Nom *": "Last name *",
+  "Email professionnel *": "Professional email *",
+  "Téléphone": "Phone",
+  "Société / Production *": "Company / Production *",
+  "Métier *": "Profession *",
+  "Sélectionnez votre métier": "Select your profession",
+  "Monteur": "Editor",
+  "Réalisateur": "Director",
+  "Producteur": "Producer",
+  "Directeur artistique": "Art Director",
+  "Superviseur musical": "Music Supervisor",
+  "Chef de projet": "Project Manager",
+  "Autre": "Other",
+  "Projet en cours (optionnel)": "Current project (optional)",
+  "Nom du film, série, publicité...": "Film, series or ad name...",
+  "Message (optionnel)": "Message (optional)",
+  "Précisez vos besoins, le type de musique recherché...": "Describe your needs, the type of music you are looking for...",
+  "Envoyer ma demande": "Send my request",
+  "Envoi en cours...": "Sending...",
+  "Vos données sont utilisées uniquement pour vous donner accès au catalogue OSM.": "Your data is used solely to give you access to the OSM catalog.",
+  "Aucune donnée n'est partagée avec des tiers.": "No data is shared with third parties.",
+  "Demande envoyée !": "Request sent!",
+  "Merci pour votre intérêt.": "Thank you for your interest.",
+  "Vladimir Streiff vous contactera sous 24h": "Vladimir Streiff will contact you within 24h",
+  "pour vous donner accès au catalogue OSM.": "to give you access to the OSM catalog.",
+  "← Retour à l'accueil": "← Back to home",
+  "Une erreur est survenue. Veuillez réessayer ou nous contacter directement.": "An error occurred. Please try again or contact us directly.",
+  "Une erreur est survenue. Veuillez réessayer.": "An error occurred. Please try again."
+});</script>
+<script src="assets/i18n.js"></script>
 
 </body>
 </html>

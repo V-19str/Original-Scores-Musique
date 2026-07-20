@@ -274,6 +274,7 @@ footer a { color: #666; text-decoration: none; }
     <div class="logo-name">ORIGINAL SCORES MUSIC</div>
   </a>
   <div class="header-right">
+    <span data-osm-langpicker></span>
     <span class="user-name" id="header-username"></span>
     <a class="btn-sm" href="index.html">← Catalogue</a>
     <button class="btn-sm btn-red" id="btn-logout" style="display:none" onclick="logout()">Déconnexion</button>
@@ -748,5 +749,75 @@ function setAdminFilter(filter, btn) {
 
 init();
 </script>
+
+<script>window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP||{}, {
+  "← Catalogue": "← Catalog",
+  "Déconnexion": "Log out",
+
+  "Bon retour": "Welcome back",
+  "Accédez à votre espace : favoris, téléchargements et projets.": "Access your space: favorites, downloads and projects.",
+  "Mot de passe": "Password",
+  "Se connecter": "Sign in",
+  "Mot de passe oublié ?": "Forgot password?",
+  "Pas encore de compte ?": "Don't have an account yet?",
+  "Faites une demande d'accès": "Request access",
+  "← Retour au catalogue": "← Back to the catalog",
+
+  "Espace Client OSM": "OSM Client Area",
+  "Bienvenue": "Welcome",
+  "Favoris": "Favorites",
+  "Téléchargements": "Downloads",
+  "Projets": "Projects",
+  "♥ Favoris": "♥ Favorites",
+  "⬇ Téléchargements": "⬇ Downloads",
+  "📁 Projets": "📁 Projects",
+  "· · · Chargement": "· · · Loading",
+  "Mes projets": "My projects",
+  "+ Nouveau projet": "+ New project",
+
+  "Panneau Administrateur": "Admin Panel",
+  "Vue d'ensemble": "Overview",
+  "DL aujourd'hui": "Downloads today",
+  "Rechercher un client...": "Search a client...",
+  "Tous": "All",
+  "Avec favoris": "With favorites",
+  "Avec DL": "With downloads",
+  "· · · Chargement des données": "· · · Loading data",
+
+  "Nouveau projet": "New project",
+  "Nom du projet *": "Project name *",
+  "Mon film 2026": "My film 2026",
+  "Chaîne, date de livraison, notes...": "Channel, delivery date, notes...",
+  "Annuler": "Cancel",
+  "Créer le projet": "Create the project",
+
+  "Veuillez remplir tous les champs.": "Please fill in all fields.",
+  "Email ou mot de passe incorrect.": "Incorrect email or password.",
+  "Entrez votre email d'abord.": "Enter your email first.",
+  "Retiré des favoris": "Removed from favorites",
+  "Projet supprimé": "Project deleted",
+  "Donnez un nom au projet": "Give the project a name",
+  "Projet créé !": "Project created!",
+
+  "Aucun favori": "No favorites",
+  "Cliquez sur ♥ dans le": "Click ♥ in the",
+  "pour sauvegarder vos morceaux préférés.": "to save your favorite tracks.",
+  "catalogue": "catalog",
+  "Aucun téléchargement": "No downloads",
+  "Vos téléchargements depuis le": "Your downloads from the",
+  "apparaîtront ici.": "will appear here.",
+  "⬇ Re-télécharger": "⬇ Re-download",
+  "Sans titre": "Untitled",
+  "Écouter": "Listen",
+  "Télécharger": "Download",
+  "Retirer": "Remove",
+  "Supprimer": "Delete",
+
+  "· · · Chargement des données clients": "· · · Loading client data",
+  "Aucun client trouvé": "No client found",
+  "Jamais connecté": "Never connected",
+  "Aucun enregistrement": "No records"
+});</script>
+<script src="assets/i18n.js"></script>
 </body>
 </html>

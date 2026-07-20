@@ -26,7 +26,7 @@
 .theme-opt:hover{background:var(--bg3);color:var(--text)}
 .theme-opt.active{color:var(--text);font-weight:600;background:var(--bg2)}
 .theme-sw{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);flex-shrink:0}
-:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.2s,color 0.2s}
 
 header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
@@ -106,6 +106,7 @@ footer a:hover{color:#888}
     <a class="btn-nav" href="nouveautes.html">⭐ Actu</a>
     <a class="btn-nav" href="service.html">Sélection sur mesure</a>
     <a class="btn-nav" href="aide.html">Aide</a>
+    <span data-osm-langpicker></span>
     <div class="theme-picker" id="theme-picker">
       <button class="btn-nav" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true">🎨</button>
       <div class="theme-menu" id="theme-menu">
@@ -545,5 +546,42 @@ document.addEventListener('click',function(e){
 });
 markActiveTheme();
 </script>
+
+<script>window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP||{}, {
+  "⭐ Actu": "⭐ News",
+  "Sélection sur mesure": "Custom selection",
+  "Aide": "Help",
+  "Choisir un thème": "Choose a theme",
+  "Clair": "Light",
+  "Sombre": "Dark",
+  "Crème": "Cream",
+  "Nuit bleue": "Blue night",
+  "Références · Diffusions": "References · Broadcasts",
+  "Télévision &": "Television &",
+  "Cinéma": "Cinema",
+  "Nos compositions originales ont été diffusées sur les plus grandes chaînes françaises — reportages d'investigation, documentaires, fictions et émissions de prime time.": "Our original compositions have been broadcast on France's leading TV channels — investigative reports, documentaries, dramas and prime-time programmes.",
+  "Chaînes TV": "TV channels",
+  "Émissions": "Shows",
+  "Titres originaux": "Original tracks",
+  "Ans d'expérience": "Years of experience",
+  "Télévision publique": "Public television",
+  "TNT Privée": "Commercial television",
+  "Câble · Satellite": "Cable · Satellite",
+  "Outre-mer & autres chaînes": "Overseas & other channels",
+  "7 émissions": "7 shows",
+  "4 émissions": "4 shows",
+  "5 émissions · 20+ épisodes": "5 shows · 20+ episodes",
+  "3 documentaires": "3 documentaries",
+  "2 projets": "2 projects",
+  "3 émissions": "3 shows",
+  "2 émissions": "2 shows",
+  "5 documentaires": "5 documentaries",
+  "1 documentaire": "1 documentary",
+  "Longs métrages": "Feature films",
+  "Vous cherchez de la musique pour votre projet ?": "Looking for music for your project?",
+  "2560 titres originaux disponibles — ou demandez une sélection sur mesure": "2560 original tracks available — or request a custom selection",
+  "🎵 Accéder au catalogue": "🎵 Access the catalogue"
+});</script>
+<script src="assets/i18n.js"></script>
 </body>
 </html>

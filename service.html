@@ -51,7 +51,7 @@
 .theme-opt:hover{background:var(--bg3);color:var(--text)}
 .theme-opt.active{color:var(--text);font-weight:600;background:var(--bg2)}
 .theme-sw{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);flex-shrink:0}
-: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; overflow-x: hidden; transition: background 0.2s, color 0.2s; }
 
 /* ── HEADER ── */
@@ -402,6 +402,7 @@ footer a:hover { color: #999; }
     <a class="btn-nav" href="nouveautes.html">⭐ Actu</a>
     <a class="btn-nav" href="television.html">Télévision</a>
     <a class="btn-nav" href="aide.html">Aide</a>
+    <span data-osm-langpicker></span>
     <div class="theme-picker" id="theme-picker">
       <button class="btn-nav" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true">🎨</button>
       <div class="theme-menu" id="theme-menu">
@@ -834,5 +835,121 @@ document.addEventListener('click',function(e){
 });
 markActiveTheme();
 </script>
+
+<script>window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP||{}, {
+  "← Retour à l'accueil": "← Back to home",
+  "⭐ Actu": "⭐ News",
+  "Télévision": "Television",
+  "Aide": "Help",
+  "Choisir un thème": "Choose a theme",
+  "Clair": "Light",
+  "Sombre": "Dark",
+  "Crème": "Cream",
+  "Nuit bleue": "Blue night",
+  "Déposer mon brief": "Submit my brief",
+  "Service Premium — Gratuit": "Premium service — Free",
+  "Votre musique,": "Your music,",
+  "sur mesure": "tailor-made",
+  "Pas le temps de parcourir 2 564 morceaux ? Décrivez votre projet en quelques lignes. Notre équipe vous envoie une sélection personnalisée sous 24h.": "No time to browse 2,564 tracks? Describe your project in a few lines. Our team sends you a personalized selection within 24h.",
+  "Explorer le catalogue": "Explore the catalog",
+  "Titres disponibles": "Tracks available",
+  "Délai de réponse": "Response time",
+  "Gratuit": "Free",
+  "Genres musicaux": "Music genres",
+  "Pourquoi ce service": "Why this service",
+  "Ce que nous faisons": "What we do",
+  "pour vous": "for you",
+  "Réponse sous 24h": "Reply within 24h",
+  "Votre brief est traité en priorité. Vous recevez une sélection ciblée et prête à être intégrée au montage.": "Your brief is handled as a priority. You receive a targeted selection ready to be dropped into the edit.",
+  "Sélection sur mesure": "Tailor-made selection",
+  "Chaque titre est choisi selon votre projet, l'ambiance, le rythme et votre deadline. Pas de playlist générique.": "Every track is chosen to fit your project, the mood, the pace and your deadline. No generic playlist.",
+  "Expertise cinéma & TV": "Film & TV expertise",
+  "Notre équipe travaille pour le cinéma, la télévision et la publicité depuis des années. Nous parlons votre langage.": "Our team has worked for film, television and advertising for years. We speak your language.",
+  "Composition dédiée": "Dedicated composition",
+  "Si aucun titre du catalogue ne convient parfaitement, nous pouvons composer spécifiquement pour votre projet.": "If no catalog track fits perfectly, we can compose specifically for your project.",
+  "Brief musical": "Music brief",
+  "Décrivez votre": "Describe your",
+  "projet": "project",
+  "Formulaire de sélection": "Selection form",
+  "Remplissez en 3 minutes — nous faisons le reste": "Fill it in 3 minutes — we handle the rest",
+  "Prénom & Nom": "First & last name",
+  "E-mail": "Email",
+  "Société / Production": "Company / Production",
+  "Téléphone": "Phone",
+  "Type de projet": "Project type",
+  "Ambiances souhaitées": "Desired moods",
+  "Urgence": "Urgency",
+  "Description du projet": "Project description",
+  "Références musicales": "Musical references",
+  "Lien de visionnage": "Screening link",
+  "(optionnel)": "(optional)",
+  "Choisissez...": "Choose...",
+  "Documentaire": "Documentary",
+  "Long métrage": "Feature film",
+  "Court métrage": "Short film",
+  "Série / Fiction": "Series / Fiction",
+  "Reportage TV": "TV report",
+  "Publicité": "Advertising",
+  "Clip musical": "Music video",
+  "Institutionnel / Corporate": "Institutional / Corporate",
+  "Jeu vidéo": "Video game",
+  "Autre": "Other",
+  "Émotion / Mélancolie": "Emotion / Melancholy",
+  "Épique / Grandiose": "Epic / Grandiose",
+  "Légèreté / Humour": "Lightness / Humor",
+  "Intimiste / Doux": "Intimate / Gentle",
+  "Suspense / Mystère": "Suspense / Mystery",
+  "Urbain / Moderne": "Urban / Modern",
+  "Exotique / Monde": "Exotic / World",
+  "Positif / Corporate": "Positive / Corporate",
+  "Décrivez votre projet : sujet, ton, séquences clés, durée des extraits, contexte de diffusion...": "Describe your project: subject, tone, key sequences, length of excerpts, broadcast context...",
+  "Films, artistes ou morceaux qui vous inspirent pour ce projet...": "Films, artists or tracks that inspire you for this project...",
+  "Lien vers un extrait ou une séquence (Wetransfer, YouTube, Vimeo...)": "Link to an excerpt or a sequence (Wetransfer, YouTube, Vimeo...)",
+  "Réponse garantie sous 24h.": "Reply guaranteed within 24h.",
+  "Service entièrement gratuit, sans engagement.": "Entirely free service, with no commitment.",
+  "Envoyer mon brief": "Send my brief",
+  "Envoi en cours...": "Sending...",
+  "Une erreur est survenue. Veuillez réessayer.": "An error occurred. Please try again.",
+  "Brief reçu avec succès !": "Brief received successfully!",
+  "Notre équipe étudie votre projet et vous enverra une sélection personnalisée sous 24h.": "Our team is reviewing your project and will send you a personalized selection within 24h.",
+  "En attendant, vous pouvez parcourir le catalogue librement.": "In the meantime, feel free to browse the catalog.",
+  "Confirmation envoyée par e-mail": "Confirmation sent by email",
+  "Processus": "Process",
+  "Comment ça": "How it",
+  "marche": "works",
+  "Vous décrivez": "You describe",
+  "Remplissez le formulaire : projet, ambiance, deadline. 3 minutes suffisent.": "Fill in the form: project, mood, deadline. 3 minutes are enough.",
+  "Nous sélectionnons": "We select",
+  "Notre équipe parcourt le catalogue et choisit les titres les plus adaptés.": "Our team browses the catalog and picks the most suitable tracks.",
+  "Vous recevez": "You receive",
+  "Une sélection personnalisée avec liens de téléchargement sous 24h.": "A personalized selection with download links within 24h.",
+  "Vous montez": "You edit",
+  "Vous intégrez librement. Nous gérons les droits SACEM après diffusion.": "You integrate it freely. We handle the SACEM rights after broadcast.",
+  "Ils nous font confiance": "They trust us",
+  "Retours de": "Feedback from",
+  "professionnels": "professionals",
+  "J'avais une deadline impossible sur un doc France 5. La sélection OSM était parfaite et livrée en 8h. Incroyable réactivité.": "I had an impossible deadline on a France 5 documentary. The OSM selection was perfect and delivered in 8h. Incredible responsiveness.",
+  "Réalisatrice documentaire — Paris": "Documentary director — Paris",
+  "On travaille régulièrement avec OSM pour nos fictions TF1. Le catalogue est riche et l'équipe comprend vraiment les enjeux du montage.": "We work regularly with OSM for our TF1 dramas. The catalog is rich and the team truly understands the challenges of editing.",
+  "Directeur de production — Fiction TV": "Production manager — TV drama",
+  "Ce service m'a sauvé sur plusieurs campagnes pub. Je décris l'ambiance et ils trouvent exactement ce que j'ai en tête.": "This service saved me on several ad campaigns. I describe the mood and they find exactly what I have in mind.",
+  "Directrice artistique — Publicité": "Art director — Advertising",
+  "Questions fréquentes": "Frequently asked questions",
+  "Tout ce que vous": "Everything you",
+  "devez savoir": "need to know",
+  "Ce service est-il vraiment gratuit ?": "Is this service really free?",
+  "Oui, entièrement. Nous ne facturons pas la sélection. Les frais de licence SACEM sont gérés séparément, uniquement après diffusion du contenu.": "Yes, entirely. We do not charge for the selection. SACEM licensing fees are handled separately, only after the content is broadcast.",
+  "Combien de titres recevrai-je dans ma sélection ?": "How many tracks will I receive in my selection?",
+  "En général entre 5 et 15 titres selon la complexité de votre projet. Chaque titre est accompagné d'une note explicative pour guider votre choix au montage.": "Usually between 5 and 15 tracks depending on the complexity of your project. Each track comes with an explanatory note to guide your choice during editing.",
+  "Puis-je demander des révisions ?": "Can I ask for revisions?",
+  "Absolument. Si la sélection ne vous convient pas, envoyez-nous vos retours et nous affinerons jusqu'à trouver exactement ce dont vous avez besoin.": "Absolutely. If the selection doesn't suit you, send us your feedback and we'll refine it until we find exactly what you need.",
+  "Que se passe-t-il si aucun titre ne convient ?": "What happens if no track fits?",
+  "Nous proposons un service de composition sur mesure. Un compositeur OSM crée spécifiquement pour votre projet. Ce service est soumis à devis.": "We offer a tailor-made composition service. An OSM composer creates specifically for your project. This service is subject to a quote.",
+  "Comment s'effectue la déclaration SACEM ?": "How is the SACEM declaration done?",
+  "Nous nous occupons de toute la gestion des droits. Vous n'avez qu'à nous informer du titre et de la date de diffusion après votre montage. Aucune démarche de votre côté.": "We take care of all rights management. You just have to tell us the title and the broadcast date after your edit. Nothing to do on your side.",
+  "Catalogue": "Catalog",
+  "À propos": "About"
+});</script>
+<script src="assets/i18n.js"></script>
 </body>
 </html>

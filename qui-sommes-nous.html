@@ -26,7 +26,7 @@
 .theme-opt:hover{background:var(--bg3);color:var(--text)}
 .theme-opt.active{color:var(--text);font-weight:600;background:var(--bg2)}
 .theme-sw{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);flex-shrink:0}
-:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden}
 
 /* ── HEADER ── */
@@ -183,6 +183,7 @@ footer a:hover{color:var(--red)}
     <a class="nav-tab active" href="qui-sommes-nous.html">Qui sommes-nous</a>
   </nav>
   <div class="header-right">
+    <span data-osm-langpicker></span>
     <div class="theme-picker" id="theme-picker">
       <button class="btn-nav" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true">🎨</button>
       <div class="theme-menu" id="theme-menu">
@@ -344,5 +345,60 @@ const obs=new IntersectionObserver(function(entries){
 },{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
 </script>
+
+<script>window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP||{}, {
+  "Accueil": "Home",
+  "Télévision": "Television",
+  "Sur mesure": "Bespoke",
+  "Actu": "News",
+  "Qui sommes-nous": "About us",
+  "Qui sommes-nous ?": "About us",
+  "Choisir un thème": "Choose a theme",
+  "Clair": "Light",
+  "Sombre": "Dark",
+  "Crème": "Cream",
+  "Nuit bleue": "Blue night",
+  "Pages": "Pages",
+  "Sélection sur mesure": "Bespoke selection",
+  "Compte": "Account",
+  "Espace Client": "Client area",
+  "Demande d'accès": "Access request",
+  "Aide": "Help",
+  "Supervision Musicale · Paris": "Music Supervision · Paris",
+  "Qui": "Who",
+  "sommes": "are we",
+  "-nous ?": "?",
+  "Musique originale pour l'image · Cinéma · Télévision · Publicité": "Original music for the screen · Cinema · Television · Advertising",
+  "Découvrir": "Discover",
+  "Notre histoire": "Our story",
+  "Une sensibilité forgée": "A sensibility forged",
+  "par l'art": "by art",
+  "Original Scores Music est né d'une histoire familiale profondément ancrée dans l'art et la création. Issu d'une famille où la musique, le théâtre et l'opéra ont toujours occupé une place centrale, j'ai grandi entouré de compositeurs, de metteurs en scène et d'interprètes — un héritage rare qui forge une sensibilité particulière pour l'image, le son et l'émotion. C'est naturellement que j'ai commencé ma carrière derrière une batterie, accompagnant des artistes français reconnus pour leurs promo TV, leurs showcases et leurs tournées. Cette expérience de scène m'a appris l'essentiel : la musique doit sublimer l'image, jamais l'écraser.": "Original Scores Music was born from a family story deeply rooted in art and creation. Raised in a family where music, theatre and opera always held a central place, I grew up surrounded by composers, stage directors and performers — a rare heritage that forges a distinctive sensibility for image, sound and emotion. It was only natural that I began my career behind a drum kit, backing renowned French artists on their TV promos, their showcases and their tours. That time on stage taught me the essentials: music must elevate the image, never overwhelm it.",
+  "En chiffres": "In numbers",
+  "aujourd'hui": "today",
+  "Ans d'expérience": "Years of experience",
+  "Music supervision & composition pour l'image": "Music supervision & composition for the screen",
+  "Titres originaux": "Original tracks",
+  "Composés et détenus intégralement par l'équipe": "Composed and wholly owned by the team",
+  "Chaînes TV": "TV channels",
+  "France 2, TF1, M6, ARTE, Canal+, C8 et bien d'autres": "France 2, TF1, M6, ARTE, Canal+, C8 and many more",
+  "Notre modèle": "Our model",
+  "Un concept": "A concept",
+  "unique": "unique",
+  "dans l'industrie": "in the industry",
+  "Depuis plus de 15 ans, je travaille comme music supervisor et compositeur. J'ai eu la chance de m'entourer de musiciens et compositeurs de grand talent, issus des univers du jazz, de la musique classique, de l'opéra et des musiques du monde. Ensemble, nous avons bâti un catalogue de plus de 2560 titres originaux, pensés spécifiquement pour l'image.": "For over 15 years, I have worked as a music supervisor and composer. I have had the good fortune to surround myself with hugely talented musicians and composers, drawn from the worlds of jazz, classical music, opera and world music. Together, we have built a catalogue of more than 2560 original tracks, designed specifically for the screen.",
+  "Notre modèle est unique : nous mettons notre musique à disposition des monteurs, réalisateurs et producteurs": "Our model is unique: we make our music available to editors, directors and producers",
+  "gratuitement": "free of charge",
+  ". Nous nous rémunérons via les droits d'auteur collectés à la SACEM selon les diffusions —": ". We are paid through the royalties collected by SACEM based on broadcasts —",
+  "sans aucun risque financier pour vous": "with no financial risk to you",
+  "Travaillons ensemble": "Let's work together",
+  "Nous": "Contact",
+  "contacter": "us",
+  "Catalogue gratuit · Accès pro validé sous 24h · Droits SACEM · Équipe disponible 7j/7": "Free catalogue · Pro access approved within 24h · SACEM royalties · Team available 7 days a week",
+  "✉ Nous contacter": "✉ Contact us",
+  "✚ Demander un accès": "✚ Request access",
+  "← Retour à l'accueil": "← Back to home"
+});</script>
+<script src="assets/i18n.js"></script>
 </body>
 </html>

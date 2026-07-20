@@ -634,6 +634,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <a class="nav-tab" href="nouveautes.html">Actu</a>
   </div>
   <div class="header-right">
+    <span data-osm-langpicker></span>
     <div class="theme-picker" id="theme-picker">
       <button class="btn-nav btn-theme" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true">🎨</button>
       <div class="theme-menu" id="theme-menu">
@@ -1915,7 +1916,7 @@ function renderTracks(){
   const q=heroSearchQuery.toLowerCase().trim();
   const kws=q?getKws(q):[];
   document.getElementById('section-title').textContent=currentFolder||'Catalogue Complet';
-  document.getElementById('section-count').textContent=`${filteredTracks.length} morceaux`;
+  document.getElementById('section-count').textContent=`${filteredTracks.length} ${window.osmLang&&osmLang()==='en'?'tracks':'morceaux'}`;
   if(!filteredTracks.length){list.innerHTML='<div class="empty">Aucun résultat</div>';return;}
   const qIds=new Set(queue.map(t=>t.id));
   const shown=filteredTracks.slice(0,visibleCount);
@@ -2219,8 +2220,9 @@ function toggleFav(id){
 function updateFavNav(){
   const n=favorites.size;
   const el=document.getElementById('fav-count-nav');if(el)el.textContent=n>0?` (${n})`:'';
-  const lbl=document.getElementById('fav-count-label');if(lbl)lbl.textContent=`${n} favori${n>1?'s':''}`;
-  const cnt=document.getElementById('fav-section-count');if(cnt)cnt.textContent=`${n} morceau${n>1?'x':''}`;
+  const en=window.osmLang&&osmLang()==='en';
+  const lbl=document.getElementById('fav-count-label');if(lbl)lbl.textContent=en?`${n} favorite${n>1?'s':''}`:`${n} favori${n>1?'s':''}`;
+  const cnt=document.getElementById('fav-section-count');if(cnt)cnt.textContent=en?`${n} track${n>1?'s':''}`:`${n} morceau${n>1?'x':''}`;
 }
 function renderFavoris(){
   updateFavNav();
@@ -2492,6 +2494,91 @@ document.addEventListener('keydown', e => {
 <button id="bg-speaker" onclick="toggleMute()" title="Couper / remettre le son">🔊</button>
 
 <div id="autoplay-banner" onclick="ws.play();hideAutoplayBanner()" style="display:none;position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;padding:13px 28px;border-radius:30px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;cursor:pointer;z-index:500;gap:10px;align-items:center;box-shadow:0 6px 24px rgba(255,85,0,0.45);animation:fadeUp 0.4s ease;white-space:nowrap;transition:opacity 0.3s">▶&nbsp; Cliquez pour lancer la musique</div>
+
+<!-- ── i18n FR/EN ── -->
+<script>
+window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP || {}, {
+  // Navigation
+  "Accueil": "Home", "Actu": "News", "Favoris": "Favorites",
+  "Pages": "Pages", "Navigation": "Navigation", "Compte": "Account",
+  "Télévision": "Television", "Sélection sur mesure": "Custom selection",
+  "Qui sommes-nous ?": "About us", "Espace Client": "Client area",
+  "Demande d'accès": "Access request", "Aide": "Help",
+  // En-tête / menus
+  "👤 Mon compte": "👤 My account", "👤 Mon compte ": "👤 My account",
+  "🎵 Ma liste": "🎵 My list", "Ma liste": "My list", "Effacer": "Clear",
+  "Ajoutez des morceaux avec +": "Add tracks with +",
+  "Panneau admin": "Admin panel", "Choisir un thème": "Choose a theme",
+  "Clair": "Light", "Sombre": "Dark", "Crème": "Cream", "Nuit bleue": "Blue night",
+  // Hero
+  "Musique originale pour l'image · Cinéma · Télévision · Publicité": "Original music for the screen · Film · Television · Advertising",
+  "Rechercher une musique, une ambiance, un instrument...": "Search for a track, a mood, an instrument...",
+  "Rechercher": "Search", "🤖 IA": "🤖 AI",
+  "Recherche en langage naturel par intelligence artificielle": "Natural-language search powered by AI",
+  "▶ Cliquez pour lancer la musique": "▶ Click to start the music",
+  // Moods
+  "Épique": "Epic", "Mélancolique": "Melancholic", "Joyeux": "Joyful",
+  "Mystérieux": "Mysterious", "Romantique": "Romantic", "Tendu": "Tense",
+  "Contemplatif": "Contemplative", "Doux": "Soft", "Dramatique": "Dramatic",
+  "Énergique": "Energetic", "Nostalgique": "Nostalgic", "Calme": "Calm",
+  "Sombre ": "Dark", "Intense": "Intense", "Positif": "Positive",
+  // Styles
+  "Électro": "Electro", "Classique": "Classical", "Acoustique": "Acoustic",
+  "Cinématique": "Cinematic",
+  // Instruments
+  "Guitare": "Guitar", "Cordes": "Strings", "Cuivres": "Brass",
+  "Percussions": "Percussion", "Synthé": "Synth", "Accordéon": "Accordion",
+  "Violon": "Violin", "Batterie": "Drums", "Basse": "Bass", "Flûte": "Flute",
+  // Usages
+  "Documentaire": "Documentary", "Publicité": "Advertising", "Cinéma": "Cinema",
+  "Série TV": "TV series", "Reportage": "Report", "Générique": "Title theme",
+  // Analyse audio
+  "Action": "Action", "Lent": "Slow", "Modéré": "Moderate", "Rapide": "Fast",
+  "Majeur": "Major", "Mineur": "Minor", "Graves": "Low end", "Aigus": "High end",
+  // Services
+  "Catalogue gratuit": "Free catalogue",
+  "+1 000 morceaux originaux gratuits pour vos montages — accès pro validé sous 24h": "1,000+ free original tracks for your edits — pro access approved within 24h",
+  "Cue sheet SACEM pré-rempli fourni pour chaque utilisation": "Pre-filled SACEM cue sheet provided for every use",
+  "Composition sur mesure": "Custom composition",
+  "Musique calée à l'image, composée spécifiquement pour votre projet": "Music timed to picture, composed specifically for your project",
+  "Droits à la diffusion": "Broadcast royalties",
+  "Aucun frais en amont — droits SACEM perçus à la diffusion uniquement": "No upfront fees — SACEM royalties collected on broadcast only",
+  // Confiance / reco
+  "Ils nous font confiance": "They trust us", "et bien d'autres…": "and many more…",
+  "Sélection personnelle": "Personal selection", "La team recommande": "The team recommends",
+  "« Ces compositions représentent ce que j'aime faire : de la musique qui sert l'image sans jamais l'écraser. »": "“These pieces are what I love to do: music that serves the picture without ever overpowering it.”",
+  // Playlists
+  "28 univers musicaux classés par thème — cliquez pour découvrir": "28 musical worlds organised by theme — click to explore",
+  "Playlist OSM": "OSM playlist", "▶ Tout écouter": "▶ Play all", "← Retour": "← Back",
+  "Titre": "Title", "Durée": "Duration",
+  // Catalogue
+  "⚙ Filtres": "⚙ Filters", "🔍  Rechercher...": "🔍  Search...",
+  "Ambiance": "Mood", "Genre": "Genre", "Analyse audio": "Audio analysis",
+  "Toutes durées": "All durations", "Moins de 1 min": "Under 1 min",
+  "1 à 3 minutes": "1 to 3 minutes", "Plus de 3 min": "Over 3 min",
+  "Réinitialiser les filtres": "Reset filters", "Catalogue complet": "Full catalogue",
+  "Tonalité": "Key", "Toutes tonalités": "All keys", "Énergie": "Energy",
+  "Faible": "Low", "Moyenne": "Medium", "Haute": "High", "Réinitialiser": "Reset",
+  "0–1 min": "0–1 min", "3 min +": "3 min +",
+  // Favoris
+  "🔗 Partager ma sélection": "🔗 Share my selection", "Mes Favoris": "My Favorites",
+  // Lecteur
+  "Lecture aléatoire": "Shuffle", "Précédent": "Previous", "Lire": "Play",
+  "Suivant": "Next", "Répéter": "Repeat", "Couper / remettre le son": "Mute / unmute",
+  "Télécharger": "Download", "⬇ Télécharger": "⬇ Download",
+  // Modales / divers
+  "🔗 Lien copié !": "🔗 Link copied!",
+  "Pour télécharger, demandez votre accès pro": "To download, request your pro access",
+  "↳ Accès pro validé sous 24h": "↳ Pro access approved within 24h",
+  "Demander un accès": "Request access", "Fermer": "Close", "Chargement": "Loading"
+});
+// Rafraîchit les compteurs générés en JS au changement de langue.
+document.addEventListener('osm-lang-change', function () {
+  try { if (typeof filterTracks === 'function') filterTracks(); } catch (e) {}
+  try { if (typeof updateFavNav === 'function') updateFavNav(); } catch (e) {}
+});
+</script>
+<script src="assets/i18n.js"></script>
 
 </body>
 </html>
