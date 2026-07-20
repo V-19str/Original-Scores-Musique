@@ -18,7 +18,15 @@
 <style>
 :root{--red:#E50914;--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--bg-deep:#e0e0e0;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff}
 [data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--bg-deep:#0a0a0a;--bg-header:rgba(10,10,10,0.98);--text:#ffffff;--text2:#d4d4d4;--muted:#999999;--border:rgba(255,255,255,0.1);--card-bg:#1a1a1a}
-*{box-sizing:border-box;margin:0;padding:0}
+
+.theme-picker{position:relative}
+.theme-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg-deep);border:1px solid var(--border);border-radius:8px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:300;min-width:154px;box-shadow:0 10px 28px rgba(0,0,0,0.28)}
+.theme-menu.open{display:flex}
+.theme-opt{display:flex;align-items:center;gap:9px;background:none;border:none;color:var(--text2);padding:8px 10px;border-radius:5px;font-family:'Montserrat',sans-serif;font-size:12px;cursor:pointer;text-align:left;transition:background .15s,color .15s}
+.theme-opt:hover{background:var(--bg3);color:var(--text)}
+.theme-opt.active{color:var(--text);font-weight:600;background:var(--bg2)}
+.theme-sw{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);flex-shrink:0}
+:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.2s,color 0.2s}
 
 header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
@@ -82,6 +90,8 @@ footer a:hover{color:#888}
   .stats-bar{grid-template-columns:repeat(2,1fr)}
   .cta-section{padding:48px 20px}
 }
+[data-theme="creme"]{--bg:#f4ecd8;--bg2:#efe5cd;--bg3:#e8dbbe;--bg4:#ddcda6;--bg-alt:#f1e7d1;--bg-deep:#ece1c8;--bg-header:rgba(244,236,216,0.98);--text:#3a2e1a;--text2:#584732;--muted:#8a755a;--border:rgba(90,70,40,0.16);--card-bg:#fbf5e6;--card-border:rgba(90,70,40,0.1)}
+[data-theme="nuit"]{--bg:#0d1b2a;--bg2:#152536;--bg3:#1d3149;--bg4:#284158;--bg-alt:#0a1622;--bg-deep:#081019;--bg-header:rgba(10,20,32,0.98);--text:#eaf2fb;--text2:#c6d6e6;--muted:#8ba4bc;--border:rgba(130,170,210,0.16);--card-bg:#0f2033;--card-border:rgba(130,170,210,0.1)}
 </style>
 </head>
 <body>
@@ -96,7 +106,15 @@ footer a:hover{color:#888}
     <a class="btn-nav" href="nouveautes.html">⭐ Actu</a>
     <a class="btn-nav" href="service.html">Sélection sur mesure</a>
     <a class="btn-nav" href="aide.html">Aide</a>
-    <button class="btn-nav" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
+    <div class="theme-picker" id="theme-picker">
+      <button class="btn-nav" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true">🎨</button>
+      <div class="theme-menu" id="theme-menu">
+        <button class="theme-opt" data-theme="light" onclick="setTheme('light')"><span class="theme-sw" style="background:#f6f6f6"></span>Clair</button>
+        <button class="theme-opt" data-theme="dark" onclick="setTheme('dark')"><span class="theme-sw" style="background:#141414"></span>Sombre</button>
+        <button class="theme-opt" data-theme="creme" onclick="setTheme('creme')"><span class="theme-sw" style="background:#f4ecd8"></span>Crème</button>
+        <button class="theme-opt" data-theme="nuit" onclick="setTheme('nuit')"><span class="theme-sw" style="background:#0d1b2a"></span>Nuit bleue</button>
+      </div>
+    </div>
     <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
   </div>
 </header>
@@ -505,19 +523,27 @@ footer a:hover{color:#888}
 </footer>
 
 <script>
-function toggleTheme(){
-  const html=document.documentElement;
-  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
-  html.setAttribute('data-theme',next);
-  localStorage.setItem('osm-theme',next);
-  const btn=document.getElementById('btn-theme');
-  if(btn)btn.textContent=next==='dark'?'☀':'🌙';
+function toggleThemeMenu(e){
+  if(e)e.stopPropagation();
+  var m=document.getElementById('theme-menu'); if(m)m.classList.toggle('open');
+  markActiveTheme();
 }
-(function(){
-  const t=localStorage.getItem('osm-theme')||'light';
-  const btn=document.getElementById('btn-theme');
-  if(btn)btn.textContent=t==='dark'?'☀':'🌙';
-})();
+function setTheme(name){
+  if(['light','dark','creme','nuit'].indexOf(name)<0)name='light';
+  document.documentElement.setAttribute('data-theme',name);
+  localStorage.setItem('osm-theme',name);
+  var m=document.getElementById('theme-menu'); if(m)m.classList.remove('open');
+  markActiveTheme();
+}
+function markActiveTheme(){
+  var cur=document.documentElement.getAttribute('data-theme')||'light';
+  document.querySelectorAll('.theme-opt').forEach(function(b){b.classList.toggle('active',b.dataset.theme===cur);});
+}
+document.addEventListener('click',function(e){
+  var p=document.getElementById('theme-picker');
+  if(p&&!p.contains(e.target)){var m=document.getElementById('theme-menu'); if(m)m.classList.remove('open');}
+});
+markActiveTheme();
 </script>
 </body>
 </html>

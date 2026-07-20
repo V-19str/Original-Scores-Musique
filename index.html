@@ -24,6 +24,8 @@
 <style>
 :root{--red:#FF5500;--purple:#8B5CF6;--blue:#00B4D8;--green:#06D6A0;--pink:#FF006E;--grad:linear-gradient(135deg,#FF5500,#FF006E);--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff;--card-border:rgba(0,0,0,0.08)}
 [data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--bg-alt:#0a0a0a;--bg-deep:#080808;--bg-header:rgba(10,10,10,0.98);--text:#ffffff;--text2:#e2e2e2;--muted:#b0b0b0;--border:rgba(255,255,255,0.12);--card-bg:#111111;--card-border:rgba(255,255,255,0.07)}
+[data-theme="creme"]{--bg:#f4ecd8;--bg2:#efe5cd;--bg3:#e8dbbe;--bg4:#ddcda6;--bg-alt:#f1e7d1;--bg-deep:#ece1c8;--bg-header:rgba(244,236,216,0.98);--text:#3a2e1a;--text2:#584732;--muted:#8a755a;--border:rgba(90,70,40,0.16);--card-bg:#fbf5e6;--card-border:rgba(90,70,40,0.1)}
+[data-theme="nuit"]{--bg:#0d1b2a;--bg2:#152536;--bg3:#1d3149;--bg4:#284158;--bg-alt:#0a1622;--bg-deep:#081019;--bg-header:rgba(10,20,32,0.98);--text:#eaf2fb;--text2:#c6d6e6;--muted:#8ba4bc;--border:rgba(130,170,210,0.16);--card-bg:#0f2033;--card-border:rgba(130,170,210,0.1)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden}
 audio{display:none}
@@ -85,7 +87,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:20px;animation:fadeUp 1s 0.2s ease both}
 .hero-title{font-size:clamp(44px,7vw,100px);font-weight:900;letter-spacing:-3px;line-height:0.92;margin-bottom:22px;animation:fadeUp 1s 0.3s ease both}
 .hero-title span{color:var(--red)}
-[data-theme="light"] .hero-title{color:#fff}
+[data-theme="light"] .hero-title,[data-theme="creme"] .hero-title{color:#fff}
+/* ── SÉLECTEUR DE THÈME ── */
+.theme-picker{position:relative}
+.theme-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg-deep);border:1px solid var(--border);border-radius:8px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:300;min-width:154px;box-shadow:0 10px 28px rgba(0,0,0,0.28)}
+.theme-menu.open{display:flex}
+.theme-opt{display:flex;align-items:center;gap:9px;background:none;border:none;color:var(--text2);padding:8px 10px;border-radius:5px;font-family:'Montserrat',sans-serif;font-size:12px;cursor:pointer;text-align:left;transition:background .15s,color .15s}
+.theme-opt:hover{background:var(--bg3);color:var(--text)}
+.theme-opt.active{color:var(--text);font-weight:600;background:var(--bg2)}
+.theme-sw{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);flex-shrink:0}
 .hero-sub{font-size:15px;font-weight:300;color:rgba(255,255,255,0.82);margin-bottom:36px;letter-spacing:1px;animation:fadeUp 1s 0.4s ease both}
 .hero-btns{display:flex;gap:12px;animation:fadeUp 1s 0.5s ease both}
 .hero-btn{padding:14px 30px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;border-radius:4px;text-transform:uppercase;border:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
@@ -624,7 +634,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <a class="nav-tab" href="nouveautes.html">Actu</a>
   </div>
   <div class="header-right">
-    <button class="btn-nav btn-theme" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
+    <div class="theme-picker" id="theme-picker">
+      <button class="btn-nav btn-theme" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true">🎨</button>
+      <div class="theme-menu" id="theme-menu">
+        <button class="theme-opt" data-theme="light" onclick="setTheme('light')"><span class="theme-sw" style="background:#f6f6f6"></span>Clair</button>
+        <button class="theme-opt" data-theme="dark" onclick="setTheme('dark')"><span class="theme-sw" style="background:#141414"></span>Sombre</button>
+        <button class="theme-opt" data-theme="creme" onclick="setTheme('creme')"><span class="theme-sw" style="background:#f4ecd8"></span>Crème</button>
+        <button class="theme-opt" data-theme="nuit" onclick="setTheme('nuit')"><span class="theme-sw" style="background:#0d1b2a"></span>Nuit bleue</button>
+      </div>
+    </div>
     <div id="osm-auth-nav"><a class="btn-nav" href="login-monteurs.html">👤 Mon compte</a></div>
     <a id="btn-admin" class="btn-nav" style="border-color:rgba(229,9,20,0.4);color:var(--red)" title="Panneau admin" onclick="window.location.href=osmUser?'admin.html':'login-monteurs.html';return false;" href="#">⚙ Admin</a>
     <button class="btn-nav" onclick="toggleQueue()" style="position:relative">🎵 Ma liste <span class="queue-badge" id="queue-badge"></span></button>
@@ -2062,13 +2080,30 @@ function downloadCurrent(){
 loadCatalogue();
 
 /* ── THEME TOGGLE ── */
-function toggleTheme(){
-  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  const next=isDark?'light':'dark';
-  document.documentElement.setAttribute('data-theme',next);
-  localStorage.setItem('osm-theme',next);
-  document.getElementById('btn-theme').textContent=next==='dark'?'☀️':'🌙';
+/* ── THÈMES (palettes) ── */
+const OSM_THEMES=['light','dark','creme','nuit'];
+function toggleThemeMenu(e){
+  if(e)e.stopPropagation();
+  document.getElementById('theme-menu').classList.toggle('open');
+  markActiveTheme();
 }
+function setTheme(name){
+  if(!OSM_THEMES.includes(name))name='light';
+  document.documentElement.setAttribute('data-theme',name);
+  localStorage.setItem('osm-theme',name);
+  document.getElementById('theme-menu').classList.remove('open');
+  markActiveTheme();
+}
+function markActiveTheme(){
+  const cur=document.documentElement.getAttribute('data-theme')||'light';
+  document.querySelectorAll('.theme-opt').forEach(b=>b.classList.toggle('active',b.dataset.theme===cur));
+}
+// Ferme le menu au clic en dehors.
+document.addEventListener('click',e=>{
+  const p=document.getElementById('theme-picker');
+  if(p&&!p.contains(e.target))document.getElementById('theme-menu').classList.remove('open');
+});
+markActiveTheme();
 /* ── HAMBURGER MENU ── */
 function toggleHamMenu(){
   const btn=document.getElementById('ham-btn');
