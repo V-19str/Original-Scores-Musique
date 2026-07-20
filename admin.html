@@ -132,6 +132,24 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
 .act-count { font-size: 10px; color: var(--text2); flex-shrink: 0; white-space: nowrap; }
 .act-empty { padding: 24px; text-align: center; color: var(--muted); font-size: 12px; }
 
+/* ── RECLASSEMENT ── */
+.recl-list { max-height: 520px; overflow-y: auto; }
+.recl-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 11px 12px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; background: var(--bg3); }
+.recl-info { min-width: 0; }
+.recl-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.recl-move { font-size: 11px; color: var(--text2); }
+.recl-pl { display: inline-block; padding: 2px 8px; border-radius: 10px; background: var(--bg4); color: var(--text2); font-size: 10px; white-space: nowrap; }
+.recl-pl.from { background: rgba(243,156,18,0.14); color: var(--yellow); }
+.recl-pl.to { background: rgba(46,204,113,0.14); color: var(--green); }
+.recl-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.recl-btn { background: var(--bg4); border: 1px solid var(--border); color: var(--text2); padding: 6px 11px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 4px; transition: all 0.15s; white-space: nowrap; }
+.recl-btn:hover { border-color: #555; color: var(--text); }
+.recl-btn.ok { background: rgba(46,204,113,0.15); border-color: rgba(46,204,113,0.35); color: var(--green); }
+.recl-btn.ok:hover { background: rgba(46,204,113,0.28); }
+.recl-btn.no { color: var(--muted); }
+.recl-select { background: var(--bg4); border: 1px solid var(--border); color: var(--text); padding: 6px 8px; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 11px; cursor: pointer; outline: none; max-width: 150px; }
+@media (max-width: 700px) { .recl-row { grid-template-columns: 1fr; } .recl-actions { justify-content: flex-start; } }
+
 /* ── SETUP PANEL ── */
 .setup-panel { margin: 24px 48px; background: rgba(229,9,20,0.06); border: 1px solid rgba(229,9,20,0.25); border-radius: 8px; overflow: hidden; }
 .setup-header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
@@ -367,6 +385,35 @@ create or replace trigger on_auth_user_created
   <div id="approve-result" style="font-size:12px;margin-top:10px;display:none;padding:8px 12px;border-radius:4px"></div>
 </div>
 
+<!-- RECLASSEMENT -->
+<div class="clients-section" style="margin-bottom:22px">
+  <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <span>Reclassement des titres</span>
+    <span id="recl-summary" style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:none;font-weight:400"></span>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px 20px">
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <button class="filter-btn active" id="recl-tab-sugg" onclick="reclSwitch('sugg')">💡 Suggestions auto</button>
+      <button class="filter-btn" id="recl-tab-manual" onclick="reclSwitch('manual')">✎ Mode manuel</button>
+      <button class="filter-btn" id="recl-tab-applied" onclick="reclSwitch('applied')">↔ Déjà reclassés</button>
+    </div>
+    <audio id="recl-audio" style="width:100%;margin-bottom:14px;display:none" controls preload="none"></audio>
+
+    <div id="recl-panel-sugg">
+      <div id="recl-sugg-list" class="loading-msg">· · · Analyse du catalogue</div>
+    </div>
+
+    <div id="recl-panel-manual" style="display:none">
+      <input type="text" class="search-admin" id="recl-manual-search" style="width:320px;max-width:100%;margin-bottom:14px" placeholder="Chercher un titre à déplacer…" oninput="reclRenderManual()">
+      <div id="recl-manual-list"><div class="detail-empty">Tapez au moins 2 lettres pour chercher un titre.</div></div>
+    </div>
+
+    <div id="recl-panel-applied" style="display:none">
+      <div id="recl-applied-list"><div class="detail-empty">—</div></div>
+    </div>
+  </div>
+</div>
+
 <!-- CONTROLS -->
 <div class="controls">
   <input type="text" class="search-admin" id="search-input" placeholder="Rechercher un client..." oninput="filterClients()">
@@ -441,6 +488,7 @@ function openAdmin() {
   document.getElementById('pw-screen').style.display = 'none';
   document.getElementById('main').classList.add('visible');
   loadAdminData();
+  reclInit();
 }
 
 async function initAdmin() {
@@ -790,6 +838,261 @@ async function approveClient() {
     btn.disabled = false;
     btn.textContent = label;
   }
+}
+
+// ── RECLASSEMENT ──────────────────────────────────────────────────
+// Suggestions automatiques : pour chaque titre, on compare son adéquation à sa
+// playlist actuelle et aux autres, à partir de ses tags (l'énergie en fait
+// partie : « haute énergie », « faible énergie »…) et de son BPM. Quand une
+// autre playlist colle nettement mieux, on propose le déplacement. Valider écrit
+// dans `reclassements` (fusionné au catalogue côté public) ; refuser mémorise le
+// rejet dans `reclassements_refuses` pour ne plus le reproposer.
+
+let reclLoaded = false;
+let reclTracks = [];              // titres avec playlist courante (override appliqué)
+const reclOriginal = {};          // id -> playlist d'origine (catalogue.json)
+let reclMap = {};                 // id -> to_playlist (reclassements en base)
+let reclAppliedRows = [];         // lignes de la table reclassements
+let reclRefused = new Set();      // "id→playlist" rejetés
+let reclProfiles = {};            // playlist -> {freq, bpmMed, size}
+let reclLabels = [];              // playlists valides (triées)
+let reclSuggestions = [];
+let reclTab = 'sugg';
+
+async function reclInit() {
+  if (reclLoaded) return;
+  try {
+    const [cat, recls, refs] = await Promise.all([
+      fetch('./catalogue.json').then(r => r.json()),
+      sb.from('reclassements').select('*'),
+      sb.from('reclassements_refuses').select('*'),
+    ]);
+    reclAppliedRows = recls.data || [];
+    reclMap = {};
+    reclAppliedRows.forEach(r => { reclMap[r.track_id] = r.to_playlist; });
+    reclRefused = new Set((refs.data || []).map(r => r.track_id + '→' + r.to_playlist));
+
+    reclTracks = (cat.tracks || []).filter(t => t.playlist !== 'samples').map(t => {
+      reclOriginal[t.id] = t.playlist;
+      return { id: t.id, title: t.title, url: t.url, bpm: t.bpm, tags: t.tags || [], playlist: reclMap[t.id] || t.playlist };
+    });
+
+    reclLoaded = true;
+    reclRebuild();
+  } catch (e) {
+    document.getElementById('recl-sugg-list').innerHTML = `<div class="detail-empty">Erreur : ${escHtml(e.message)}</div>`;
+  }
+}
+
+// Recalcule profils + suggestions + rendu après toute modification.
+function reclRebuild() {
+  buildReclProfiles();
+  computeReclSuggestions();
+  renderReclSuggestions();
+  renderReclApplied();
+  updateReclSummary();
+}
+
+function buildReclProfiles() {
+  const byPl = {};
+  reclTracks.forEach(t => { (byPl[t.playlist] = byPl[t.playlist] || []).push(t); });
+  reclProfiles = {};
+  Object.entries(byPl).forEach(([pl, arr]) => {
+    const tagCount = {}, bpms = [];
+    arr.forEach(t => {
+      (t.tags || []).forEach(tg => { tagCount[tg] = (tagCount[tg] || 0) + 1; });
+      if (t.bpm) bpms.push(t.bpm);
+    });
+    const freq = {};
+    Object.entries(tagCount).forEach(([tg, c]) => { freq[tg] = c / arr.length; });
+    bpms.sort((a, b) => a - b);
+    reclProfiles[pl] = { freq, bpmMed: bpms.length ? bpms[Math.floor(bpms.length / 2)] : null, size: arr.length };
+  });
+  reclLabels = Object.keys(reclProfiles).sort((a, b) => a.localeCompare(b, 'fr'));
+}
+
+// Adéquation d'un titre à une playlist : représentativité de ses tags (75 %) +
+// proximité de BPM (25 %).
+function reclScore(t, pl) {
+  const prof = reclProfiles[pl];
+  if (!prof) return 0;
+  const tags = t.tags || [];
+  let tagSim = 0;
+  tags.forEach(tg => { tagSim += (prof.freq[tg] || 0); });
+  tagSim = tags.length ? tagSim / tags.length : 0;
+  let bpmScore = 0.5;
+  if (t.bpm && prof.bpmMed) bpmScore = 1 - Math.min(Math.abs(t.bpm - prof.bpmMed) / 60, 1);
+  return 0.75 * tagSim + 0.25 * bpmScore;
+}
+
+function computeReclSuggestions() {
+  const sugg = [];
+  reclTracks.forEach(t => {
+    if (reclMap[t.id]) return;                 // déjà reclassé : on ne propose pas
+    const cur = t.playlist;
+    const curScore = reclScore(t, cur);
+    let best = cur, bestScore = curScore;
+    reclLabels.forEach(pl => {
+      if (pl === cur) return;
+      const s = reclScore(t, pl);
+      if (s > bestScore) { bestScore = s; best = pl; }
+    });
+    // Marge nette exigée pour éviter le bruit sur des titres polyvalents.
+    if (best !== cur && bestScore > 0.18 && bestScore > curScore * 1.35) {
+      if (reclRefused.has(t.id + '→' + best)) return;
+      sugg.push({ id: t.id, from: cur, to: best, margin: bestScore - curScore });
+    }
+  });
+  sugg.sort((a, b) => b.margin - a.margin);
+  reclSuggestions = sugg;
+}
+
+function reclPlOptions(selected) {
+  return reclLabels.map(pl => `<option value="${escHtml(pl)}"${pl === selected ? ' selected' : ''}>${escHtml(pl)}</option>`).join('');
+}
+
+function reclTrack(id) { return reclTracks.find(t => t.id === id); }
+
+function renderReclSuggestions() {
+  const el = document.getElementById('recl-sugg-list');
+  el.className = 'recl-list';
+  if (!reclSuggestions.length) {
+    el.innerHTML = '<div class="detail-empty">Aucune suggestion — le classement actuel est cohérent.</div>';
+    return;
+  }
+  el.innerHTML = reclSuggestions.slice(0, 100).map(s => {
+    const t = reclTrack(s.id);
+    if (!t) return '';
+    return `<div class="recl-row" id="recl-row-${escHtml(s.id)}">
+      <div class="recl-info">
+        <div class="recl-title">${escHtml(t.title)}</div>
+        <div class="recl-move">est dans <span class="recl-pl from">${escHtml(s.from)}</span> — ressemble à <span class="recl-pl to">${escHtml(s.to)}</span></div>
+      </div>
+      <div class="recl-actions">
+        <button class="recl-btn" onclick="reclPlay('${escAttr(t.url)}')" title="Écouter">▶</button>
+        <button class="recl-btn ok" onclick="reclValidate('${escAttr(s.id)}')">✓ Déplacer</button>
+        <select class="recl-select" id="recl-sel-${escHtml(s.id)}" title="Choisir une autre playlist">${reclPlOptions(s.to)}</select>
+        <button class="recl-btn" onclick="reclManualApply('${escAttr(s.id)}')" title="Appliquer la playlist choisie">Appliquer</button>
+        <button class="recl-btn no" onclick="reclRefuse('${escAttr(s.id)}','${escAttr(s.to)}')">✕ Refuser</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function reclRenderManual() {
+  const q = (document.getElementById('recl-manual-search').value || '').toLowerCase().trim();
+  const el = document.getElementById('recl-manual-list');
+  if (q.length < 2) { el.innerHTML = '<div class="detail-empty">Tapez au moins 2 lettres pour chercher un titre.</div>'; return; }
+  const matches = reclTracks.filter(t => t.title.toLowerCase().includes(q)).slice(0, 60);
+  if (!matches.length) { el.innerHTML = '<div class="detail-empty">Aucun titre trouvé.</div>'; return; }
+  el.className = 'recl-list';
+  el.innerHTML = matches.map(t => `<div class="recl-row">
+    <div class="recl-info">
+      <div class="recl-title">${escHtml(t.title)}</div>
+      <div class="recl-move">actuellement dans <span class="recl-pl ${reclMap[t.id] ? 'to' : ''}">${escHtml(t.playlist)}</span>${reclMap[t.id] ? ' (reclassé)' : ''}</div>
+    </div>
+    <div class="recl-actions">
+      <button class="recl-btn" onclick="reclPlay('${escAttr(t.url)}')" title="Écouter">▶</button>
+      <select class="recl-select" id="recl-sel-${escHtml(t.id)}">${reclPlOptions(t.playlist)}</select>
+      <button class="recl-btn ok" onclick="reclManualApply('${escAttr(t.id)}')">Appliquer</button>
+    </div>
+  </div>`).join('');
+}
+
+function renderReclApplied() {
+  const el = document.getElementById('recl-applied-list');
+  if (!reclAppliedRows.length) { el.innerHTML = '<div class="detail-empty">Aucun titre reclassé pour le moment.</div>'; return; }
+  el.className = 'recl-list';
+  el.innerHTML = reclAppliedRows.map(r => `<div class="recl-row">
+    <div class="recl-info">
+      <div class="recl-title">${escHtml(r.track_title || r.track_id)}</div>
+      <div class="recl-move"><span class="recl-pl from">${escHtml(r.from_playlist || '?')}</span> → <span class="recl-pl to">${escHtml(r.to_playlist)}</span></div>
+    </div>
+    <div class="recl-actions">
+      <button class="recl-btn no" onclick="reclUndo('${escAttr(r.track_id)}')">↩ Annuler</button>
+    </div>
+  </div>`).join('');
+}
+
+function updateReclSummary() {
+  document.getElementById('recl-summary').textContent =
+    `${reclAppliedRows.length} reclassé${reclAppliedRows.length > 1 ? 's' : ''} · ${reclSuggestions.length} suggestion${reclSuggestions.length > 1 ? 's' : ''}`;
+}
+
+function reclSwitch(tab) {
+  reclTab = tab;
+  ['sugg', 'manual', 'applied'].forEach(t => {
+    document.getElementById('recl-panel-' + t).style.display = t === tab ? 'block' : 'none';
+    document.getElementById('recl-tab-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'manual') reclRenderManual();
+  if (tab === 'applied') renderReclApplied();
+}
+
+function reclPlay(url) {
+  const a = document.getElementById('recl-audio');
+  a.style.display = 'block';
+  a.src = url;
+  a.play().catch(() => {});
+}
+
+// Écrit (ou met à jour) le reclassement en base et actualise l'état local.
+async function reclApply(track, from, to) {
+  const { error } = await sb.from('reclassements').upsert({
+    track_id: track.id, track_title: track.title, from_playlist: from, to_playlist: to,
+  });
+  if (error) { showToast('Erreur : ' + error.message); return false; }
+  reclMap[track.id] = to;
+  track.playlist = to;
+  reclAppliedRows = reclAppliedRows.filter(r => r.track_id !== track.id);
+  reclAppliedRows.unshift({ track_id: track.id, track_title: track.title, from_playlist: from, to_playlist: to });
+  showToast(`« ${track.title} » déplacé vers ${to}`);
+  return true;
+}
+
+async function reclValidate(id) {
+  const s = reclSuggestions.find(x => x.id === id);
+  const t = reclTrack(id);
+  if (!s || !t) return;
+  if (await reclApply(t, s.from, s.to)) reclRebuild();
+}
+
+// Applique la playlist choisie dans le <select> (suggestions ou mode manuel).
+async function reclManualApply(id) {
+  const t = reclTrack(id);
+  const sel = document.getElementById('recl-sel-' + id);
+  if (!t || !sel) return;
+  const to = sel.value;
+  if (to === t.playlist) { showToast('Déjà dans cette playlist'); return; }
+  const from = reclOriginal[id] || t.playlist;
+  if (await reclApply(t, from, to)) { reclRebuild(); if (reclTab === 'manual') reclRenderManual(); }
+}
+
+async function reclRefuse(id, to) {
+  const { error } = await sb.from('reclassements_refuses').insert({ track_id: id, to_playlist: to });
+  if (error && !/duplicate|unique/i.test(error.message)) { showToast('Erreur : ' + error.message); return; }
+  reclRefused.add(id + '→' + to);
+  computeReclSuggestions();
+  renderReclSuggestions();
+  updateReclSummary();
+}
+
+async function reclUndo(id) {
+  const { error } = await sb.from('reclassements').delete().eq('track_id', id);
+  if (error) { showToast('Erreur : ' + error.message); return; }
+  delete reclMap[id];
+  reclAppliedRows = reclAppliedRows.filter(r => r.track_id !== id);
+  const t = reclTrack(id);
+  if (t) t.playlist = reclOriginal[id] || t.playlist;   // retour à la playlist d'origine
+  showToast('Reclassement annulé');
+  reclRebuild();
+  if (reclTab === 'manual') reclRenderManual();
+}
+
+// escHtml protège le texte ; pour les valeurs injectées dans une chaîne JS
+// d'attribut onclick, on neutralise aussi apostrophes et antislashs.
+function escAttr(s) {
+  return String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 }
 </script>
 </body>

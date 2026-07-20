@@ -1318,8 +1318,21 @@ let currentDetailTracks=[],detailIndex=-1;
 function fmt(s){if(!s||s==='0:00')return'—';return s;}
 function fmt2(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.toString().padStart(2,'0')}`;}
 
+// Base Supabase, en lecture anonyme : nouveaux_titres et reclassements sont
+// fusionnés au catalogue à chaque chargement, sans jamais toucher
+// catalogue.json. Les deux tables ont une policy de lecture publique.
+const OSM_SB_URL='https://ubpmzncfhkohoyfonjbb.supabase.co';
+const OSM_SB_KEY='sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+async function fetchSbRows(table){
+  try{
+    const r=await fetch(`${OSM_SB_URL}/rest/v1/${table}?select=*`,{headers:{apikey:OSM_SB_KEY}});
+    if(!r.ok)return[];
+    return await r.json();
+  }catch(e){console.warn('[OSM] Lecture '+table+' impossible:',e);return[];}
+}
+
 function loadCatalogue(){
-  fetch('./catalogue.json').then(r=>r.json()).then(data=>{
+  fetch('./catalogue.json').then(r=>r.json()).then(async data=>{
     const cataloguePlaylists=data.playlists||[];
     const tagsMapKeys=Object.keys(TAGS_MAP);
     console.log('[OSM] Playlists dans catalogue.json (%d):', cataloguePlaylists.length, cataloguePlaylists);
@@ -1329,7 +1342,29 @@ function loadCatalogue(){
     if(orphanTags.length)console.warn('[OSM] Tags sans playlist correspondante:', orphanTags);
     else console.log('[OSM] Tous les tags TAGS_MAP correspondent à une playlist catalogue.');
     if(unmappedPlaylists.length)console.info('[OSM] Playlists catalogue sans entrée TAGS_MAP:', unmappedPlaylists);
-    allTracks=(data.tracks||[]).filter(t=>t.playlist!=='samples').map(t=>({...t,playlistLabel:getLabel(t.playlist)}));
+
+    let tracks=(data.tracks||[]).filter(t=>t.playlist!=='samples');
+
+    // ── Fusion base Supabase (catalogue.json reste intact) ──────────
+    const [nouveaux, recls] = await Promise.all([
+      fetchSbRows('nouveaux_titres'),
+      fetchSbRows('reclassements'),
+    ]);
+    // Titres ajoutés depuis l'admin : ajoutés au catalogue.
+    const knownIds=new Set(tracks.map(t=>t.id));
+    nouveaux.forEach(n=>{
+      if(!n.track_id||knownIds.has(n.track_id))return;
+      tracks.push({id:n.track_id,title:n.title,playlist:n.playlist,duration:n.duration||'',url:n.url,created_at:n.created_at,tags:n.tags||[],bpm:n.bpm});
+      knownIds.add(n.track_id);
+    });
+    // Reclassements : écrasent la playlist d'un titre existant.
+    if(recls.length){
+      const rmap={};recls.forEach(r=>{if(r.track_id&&r.to_playlist)rmap[r.track_id]=r.to_playlist;});
+      tracks.forEach(t=>{if(rmap[t.id])t.playlist=rmap[t.id];});
+      console.log('[OSM] Reclassements appliqués (%d)', recls.length);
+    }
+
+    allTracks=tracks.map(t=>({...t,playlistLabel:getLabel(t.playlist)}));
     initProFilters();
     renderPlaylists();
     renderNavPills();
