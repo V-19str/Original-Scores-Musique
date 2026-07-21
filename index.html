@@ -411,6 +411,38 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .qi-rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px}
 .qi-rm:hover{color:var(--red)}
 .queue-empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:13px}
+/* ── Cue sheet SACEM ── */
+.cue-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:2100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.cue-overlay.show{opacity:1;pointer-events:auto}
+.cue-card{background:var(--bg-deep,#111);color:var(--text,#fff);border:1px solid var(--border);border-radius:16px;padding:28px 26px 22px;width:min(860px,100%);max-height:88vh;overflow-y:auto;position:relative}
+.cue-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:24px;line-height:1;cursor:pointer;font-family:inherit}
+.cue-close:hover{color:var(--text)}
+.cue-h{font-size:17px;font-weight:700;letter-spacing:1px;margin-bottom:4px}
+.cue-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.cue-note{background:rgba(255,85,0,0.12);border:1px solid rgba(255,85,0,0.35);border-radius:8px;padding:10px 12px;font-size:11.5px;margin-bottom:14px}
+.cue-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:18px}
+.cue-card label{display:flex;flex-direction:column;gap:4px;font-size:10.5px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted)}
+.cue-card input,.cue-card select{background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-family:'Montserrat',sans-serif;font-size:12.5px;text-transform:none;letter-spacing:0}
+.cue-card input:focus,.cue-card select:focus{outline:none;border-color:var(--red)}
+.cue-row{border-top:1px solid var(--border);padding:12px 0}
+.cue-row-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.cue-row-n{color:var(--muted);font-size:11px;min-width:18px}
+.cue-row-t{font-size:13px;font-weight:600;flex:1}
+.cue-row-d{color:var(--muted);font-size:11px}
+.cue-row-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.cue-row-comp{margin-top:8px;font-size:11px}
+.cue-ok{color:var(--muted)}
+.cue-missing{color:#ff9a5b}
+.cue-err{background:rgba(200,40,40,0.15);border:1px solid rgba(200,40,40,0.45);border-radius:8px;padding:10px 12px;font-size:11.5px;margin-top:14px}
+.cue-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.cue-btn{background:var(--grad);color:#fff;border:none;border-radius:8px;padding:11px 22px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer}
+.cue-btn-ghost{background:none;color:var(--muted);border:1px solid var(--border);border-radius:8px;padding:11px 18px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.cue-btn-ghost:hover{color:var(--text)}
+@media(max-width:600px){.cue-card{padding:22px 16px 18px}}
+.queue-foot{padding:12px 16px;border-top:1px solid var(--border)}
+.queue-cue{width:100%;background:var(--grad);color:#fff;border:none;border-radius:8px;padding:11px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer}
+.queue-cue:hover{filter:brightness(1.1)}
+.queue-cue:disabled{opacity:0.45;cursor:not-allowed;filter:none}
 
 /* MISC */
 .loading{text-align:center;padding:80px;color:var(--muted);font-size:12px;letter-spacing:2px}
@@ -677,6 +709,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 <div id="queue-panel">
   <div class="queue-header"><span class="queue-title">Ma liste</span><button class="queue-clear" onclick="clearQueue()">Effacer</button></div>
   <div class="queue-list" id="queue-list"><div class="queue-empty">Ajoutez des morceaux avec +</div></div>
+  <div class="queue-foot"><button class="queue-cue" onclick="osmCueSheet.open()">📄 Cue sheet SACEM</button></div>
 </div>
 
 <!-- ACCUEIL -->
@@ -1394,6 +1427,9 @@ function loadCatalogue(){
     renderNavPills();
     renderRecommends();
     updateFavNav();
+    // Avant le return de ?playlist= plus bas, sinon une entrée depuis une page
+    // pré-rendue repartirait avec une file vide.
+    restoreQueue();
     const params=new URLSearchParams(location.search);
     const sharedFavs=params.get('favs');
     if(sharedFavs){sharedFavs.split(',').forEach(id=>{if(id.trim())favorites.add(id.trim());});localStorage.setItem('osm-favs',JSON.stringify([...favorites]));updateFavNav();}
@@ -2057,7 +2093,26 @@ function toggleQueueTrack(i){
   if(idx>=0)queue.splice(idx,1);else queue.push(t);
   updateQueueBadge();renderTracks();renderQueueList();
 }
-function updateQueueBadge(){const b=document.getElementById('queue-badge');b.textContent=queue.length;queue.length>0?b.classList.add('visible'):b.classList.remove('visible');}
+// Toutes les mutations de la file (ajout, retrait, vidage, depuis les favoris)
+// passent par updateQueueBadge : c'est le seul endroit ou brancher la
+// sauvegarde pour n'en oublier aucune.
+function updateQueueBadge(){const b=document.getElementById('queue-badge');b.textContent=queue.length;queue.length>0?b.classList.add('visible'):b.classList.remove('visible');saveQueue();}
+// On ne persiste que les identifiants : les objets complets se re-hydratent
+// depuis allTracks au chargement, donc un titre reclasse ou renomme suit.
+function saveQueue(){try{localStorage.setItem('osm-queue',JSON.stringify(queue.map(t=>t.id)));}catch(e){}}
+function restoreQueue(){
+  let ids=[];
+  try{ids=JSON.parse(localStorage.getItem('osm-queue')||'[]');}catch(e){return;}
+  if(!Array.isArray(ids)||!ids.length)return;
+  const byId=new Map(allTracks.map(t=>[t.id,t]));
+  // Un morceau disparu du catalogue est simplement omis, sans casser le reste.
+  queue=ids.map(id=>byId.get(id)).filter(Boolean);
+  updateQueueBadge();renderQueueList();
+}
+// Passerelle explicite vers assets/cuesheet.js. `queue` et `osmUser` sont
+// declares en `let` : accessibles par nom depuis un autre script classique,
+// mais on prefere un point d'entree nomme plutot qu'une dependance implicite.
+window.osmApp={queue:()=>queue,sb:()=>typeof osmSB!=='undefined'?osmSB:null,user:()=>typeof osmUser!=='undefined'?osmUser:null};
 function clearQueue(){queue=[];queueIndex=-1;updateQueueBadge();renderQueueList();renderTracks();}
 function renderQueueList(){
   const list=document.getElementById('queue-list');
@@ -2583,7 +2638,27 @@ window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP || {}, {
   "🔗 Lien copié !": "🔗 Link copied!",
   "Pour télécharger, demandez votre accès pro": "To download, request your pro access",
   "↳ Accès pro validé sous 24h": "↳ Pro access approved within 24h",
-  "Demander un accès": "Request access", "Fermer": "Close", "Chargement": "Loading"
+  "Demander un accès": "Request access", "Fermer": "Close", "Chargement": "Loading",
+  // Cue sheet SACEM
+  "📄 Cue sheet SACEM": "📄 SACEM cue sheet", "Cue sheet SACEM": "SACEM cue sheet",
+  "Renseignez le programme, puis le timecode et la durée d'utilisation de chaque titre.":
+    "Fill in the programme, then the timecode and cue duration for each track.",
+  "Titre du programme": "Programme title", "Épisode / numéro": "Episode / number",
+  "Production": "Production", "Diffuseur": "Broadcaster",
+  "Date de diffusion": "Broadcast date", "Durée du programme": "Programme duration",
+  "Timecode": "Timecode", "Durée utilisée": "Cue duration", "Utilisation": "Usage",
+  "Fond sonore": "Background", "Générique début": "Opening titles",
+  "Générique fin": "End credits", "Illustration": "Illustration", "Thème": "Theme",
+  "Compositeurs à compléter": "Composers to complete",
+  "Annuler": "Cancel", "Télécharger le PDF": "Download PDF",
+  "Ajoutez d'abord des morceaux à votre liste.": "Add some tracks to your list first.",
+  "Vous n'êtes pas connecté : les compositeurs ne peuvent pas être pré-remplis. Connectez-vous pour un cue sheet complet.":
+    "You are not signed in: composers cannot be pre-filled. Sign in for a complete cue sheet.",
+  "Le titre du programme est obligatoire.": "The programme title is required.",
+  "Ligne": "Row", "timecode attendu au format HH:MM:SS.": "timecode expected as HH:MM:SS.",
+  "durée attendue au format M:SS.": "duration expected as M:SS.",
+  "Le module PDF n'a pas pu être chargé. Rechargez la page.":
+    "The PDF module could not be loaded. Please reload the page."
 });
 // Rafraîchit les compteurs générés en JS au changement de langue.
 document.addEventListener('osm-lang-change', function () {
@@ -2592,6 +2667,14 @@ document.addEventListener('osm-lang-change', function () {
 });
 </script>
 <script src="assets/i18n.js"></script>
+
+<!-- ── Cue sheet SACEM ──
+     jsPDF et autoTable sont embarqués plutôt que servis par un CDN : le site
+     est statique et ne doit pas dépendre d'un tiers pour une fonctionnalité
+     promise aux clients. defer : ils ne sont utiles qu'au clic. -->
+<script defer src="assets/vendor/jspdf.umd.min.js"></script>
+<script defer src="assets/vendor/jspdf.plugin.autotable.min.js"></script>
+<script defer src="assets/cuesheet.js"></script>
 
 </body>
 </html>
