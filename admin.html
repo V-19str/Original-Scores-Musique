@@ -150,6 +150,9 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
 .recl-select { background: var(--bg4); border: 1px solid var(--border); color: var(--text); padding: 6px 8px; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 11px; cursor: pointer; outline: none; max-width: 150px; }
 @media (max-width: 700px) { .recl-row { grid-template-columns: 1fr; } .recl-actions { justify-content: flex-start; } }
 
+/* ── AJOUT DE MORCEAUX ── */
+.up-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+
 /* ── DEMANDES D'ACCÈS ── */
 .req-badge { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 9px; margin-left: 6px; vertical-align: middle; }
 .req-badge.pending { background: rgba(243,156,18,0.16); color: var(--yellow); }
@@ -400,6 +403,55 @@ create or replace trigger on_auth_user_created
   <div id="approve-result" style="font-size:12px;margin-top:10px;display:none;padding:8px 12px;border-radius:4px"></div>
 </div>
 
+<!-- AJOUT DE MORCEAUX -->
+<div class="clients-section" style="margin-bottom:22px">
+  <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <span>Ajouter un morceau</span>
+    <span id="up-summary" style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:none;font-weight:400"></span>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px 20px">
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end">
+      <div style="flex:2;min-width:240px">
+        <label class="up-label" for="up-file">Fichier MP3 *</label>
+        <input type="file" id="up-file" accept="audio/mpeg,.mp3" class="search-admin" style="width:100%;padding:8px 10px" onchange="upOnFile()">
+      </div>
+      <div style="flex:2;min-width:220px">
+        <label class="up-label" for="up-title">Titre *</label>
+        <input type="text" id="up-title" class="search-admin" style="width:100%" placeholder="Nom du morceau">
+      </div>
+      <div style="flex:1;min-width:170px">
+        <label class="up-label" for="up-playlist">Playlist *</label>
+        <select id="up-playlist" class="recl-select" style="width:100%"><option value="">—</option></select>
+      </div>
+      <div style="flex:0 0 110px">
+        <label class="up-label" for="up-bpm">BPM</label>
+        <input type="number" id="up-bpm" class="search-admin" style="width:100%" min="20" max="300" placeholder="auto">
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-top:12px">
+      <div style="flex:3;min-width:280px">
+        <label class="up-label" for="up-tags">Tags (séparés par des virgules)</label>
+        <input type="text" id="up-tags" class="search-admin" style="width:100%" placeholder="majeur, modéré, positif…" list="up-tags-list">
+        <datalist id="up-tags-list"></datalist>
+      </div>
+      <button class="pw-btn" id="up-btn" style="width:auto;white-space:nowrap;padding:11px 20px" onclick="upSubmit()">⬆ Envoyer le morceau</button>
+    </div>
+    <div id="up-progress-wrap" style="display:none;margin-top:14px">
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div id="up-progress" style="height:100%;width:0;background:var(--red);transition:width .2s"></div>
+      </div>
+      <div id="up-progress-label" style="font-size:11px;color:var(--muted);margin-top:6px">—</div>
+    </div>
+    <div id="up-result" style="font-size:12px;margin-top:12px;display:none;padding:8px 12px;border-radius:4px"></div>
+
+    <div style="margin-top:18px">
+      <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Morceaux ajoutés depuis l'admin</div>
+      <audio id="up-audio" style="width:100%;margin-bottom:12px;display:none" controls preload="none"></audio>
+      <div id="up-list"><div class="detail-empty">—</div></div>
+    </div>
+  </div>
+</div>
+
 <!-- RECLASSEMENT -->
 <div class="clients-section" style="margin-bottom:22px">
   <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
@@ -504,6 +556,7 @@ function openAdmin() {
   document.getElementById('main').classList.add('visible');
   loadAdminData();
   reclInit();
+  upInit();
 }
 
 async function initAdmin() {
@@ -954,6 +1007,226 @@ async function reqDelete(id) {
   reqRows = reqRows.filter(x => x.id !== id);
   renderReqs();
   showToast('Demande supprimée');
+}
+
+// ── AJOUT DE MORCEAUX ─────────────────────────────────────────────
+// Le MP3 ne passe pas par le serveur OSM : l'Edge Function signer-upload
+// renvoie une signature Cloudinary à durée de vie courte, le navigateur poste
+// le fichier directement à Cloudinary, puis la ligne est insérée dans
+// nouveaux_titres — table que index.html fusionne au catalogue au chargement.
+// Le secret API Cloudinary n'est donc jamais exposé au client.
+
+let upTracksRows = [];
+
+async function upInit() {
+  // Playlists et vocabulaire de tags viennent du catalogue lui-même : pas de
+  // liste en dur à maintenir en double. Le fetch tombe dans le cache navigateur
+  // (reclInit charge le même fichier).
+  try {
+    const cat = await fetch('./catalogue.json').then(r => r.json());
+    const pls = (cat.playlists || []).filter(p => p !== 'samples').sort((a, b) => a.localeCompare(b, 'fr'));
+    const sel = document.getElementById('up-playlist');
+    sel.innerHTML = '<option value="">—</option>' + pls.map(p => `<option value="${escAttr(p)}">${escHtml(p)}</option>`).join('');
+
+    const tags = new Set();
+    (cat.tracks || []).forEach(t => (t.tags || []).forEach(tg => tags.add(tg)));
+    document.getElementById('up-tags-list').innerHTML =
+      [...tags].sort((a, b) => a.localeCompare(b, 'fr')).map(t => `<option value="${escAttr(t)}">`).join('');
+  } catch (e) {
+    showUpResult('Catalogue illisible : ' + e.message, false);
+  }
+  upLoadList();
+}
+
+async function upLoadList() {
+  const el = document.getElementById('up-list');
+  const { data, error } = await sb.from('nouveaux_titres').select('*').order('created_at', { ascending: false });
+  if (error) {
+    el.innerHTML = `<div class="detail-empty">Erreur : ${escHtml(error.message)}</div>`;
+    return;
+  }
+  upTracksRows = data || [];
+  renderUpList();
+}
+
+function renderUpList() {
+  const el = document.getElementById('up-list');
+  const summary = document.getElementById('up-summary');
+  if (summary) summary.textContent = upTracksRows.length ? `${upTracksRows.length} titre${upTracksRows.length > 1 ? 's' : ''} ajouté${upTracksRows.length > 1 ? 's' : ''}` : '';
+  if (!upTracksRows.length) {
+    el.className = '';
+    el.innerHTML = '<div class="detail-empty">Aucun morceau ajouté depuis l\'admin pour le moment.</div>';
+    return;
+  }
+  el.className = 'recl-list';
+  el.innerHTML = upTracksRows.map(r => {
+    const meta = [r.playlist, r.duration, r.bpm ? r.bpm + ' BPM' : '', fmtDateTime(r.created_at)]
+      .filter(Boolean).map(escHtml).join(' · ');
+    return `<div class="recl-row">
+      <div class="recl-info">
+        <div class="recl-title">${escHtml(r.title)}</div>
+        <div class="recl-move">${meta}</div>
+        ${(r.tags || []).length ? `<div class="recl-move" style="margin-top:3px;color:var(--muted)">${escHtml((r.tags || []).join(', '))}</div>` : ''}
+      </div>
+      <div class="recl-actions">
+        <button class="recl-btn" onclick="upPlay('${escAttr(r.url)}')" title="Écouter">▶</button>
+        <button class="recl-btn no" onclick="upDelete('${escAttr(r.track_id)}')" title="Retirer du catalogue">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function upPlay(url) {
+  const a = document.getElementById('up-audio');
+  a.style.display = 'block';
+  a.src = url;
+  a.play().catch(() => {});
+}
+
+function showUpResult(msg, ok) {
+  const el = document.getElementById('up-result');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.color = ok ? '#4caf50' : 'var(--red)';
+  el.style.background = ok ? 'rgba(76,175,80,0.08)' : 'rgba(229,9,20,0.08)';
+  el.style.border = '1px solid ' + (ok ? 'rgba(76,175,80,0.25)' : 'rgba(229,9,20,0.25)');
+}
+
+function upProgress(pct, label) {
+  document.getElementById('up-progress-wrap').style.display = 'block';
+  document.getElementById('up-progress').style.width = Math.max(0, Math.min(100, pct)) + '%';
+  document.getElementById('up-progress-label').textContent = label;
+}
+
+// Pré-remplit le titre à partir du nom de fichier, sans écraser une saisie.
+function upOnFile() {
+  const f = document.getElementById('up-file').files[0];
+  const titleEl = document.getElementById('up-title');
+  if (!f || titleEl.value.trim()) return;
+  titleEl.value = f.name.replace(/\.[a-z0-9]+$/i, '').replace(/[_-]+/g, ' ').trim();
+}
+
+function upFmtDuration(sec) {
+  if (!sec || !isFinite(sec)) return '';
+  const m = Math.floor(sec / 60), s = Math.round(sec % 60);
+  return s === 60 ? `${m + 1}:00` : `${m}:${String(s).padStart(2, '0')}`;
+}
+
+// fetch() ne donne pas la progression d'un upload : XHR, pour qu'un MP3 de
+// plusieurs dizaines de Mo n'ait pas l'air figé.
+function upPost(url, form, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.upload.onprogress = e => { if (e.lengthComputable) onProgress(e.loaded / e.total * 100); };
+    xhr.onload = () => {
+      let out = {};
+      try { out = JSON.parse(xhr.responseText); } catch { /* réponse non JSON */ }
+      if (xhr.status >= 200 && xhr.status < 300) resolve(out);
+      else reject(new Error(out?.error?.message || `Cloudinary ${xhr.status}`));
+    };
+    xhr.onerror = () => reject(new Error('Connexion à Cloudinary interrompue.'));
+    xhr.send(form);
+  });
+}
+
+async function upSubmit() {
+  const file = document.getElementById('up-file').files[0];
+  const title = document.getElementById('up-title').value.trim();
+  const playlist = document.getElementById('up-playlist').value;
+  const bpmRaw = document.getElementById('up-bpm').value.trim();
+  const tags = document.getElementById('up-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+  const btn = document.getElementById('up-btn');
+  document.getElementById('up-result').style.display = 'none';
+
+  if (!file) { showUpResult('Choisissez un fichier MP3.', false); return; }
+  if (!/\.mp3$/i.test(file.name) && file.type !== 'audio/mpeg') {
+    showUpResult('Format attendu : MP3.', false); return;
+  }
+  if (!title) { showUpResult('Entrez un titre.', false); return; }
+  if (!playlist) { showUpResult('Choisissez une playlist.', false); return; }
+  const bpm = bpmRaw ? parseInt(bpmRaw, 10) : null;
+  if (bpmRaw && (!bpm || bpm < 20 || bpm > 300)) { showUpResult('BPM invalide (20–300).', false); return; }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session || session.user?.email !== ADMIN_EMAIL) {
+    showUpResult('Session admin introuvable. Reconnectez-vous.', false); return;
+  }
+
+  btn.disabled = true;
+  const label = btn.textContent;
+  btn.textContent = 'Envoi…';
+  try {
+    // 1. Signature Cloudinary (l'Edge Function vérifie le JWT admin).
+    upProgress(2, 'Signature de l\'upload…');
+    const sigRes = await fetch(`${SUPABASE_URL}/functions/v1/signer-upload`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+        'apikey': SUPABASE_KEY,
+      },
+      body: JSON.stringify({ title }),
+    });
+    const sig = await sigRes.json().catch(() => ({}));
+    if (!sigRes.ok) throw new Error(sig.error || sigRes.statusText || 'signature refusée.');
+
+    // 2. Upload direct du fichier vers Cloudinary.
+    const form = new FormData();
+    form.append('file', file);
+    form.append('api_key', sig.api_key);
+    form.append('timestamp', sig.timestamp);
+    form.append('public_id', sig.public_id);
+    form.append('signature', sig.signature);
+    if (sig.folder) form.append('folder', sig.folder);
+    const up = await upPost(sig.upload_url, form, p => upProgress(2 + p * 0.9, `Envoi du fichier… ${Math.round(p)} %`));
+
+    const url = up.secure_url;
+    if (!url) throw new Error('Cloudinary n\'a pas renvoyé d\'URL.');
+
+    // 3. Insertion dans nouveaux_titres (RLS : email admin dans le JWT).
+    upProgress(96, 'Enregistrement dans le catalogue…');
+    const row = {
+      track_id: up.public_id || sig.public_id,
+      title,
+      playlist,
+      duration: upFmtDuration(up.duration),
+      url,
+      tags,
+      bpm,
+    };
+    const { error } = await sb.from('nouveaux_titres').insert(row);
+    if (error) throw new Error('Fichier envoyé, mais enregistrement refusé : ' + error.message);
+
+    upProgress(100, 'Terminé.');
+    showUpResult(`✓ « ${title} » ajouté à ${playlist}. Il apparaît sur le site au prochain chargement.`, true);
+    showToast('Morceau ajouté');
+    document.getElementById('up-file').value = '';
+    document.getElementById('up-title').value = '';
+    document.getElementById('up-bpm').value = '';
+    document.getElementById('up-tags').value = '';
+    setTimeout(() => { document.getElementById('up-progress-wrap').style.display = 'none'; }, 1500);
+    upLoadList();
+  } catch (e) {
+    document.getElementById('up-progress-wrap').style.display = 'none';
+    showUpResult('Erreur : ' + e.message, false);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = label;
+  }
+}
+
+// Retire le titre du catalogue public. Le fichier reste chez Cloudinary : on ne
+// donne pas au navigateur de quoi supprimer un asset, et un retour arrière ne
+// coûte alors qu'un ré-ajout de la ligne.
+async function upDelete(trackId) {
+  const row = upTracksRows.find(r => r.track_id === trackId);
+  if (!confirm(`Retirer « ${row ? row.title : trackId} » du catalogue ?\nLe fichier reste chez Cloudinary.`)) return;
+  const { error } = await sb.from('nouveaux_titres').delete().eq('track_id', trackId);
+  if (error) { showToast('Erreur : ' + error.message); return; }
+  upTracksRows = upTracksRows.filter(r => r.track_id !== trackId);
+  renderUpList();
+  showToast('Morceau retiré');
 }
 
 // ── RECLASSEMENT ──────────────────────────────────────────────────
