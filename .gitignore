@@ -3,3 +3,9 @@ __pycache__/
 _audio_cache/
 analysis_progress.json
 catalogue_backup.json
+
+# Compositeurs et cles de repartition : donnee reservee aux monteurs connectes,
+# servie depuis Supabase (table credits, RLS authenticated). Ne doit jamais
+# entrer dans le depot public. Regenerer avec build_credits.py.
+credits.json
+credits_seed.sql
