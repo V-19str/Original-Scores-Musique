@@ -9,3 +9,9 @@ catalogue_backup.json
 # entrer dans le depot public. Regenerer avec build_credits.py.
 credits.json
 credits_seed.sql
+
+# Revenus SACEM, previsionnel et co-auteurs : retires d'admin-sacem.html et
+# servis depuis Supabase (table sacem_data, RLS admin). Source de verite privee
+# et seed, a ne jamais publier. Regenerer avec build_sacem_data.py.
+sacem_data_source.json
+sacem_data_seed.sql

@@ -5,10 +5,11 @@ build_credits.py
 Produit credits.json : titre du catalogue → compositeurs et clés de répartition,
 donnée indispensable au générateur de cue sheet SACEM côté client.
 
-La source est admin-sacem.html, qui n'est PAS publiable en l'état : il contient
-aussi les revenus (REVENUS_ANNEE, COMPS_REVENU, REVENUS_VERSEMENTS, PROGRAMMES).
-Ce script n'extrait donc que CAT_PARTS — nom du compositeur et pourcentage —
-et refuse d'écrire si la sortie contient la moindre trace de ces blocs.
+La source est sacem_data_source.json (hors dépôt, produit par
+build_sacem_data.py) : les blocs confidentiels d'admin-sacem.html — dont
+CAT_PARTS et les revenus — y ont été déplacés lorsque la page a été vidée.
+Ce script n'extrait que CAT_PARTS — nom du compositeur et pourcentage — et
+refuse d'écrire si la sortie contient la moindre trace des blocs de revenus.
 
 Appariement avec catalogue.json :
   1. titre normalisé (accents, casse et ponctuation neutralisés)
@@ -25,7 +26,7 @@ import argparse, json, re, sys, unicodedata
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-SOURCE = "admin-sacem.html"
+SOURCE = "sacem_data_source.json"
 CATALOGUE = "catalogue.json"
 OUTPUT = "credits.json"
 SEED = "credits_seed.sql"
@@ -63,12 +64,16 @@ def read(path):
         return f.read()
 
 
-def extract_parts(html):
-    """CAT_PARTS : {"TITRE": [{"n": "Nom Prenom", "k": 25.0}, ...]}"""
-    m = re.search(r"const CAT_PARTS = (\{.*?\});\s*\n", html, re.S)
-    if not m:
-        sys.exit("CAT_PARTS introuvable dans %s" % SOURCE)
-    return json.loads(m.group(1))
+def extract_parts(raw):
+    """CAT_PARTS : {"TITRE": [{"n": "Nom Prenom", "k": 25.0}, ...]},
+    lu depuis sacem_data_source.json."""
+    try:
+        src = json.loads(raw)
+    except json.JSONDecodeError:
+        sys.exit("%s illisible : lancez build_sacem_data.py" % SOURCE)
+    if "CAT_PARTS" not in src:
+        sys.exit("CAT_PARTS absent de %s" % SOURCE)
+    return src["CAT_PARTS"]
 
 
 def main():
