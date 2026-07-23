@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM – Mentions légales & Politique de confidentialité</title>
+<meta name="description" content="Mentions légales, hébergeur et politique de confidentialité (RGPD) du site Original Scores Music.">
+<meta name="robots" content="noindex, follow">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script>(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<style>
+:root{--red:#E50914;--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--text:#111;--text2:#2c2c2c;--muted:#666;--border:rgba(0,0,0,0.1);--card-bg:#fff;--bg-header:rgba(246,246,246,0.98);--bg-deep:#eaeaea}
+[data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#fff;--text2:#d4d4d4;--muted:#999;--border:rgba(255,255,255,0.1);--card-bg:#1a1a1a;--bg-header:rgba(10,10,10,0.98);--bg-deep:#0e0e0e}
+[data-theme="creme"]{--bg:#f4ecd8;--bg2:#efe5cd;--bg3:#e8dbbe;--bg4:#ddcda6;--bg-header:rgba(244,236,216,0.98);--bg-deep:#ece1c8;--text:#3a2e1a;--text2:#584732;--muted:#8a755a;--border:rgba(90,70,40,0.16);--card-bg:#fbf5e6}
+[data-theme="nuit"]{--bg:#0d1b2a;--bg2:#152536;--bg3:#1d3149;--bg4:#284158;--bg-header:rgba(10,20,32,0.98);--bg-deep:#081019;--text:#eaf2fb;--text2:#c6d6e6;--muted:#8ba4bc;--border:rgba(130,170,210,0.16);--card-bg:#0f2033}
+
+.theme-picker{position:relative}
+.theme-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg-deep);border:1px solid var(--border);border-radius:8px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:300;min-width:154px;box-shadow:0 10px 28px rgba(0,0,0,0.28)}
+.theme-menu.open{display:flex}
+.theme-opt{display:flex;align-items:center;gap:9px;background:none;border:none;color:var(--text2);padding:8px 10px;border-radius:5px;font-family:'Montserrat',sans-serif;font-size:12px;cursor:pointer;text-align:left;transition:background .15s,color .15s}
+.theme-opt:hover{background:var(--bg3);color:var(--text)}
+.theme-opt.active{color:var(--text);font-weight:600;background:var(--bg2)}
+.theme-sw{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);flex-shrink:0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.2s,color 0.2s}
+
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px;color:var(--text)}
+.header-right{display:flex;align-items:center;gap:8px}
+.btn-nav{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s;white-space:nowrap}
+.btn-nav:hover{border-color:#888;color:var(--text)}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.btn-red:hover{background:#c4070f;border-color:#c4070f}
+
+.hero{padding:108px 72px 52px;background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
+.hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:18px}
+.hero-title{font-size:clamp(30px,4vw,52px);font-weight:900;letter-spacing:-2px;line-height:0.98;margin-bottom:18px}
+.hero-title span{color:var(--red)}
+.hero-sub{font-size:14px;font-weight:300;color:var(--muted);max-width:640px;line-height:1.7}
+
+.content{padding:48px 72px 80px;max-width:900px;margin:0 auto}
+.section{margin-bottom:46px}
+.section-num{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.section-title{font-size:20px;font-weight:700;margin-bottom:18px;letter-spacing:-0.3px}
+.section p{font-size:13.5px;color:var(--text2);line-height:1.75;font-weight:300;margin-bottom:12px}
+.section p strong{font-weight:600;color:var(--text)}
+.section ul{margin:0 0 12px 18px}
+.section li{font-size:13.5px;color:var(--text2);line-height:1.75;font-weight:300;margin-bottom:7px}
+.section li strong{font-weight:600;color:var(--text)}
+.section a{color:var(--red);text-decoration:none}
+.section a:hover{text-decoration:underline}
+code{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 6px;font-family:monospace;font-size:12px;color:var(--red)}
+
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:22px 26px;margin-bottom:14px}
+.card p:last-child{margin-bottom:0}
+
+table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:12.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;font-weight:300;color:var(--text2);line-height:1.6}
+th{font-weight:600;color:var(--text);font-size:11px;letter-spacing:0.5px;text-transform:uppercase}
+.table-wrap{overflow-x:auto}
+
+.updated{font-size:11px;color:var(--muted);font-weight:300;margin-top:36px;padding-top:18px;border-top:1px solid var(--border)}
+
+footer{text-align:center;padding:24px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--red)}
+
+@media(max-width:900px){
+  header{padding:0 16px}
+  .hero{padding:88px 20px 44px}
+  .content{padding:36px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">ORIGINAL SCORES MUSIC</div>
+  </a>
+  <div class="header-right">
+    <a class="btn-nav" href="index.html">← Retour à l'accueil</a>
+    <a class="btn-nav" href="aide.html">❓ Aide</a>
+    <div class="theme-picker" id="theme-picker">
+      <button class="btn-nav" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true">🎨</button>
+      <div class="theme-menu" id="theme-menu">
+        <button class="theme-opt" data-theme="light" onclick="setTheme('light')"><span class="theme-sw" style="background:#f6f6f6"></span>Clair</button>
+        <button class="theme-opt" data-theme="dark" onclick="setTheme('dark')"><span class="theme-sw" style="background:#141414"></span>Sombre</button>
+        <button class="theme-opt" data-theme="creme" onclick="setTheme('creme')"><span class="theme-sw" style="background:#f4ecd8"></span>Crème</button>
+        <button class="theme-opt" data-theme="nuit" onclick="setTheme('nuit')"><span class="theme-sw" style="background:#0d1b2a"></span>Nuit bleue</button>
+      </div>
+    </div>
+    <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Informations légales</div>
+  <h1 class="hero-title">Mentions légales<br>&amp; <span>confidentialité</span></h1>
+  <p class="hero-sub">Identification de l'éditeur et de l'hébergeur du site, conditions d'utilisation du catalogue, et politique de traitement des données personnelles (RGPD).</p>
+</div>
+
+<div class="content">
+
+  <!-- 1. ÉDITEUR -->
+  <div class="section">
+    <div class="section-num">01</div>
+    <h2 class="section-title">Éditeur du site</h2>
+    <div class="card">
+      <p><strong>Original Scores Music (OSM)</strong> — site <a href="https://osm-music.fr">osm-music.fr</a></p>
+      <p>Le présent site est <strong>édité à titre non professionnel</strong> par une personne physique.</p>
+      <p>Conformément à l'<strong>article 6, III, 2° de la loi n° 2004-575 du 21 juin 2004</strong> pour la confiance dans l'économie numérique (LCEN), l'éditeur non professionnel qui souhaite préserver son anonymat vis-à-vis du public peut se limiter à indiquer les coordonnées de son hébergeur, sous réserve d'avoir communiqué à celui-ci les éléments d'identification personnelle prévus au 1° du même article. Ces éléments ont été communiqués à l'hébergeur mentionné à l'article 2.</p>
+      <p><strong>Directeur de la publication :</strong> l'éditeur du site, dans les conditions d'anonymat rappelées ci-dessus.</p>
+      <p><strong>Contact :</strong> <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> — 06 82 98 57 52</p>
+    </div>
+  </div>
+
+  <!-- 2. HÉBERGEUR -->
+  <div class="section">
+    <div class="section-num">02</div>
+    <h2 class="section-title">Hébergeur</h2>
+    <div class="card">
+      <p><strong>GitHub, Inc.</strong> (service GitHub Pages)</p>
+      <p>88 Colin P. Kelly Jr. Street<br>San Francisco, CA 94107<br>États-Unis</p>
+      <p>Contact : <a href="https://support.github.com" target="_blank" rel="noopener">support.github.com</a></p>
+      <p>Le site est publié statiquement via GitHub Pages et servi sur le nom de domaine <code>osm-music.fr</code>.</p>
+    </div>
+  </div>
+
+  <!-- 3. PROPRIÉTÉ INTELLECTUELLE -->
+  <div class="section">
+    <div class="section-num">03</div>
+    <h2 class="section-title">Propriété intellectuelle</h2>
+    <p>L'ensemble des œuvres musicales présentées sur ce site, ainsi que les textes, visuels, la charte graphique et le code du site, sont protégés par le droit d'auteur. Les œuvres musicales du catalogue sont <strong>déposées à la SACEM</strong> : leur utilisation dans une production audiovisuelle implique la déclaration des œuvres utilisées auprès de la SACEM par le diffuseur ou le producteur, selon les usages professionnels en vigueur.</p>
+    <p>La mise à disposition des fichiers via ce site ne vaut pas cession de droits. Toute reproduction, représentation, modification ou exploitation, totale ou partielle, en dehors du cadre convenu, est interdite sans autorisation écrite préalable.</p>
+  </div>
+
+  <!-- 4. RGPD -->
+  <div class="section">
+    <div class="section-num">04</div>
+    <h2 class="section-title">Données personnelles (RGPD)</h2>
+    <p>La présente politique est établie conformément au <strong>Règlement (UE) 2016/679</strong> du 27 avril 2016 (RGPD) et à la loi « Informatique et Libertés » n° 78-17 du 6 janvier 1978 modifiée.</p>
+    <p><strong>Responsable du traitement :</strong> l'éditeur du site, joignable à l'adresse <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a>. Toute demande relative à vos données peut être adressée à ce contact, qui constitue le point d'entrée unique pour l'exercice de vos droits.</p>
+
+    <h3 style="font-size:14px;font-weight:600;margin:22px 0 10px;">Données collectées et finalités</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Traitement</th><th>Données</th><th>Finalité</th><th>Base légale</th><th>Conservation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Demande d'accès</strong><br>(formulaire d'inscription)</td>
+            <td>Nom, prénom, e-mail, téléphone, société, métier, description du projet, message</td>
+            <td>Étudier la demande, vous recontacter et ouvrir un accès au catalogue</td>
+            <td>Mesures précontractuelles à la demande de la personne (art. 6.1.b)</td>
+            <td>3 ans à compter du dernier contact</td>
+          </tr>
+          <tr>
+            <td><strong>Compte utilisateur</strong></td>
+            <td>E-mail, mot de passe (chiffré), nom, société</td>
+            <td>Authentification et accès à l'espace monteurs</td>
+            <td>Exécution du service demandé (art. 6.1.b)</td>
+            <td>Durée de vie du compte, puis 12 mois</td>
+          </tr>
+          <tr>
+            <td><strong>Usage du catalogue</strong></td>
+            <td>Titres écoutés, téléchargés, mis en favori, projets créés</td>
+            <td>Fournir les fonctionnalités (favoris, listes) et mesurer l'usage du catalogue</td>
+            <td>Intérêt légitime (art. 6.1.f) — amélioration du service</td>
+            <td>24 mois</td>
+          </tr>
+          <tr>
+            <td><strong>Formulaire de brief</strong><br>(sélection sur mesure)</td>
+            <td>Coordonnées et description du projet</td>
+            <td>Répondre à votre demande de sélection musicale</td>
+            <td>Mesures précontractuelles (art. 6.1.b)</td>
+            <td>3 ans à compter du dernier contact</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Aucune donnée n'est vendue, louée ou cédée à des tiers à des fins commerciales ou publicitaires.</p>
+
+    <h3 style="font-size:14px;font-weight:600;margin:22px 0 10px;">Sous-traitants et destinataires</h3>
+    <p>Les prestataires techniques suivants interviennent dans le fonctionnement du site :</p>
+    <ul>
+      <li><strong>GitHub, Inc.</strong> (États-Unis) — hébergement des pages du site.</li>
+      <li><strong>Supabase</strong> — base de données, authentification et stockage des comptes, favoris et statistiques d'usage.</li>
+      <li><strong>Cloudinary</strong> — hébergement et diffusion des fichiers audio du catalogue.</li>
+      <li><strong>Formspree, Inc.</strong> (États-Unis) — acheminement des formulaires d'inscription et de brief par e-mail.</li>
+      <li><strong>Brevo</strong> — envoi des e-mails transactionnels (invitations, notifications).</li>
+      <li><strong>Google Ireland Ltd.</strong> — fourniture des polices de caractères (Google Fonts), qui implique une connexion de votre navigateur aux serveurs de Google.</li>
+    </ul>
+    <p>Certains de ces prestataires sont établis hors de l'Union européenne. Les transferts correspondants sont encadrés par les clauses contractuelles types de la Commission européenne et/ou le cadre de protection des données UE–États-Unis (<i>EU–US Data Privacy Framework</i>), selon les engagements publiés par chaque prestataire.</p>
+
+    <h3 style="font-size:14px;font-weight:600;margin:22px 0 10px;">Vos droits</h3>
+    <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données, ainsi que du droit de définir des directives relatives à leur sort après votre décès. Ces droits s'exercent par simple demande à <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a>. Une réponse vous sera apportée dans un délai d'un mois.</p>
+    <p>Vous pouvez également introduire une réclamation auprès de la <strong>CNIL</strong> — 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 — <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>.</p>
+  </div>
+
+  <!-- 5. COOKIES -->
+  <div class="section">
+    <div class="section-num">05</div>
+    <h2 class="section-title">Cookies et stockage local</h2>
+    <p><strong>Ce site n'utilise aucun cookie publicitaire, aucun traceur tiers et aucun outil de mesure d'audience</strong> (ni Google Analytics, ni équivalent). Aucun bandeau de consentement n'est donc requis.</p>
+    <p>Le site utilise le <strong>stockage local de votre navigateur</strong> (<code>localStorage</code>), qui ne quitte jamais votre appareil, pour mémoriser vos préférences et votre session :</p>
+    <ul>
+      <li><code>osm-theme</code> — le thème d'affichage choisi (clair, sombre, crème, nuit).</li>
+      <li><code>osm-favs</code>, <code>osm-queue</code>, <code>osm_projects</code> — vos favoris, votre liste d'écoute et vos projets.</li>
+      <li><code>diapason_*</code> — les données de travail de l'application Diapason, traitées exclusivement en local.</li>
+      <li>Un jeton de session déposé par Supabase lorsque vous êtes connecté, nécessaire à votre authentification.</li>
+    </ul>
+    <p>Vous pouvez effacer ces éléments à tout moment en vidant les données de site de votre navigateur.</p>
+  </div>
+
+  <!-- 6. RESPONSABILITÉ -->
+  <div class="section">
+    <div class="section-num">06</div>
+    <h2 class="section-title">Responsabilité et liens</h2>
+    <p>L'éditeur s'efforce d'assurer l'exactitude des informations publiées et la disponibilité du site, sans pouvoir la garantir de manière absolue. Sa responsabilité ne saurait être engagée en cas d'interruption du service, de perte de données ou de dommage résultant de l'utilisation du site.</p>
+    <p>Le site peut contenir des liens vers des sites tiers, sur le contenu desquels l'éditeur n'exerce aucun contrôle et dont il ne saurait être tenu responsable.</p>
+  </div>
+
+  <!-- 7. DROIT APPLICABLE -->
+  <div class="section">
+    <div class="section-num">07</div>
+    <h2 class="section-title">Droit applicable</h2>
+    <p>Les présentes mentions sont soumises au droit français. En cas de litige, et à défaut de résolution amiable, les tribunaux français sont seuls compétents.</p>
+    <p>Conformément aux articles L612-1 et suivants du Code de la consommation, le consommateur peut recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable d'un litige.</p>
+  </div>
+
+  <p class="updated">Dernière mise à jour : juillet 2026.</p>
+
+</div>
+
+<footer>
+  © 2026 Original Scores Music &nbsp;·&nbsp;
+  <a href="mentions-legales.html">Mentions légales</a> &nbsp;·&nbsp;
+  <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp;
+  <a href="tel:+33682985752">06 82 98 57 52</a>
+</footer>
+
+<script>
+function toggleThemeMenu(e){
+  if(e)e.stopPropagation();
+  var m=document.getElementById('theme-menu'); if(m)m.classList.toggle('open');
+  markActiveTheme();
+}
+function setTheme(name){
+  if(['light','dark','creme','nuit'].indexOf(name)<0)name='light';
+  document.documentElement.setAttribute('data-theme',name);
+  localStorage.setItem('osm-theme',name);
+  var m=document.getElementById('theme-menu'); if(m)m.classList.remove('open');
+  markActiveTheme();
+}
+function markActiveTheme(){
+  var cur=document.documentElement.getAttribute('data-theme')||'light';
+  document.querySelectorAll('.theme-opt').forEach(function(b){b.classList.toggle('active',b.dataset.theme===cur);});
+}
+document.addEventListener('click',function(e){
+  var p=document.getElementById('theme-picker');
+  if(p&&!p.contains(e.target)){var m=document.getElementById('theme-menu'); if(m)m.classList.remove('open');}
+});
+markActiveTheme();
+</script>
+
+</body>
+</html>
