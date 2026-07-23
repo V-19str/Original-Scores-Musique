@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSM – Nouveautés · Coupe du Monde 2026</title>
+<title>OSM – Nouveautés · L'été</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root{--red:#E50914;--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#fff;--text2:#d4d4d4;--muted:#999;--border:rgba(255,255,255,0.12)}
@@ -23,7 +23,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,
 
 /* HERO */
 .hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:flex-end;overflow:hidden;padding-top:64px}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1920&q=80') center/cover no-repeat;animation:heroZoom 14s ease-in-out infinite alternate}
+.hero-bg{position:absolute;inset:0;background:url('assets/ete-hero-desktop.webp') center/cover no-repeat;animation:heroZoom 14s ease-in-out infinite alternate}
+/* Sur mobile, le recadrage 2:1 perd la composition : on sert la version 2:3. */
+@media(max-width:700px){.hero-bg{background-image:url('assets/ete-hero-mobile.webp')}}
 @keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.06)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.55) 50%,rgba(0,0,0,0.2) 100%)}
 .hero-content{position:relative;z-index:2;padding:0 72px 72px;max-width:900px;animation:fadeUp 1s .3s ease both}
@@ -154,32 +156,33 @@ footer a{color:#666;text-decoration:none}
   <div class="hero-bg"></div>
   <div class="hero-ov"></div>
   <div class="hero-content">
-    <div class="hero-badge"><span class="hero-badge-dot"></span>Sélection du mois — Juin 2026</div>
-    <h1 class="hero-title">Coupe du<br><span>Monde</span> 2026</h1>
-    <p class="hero-sub">La sélection OSM pour le plus grand événement sportif de la planète — guitares électriques, orchestrations épiques et rythmiques puissantes.</p>
+    <div class="hero-badge"><span class="hero-badge-dot"></span>Sélection de saison — Été 2026</div>
+    <h1 class="hero-title">L’<span>été</span></h1>
+    <p class="hero-sub">La sélection OSM pour vos images de saison — guitares acoustiques, grooves solaires, percussions latines et couleurs du monde.</p>
     <div class="hero-cta">
       <button class="hero-btn hero-btn-red" onclick="playAll()">▶ Tout écouter</button>
       <button class="hero-btn hero-btn-ghost" onclick="scrollToTracks()">↓ Voir les morceaux</button>
     </div>
   </div>
   <div class="hero-stats" id="hero-stats">
-    <div class="hero-stat"><div class="hero-stat-num" id="stat-action">—</div><div class="hero-stat-label">Action</div></div>
-    <div class="hero-stat"><div class="hero-stat-num" id="stat-rock">—</div><div class="hero-stat-label">Rock</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="stat-world">—</div><div class="hero-stat-label">World Music</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="stat-acou">—</div><div class="hero-stat-label">Acoustique</div></div>
     <div class="hero-stat"><div class="hero-stat-num" id="stat-total">—</div><div class="hero-stat-label">Total</div></div>
   </div>
 </div>
 
 <div class="section" id="tracks-anchor">
-  <div class="section-eyebrow">Sélection Coupe du Monde</div>
-  <h2 class="section-title">Rock · Action · Orchestral · Électro</h2>
-  <p class="section-sub">Des musiques taillées pour les séquences à haute intensité : montages sportifs, moments de victoire, climax dramatiques. Tout ce qu'il faut pour sublimer les images du mondial.</p>
+  <div class="section-eyebrow">Sélection Été</div>
+  <h2 class="section-title">Soleil · Voyage · Groove</h2>
+  <p class="section-sub">Des musiques lumineuses pour les séquences de saison : reportages en extérieur, carnets de voyage, sujets vacances et art de vivre. Grooves chaleureux, cordes acoustiques et couleurs du monde.</p>
   
   <div class="filter-bar">
     <button class="filter-pill active" onclick="setFilter('all',this)">Tous</button>
-    <button class="filter-pill" onclick="setFilter('Action',this)">Action</button>
-    <button class="filter-pill" onclick="setFilter('Rock',this)">Rock</button>
-    <button class="filter-pill" onclick="setFilter('Orchestral',this)">Orchestral</button>
-    <button class="filter-pill" onclick="setFilter('Électro',this)">Électro</button>
+    <button class="filter-pill" onclick="setFilter('World Music',this)">World Music</button>
+    <button class="filter-pill" onclick="setFilter('Pop Acoustique',this)">Pop Acoustique</button>
+    <button class="filter-pill" onclick="setFilter('Groovy',this)">Groovy</button>
+    <button class="filter-pill" onclick="setFilter('Reggae',this)">Reggae</button>
+    <button class="filter-pill" onclick="setFilter('Latino',this)">Latino</button>
   </div>
 
   <div class="tracks-header">
@@ -227,7 +230,8 @@ footer a{color:#666;text-decoration:none}
 <div class="copy-toast" id="copy-toast">🔗 Lien copié !</div>
 
 <footer>
-  © 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp;
+  © 2026 Original Scores Music &nbsp;·&nbsp;
+  <a href="mentions-legales.html">Mentions légales</a> &nbsp;·&nbsp;
   <a href="qui-sommes-nous.html">Qui sommes-nous ?</a> &nbsp;·&nbsp;
   <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a>
 </footer>
@@ -235,7 +239,25 @@ footer a{color:#666;text-decoration:none}
 <audio id="audio"></audio>
 
 <script>
-const TARGET_PLAYLISTS = ['Action', 'Rock', 'Orchestral', 'Électro'];
+/* Regle « L'ete » — dupliquee depuis index.html (bloc SELECTION « L'ETE »).
+   Les tags de catalogue.json sont purement musicaux (mode, tonalite, tempo,
+   energie, humeur) : aucun tag thematique « soleil » ou « voyage » n'existe.
+   On croise donc playlist d'origine, humeur solaire et mots-cles de titre.
+   Toute evolution doit etre reportee dans index.html, qui alimente le
+   compteur affiche dans le hero de l'accueil. */
+const ETE_PLAYLISTS = ['World Music','Pop Acoustique','Groovy','Neutre Positif','Latino','Reggae'];
+const ETE_MOODS = ['lumineux','positif','joyeux','festif'];
+const ETE_KW = ['sun','summer','beach','tropic','island','ocean','surf','palm','coco','bossa',
+  'samba','salsa','cuba','brasil','brazil','rio','carib','jamaic','holiday','plage','soleil',
+  'lagoon','paradise','breeze','sunset','sunrise','miami','ibiza','hawa','bali','tiki',
+  'calypso','chill','lounge','cocktail','riviera','azur'];
+function isEte(t){
+  const tags = t.tags || [];
+  if (tags.includes('sombre')) return false;
+  const title = (t.title || '').toLowerCase();
+  if (ETE_KW.some(k => title.includes(k))) return true;
+  return ETE_PLAYLISTS.includes(t.playlist) && ETE_MOODS.some(m => tags.includes(m));
+}
 const PAGE_SIZE = 60;
 let allTracks = [], filteredTracks = [], currentFilter = 'all', currentIndex = -1;
 let shuffleOn = false, repeatOn = false, displayedCount = PAGE_SIZE;
@@ -243,9 +265,17 @@ const audio = document.getElementById('audio');
 
 fetch('./catalogue.json').then(r=>r.json()).then(data=>{
   const tracks = data.tracks || data;
-  allTracks = tracks.filter(t => TARGET_PLAYLISTS.includes(t.playlist));
-  document.getElementById('stat-action').textContent = allTracks.filter(t=>t.playlist==='Action').length;
-  document.getElementById('stat-rock').textContent = allTracks.filter(t=>t.playlist==='Rock'||t.playlist==='Hard Rock').length;
+  // Deduplication par titre : un meme morceau figure parfois dans plusieurs
+  // playlists, ce qui ferait diverger ce compteur de celui du hero d'accueil.
+  const seen = new Set();
+  allTracks = tracks.filter(t => {
+    if (t.playlist === 'samples' || !isEte(t)) return false;
+    const k = (t.title || '').toLowerCase().trim();
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+  document.getElementById('stat-world').textContent = allTracks.filter(t=>t.playlist==='World Music').length;
+  document.getElementById('stat-acou').textContent = allTracks.filter(t=>t.playlist==='Pop Acoustique'||t.playlist==='Folk Acoustique').length;
   document.getElementById('stat-total').textContent = allTracks.length;
   applyFilter();
 }).catch(()=>{document.getElementById('track-list').innerHTML='<div class="loading">Erreur de chargement.</div>';});
@@ -329,14 +359,17 @@ function fmt(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.
   "Catalogue": "Catalog",
   "Nouveautés": "New Releases",
   "← Accueil": "← Home",
-  "Sélection du mois — Juin 2026": "Selection of the Month — June 2026",
-  "Coupe du": "World",
-  "Monde": "Cup",
-  "La sélection OSM pour le plus grand événement sportif de la planète — guitares électriques, orchestrations épiques et rythmiques puissantes.": "The OSM selection for the planet's biggest sporting event — electric guitars, epic orchestrations and powerful rhythms.",
+  "Sélection de saison — Été 2026": "Season Selection — Summer 2026",
+  "été": "Summer",
+  "World Music": "World Music",
+  "La sélection OSM pour vos images de saison — guitares acoustiques, grooves solaires, percussions latines et couleurs du monde.": "The OSM selection for your seasonal visuals — acoustic guitars, sunny grooves, Latin percussion and world colours.",
   "▶ Tout écouter": "▶ Play all",
   "↓ Voir les morceaux": "↓ View tracks",
-  "Sélection Coupe du Monde": "World Cup Selection",
-  "Des musiques taillées pour les séquences à haute intensité : montages sportifs, moments de victoire, climax dramatiques. Tout ce qu'il faut pour sublimer les images du mondial.": "Music built for high-intensity sequences: sports montages, moments of victory, dramatic climaxes. Everything you need to elevate the World Cup's imagery.",
+  "Sélection Été": "Summer Selection",
+  "Soleil · Voyage · Groove": "Sun · Travel · Groove",
+  "Acoustique": "Acoustic",
+  "Pop Acoustique": "Acoustic Pop",
+  "Des musiques lumineuses pour les séquences de saison : reportages en extérieur, carnets de voyage, sujets vacances et art de vivre. Grooves chaleureux, cordes acoustiques et couleurs du monde.": "Bright music for seasonal sequences: outdoor reporting, travel diaries, holiday and lifestyle features. Warm grooves, acoustic strings and world colours.",
   "Tous": "All",
   "Morceaux": "Tracks",
   "· · · Chargement": "· · · Loading",

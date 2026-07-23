@@ -111,6 +111,28 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#000}
 .hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px));pointer-events:none;border:0}
 .hero-video-cover{position:absolute;inset:0;z-index:1;background:#000;pointer-events:none;transition:opacity 0.8s ease}
+
+/* Mise en avant « L'été » posée dans le hero, sous la recherche. */
+.hero-ete{margin-top:28px;display:inline-flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;
+  background:rgba(0,0,0,0.46);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);
+  border-radius:14px;padding:15px 22px;animation:fadeUp 1s 1.5s ease both}
+.hero-ete-left{display:flex;align-items:center;gap:13px;text-align:left}
+.hero-ete-sun{font-size:26px;line-height:1;filter:drop-shadow(0 0 10px rgba(255,190,60,0.55))}
+.hero-ete-txt{display:flex;flex-direction:column;gap:3px}
+.hero-ete-kicker{font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#ffd48a}
+.hero-ete-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:0.2px}
+.hero-ete-sub{font-size:11.5px;font-weight:300;color:rgba(255,255,255,0.8)}
+.hero-ete-btns{display:flex;gap:9px;flex-wrap:wrap}
+.hero-ete-btn{padding:9px 17px;font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:1.4px;
+  text-transform:uppercase;border-radius:5px;cursor:pointer;text-decoration:none;border:1px solid transparent;transition:all .15s;white-space:nowrap}
+.hero-ete-btn-sun{background:linear-gradient(135deg,#ff9500,#ff5e3a);color:#fff}
+.hero-ete-btn-sun:hover{filter:brightness(1.1)}
+.hero-ete-btn-ghost{background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.3)}
+.hero-ete-btn-ghost:hover{background:rgba(255,255,255,0.22)}
+@media(max-width:700px){
+  .hero-ete{margin-top:20px;padding:13px 16px;gap:13px}
+  .hero-ete-title{font-size:13.5px}
+}
 /* HERO CENTER — contenu apparaît après 1,2s pour laisser la vidéo s'installer */
 .hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
 /* OSM LOGO HERO */
@@ -503,7 +525,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .trust-programs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;font-size:11px;color:var(--muted)}
 .trust-dot{color:var(--border);margin:0 2px}
 
-/* VLADIMIR RECOMMANDE */
+/* SELECTION OSM */
 .recommends-wrap{padding:60px 64px;background:var(--bg-alt)}
 .rec-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;gap:24px;flex-wrap:wrap}
 .rec-eyebrow{font-size:10px;font-weight:700;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:10px}
@@ -704,6 +726,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   <a class="ham-item" href="aide.html"><span class="ham-item-icon">❓</span>Aide</a>
   <div class="ham-divider"></div>
   <a class="ham-item" href="mailto:vladimirstreiff@gmail.com"><span class="ham-item-icon">✉️</span>Contact</a>
+  <a class="ham-item" href="mentions-legales.html"><span class="ham-item-icon">⚖️</span>Mentions légales</a>
 </div>
 
 <div id="queue-panel">
@@ -814,6 +837,20 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
           </div>
         </div>
       </div>
+      <div class="hero-ete">
+        <div class="hero-ete-left">
+          <span class="hero-ete-sun">☀️</span>
+          <div class="hero-ete-txt">
+            <div class="hero-ete-kicker">Sélection de saison</div>
+            <div class="hero-ete-title">L'été — soleil, voyage et groove</div>
+            <div class="hero-ete-sub"><span id="ete-count">—</span> titres pour vos images estivales</div>
+          </div>
+        </div>
+        <div class="hero-ete-btns">
+          <button class="hero-ete-btn hero-ete-btn-sun" onclick="playEte()">▶ Écouter</button>
+          <a class="hero-ete-btn hero-ete-btn-ghost" href="nouveautes.html">Voir la sélection</a>
+        </div>
+      </div>
     </div>
     <div class="hero-scroll"><div class="hero-scroll-line"></div>SCROLL</div>
   </div>
@@ -871,7 +908,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     </div>
   </div>
 
-  <!-- VLADIMIR RECOMMANDE -->
+  <!-- SELECTION OSM -->
   <div class="recommends-wrap">
     <div class="rec-top">
       <div>
@@ -1367,6 +1404,52 @@ function getInfo(label){return Object.values(PLAYLIST_MAP).find(p=>p.label===lab
 function plSlug(s){return String(s||'').normalize('NFD').replace(/\p{M}/gu,'').toLowerCase().replace(/&/g,' et ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
 
 let allTracks=[],filteredTracks=[],currentIndex=-1,currentFolder=null,activeTag=null;
+
+/* ── SÉLECTION « L'ÉTÉ » (playlist virtuelle) ──────────────────────────────
+   Les tags de catalogue.json sont purement musicaux (mode, tonalite, tempo,
+   energie, humeur) : il n'existe aucun tag thematique « soleil », « tropical »
+   ou « voyage ». La selection croise donc trois criteres :
+     1. la playlist d'origine, pour l'axe geographique/instrumental ;
+     2. une humeur solaire, pour ecarter les versions sombres d'un meme morceau ;
+     3. les mots-cles de titre, qui rattrapent les morceaux estivaux ranges
+        ailleurs (Sunburn en Atmosphere, Big Up Jamaica en Burlesque...).
+   Aucune modification de catalogue.json : la regle est evaluee a la volee.
+   Le meme jeu de regles est duplique dans nouveautes.html — toute evolution
+   doit etre reportee des deux cotes. */
+const ETE_PLAYLISTS=new Set(['World Music','Pop Acoustique','Groovy','Neutre Positif','Latino','Reggae']);
+const ETE_MOODS=['lumineux','positif','joyeux','festif'];
+const ETE_KW=['sun','summer','beach','tropic','island','ocean','surf','palm','coco','bossa',
+  'samba','salsa','cuba','brasil','brazil','rio','carib','jamaic','holiday','plage','soleil',
+  'lagoon','paradise','breeze','sunset','sunrise','miami','ibiza','hawa','bali','tiki',
+  'calypso','chill','lounge','cocktail','riviera','azur'];
+function isEte(t){
+  const tags=t.tags||[];
+  if(tags.includes('sombre'))return false;
+  const title=(t.title||'').toLowerCase();
+  if(ETE_KW.some(k=>title.includes(k)))return true;
+  return ETE_PLAYLISTS.has(t.playlistLabel)&&ETE_MOODS.some(m=>tags.includes(m));
+}
+/* Deduplication par titre : un meme morceau existe parfois dans plusieurs
+   playlists (Atmosphere + Divers + Folk), ce qui gonflerait le compteur. */
+function eteTracks(){
+  const seen=new Set();
+  return allTracks.filter(t=>{
+    if(!isEte(t))return false;
+    const k=(t.title||'').toLowerCase().trim();
+    if(seen.has(k))return false;
+    seen.add(k);return true;
+  });
+}
+function updateEteCount(){
+  const el=document.getElementById('ete-count');
+  if(el)el.textContent=eteTracks().length;
+}
+function playEte(){
+  selectFolder('__ete',null);
+  const grid=document.getElementById('section-title');
+  if(grid)grid.scrollIntoView({behavior:'smooth',block:'start'});
+  if(filteredTracks.length)playTrack(0);
+}
 const TRACKS_PER_PAGE=50;let visibleCount=TRACKS_PER_PAGE;
 function loadMoreTracks(){visibleCount+=TRACKS_PER_PAGE;renderTracks();}
 let queue=[],queueIndex=-1,playingFromQueue=false,shuffleOn=false,repeatOn=false;
@@ -1422,6 +1505,7 @@ function loadCatalogue(){
     }
 
     allTracks=tracks.map(t=>({...t,playlistLabel:getLabel(t.playlist)}));
+    updateEteCount();
     initProFilters();
     renderPlaylists();
     renderNavPills();
@@ -1911,7 +1995,9 @@ function filterTracks(){
   const kws=q?getKws(q):[];
   filteredTracks=allTracks.filter(t=>{
     const lbl=t.playlistLabel;
-    const matchFolder=!currentFolder||lbl===currentFolder;
+    // '__ete' est une playlist virtuelle : elle n'existe pas dans catalogue.json
+    // et se resout par regle de tags/titre plutot que par egalite de libelle.
+    const matchFolder=currentFolder==='__ete'?isEte(t):(!currentFolder||lbl===currentFolder);
     const tagPls=activeTag?THEMES.flatMap(th=>th.playlists.filter(p=>p.tags.includes(activeTag)).map(p=>p.label)):null;
     const matchTag=!activeTag||(tagPls&&tagPls.includes(lbl));
     const hay=`${t.title} ${lbl} ${(t.tags||[]).join(' ')} ${(TAGS_MAP[lbl]||[]).join(' ')}`.toLowerCase();
@@ -1930,6 +2016,16 @@ function filterTracks(){
     const matchEnergy=!fEnergy||(t.tags||[]).includes(ENERGY_TAG[fEnergy]);
     return matchFolder&&matchTag&&matchSearch&&matchHeroTags&&matchDuration&&matchBpm&&matchDur4&&matchKey&&matchEnergy;
   });
+  // Un meme morceau peut figurer dans plusieurs playlists : sans cette passe,
+  // la grille afficherait plus de titres que le compteur annonce dans le hero.
+  if(currentFolder==='__ete'){
+    const seen=new Set();
+    filteredTracks=filteredTracks.filter(t=>{
+      const k=(t.title||'').toLowerCase().trim();
+      if(seen.has(k))return false;
+      seen.add(k);return true;
+    });
+  }
   const bar=document.getElementById('search-active-bar');
   const activeTags=[...activeHeroTags];
   if(kws.length>0||activeTags.length>0){
@@ -1964,7 +2060,8 @@ function renderTracks(){
   const list=document.getElementById('track-list');
   const q=heroSearchQuery.toLowerCase().trim();
   const kws=q?getKws(q):[];
-  document.getElementById('section-title').textContent=currentFolder||'Catalogue Complet';
+  document.getElementById('section-title').textContent=
+    currentFolder==='__ete'?"L'été":(currentFolder||'Catalogue Complet');
   document.getElementById('section-count').textContent=`${filteredTracks.length} ${window.osmLang&&osmLang()==='en'?'tracks':'morceaux'}`;
   if(!filteredTracks.length){list.innerHTML='<div class="empty">Aucun résultat</div>';return;}
   const qIds=new Set(queue.map(t=>t.id));
@@ -2353,7 +2450,7 @@ function toggleFavDetail(id,i){
 }
 
 
-/* ── VLADIMIR RECOMMANDE ── */
+/* ── SELECTION OSM ── */
 const RECOMMENDS_CONFIG=[
   {playlist:'Orchestral',note:'Ma signature épique'},
   {playlist:'Piano',note:"L'émotion à l'état pur"},
@@ -2566,6 +2663,14 @@ document.addEventListener('keydown', e => {
 <!-- ── i18n FR/EN ── -->
 <script>
 window.OSM_I18N_MAP = Object.assign(window.OSM_I18N_MAP || {}, {
+  // Mise en avant « L'été » (hero)
+  "Sélection de saison": "Season selection",
+  "L'été — soleil, voyage et groove": "Summer — sun, travel and groove",
+  "titres pour vos images estivales": "tracks for your summer visuals",
+  "▶ Écouter": "▶ Play",
+  "Voir la sélection": "View the selection",
+  "L'été": "Summer",
+  "Mentions légales": "Legal notice",
   // Navigation
   "Accueil": "Home", "Actu": "News", "Favoris": "Favorites",
   "Pages": "Pages", "Navigation": "Navigation", "Compte": "Account",
