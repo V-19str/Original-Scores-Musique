@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSM – Nouveautés · L'été</title>
+<title>OSM – Nouveautés · La Rentrée</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root{--red:#E50914;--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#fff;--text2:#d4d4d4;--muted:#999;--border:rgba(255,255,255,0.12)}
@@ -23,9 +23,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,
 
 /* HERO */
 .hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:flex-end;overflow:hidden;padding-top:64px}
-.hero-bg{position:absolute;inset:0;background:url('assets/ete-hero-desktop.webp') center/cover no-repeat;animation:heroZoom 14s ease-in-out infinite alternate}
+.hero-bg{position:absolute;inset:0;background:url('assets/rentree-hero-desktop.webp') center/cover no-repeat;animation:heroZoom 14s ease-in-out infinite alternate}
 /* Sur mobile, le recadrage 2:1 perd la composition : on sert la version 2:3. */
-@media(max-width:700px){.hero-bg{background-image:url('assets/ete-hero-mobile.webp')}}
+@media(max-width:700px){.hero-bg{background-image:url('assets/rentree-hero-mobile.webp')}}
 @keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.06)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.55) 50%,rgba(0,0,0,0.2) 100%)}
 .hero-content{position:relative;z-index:2;padding:0 72px 72px;max-width:900px;animation:fadeUp 1s .3s ease both}
@@ -156,33 +156,33 @@ footer a{color:#666;text-decoration:none}
   <div class="hero-bg"></div>
   <div class="hero-ov"></div>
   <div class="hero-content">
-    <div class="hero-badge"><span class="hero-badge-dot"></span>Sélection de saison — Été 2026</div>
-    <h1 class="hero-title">L’<span>été</span></h1>
-    <p class="hero-sub">La sélection OSM pour vos images de saison — guitares acoustiques, grooves solaires, percussions latines et couleurs du monde.</p>
+    <div class="hero-badge"><span class="hero-badge-dot"></span>Sélection de saison — Rentrée 2026</div>
+    <h1 class="hero-title">La <span>rentrée</span></h1>
+    <p class="hero-sub">La sélection OSM pour vos sujets de rentrée économique — reprise d'activité, vie de bureau, transformation digitale et nouveaux défis professionnels.</p>
     <div class="hero-cta">
       <button class="hero-btn hero-btn-red" onclick="playAll()">▶ Tout écouter</button>
       <button class="hero-btn hero-btn-ghost" onclick="scrollToTracks()">↓ Voir les morceaux</button>
     </div>
   </div>
   <div class="hero-stats" id="hero-stats">
-    <div class="hero-stat"><div class="hero-stat-num" id="stat-world">—</div><div class="hero-stat-label">World Music</div></div>
-    <div class="hero-stat"><div class="hero-stat-num" id="stat-acou">—</div><div class="hero-stat-label">Acoustique</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="stat-orch">—</div><div class="hero-stat-label">Orchestral</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="stat-elec">—</div><div class="hero-stat-label">Électro</div></div>
     <div class="hero-stat"><div class="hero-stat-num" id="stat-total">—</div><div class="hero-stat-label">Total</div></div>
   </div>
 </div>
 
 <div class="section" id="tracks-anchor">
-  <div class="section-eyebrow">Sélection Été</div>
-  <h2 class="section-title">Soleil · Voyage · Groove</h2>
-  <p class="section-sub">Des musiques lumineuses pour les séquences de saison : reportages en extérieur, carnets de voyage, sujets vacances et art de vivre. Grooves chaleureux, cordes acoustiques et couleurs du monde.</p>
-  
+  <div class="section-eyebrow">Sélection Rentrée</div>
+  <h2 class="section-title">Bureau · Business · Dynamisme</h2>
+  <p class="section-sub">Des musiques modernes et confiantes pour vos sujets de rentrée économique : reprise d'activité, vie de bureau, transformation digitale et nouveaux projets. Rythmes dynamiques, textures électro et orchestrations positives.</p>
+
   <div class="filter-bar">
     <button class="filter-pill active" onclick="setFilter('all',this)">Tous</button>
-    <button class="filter-pill" onclick="setFilter('World Music',this)">World Music</button>
+    <button class="filter-pill" onclick="setFilter('Orchestral',this)">Orchestral</button>
     <button class="filter-pill" onclick="setFilter('Pop Acoustique',this)">Pop Acoustique</button>
-    <button class="filter-pill" onclick="setFilter('Groovy',this)">Groovy</button>
-    <button class="filter-pill" onclick="setFilter('Reggae',this)">Reggae</button>
-    <button class="filter-pill" onclick="setFilter('Latino',this)">Latino</button>
+    <button class="filter-pill" onclick="setFilter('Électro',this)">Électro</button>
+    <button class="filter-pill" onclick="setFilter('Électro-Pop',this)">Électro-Pop</button>
+    <button class="filter-pill" onclick="setFilter('Neutre Positif',this)">Neutre Positif</button>
   </div>
 
   <div class="tracks-header">
@@ -239,24 +239,32 @@ footer a{color:#666;text-decoration:none}
 <audio id="audio"></audio>
 
 <script>
-/* Regle « L'ete » — dupliquee depuis index.html (bloc SELECTION « L'ETE »).
+/* Regle « Rentree » — dupliquee depuis index.html (bloc SELECTION « RENTREE »).
    Les tags de catalogue.json sont purement musicaux (mode, tonalite, tempo,
-   energie, humeur) : aucun tag thematique « soleil » ou « voyage » n'existe.
-   On croise donc playlist d'origine, humeur solaire et mots-cles de titre.
+   energie, humeur) : aucun tag thematique « bureau » ou « business » n'existe.
+   On croise donc playlist corporate, humeur confiante/dynamique et mots-cles
+   de titre, en excluant les playlists hors-sujet (suspense, action...).
    Toute evolution doit etre reportee dans index.html, qui alimente le
    compteur affiche dans le hero de l'accueil. */
-const ETE_PLAYLISTS = ['World Music','Pop Acoustique','Groovy','Neutre Positif','Latino','Reggae'];
-const ETE_MOODS = ['lumineux','positif','joyeux','festif'];
-const ETE_KW = ['sun','summer','beach','tropic','island','ocean','surf','palm','coco','bossa',
-  'samba','salsa','cuba','brasil','brazil','rio','carib','jamaic','holiday','plage','soleil',
-  'lagoon','paradise','breeze','sunset','sunrise','miami','ibiza','hawa','bali','tiki',
-  'calypso','chill','lounge','cocktail','riviera','azur'];
-function isEte(t){
+const RENTREE_PLAYLISTS = ['Neutre Positif','Pop Acoustique','Orchestral','Électro','Électro-Pop'];
+const RENTREE_MOODS_A = ['positif','lumineux'];
+const RENTREE_MOODS_B = ['énergique','équilibré','modéré','majeur'];
+const RENTREE_KW = ['corporate','business','professionnel','entreprise','company','meeting','success',
+  'achievement','growth','innovation','technology','digital','startup','enterprise','presentation',
+  'conference','motivation','inspir','future','progress','ambition','vision','strategy','confident'];
+const RENTREE_BLOCK_KW = ['fuck','shit','bitch'];
+const RENTREE_EXCLUDED_PLAYLISTS = ['Suspense','Action','Paranormal','Hard Rock','Burlesque','Romance',
+  'Ludique','Paname','Piano','Pizzicato','Country Blues','Swing Jazz'];
+function isRentree(t){
   const tags = t.tags || [];
-  if (tags.includes('sombre')) return false;
+  if (RENTREE_EXCLUDED_PLAYLISTS.includes(t.playlist)) return false;
+  if (tags.includes('sombre') || tags.includes('mélancolique') || tags.includes('tendu')) return false;
   const title = (t.title || '').toLowerCase();
-  if (ETE_KW.some(k => title.includes(k))) return true;
-  return ETE_PLAYLISTS.includes(t.playlist) && ETE_MOODS.some(m => tags.includes(m));
+  if (RENTREE_BLOCK_KW.some(b => title.includes(b))) return false;
+  if (RENTREE_KW.some(k => title.includes(k))) return true;
+  return RENTREE_PLAYLISTS.includes(t.playlist)
+    && RENTREE_MOODS_A.some(m => tags.includes(m))
+    && RENTREE_MOODS_B.some(m => tags.includes(m));
 }
 const PAGE_SIZE = 60;
 let allTracks = [], filteredTracks = [], currentFilter = 'all', currentIndex = -1;
@@ -269,13 +277,13 @@ fetch('./catalogue.json').then(r=>r.json()).then(data=>{
   // playlists, ce qui ferait diverger ce compteur de celui du hero d'accueil.
   const seen = new Set();
   allTracks = tracks.filter(t => {
-    if (t.playlist === 'samples' || !isEte(t)) return false;
+    if (t.playlist === 'samples' || !isRentree(t)) return false;
     const k = (t.title || '').toLowerCase().trim();
     if (seen.has(k)) return false;
     seen.add(k); return true;
   });
-  document.getElementById('stat-world').textContent = allTracks.filter(t=>t.playlist==='World Music').length;
-  document.getElementById('stat-acou').textContent = allTracks.filter(t=>t.playlist==='Pop Acoustique'||t.playlist==='Folk Acoustique').length;
+  document.getElementById('stat-orch').textContent = allTracks.filter(t=>t.playlist==='Orchestral').length;
+  document.getElementById('stat-elec').textContent = allTracks.filter(t=>t.playlist==='Électro'||t.playlist==='Électro-Pop').length;
   document.getElementById('stat-total').textContent = allTracks.length;
   applyFilter();
 }).catch(()=>{document.getElementById('track-list').innerHTML='<div class="loading">Erreur de chargement.</div>';});
@@ -359,17 +367,19 @@ function fmt(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.
   "Catalogue": "Catalog",
   "Nouveautés": "New Releases",
   "← Accueil": "← Home",
-  "Sélection de saison — Été 2026": "Season Selection — Summer 2026",
-  "été": "Summer",
-  "World Music": "World Music",
-  "La sélection OSM pour vos images de saison — guitares acoustiques, grooves solaires, percussions latines et couleurs du monde.": "The OSM selection for your seasonal visuals — acoustic guitars, sunny grooves, Latin percussion and world colours.",
+  "Sélection de saison — Rentrée 2026": "Season Selection — Back-to-Business 2026",
+  "rentrée": "Back-to-Business",
+  "Orchestral": "Orchestral",
+  "Électro": "Electronic",
+  "Électro-Pop": "Electro-Pop",
+  "Neutre Positif": "Neutral Positive",
+  "La sélection OSM pour vos sujets de rentrée économique — reprise d'activité, vie de bureau, transformation digitale et nouveaux défis professionnels.": "The OSM selection for your back-to-business features — economic recovery, office life, digital transformation and new professional challenges.",
   "▶ Tout écouter": "▶ Play all",
   "↓ Voir les morceaux": "↓ View tracks",
-  "Sélection Été": "Summer Selection",
-  "Soleil · Voyage · Groove": "Sun · Travel · Groove",
-  "Acoustique": "Acoustic",
+  "Sélection Rentrée": "Back-to-Business Selection",
+  "Bureau · Business · Dynamisme": "Office · Business · Momentum",
   "Pop Acoustique": "Acoustic Pop",
-  "Des musiques lumineuses pour les séquences de saison : reportages en extérieur, carnets de voyage, sujets vacances et art de vivre. Grooves chaleureux, cordes acoustiques et couleurs du monde.": "Bright music for seasonal sequences: outdoor reporting, travel diaries, holiday and lifestyle features. Warm grooves, acoustic strings and world colours.",
+  "Des musiques modernes et confiantes pour vos sujets de rentrée économique : reprise d'activité, vie de bureau, transformation digitale et nouveaux projets. Rythmes dynamiques, textures électro et orchestrations positives.": "Modern, confident music for your back-to-business features: economic recovery, office life, digital transformation and new projects. Dynamic rhythms, electro textures and upbeat orchestral scores.",
   "Tous": "All",
   "Morceaux": "Tracks",
   "· · · Chargement": "· · · Loading",
