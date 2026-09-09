@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cap – Ton tuteur d'orientation</title>
+<meta name="description" content="Cap, un tuteur IA bienveillant qui t'accompagne avant et pendant Parcoursup : analyse de ton profil, formations, établissements, débouchés et soutien rassurant.">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script>(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<style>
+:root{--red:#E50914;--accent:#1e88e5;--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--text:#111;--text2:#2c2c2c;--muted:#666;--border:rgba(0,0,0,0.1);--card-bg:#fff;--bg-header:rgba(246,246,246,0.98);--user-bubble:#1e88e5;--ai-bubble:#ffffff}
+[data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#fff;--text2:#d4d4d4;--muted:#999;--border:rgba(255,255,255,0.1);--card-bg:#1a1a1a;--bg-header:rgba(10,10,10,0.98);--user-bubble:#1565c0;--ai-bubble:#222}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.2s,color 0.2s}
+
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px;color:var(--text)}
+.header-right{display:flex;align-items:center;gap:8px}
+.btn-nav{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s;white-space:nowrap}
+.btn-nav:hover{border-color:#888;color:var(--text)}
+
+.hero{padding:104px 24px 40px;text-align:center;background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
+.hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:6px;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
+.hero-title{font-size:clamp(30px,4.5vw,54px);font-weight:900;letter-spacing:-1.5px;line-height:1;margin-bottom:18px}
+.hero-title span{color:var(--accent)}
+.hero-sub{font-size:15px;font-weight:300;color:var(--muted);max-width:620px;margin:0 auto;line-height:1.7}
+
+.wrap{max-width:820px;margin:0 auto;padding:24px 16px 80px}
+
+/* ---------- Questionnaire ---------- */
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:32px;box-shadow:0 6px 24px rgba(0,0,0,0.04)}
+.card-eyebrow{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.card-title{font-size:20px;font-weight:700;margin-bottom:6px;letter-spacing:-0.3px}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.6;font-weight:300;margin-bottom:26px}
+.field{margin-bottom:20px}
+.field label{display:block;font-size:12px;font-weight:600;margin-bottom:7px;color:var(--text2)}
+.field .hint{font-weight:400;color:var(--muted)}
+.field input[type=text],.field textarea,.field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--text);transition:border-color 0.15s}
+.field input[type=text]:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent)}
+.field textarea{resize:vertical;min-height:64px;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip-opt{border:1px solid var(--border);background:var(--bg);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);transition:all 0.15s;user-select:none}
+.chip-opt:hover{border-color:var(--accent)}
+.chip-opt.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.check-row{display:flex;align-items:flex-start;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer}
+.check-row input{margin-top:2px;width:16px;height:16px;accent-color:var(--accent);flex-shrink:0}
+.check-row span{font-size:12.5px;color:var(--text2);line-height:1.5}
+.btn-primary{width:100%;background:var(--accent);border:none;color:#fff;padding:14px;border-radius:10px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.15s;margin-top:8px}
+.btn-primary:hover{background:#1565c0}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+.reassure-note{margin-top:18px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6}
+
+/* ---------- Chat ---------- */
+.chat-wrap{display:none;flex-direction:column;height:calc(100vh - 200px);min-height:460px}
+.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.chat-title{display:flex;align-items:center;gap:12px}
+.cap-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#1e88e5,#42a5f5);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.chat-title h2{font-size:16px;font-weight:700}
+.chat-title p{font-size:11.5px;color:var(--muted);font-weight:300}
+.chat-box{flex:1;overflow-y:auto;background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.msg{display:flex;gap:10px;max-width:88%;animation:pop 0.25s ease}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg .bubble{padding:12px 15px;border-radius:14px;font-size:13.5px;line-height:1.65}
+.msg.ai .bubble{background:var(--ai-bubble);border:1px solid var(--border);border-top-left-radius:4px}
+.msg.user .bubble{background:var(--user-bubble);color:#fff;border-top-right-radius:4px}
+.msg .bubble strong{font-weight:700}
+.msg .bubble ul{margin:6px 0 6px 18px;padding:0}
+.msg .bubble li{margin:3px 0}
+.msg .bubble p{margin:6px 0}
+.msg .bubble p:first-child{margin-top:0}
+.msg .bubble p:last-child{margin-bottom:0}
+.avatar-mini{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
+.avatar-mini.ai{background:linear-gradient(135deg,#1e88e5,#42a5f5)}
+.avatar-mini.user{background:var(--bg3);border:1px solid var(--border)}
+.profile-note{align-self:center;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:11.5px;color:var(--muted);max-width:90%;text-align:center;line-height:1.6}
+.typing{display:inline-flex;gap:4px;align-items:center}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite}
+.typing span:nth-child(2){animation-delay:0.2s}
+.typing span:nth-child(3){animation-delay:0.4s}
+@keyframes blink{0%,60%,100%{opacity:0.25}30%{opacity:1}}
+
+.quick-chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.quick-chip{border:1px solid var(--border);background:var(--card-bg);border-radius:20px;padding:7px 13px;font-size:11.5px;font-weight:500;cursor:pointer;color:var(--text2);transition:all 0.15s}
+.quick-chip:hover{border-color:var(--accent);color:var(--accent)}
+.quick-chip.reassure{border-color:rgba(229,9,20,0.35);color:var(--red)}
+.quick-chip.reassure:hover{background:var(--red);color:#fff;border-color:var(--red)}
+
+.composer{display:flex;gap:10px;margin-top:4px}
+.composer textarea{flex:1;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'Montserrat',sans-serif;font-size:13.5px;color:var(--text);resize:none;max-height:120px;line-height:1.5}
+.composer textarea:focus{outline:none;border-color:var(--accent)}
+.composer button{background:var(--accent);border:none;color:#fff;width:46px;border-radius:12px;font-size:18px;cursor:pointer;flex-shrink:0;transition:background 0.15s}
+.composer button:hover{background:#1565c0}
+.composer button:disabled{opacity:0.5;cursor:not-allowed}
+.restart{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 12px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;font-family:'Montserrat',sans-serif}
+.restart:hover{color:var(--text);border-color:#888}
+.disclaimer{font-size:10.5px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6;max-width:640px;margin-left:auto;margin-right:auto}
+.disclaimer a{color:var(--accent);text-decoration:none}
+
+footer{text-align:center;padding:24px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--accent)}
+
+@media(max-width:720px){
+  header{padding:0 16px}
+  .hero{padding:88px 16px 28px}
+  .wrap{padding:16px 12px 60px}
+  .card{padding:22px}
+  .msg{max-width:94%}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">ORIGINAL SCORES MUSIC</div>
+  </a>
+  <div class="header-right">
+    <a class="btn-nav" href="index.html">← Accueil</a>
+    <button class="btn-nav" id="btn-theme" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Orientation · Parcoursup</div>
+  <h1 class="hero-title">Fais le point avec <span>Cap</span></h1>
+  <p class="hero-sub">Ton tuteur bienveillant qui t'aide à y voir clair avant et pendant Parcoursup. Réponds à quelques questions : Cap analyse ton profil, te propose des formations, des établissements et plein de débouchés — et te rassure quand tu en as besoin. 🌱</p>
+</div>
+
+<div class="wrap">
+
+  <!-- ÉTAPE 1 : questionnaire -->
+  <div class="card" id="quiz-card">
+    <div class="card-eyebrow">Étape 1 · Faisons connaissance</div>
+    <div class="card-title">Parle-moi un peu de toi</div>
+    <div class="card-desc">Rien n'est obligatoire — remplis ce que tu veux. Plus tu m'en dis, plus mes conseils seront personnalisés. Et rassure-toi : il n'y a pas de mauvaise réponse. 🤝</div>
+
+    <form id="quiz-form">
+      <div class="field">
+        <label>Ton prénom <span class="hint">(facultatif)</span></label>
+        <input type="text" id="f-prenom" placeholder="Ex : Léa" maxlength="40" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Où en es-tu dans tes études ?</label>
+        <div class="chips" id="f-niveau" data-single="1">
+          <div class="chip-opt" data-val="Seconde">Seconde</div>
+          <div class="chip-opt" data-val="Première">Première</div>
+          <div class="chip-opt" data-val="Terminale">Terminale</div>
+          <div class="chip-opt" data-val="Bac +1 / étudiant·e">Étudiant·e</div>
+          <div class="chip-opt" data-val="En réorientation">En réorientation</div>
+          <div class="chip-opt" data-val="Autre situation">Autre</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Ta filière / voie</label>
+        <div class="chips" id="f-filiere" data-single="1">
+          <div class="chip-opt" data-val="Générale">Générale</div>
+          <div class="chip-opt" data-val="Technologique">Technologique</div>
+          <div class="chip-opt" data-val="Professionnelle">Professionnelle</div>
+          <div class="chip-opt" data-val="Je ne sais pas encore">Je ne sais pas</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Tes spécialités ou options <span class="hint">(si tu en as)</span></label>
+        <input type="text" id="f-specialites" placeholder="Ex : Maths, SES, HGGSP…" maxlength="200" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Les matières où tu te sens le/la plus à l'aise, ou que tu préfères</label>
+        <input type="text" id="f-matieres" placeholder="Ex : j'adore les langues et l'histoire" maxlength="200" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Ce qui t'intéresse dans la vie <span class="hint">(passions, thèmes…)</span></label>
+        <input type="text" id="f-interets" placeholder="Ex : le sport, l'environnement, le numérique, aider les gens…" maxlength="250" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Ce que tu aimerais faire plus tard <span class="hint">(même si c'est flou !)</span></label>
+        <textarea id="f-projet" placeholder="Ex : « Je ne sais pas du tout » ou « peut-être quelque chose avec les animaux »…" maxlength="500"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Es-tu prêt·e à partir loin pour tes études ?</label>
+        <div class="chips" id="f-mobilite" data-single="1">
+          <div class="chip-opt" data-val="Je préfère rester près de chez moi">Près de chez moi</div>
+          <div class="chip-opt" data-val="Dans ma région">Ma région</div>
+          <div class="chip-opt" data-val="Partout en France">Partout en France</div>
+          <div class="chip-opt" data-val="Même à l'étranger">Même à l'étranger</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="check-row">
+          <input type="checkbox" id="f-perdu">
+          <span>Je me sens un peu <strong>perdu·e</strong> ou stressé·e par l'orientation, et j'aimerais être rassuré·e.</span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn-primary" id="quiz-submit">Discuter avec Cap →</button>
+      <p class="reassure-note">Cap est là pour t'aider, pas pour te juger. Tu peux revenir modifier tes réponses quand tu veux.</p>
+    </form>
+  </div>
+
+  <!-- ÉTAPE 2 : chat -->
+  <div class="chat-wrap" id="chat-wrap">
+    <div class="chat-head">
+      <div class="chat-title">
+        <div class="cap-avatar">🧭</div>
+        <div>
+          <h2>Cap</h2>
+          <p>Ton tuteur d'orientation</p>
+        </div>
+      </div>
+      <button class="restart" id="btn-restart">↻ Recommencer</button>
+    </div>
+
+    <div class="chat-box" id="chat-box"></div>
+
+    <div class="quick-chips" id="quick-chips">
+      <div class="quick-chip" data-msg="Quelles formations pourraient me correspondre ?">🎓 Quelles formations ?</div>
+      <div class="quick-chip" data-msg="Quels débouchés et métiers possibles ?">💼 Quels débouchés ?</div>
+      <div class="quick-chip" data-msg="Dans quels types d'établissements je peux aller ?">🏫 Quels établissements ?</div>
+      <div class="quick-chip" data-msg="Je me sens un peu perdu·e, peux-tu m'aider à y voir plus clair ?">🧭 Je suis perdu·e</div>
+      <div class="quick-chip reassure" data-msg="Je stresse beaucoup en ce moment avec l'orientation. Peux-tu me rassurer ?">💙 Rassure-moi</div>
+    </div>
+
+    <div class="composer">
+      <textarea id="composer-input" rows="1" placeholder="Écris ta question à Cap…" maxlength="2000"></textarea>
+      <button id="composer-send" title="Envoyer">➤</button>
+    </div>
+    <p class="disclaimer">Cap est une IA : ses conseils sont des pistes, pas des vérités absolues. Vérifie toujours les infos officielles sur <a href="https://www.parcoursup.fr" target="_blank" rel="noopener">parcoursup.fr</a> et <a href="https://www.onisep.fr" target="_blank" rel="noopener">onisep.fr</a>. En cas de mal-être, parles-en à un adulte de confiance, au CPE ou appelle le 3114 (gratuit, 24h/24).</p>
+  </div>
+
+</div>
+
+<footer>
+  © Original Scores Music · <a href="index.html">Accueil</a> · Cap, tuteur d'orientation
+</footer>
+
+<script>
+/* ====== Configuration ====== */
+const SUPABASE_URL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+const FN_URL = SUPABASE_URL + '/functions/v1/tuteur-orientation';
+const STORAGE_KEY = 'cap-orientation-session';
+
+/* ====== Thème ====== */
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('osm-theme', next);
+  document.getElementById('btn-theme').textContent = next === 'dark' ? '☀️' : '🌙';
+}
+(function(){
+  const t = document.documentElement.getAttribute('data-theme');
+  document.getElementById('btn-theme').textContent = t === 'dark' ? '☀️' : '🌙';
+})();
+
+/* ====== Sélection par chips (choix unique) ====== */
+document.querySelectorAll('.chips[data-single] .chip-opt').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const parent = chip.parentElement;
+    const was = chip.classList.contains('on');
+    parent.querySelectorAll('.chip-opt').forEach(c => c.classList.remove('on'));
+    if (!was) chip.classList.add('on');
+  });
+});
+function chipVal(id){ const el = document.querySelector('#'+id+' .chip-opt.on'); return el ? el.dataset.val : ''; }
+
+/* ====== État ====== */
+let profile = {};
+let messages = [];   // { role, content }
+let busy = false;
+
+/* ====== Rendu texte (markdown-léger, sécurisé) ====== */
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function renderText(raw){
+  let t = escapeHtml(raw);
+  t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  const lines = t.split('\n');
+  let html = '', inList = false;
+  for (let line of lines){
+    const li = line.match(/^\s*[-•*]\s+(.*)$/);
+    if (li){
+      if (!inList){ html += '<ul>'; inList = true; }
+      html += '<li>' + li[1] + '</li>';
+    } else {
+      if (inList){ html += '</ul>'; inList = false; }
+      if (line.trim() === '') continue;
+      html += '<p>' + line + '</p>';
+    }
+  }
+  if (inList) html += '</ul>';
+  return html || '<p></p>';
+}
+
+/* ====== UI chat ====== */
+const chatBox = document.getElementById('chat-box');
+function addBubble(role, initialHtml){
+  const wrap = document.createElement('div');
+  wrap.className = 'msg ' + (role === 'user' ? 'user' : 'ai');
+  const av = document.createElement('div');
+  av.className = 'avatar-mini ' + (role === 'user' ? 'user' : 'ai');
+  av.textContent = role === 'user' ? '🙂' : '🧭';
+  const bub = document.createElement('div');
+  bub.className = 'bubble';
+  bub.innerHTML = initialHtml;
+  wrap.appendChild(av); wrap.appendChild(bub);
+  chatBox.appendChild(wrap);
+  chatBox.scrollTop = chatBox.scrollHeight;
+  return bub;
+}
+function addProfileNote(text){
+  const n = document.createElement('div');
+  n.className = 'profile-note';
+  n.textContent = text;
+  chatBox.appendChild(n);
+}
+
+/* ====== Persistance ====== */
+function save(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ profile, messages })); } catch(e){}
+}
+function clearSession(){
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+}
+
+/* ====== Appel streaming à l'Edge Function ====== */
+async function streamReply(){
+  if (busy) return;
+  busy = true;
+  document.getElementById('composer-send').disabled = true;
+
+  const bub = addBubble('ai', '<span class="typing"><span></span><span></span><span></span></span>');
+  let acc = '';
+  let firstToken = true;
+
+  try {
+    const resp = await fetch(FN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'apikey': SUPABASE_KEY
+      },
+      body: JSON.stringify({ profile, messages })
+    });
+
+    if (!resp.ok || !resp.body){
+      let detail = '';
+      try { detail = (await resp.json()).error || ''; } catch(e){}
+      throw new Error(detail || ('Erreur ' + resp.status));
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true){
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      let sep;
+      while ((sep = buffer.indexOf('\n\n')) !== -1){
+        const chunk = buffer.slice(0, sep);
+        buffer = buffer.slice(sep + 2);
+        for (const line of chunk.split('\n')){
+          const l = line.trim();
+          if (!l.startsWith('data:')) continue;
+          const payload = l.slice(5).trim();
+          if (!payload) continue;
+          let evt;
+          try { evt = JSON.parse(payload); } catch(e){ continue; }
+          if (evt.text){
+            if (firstToken){ bub.innerHTML = ''; firstToken = false; }
+            acc += evt.text;
+            bub.innerHTML = renderText(acc);
+            chatBox.scrollTop = chatBox.scrollHeight;
+          } else if (evt.error){
+            throw new Error(evt.error);
+          }
+        }
+      }
+    }
+
+    if (!acc.trim()){
+      bub.innerHTML = renderText("Désolé, je n'ai pas réussi à répondre. Peux-tu reformuler ? 🙏");
+    } else {
+      messages.push({ role: 'assistant', content: acc });
+      save();
+    }
+  } catch (e){
+    bub.innerHTML = renderText("Oups, je n'arrive pas à te répondre pour le moment (" + (e.message || e) + "). Réessaie dans un instant. 💙");
+  } finally {
+    busy = false;
+    document.getElementById('composer-send').disabled = false;
+  }
+}
+
+/* ====== Envoi d'un message ====== */
+function sendUserMessage(text){
+  if (busy) return;
+  const t = (text || '').trim();
+  if (!t) return;
+  addBubble('user', renderText(t));
+  messages.push({ role: 'user', content: t });
+  save();
+  streamReply();
+}
+
+/* ====== Démarrage du chat ====== */
+function startChat(kickoff){
+  document.getElementById('quiz-card').style.display = 'none';
+  document.getElementById('chat-wrap').style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Récapitulatif du profil visible dans le fil.
+  const parts = [];
+  if (profile.prenom) parts.push(profile.prenom);
+  if (profile.niveau) parts.push(profile.niveau);
+  if (profile.filiere) parts.push('voie ' + profile.filiere.toLowerCase());
+  addProfileNote('Profil transmis à Cap' + (parts.length ? ' · ' + parts.join(' · ') : ''));
+
+  if (kickoff){
+    const first = "Bonjour Cap ! Je viens de remplir le questionnaire. Peux-tu analyser mon profil, me rassurer si besoin, et me proposer des formations, des types d'établissements et des débouchés qui pourraient me correspondre ?";
+    messages.push({ role: 'user', content: first });
+    save();
+    streamReply();
+  }
+}
+
+/* ====== Formulaire ====== */
+document.getElementById('quiz-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  profile = {
+    prenom: document.getElementById('f-prenom').value.trim(),
+    niveau: chipVal('f-niveau'),
+    filiere: chipVal('f-filiere'),
+    specialites: document.getElementById('f-specialites').value.trim(),
+    matieres: document.getElementById('f-matieres').value.trim(),
+    interets: document.getElementById('f-interets').value.trim(),
+    projet: document.getElementById('f-projet').value.trim(),
+    mobilite: chipVal('f-mobilite'),
+    perdu: document.getElementById('f-perdu').checked
+  };
+  messages = [];
+  startChat(true);
+});
+
+/* ====== Composer ====== */
+const input = document.getElementById('composer-input');
+input.addEventListener('input', () => {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+});
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault();
+    sendUserMessage(input.value);
+    input.value = ''; input.style.height = 'auto';
+  }
+});
+document.getElementById('composer-send').addEventListener('click', () => {
+  sendUserMessage(input.value);
+  input.value = ''; input.style.height = 'auto';
+});
+document.querySelectorAll('.quick-chip').forEach(c => {
+  c.addEventListener('click', () => sendUserMessage(c.dataset.msg));
+});
+
+/* ====== Recommencer ====== */
+document.getElementById('btn-restart').addEventListener('click', () => {
+  if (!confirm('Recommencer depuis le début ? Ta conversation actuelle sera effacée.')) return;
+  clearSession();
+  messages = []; profile = {};
+  chatBox.innerHTML = '';
+  document.getElementById('chat-wrap').style.display = 'none';
+  document.getElementById('quiz-card').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ====== Reprise d'une session existante ====== */
+(function restore(){
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e){}
+  if (saved && saved.messages && saved.messages.length){
+    profile = saved.profile || {};
+    messages = saved.messages;
+    startChat(false);
+    // Rejoue le fil (on masque le premier message « kickoff » automatique).
+    messages.forEach((m, i) => {
+      if (i === 0 && m.role === 'user') return;
+      addBubble(m.role, renderText(m.content));
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+})();
+</script>
+</body>
+</html>
