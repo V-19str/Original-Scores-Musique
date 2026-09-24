@@ -34,9 +34,11 @@ const API_KEY = Deno.env.get("CLOUDINARY_API_KEY") ?? "";
 const API_SECRET = Deno.env.get("CLOUDINARY_API_SECRET") ?? "";
 const FOLDER = (Deno.env.get("CLOUDINARY_FOLDER") ?? "").trim();
 
+const ADMIN_SECRET = "OSM_ADMIN_2026";
+
 const cors = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-admin-secret",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
@@ -86,17 +88,15 @@ Deno.serve(async (req) => {
   }
 
   // 1. Vérifier que l'appelant est bien l'admin OSM.
-  const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
-  if (!token) return json({ error: "Token d'authentification manquant." }, 401);
-
-  const authClient = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_ANON_KEY")!,
-  );
-  const { data: userData, error: userErr } = await authClient.auth.getUser(token);
-  if (userErr || !userData?.user) return json({ error: "Session invalide ou expirée." }, 401);
-  if (userData.user.email?.toLowerCase() !== ADMIN_EMAIL) {
-    return json({ error: "Accès refusé : réservé à l'administrateur." }, 403);
+  //    Deux modes : secret statique (x-admin-secret) ou JWT Supabase.
+  const adminSecret = req.headers.get("x-admin-secret") ?? "";
+  if (adminSecret !== ADMIN_SECRET) {
+    const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+    if (!token) return json({ error: "Authentification requise." }, 401);
+    const authClient = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!);
+    const { data: userData, error: userErr } = await authClient.auth.getUser(token);
+    if (userErr || !userData?.user) return json({ error: "Session invalide ou expirée." }, 401);
+    if (userData.user.email?.toLowerCase() !== ADMIN_EMAIL) return json({ error: "Accès refusé." }, 403);
   }
 
   // 2. Titre du morceau, qui donne l'id public.

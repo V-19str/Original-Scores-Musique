@@ -24,25 +24,14 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; min-height: 100vh; }
 
-/* ── PASSWORD SCREEN ── */
-#pw-screen { position: fixed; inset: 0; background: #090909; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; z-index: 9999; }
-.pw-logo { display: flex; align-items: center; gap: 12px; }
-.pw-mark { background: var(--red); color: #fff; font-size: 14px; font-weight: 700; letter-spacing: 2px; padding: 6px 10px; border-radius: 3px; }
-.pw-name { font-size: 15px; font-weight: 600; letter-spacing: 3px; }
-.pw-badge { background: rgba(229,9,20,0.15); border: 1px solid rgba(229,9,20,0.3); color: var(--red); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-.pw-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 42px; width: 360px; text-align: center; }
-.pw-title { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
-.pw-sub { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
-.pw-input { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 14px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 14px; transition: border-color 0.2s; }
-.pw-input:focus { border-color: var(--red); }
-.pw-btn { width: 100%; background: var(--red); color: #fff; border: none; padding: 13px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; border-radius: 4px; text-transform: uppercase; transition: background 0.15s; }
-.pw-btn:hover { background: #c4070f; }
-.pw-btn:disabled { background: var(--bg4); color: var(--muted); cursor: not-allowed; }
-.pw-error { font-size: 11px; color: var(--red); margin-top: 10px; display: none; }
+
+/* ── ACTION BUTTON ── */
+.btn-action { background: var(--red); color: #fff; border: none; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; border-radius: 4px; text-transform: uppercase; transition: background 0.15s; }
+.btn-action:hover { background: #c4070f; }
+.btn-action:disabled { background: var(--bg4); color: var(--muted); cursor: not-allowed; }
 
 /* ── MAIN ── */
-#main { display: none; }
-#main.visible { display: block; }
+#main { display: block; }
 
 header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border); padding: 0 48px; height: 68px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
 .logo { display: flex; align-items: center; gap: 12px; }
@@ -190,25 +179,6 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
 </head>
 <body>
 
-<!-- PASSWORD SCREEN -->
-<div id="pw-screen">
-  <div class="pw-logo">
-    <div class="pw-mark">OSM</div>
-    <div class="pw-name">ORIGINAL SCORES MUSIC</div>
-  </div>
-  <div class="pw-badge">Administration</div>
-  <div class="pw-box">
-    <div class="pw-title">Connexion Admin</div>
-    <div class="pw-sub">Réservé à Vladimir Streiff</div>
-    <input type="password" class="pw-input" id="pw-pw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkAdmin()" style="margin-bottom:14px">
-    <button class="pw-btn" id="pw-btn" onclick="checkAdmin()">Se connecter</button>
-    <div class="pw-error" id="pw-error"></div>
-    <div style="margin-top:12px;text-align:center">
-      <a href="#" onclick="adminForgot();return false;" style="font-size:11px;color:#888;text-decoration:none;transition:color 0.15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">Mot de passe oublié ?</a>
-    </div>
-  </div>
-</div>
-
 <!-- MAIN -->
 <div id="main">
 
@@ -222,7 +192,6 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
     <a class="btn-sm btn-sacem" href="admin-sacem.html">📊 Calculateur SACEM</a>
     <button class="btn-sm" onclick="refreshData()">↺ Actualiser</button>
     <a class="btn-sm" href="index.html">← Catalogue</a>
-    <button class="btn-sm btn-red-sm" onclick="adminLogout()">Déconnexion</button>
   </div>
 </header>
 
@@ -400,7 +369,7 @@ create or replace trigger on_auth_user_created
       <label style="display:block;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Nom</label>
       <input type="text" id="approve-nom" class="search-admin" style="width:100%" placeholder="Dupont">
     </div>
-    <button class="pw-btn" id="approve-btn" style="width:auto;white-space:nowrap;padding:11px 20px" onclick="approveClient()">✅ Approuver et envoyer l'invitation</button>
+    <button class="btn-action" id="approve-btn" style="width:auto;white-space:nowrap;padding:11px 20px" onclick="approveClient()">✅ Approuver et envoyer l'invitation</button>
   </div>
   <div id="approve-result" style="font-size:12px;margin-top:10px;display:none;padding:8px 12px;border-radius:4px"></div>
 </div>
@@ -436,7 +405,7 @@ create or replace trigger on_auth_user_created
         <input type="text" id="up-tags" class="search-admin" style="width:100%" placeholder="majeur, modéré, positif…" list="up-tags-list">
         <datalist id="up-tags-list"></datalist>
       </div>
-      <button class="pw-btn" id="up-btn" style="width:auto;white-space:nowrap;padding:11px 20px" onclick="upSubmit()">⬆ Envoyer le morceau</button>
+      <button class="btn-action" id="up-btn" style="width:auto;white-space:nowrap;padding:11px 20px" onclick="upSubmit()">⬆ Envoyer le morceau</button>
     </div>
     <div id="up-progress-wrap" style="display:none;margin-top:14px">
       <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
@@ -508,86 +477,23 @@ const SUPABASE_URL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const ADMIN_EMAIL = 'vladimirstreiff@gmail.com';
+const ADMIN_SECRET = 'OSM_ADMIN_2026';
 
 let allProfiles = [], allFavorites = [], allDownloads = [], allPlays = [], topTracks = [];
 let activeFilter = 'all';
 
-// Detail d'un client (favoris/telechargements/ecoutes complets), charge a la
-// demande au depliage de sa fiche et garde en cache pour les depliages
-// suivants. get_admin_data ne renvoie que les 200 ecoutes les plus recentes :
-// tout charger d'entree n'aurait servi qu'a ralentir l'ouverture du dashboard.
 const clientDetailCache = {};
 
-// ── AUTH ──────────────────────────────────────────────────────────
-async function checkAdmin() {
-  const pw = document.getElementById('pw-pw').value;
-  const btn = document.getElementById('pw-btn');
-
-  document.getElementById('pw-error').style.display = 'none';
-  if (!pw) { showPwErr('Entrez votre mot de passe.'); return; }
-
-  btn.disabled = true; btn.textContent = 'Connexion...';
-  const { data, error } = await sb.auth.signInWithPassword({ email: ADMIN_EMAIL, password: pw });
-  btn.disabled = false; btn.textContent = 'Se connecter';
-
-  if (error) { showPwErr('Mot de passe incorrect.'); return; }
-  openAdmin();
-}
-
-function showPwErr(msg) {
-  const el = document.getElementById('pw-error');
-  el.textContent = msg; el.style.display = 'block';
-}
-
-async function adminForgot() {
-  const email = ADMIN_EMAIL;
-  document.getElementById('pw-error').style.display = 'none';
-  const btn = document.getElementById('pw-btn');
-  btn.disabled = true; btn.textContent = 'Envoi...';
-  try {
-    const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://osm-music.fr/admin.html'
-    });
-    if (error) throw error;
-    showPwErr('Email envoyé à ' + email + ' — vérifiez votre boîte (et les spams)');
-    document.getElementById('pw-error').style.color = '#22c55e';
-  } catch (err) {
-    showPwErr('Erreur : ' + (err.message || 'impossible d\'envoyer l\'email'));
-    document.getElementById('pw-error').style.color = 'var(--red)';
-  } finally {
-    btn.disabled = false; btn.textContent = 'Se connecter';
-  }
-}
-
-async function adminLogout() {
-  await sb.auth.signOut();
-  document.getElementById('pw-screen').style.display = 'flex';
-  document.getElementById('main').classList.remove('visible');
-  document.getElementById('pw-pw').value = '';
-}
-
-function openAdmin() {
-  document.getElementById('pw-screen').style.display = 'none';
-  document.getElementById('main').classList.add('visible');
-  loadAdminData();
-  reclInit();
-  upInit();
-}
-
-async function initAdmin() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session?.user?.email === ADMIN_EMAIL) openAdmin();
-}
-
-initAdmin();
+// Pas d'écran de connexion — accès direct
+loadAdminData();
+reclInit();
+upInit();
 
 // ── DATA ──────────────────────────────────────────────────────────
 async function loadAdminData() {
   document.getElementById('clients-list').innerHTML = '<div class="loading-msg">· · · Chargement des données clients</div>';
 
-  // Sans argument : la fonction lit l'email dans le JWT de la session.
-  const { data, error } = await sb.rpc('get_admin_data');
+  const { data, error } = await sb.rpc('get_admin_data', { admin_pwd: ADMIN_SECRET });
 
   if (error) {
     if (error.message.includes('does not exist') || error.message.includes('function')) {
@@ -889,10 +795,6 @@ async function approveClient() {
     showApproveResult('Entrez un email valide.', false); return;
   }
 
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session || session.user?.email !== ADMIN_EMAIL) {
-    showApproveResult('Session admin introuvable. Reconnectez-vous.', false); return;
-  }
 
   btn.disabled = true;
   const label = btn.textContent;
@@ -902,7 +804,7 @@ async function approveClient() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
+        'x-admin-secret': ADMIN_SECRET,
         'apikey': SUPABASE_KEY,
       },
       body: JSON.stringify({ email, prenom, nom }),
@@ -1002,15 +904,13 @@ function renderReqs() {
 async function reqApprove(id) {
   const r = reqRows.find(x => x.id === id);
   if (!r) return;
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session || session.user?.email !== ADMIN_EMAIL) { showToast('Session admin introuvable. Reconnectez-vous.'); return; }
   showToast('Envoi de l\'invitation…');
   try {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/inviter-client`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
+        'x-admin-secret': ADMIN_SECRET,
         'apikey': SUPABASE_KEY,
       },
       body: JSON.stringify({ email: r.email, prenom: r.prenom || '', nom: r.nom || '' }),
@@ -1176,10 +1076,6 @@ async function upSubmit() {
   const bpm = bpmRaw ? parseInt(bpmRaw, 10) : null;
   if (bpmRaw && (!bpm || bpm < 20 || bpm > 300)) { showUpResult('BPM invalide (20–300).', false); return; }
 
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session || session.user?.email !== ADMIN_EMAIL) {
-    showUpResult('Session admin introuvable. Reconnectez-vous.', false); return;
-  }
 
   btn.disabled = true;
   const label = btn.textContent;
@@ -1191,7 +1087,7 @@ async function upSubmit() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
+        'x-admin-secret': ADMIN_SECRET,
         'apikey': SUPABASE_KEY,
       },
       body: JSON.stringify({ title }),

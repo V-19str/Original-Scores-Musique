@@ -13,10 +13,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const ADMIN_EMAIL = "vladimirstreiff@gmail.com";
 const REDIRECT_TO = "https://osm-music.fr/finaliser-inscription.html";
 
+const ADMIN_SECRET = "OSM_ADMIN_2026";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-admin-secret",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
@@ -40,21 +42,15 @@ Deno.serve(async (req) => {
   const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
   // 1. Vérifier que l'appelant est bien l'admin OSM
-  const authHeader = req.headers.get("Authorization") ?? "";
-  const token = authHeader.replace(/^Bearer\s+/i, "");
-  if (!token) {
-    return json({ error: "Token d'authentification manquant." }, 401);
-  }
-
-  const authClient = createClient(SUPABASE_URL, ANON_KEY);
-  const { data: userData, error: userErr } = await authClient.auth.getUser(
-    token,
-  );
-  if (userErr || !userData?.user) {
-    return json({ error: "Session invalide ou expirée." }, 401);
-  }
-  if (userData.user.email?.toLowerCase() !== ADMIN_EMAIL) {
-    return json({ error: "Accès refusé : réservé à l'administrateur." }, 403);
+  //    Deux modes : secret statique (x-admin-secret) ou JWT Supabase.
+  const adminSecret = req.headers.get("x-admin-secret") ?? "";
+  if (adminSecret !== ADMIN_SECRET) {
+    const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+    if (!token) return json({ error: "Authentification requise." }, 401);
+    const authClient = createClient(SUPABASE_URL, ANON_KEY);
+    const { data: userData, error: userErr } = await authClient.auth.getUser(token);
+    if (userErr || !userData?.user) return json({ error: "Session invalide ou expirée." }, 401);
+    if (userData.user.email?.toLowerCase() !== ADMIN_EMAIL) return json({ error: "Accès refusé." }, 403);
   }
 
   // 2. Lire le corps de la requête
