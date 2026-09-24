@@ -204,6 +204,9 @@ header { background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border)
     <input type="password" class="pw-input" id="pw-pw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkAdmin()" style="margin-bottom:14px">
     <button class="pw-btn" id="pw-btn" onclick="checkAdmin()">Se connecter</button>
     <div class="pw-error" id="pw-error"></div>
+    <div style="margin-top:12px;text-align:center">
+      <a href="#" onclick="adminForgot();return false;" style="font-size:11px;color:#888;text-decoration:none;transition:color 0.15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">Mot de passe oublié ?</a>
+    </div>
   </div>
 </div>
 
@@ -541,6 +544,26 @@ async function checkAdmin() {
 function showPwErr(msg) {
   const el = document.getElementById('pw-error');
   el.textContent = msg; el.style.display = 'block';
+}
+
+async function adminForgot() {
+  const email = document.getElementById('pw-email').value.trim() || ADMIN_EMAIL;
+  document.getElementById('pw-error').style.display = 'none';
+  const btn = document.getElementById('pw-btn');
+  btn.disabled = true; btn.textContent = 'Envoi...';
+  try {
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://osm-music.fr/admin.html'
+    });
+    if (error) throw error;
+    showPwErr('Email envoyé à ' + email + ' — vérifiez votre boîte (et les spams)');
+    document.getElementById('pw-error').style.color = '#22c55e';
+  } catch (err) {
+    showPwErr('Erreur : ' + (err.message || 'impossible d\'envoyer l\'email'));
+    document.getElementById('pw-error').style.color = 'var(--red)';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Se connecter';
+  }
 }
 
 async function adminLogout() {
