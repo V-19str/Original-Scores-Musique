@@ -155,6 +155,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
       <div class="hdr-name">DIAPASON</div>
     </div>
     <div class="hdr-spacer"></div>
+    <span id="hdr-cat" style="font-size:10px;color:var(--muted);margin-right:8px"></span>
     <span class="hdr-user" id="hdr-user"></span>
     <button class="hdr-btn" onclick="logout()">Déconnexion</button>
   </header>
@@ -347,6 +348,16 @@ async function init() {
   const app = document.getElementById('app');
   app.style.display = 'flex';
   app.style.flexDirection = 'column';
+
+  // Indicateur catalogue dans le header
+  const catBadge = document.getElementById('hdr-cat');
+  if (catBadge) catBadge.textContent = catalogue.length ? `📀 ${catalogue.length} titres OSM` : '⚠️ Catalogue non chargé';
+
+  // Drag-and-drop global sur toute la page
+  document.addEventListener('dragover', e => { e.preventDefault(); document.getElementById('dropzone').classList.add('over'); showTab('import'); });
+  document.addEventListener('dragleave', e => { if (!e.relatedTarget) document.getElementById('dropzone').classList.remove('over'); });
+  document.addEventListener('drop', e => { e.preventDefault(); document.getElementById('dropzone').classList.remove('over'); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+
   renderRules();
   renderBatch();
 }
@@ -413,7 +424,9 @@ async function handleFile(file) {
     document.getElementById('parse-progress').style.display = 'none';
     renderCueList();
     updateBadge();
-    toast(`${cues.length} cue${cues.length > 1 ? 's' : ''} importé${cues.length > 1 ? 's' : ''}`, 'green');
+    const matched = matches.filter(m=>m.track).length;
+    toast(`${cues.length} cue${cues.length>1?'s':''} importé${cues.length>1?'s':''} — ${matched} correspondance${matched>1?'s':''} trouvée${matched>1?'s':''}`, 'green');
+    showTab('match');
   }, 600);
 }
 
@@ -438,15 +451,26 @@ function parseEDL(text) {
   for (const line of lines) {
     const l = line.trim();
     if (!l || /^(TITLE|FCM):/.test(l)) continue;
-    const ev = l.match(/^(\d{3,4})\s+\S+\s+\S+\s+C\s+\S+\s+\S+\s+(\S+)\s+(\S+)/);
-    if (ev) { cur = { event:ev[1], tc_in:ev[2], tc_out:ev[3], title:'', source:'EDL' }; cues.push(cur); continue; }
+    const ev = l.match(/^(\d{3,4})\s+(\S+)\s+\S+\s+C\s+\S+\s+\S+\s+(\S+)\s+(\S+)/);
+    if (ev) {
+      // ev[2]=source/reel, ev[3]=tc_in_rec, ev[4]=tc_out_rec
+      const srcName = ev[2].replace(/[_\-]+/g,' ').replace(/\.[a-z0-9]+$/i,'').trim();
+      cur = { event:ev[1], tc_in:ev[3], tc_out:ev[4], title:'', srcFallback: srcName !== 'AX' && srcName !== 'BL' ? srcName : '', source:'EDL' };
+      cues.push(cur);
+      continue;
+    }
     if (cur) {
-      for (const pfx of ['* FROM CLIP NAME:','* CLIP NAME:','* SOURCE FILE:']) {
+      for (const pfx of ['* FROM CLIP NAME:','* CLIP NAME:','* SOURCE FILE:','* NAME:']) {
         if (l.startsWith(pfx)) cur.title = l.slice(pfx.length).trim().replace(/\.[a-z0-9]+$/i,'').trim();
       }
     }
   }
-  return cues.filter(c=>c.title).map(c => ({ ...c, duration_s: Math.max(0, tcS(c.tc_out) - tcS(c.tc_in)) }));
+  // Si aucun CLIP NAME trouvé, utiliser les noms source comme fallback
+  const hasClipNames = cues.some(c => c.title);
+  return cues
+    .map(c => ({ ...c, title: c.title || (hasClipNames ? '' : c.srcFallback) }))
+    .filter(c => c.title)
+    .map(c => ({ ...c, duration_s: Math.max(0, tcS(c.tc_out) - tcS(c.tc_in)) }));
 }
 
 function parseProTools(text) {
