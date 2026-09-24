@@ -240,41 +240,45 @@ footer a:hover{color:var(--text2)}
   <p>© 2026 Vladimir Streiff – Original Scores Music &nbsp;·&nbsp; <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> &nbsp;·&nbsp; <a href="index.html">← Catalogue</a></p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+const SB_URL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
+const SB_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
 const form = document.getElementById('reg-form');
 const submitBtn = document.getElementById('submit-btn');
 
-// Update subject with name on submit
 form.addEventListener('submit', async function(e) {
   e.preventDefault();
-  const prenom = document.getElementById('prenom').value.trim();
-  const nom = document.getElementById('nom').value.trim();
-  const societe = document.getElementById('societe').value.trim();
+  const prenom   = document.getElementById('prenom').value.trim();
+  const nom      = document.getElementById('nom').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const societe  = document.getElementById('societe').value.trim();
+  const telephone= document.getElementById('telephone').value.trim();
+  const metier   = document.getElementById('metier').value.trim();
+  const projet   = document.getElementById('projet').value.trim();
+  const message  = document.getElementById('notes').value.trim();
+
   document.getElementById('form-subject').value = `Nouvelle demande OSM : ${prenom} ${nom} — ${societe}`;
 
   submitBtn.disabled = true;
   submitBtn.textContent = 'Envoi en cours…';
 
-  const data = new FormData(form);
-
+  // Envoi Formspree (email)
+  const formData = new FormData(form);
   try {
-    const res = await fetch(form.action, {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json' }
-    });
+    const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+    if (!res.ok) throw new Error('Formspree error');
+  } catch {}
 
-    if (res.ok) {
-      document.getElementById('form-section').style.display = 'none';
-      document.getElementById('success-screen').style.display = 'block';
-    } else {
-      throw new Error('Erreur serveur');
-    }
-  } catch {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Envoyer ma demande';
-    alert('Une erreur est survenue. Réessayez ou contactez vladimirstreiff@gmail.com');
-  }
+  // Enregistrement Supabase (silencieux si table absente)
+  try {
+    await sb.from('access_requests').insert({ email, prenom, nom, societe, telephone, metier, projet, message });
+  } catch {}
+
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('success-screen').style.display = 'block';
 });
 </script>
 

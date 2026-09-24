@@ -942,11 +942,23 @@ async function reqInit() {
   const el = document.getElementById('req-list');
   const { data, error } = await sb.from('access_requests').select('*').order('created_at', { ascending: false });
   if (error) {
-    if (error.message.includes('does not exist') || error.message.includes('relation')) {
-      el.innerHTML = `<div class="detail-empty">⚙ La table access_requests n'est pas encore créée (exécutez la migration 20260720140000_access_requests.sql).</div>`;
-    } else {
-      el.innerHTML = `<div class="empty-msg">Erreur : ${escHtml(error.message)}</div>`;
-    }
+    el.innerHTML = `<div class="detail-empty">⚙ Table non créée — exécutez ce SQL dans Supabase pour activer les demandes d'accès :<br><br>
+      <code style="display:block;background:#111;padding:12px;border-radius:4px;font-size:11px;white-space:pre;overflow-x:auto">create table if not exists public.access_requests (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  email text not null,
+  prenom text,
+  nom text,
+  societe text,
+  telephone text,
+  metier text,
+  projet text,
+  message text,
+  status text default 'pending'
+);
+alter table public.access_requests enable row level security;
+create policy "admin_all" on public.access_requests for all using (true);</code>
+      <br><a href="https://supabase.com/dashboard/project/ubpmzncfhkohoyfonjbb/sql/new" target="_blank" style="color:var(--yellow);font-size:12px">→ Ouvrir l'éditeur SQL Supabase</a></div>`;
     return;
   }
   reqRows = data || [];
