@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIAPASON — Outil Cue Sheet SACEM</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#D4A017;--gold2:#F0C040;--bg:#0f1117;--bg2:#161820;--bg3:#1e2030;--bg4:#252840;--text:#e8e8ec;--text2:#9aa0ac;--muted:#5f6672;--border:rgba(255,255,255,0.08);--green:#22c55e;--blue:#3b82f6;--red:#ef4444;--orange:#f97316;--grad:linear-gradient(135deg,#D4A017,#F0C040)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
+
+/* Header */
+.hdr{position:sticky;top:0;z-index:50;background:var(--bg2);border-bottom:1px solid var(--border);height:54px;display:flex;align-items:center;padding:0 24px;gap:16px}
+.hdr-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hdr-mark{background:var(--grad);color:#0f1117;font-size:10px;font-weight:800;letter-spacing:2px;padding:4px 8px;border-radius:3px}
+.hdr-name{font-size:14px;font-weight:700;letter-spacing:3px}
+.hdr-spacer{flex:1}
+.hdr-user{font-size:11px;color:var(--muted)}
+.hdr-btn{background:transparent;border:1px solid var(--border);color:var(--text2);font-family:inherit;font-size:11px;padding:6px 12px;border-radius:4px;cursor:pointer;transition:all .15s}
+.hdr-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Tabs */
+.tab-bar{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;padding:0 24px;gap:2px;overflow-x:auto}
+.tab-btn{background:none;border:none;color:var(--muted);font-family:inherit;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:12px 16px;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:8px;padding:0 4px;margin-left:6px}
+
+/* Content */
+.tab-content{display:none;padding:28px 24px 80px;max-width:1200px;margin:0 auto;width:100%}
+.tab-content.active{display:block}
+
+/* Section headers */
+.sec-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.sec-title{font-size:16px;font-weight:700}
+.sec-sub{font-size:12px;color:var(--muted)}
+.sec-spacer{flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-family:inherit;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;transition:all .15s}
+.btn:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:#0f1117;font-weight:700}
+.btn-gold:hover{background:var(--gold2);border-color:var(--gold2);color:#0f1117}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-ghost{background:transparent;border-color:transparent}
+.btn-red{color:#f87171}
+.btn-red:hover{background:rgba(239,68,68,.1);border-color:var(--red)}
+
+/* Forms */
+.form-row{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.form-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:160px}
+.form-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.form-input{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:13px;padding:8px 12px;border-radius:6px;outline:none;transition:border-color .15s;width:100%}
+.form-input:focus{border-color:var(--gold)}
+.form-select{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:12px;padding:7px 10px;border-radius:6px;outline:none;cursor:pointer;width:100%}
+textarea.form-input{resize:vertical;min-height:80px;font-size:12px;font-family:'JetBrains Mono',monospace}
+
+/* Drop zone */
+.dropzone{border:2px dashed var(--border);border-radius:12px;padding:48px 24px;text-align:center;cursor:pointer;transition:all .2s}
+.dropzone:hover,.dropzone.over{border-color:var(--gold);background:rgba(212,160,23,.04)}
+.dz-icon{font-size:32px;margin-bottom:10px}
+.dz-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.dz-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.dz-formats{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.dz-fmt{background:var(--bg3);border:1px solid var(--border);color:var(--muted);font-size:10px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:4px}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);background:var(--bg3);border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text2);vertical-align:middle;font-size:13px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+.tc{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text)}
+.dur{font-family:'JetBrains Mono',monospace;font-size:11px}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.badge-ok{background:rgba(34,197,94,.12);color:#4ade80}
+.badge-warn{background:rgba(249,115,22,.12);color:#fb923c}
+.badge-err{background:rgba(239,68,68,.12);color:#f87171}
+.badge-rule{background:rgba(212,160,23,.12);color:var(--gold)}
+.badge-muted{background:var(--bg3);color:var(--muted)}
+
+/* Score bar */
+.score-bar{width:50px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:4px}
+.score-fill{height:100%;border-radius:2px}
+
+/* Empty state */
+.empty{text-align:center;padding:60px 24px;color:var(--muted)}
+.empty-icon{font-size:36px;margin-bottom:10px}
+.empty-title{font-size:14px;font-weight:600;color:var(--text2)}
+
+/* SACEM preview header */
+.sacem-hdr{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:20px}
+.sacem-logo{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--gold);margin-bottom:6px;text-transform:uppercase}
+.sacem-title{font-size:18px;font-weight:700;margin-bottom:12px}
+.sacem-meta{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.sacem-field{font-size:12px;color:var(--text2)}
+.sacem-field span{color:var(--text);font-weight:500}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.card-num{font-size:26px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.card-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* Rule form */
+.rule-form{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px}
+
+/* Info box */
+.info-box{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;padding:16px 20px;margin-bottom:20px}
+.info-box-blue{border-left-color:var(--blue)}
+.info-box-green{border-left-color:var(--green)}
+.info-title{font-size:12px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.info-text{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* Toast */
+#toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--gold);padding:11px 16px;border-radius:8px;font-size:13px;max-width:320px;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+
+/* Progress */
+.progress-wrap{background:var(--bg3);border-radius:4px;height:3px;margin:6px 0;overflow:hidden}
+.progress-bar{height:100%;background:var(--grad);border-radius:4px;transition:width .3s}
+
+/* Autocomplete dropdown */
+.ac-drop{position:absolute;left:0;right:0;top:4px;z-index:200;background:var(--bg3);border:1px solid var(--border);border-radius:8px;max-height:240px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+.ac-item{padding:9px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;align-items:center}
+.ac-item:hover{background:var(--bg4)}
+.ac-item:last-child{border-bottom:none}
+
+/* Audit */
+.audit-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}
+.audit-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+
+/* Cat status bar */
+.cat-bar{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.cat-stat{font-size:12px;color:var(--text2)}
+.cat-stat strong{color:var(--text)}
+.cat-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.cat-dot.empty{background:var(--red)}
+
+.spin{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){.tab-content{padding:16px 12px 80px}.hdr{padding:0 16px}th,td{padding:7px 8px;font-size:12px}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo">
+    <div class="hdr-mark">▲</div>
+    <div class="hdr-name">DIAPASON</div>
+  </div>
+  <div class="hdr-spacer"></div>
+  <span class="hdr-user" id="hdr-publisher"></span>
+  <button class="hdr-btn" onclick="showTab('settings')">⚙ Paramètres</button>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn" onclick="showTab('catalogue')" id="tb-catalogue">Catalogue<span class="tab-badge" id="badge-cat" style="display:none">!</span></button>
+  <button class="tab-btn active" onclick="showTab('import')" id="tb-import">Importer</button>
+  <button class="tab-btn" onclick="showTab('match')" id="tb-match">Correspondances<span class="tab-badge" id="badge-match" style="display:none">0</span></button>
+  <button class="tab-btn" onclick="showTab('decl')" id="tb-decl">Déclaration SACEM</button>
+  <button class="tab-btn" onclick="showTab('rules')" id="tb-rules">Règles apprises</button>
+  <button class="tab-btn" onclick="showTab('batch')" id="tb-batch">Lots</button>
+  <button class="tab-btn" onclick="showTab('audit')" id="tb-audit">Audit</button>
+  <button class="tab-btn" onclick="showTab('settings')" id="tb-settings">Paramètres</button>
+</nav>
+
+<!-- TAB: Catalogue -->
+<div class="tab-content" id="tab-catalogue">
+  <div class="sec-hdr">
+    <div><div class="sec-title">Catalogue musical</div><div class="sec-sub">Chargez votre catalogue pour activer le matching automatique</div></div>
+    <div class="sec-spacer"></div>
+    <button class="btn btn-sm" onclick="exportCatJSON()">Export JSON</button>
+    <button class="btn btn-sm" style="margin-left:6px" onclick="clearCatalogue()">Vider</button>
+  </div>
+
+  <div class="cat-bar" id="cat-status-bar">
+    <div class="cat-dot empty" id="cat-dot"></div>
+    <div class="cat-stat" id="cat-stat-text">Aucun catalogue chargé</div>
+    <div class="sec-spacer"></div>
+    <button class="btn btn-sm btn-gold" onclick="document.getElementById('cat-file-input').click()">📂 Charger un fichier</button>
+    <input type="file" id="cat-file-input" accept=".json,.csv,.xlsx,.xls" style="display:none" onchange="loadCatalogueFile(this.files[0])">
+  </div>
+
+  <div class="info-box info-box-blue" style="margin-bottom:20px">
+    <div class="info-title">Formats acceptés</div>
+    <div class="info-text">
+      <strong>JSON</strong> — tableau d'objets avec les champs : <code>title</code>, <code>composer</code> (ou <code>compositeur</code>), <code>iswc</code>, <code>category</code> (ou <code>playlist</code>), <code>duration</code> (ou <code>duree</code>)<br>
+      <strong>CSV / Excel</strong> — première ligne = en-têtes. Colonnes détectées automatiquement selon leurs noms.<br>
+      Exemple CSV minimal : <code>title,composer,iswc,category,duration</code>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:24px">
+    <div class="info-title">Saisie manuelle rapide (JSON)</div>
+    <div class="info-text" style="margin-bottom:10px">Collez ou tapez votre catalogue en JSON ci-dessous, puis cliquez Importer.</div>
+    <textarea class="form-input" id="cat-json-input" rows="6" placeholder='[{"title":"My Track","composer":"Jean Dupont","iswc":"T-123456789-0","category":"Action","duration":"2:30"},...]'></textarea>
+    <button class="btn btn-gold btn-sm" style="margin-top:10px" onclick="loadCatalogueJSON()">Importer ce JSON</button>
+  </div>
+
+  <div id="cat-list"></div>
+</div>
+
+<!-- TAB: Importer -->
+<div class="tab-content active" id="tab-import">
+  <div class="sec-hdr">
+    <div><div class="sec-title">Importer un programme</div><div class="sec-sub">EDL, Pro Tools, PDF, Word, Excel — tous formats acceptés</div></div>
+    <div class="sec-spacer"></div>
+    <button class="btn btn-sm" onclick="resetProgramme()">Nouveau programme</button>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label class="form-label">Titre du programme</label>
+      <input class="form-input" id="prog-title" type="text" placeholder="Ex: Envoyé Spécial — Épisode 24">
+    </div>
+    <div class="form-group" style="max-width:200px">
+      <label class="form-label">Chaîne / Diffuseur</label>
+      <input class="form-input" id="prog-channel" type="text" placeholder="France 2">
+    </div>
+    <div class="form-group" style="max-width:150px">
+      <label class="form-label">Durée programme</label>
+      <input class="form-input" id="prog-duration" type="text" placeholder="52:00">
+    </div>
+    <div class="form-group" style="max-width:170px">
+      <label class="form-label">Date de diffusion</label>
+      <input class="form-input" id="prog-date" type="date">
+    </div>
+  </div>
+  <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()"
+       ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event)">
+    <input type="file" id="file-input" accept=".edl,.txt,.pdf,.docx,.xlsx,.xls,.ods,.csv" style="display:none" onchange="handleFile(this.files[0])">
+    <div class="dz-icon">📂</div>
+    <div class="dz-title">Déposer votre fichier ici</div>
+    <div class="dz-sub">ou cliquer pour choisir</div>
+    <div class="dz-formats">
+      <span class="dz-fmt">EDL CMX3600</span>
+      <span class="dz-fmt">Pro Tools TXT</span>
+      <span class="dz-fmt">PDF</span>
+      <span class="dz-fmt">Word DOCX</span>
+      <span class="dz-fmt">Excel XLSX/XLS</span>
+      <span class="dz-fmt">CSV / ODS</span>
+    </div>
+  </div>
+  <div id="parse-progress" style="display:none;margin-top:10px">
+    <div style="font-size:12px;color:var(--text2);margin-bottom:4px" id="parse-status"></div>
+    <div class="progress-wrap"><div class="progress-bar" id="parse-bar" style="width:0%"></div></div>
+  </div>
+  <div id="cue-list" style="margin-top:20px"></div>
+</div>
+
+<!-- TAB: Correspondances -->
+<div class="tab-content" id="tab-match">
+  <div class="sec-hdr">
+    <div><div class="sec-title">Correspondances</div><div class="sec-sub">Associez chaque cue à son titre dans le catalogue</div></div>
+    <div class="sec-spacer"></div>
+    <button class="btn btn-sm" onclick="autoMatchAll()">🔄 Re-matcher tout</button>
+    <button class="btn btn-gold btn-sm" style="margin-left:8px" onclick="showTab('decl')">Générer la déclaration →</button>
+  </div>
+  <div id="match-content">
+    <div class="empty"><div class="empty-icon">🎵</div><div class="empty-title">Importez un programme d'abord</div></div>
+  </div>
+</div>
+
+<!-- TAB: Déclaration SACEM -->
+<div class="tab-content" id="tab-decl">
+  <div class="sec-hdr">
+    <div><div class="sec-title">Déclaration SACEM</div><div class="sec-sub">Feuille de relevé de musiques</div></div>
+    <div class="sec-spacer"></div>
+    <button class="btn btn-sm" onclick="exportCNC()">📄 Export CNC</button>
+    <button class="btn btn-gold btn-sm" style="margin-left:8px" onclick="exportSACEM()">📊 Export Excel SACEM</button>
+  </div>
+  <div id="decl-content">
+    <div class="empty"><div class="empty-icon">📋</div><div class="empty-title">Aucune déclaration à afficher</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Importez et matchez un programme d'abord</div></div>
+  </div>
+</div>
+
+<!-- TAB: Règles apprises -->
+<div class="tab-content" id="tab-rules">
+  <div class="sec-hdr">
+    <div><div class="sec-title">Règles apprises</div><div class="sec-sub">Correspondances mémorisées — prioritaires sur le matching automatique</div></div>
+    <div class="sec-spacer"></div>
+    <button class="btn btn-sm" onclick="showAddRule()">+ Ajouter</button>
+    <button class="btn btn-sm" style="margin-left:6px" onclick="exportRules()">Export JSON</button>
+    <button class="btn btn-sm" style="margin-left:4px" onclick="document.getElementById('rules-import').click()">Import JSON</button>
+    <input type="file" id="rules-import" accept=".json" style="display:none" onchange="importRules(this)">
+  </div>
+  <div class="rule-form" id="rule-form" style="display:none">
+    <div class="form-row" style="margin-bottom:10px">
+      <div class="form-group">
+        <label class="form-label">Titre source (dans EDL / fichier)</label>
+        <input class="form-input" id="rule-src" type="text" placeholder="Ex: JAZZTIP AD LIB">
+      </div>
+      <div class="form-group" style="position:relative">
+        <label class="form-label">Titre catalogue associé</label>
+        <input class="form-input" id="rule-osm" type="text" placeholder="Chercher un titre…" oninput="searchCatInput(this)" autocomplete="off">
+        <div id="rule-ac"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-gold btn-sm" onclick="saveRule()">Enregistrer</button>
+      <button class="btn btn-sm" onclick="document.getElementById('rule-form').style.display='none'">Annuler</button>
+    </div>
+  </div>
+  <div id="rules-list"></div>
+</div>
+
+<!-- TAB: Lots -->
+<div class="tab-content" id="tab-batch">
+  <div class="sec-hdr">
+    <div><div class="sec-title">Traitement par lots</div><div class="sec-sub">Récapitulatif saisonnier</div></div>
+    <div class="sec-spacer"></div>
+    <button class="btn btn-sm" onclick="addCurrentToBatch()">+ Ajouter le programme courant</button>
+    <button class="btn btn-sm" style="margin-left:6px" onclick="clearBatch()">Vider le lot</button>
+    <button class="btn btn-gold btn-sm" style="margin-left:8px" onclick="exportBatchSACEM()">📊 Export saison Excel</button>
+  </div>
+  <div id="batch-list">
+    <div class="empty"><div class="empty-icon">📁</div><div class="empty-title">Aucun programme en lot</div></div>
+  </div>
+  <div id="batch-stats" style="margin-top:24px;display:none">
+    <div class="sec-title" style="margin-bottom:12px">Récapitulatif saison</div>
+    <div class="card-grid" id="batch-stat-cards"></div>
+  </div>
+</div>
+
+<!-- TAB: Audit -->
+<div class="tab-content" id="tab-audit">
+  <div class="sec-hdr">
+    <div><div class="sec-title">Audit catalogue</div><div class="sec-sub">Vérifications d'intégrité</div></div>
+    <div class="sec-spacer"></div>
+    <button class="btn btn-sm" onclick="runAudit()">🔍 Lancer l'audit</button>
+  </div>
+  <div id="audit-result">
+    <div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">Cliquez sur "Lancer l'audit"</div></div>
+  </div>
+</div>
+
+<!-- TAB: Paramètres -->
+<div class="tab-content" id="tab-settings">
+  <div class="sec-hdr">
+    <div><div class="sec-title">Paramètres</div><div class="sec-sub">Informations de votre société</div></div>
+    <div class="sec-spacer"></div>
+    <button class="btn btn-gold btn-sm" onclick="saveSettings()">Enregistrer</button>
+  </div>
+
+  <div class="info-box info-box-green" style="margin-bottom:24px">
+    <div class="info-title">Ces informations apparaîtront dans vos exports SACEM et CNC</div>
+    <div class="info-text">Elles sont enregistrées localement dans votre navigateur et ne quittent jamais votre ordinateur.</div>
+  </div>
+
+  <div style="max-width:600px">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nom de l'éditeur / société</label>
+        <input class="form-input" id="s-publisher" type="text" placeholder="Ex: Original Scores Music">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Numéro SACEM (si adhérent)</label>
+        <input class="form-input" id="s-sacem-num" type="text" placeholder="Ex: 123456789">
+      </div>
+      <div class="form-group">
+        <label class="form-label">SIRET (optionnel)</label>
+        <input class="form-input" id="s-siret" type="text" placeholder="Ex: 12345678900012">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Adresse (optionnel)</label>
+        <input class="form-input" id="s-address" type="text" placeholder="12 rue de la Musique, 75001 Paris">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Email de contact (optionnel)</label>
+        <input class="form-input" id="s-email" type="email" placeholder="contact@mamaison.fr">
+      </div>
+    </div>
+
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--border)">
+      <div class="form-label" style="margin-bottom:12px;font-size:10px">Données locales</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-sm" onclick="exportAllData()">📦 Exporter toutes les données</button>
+        <button class="btn btn-sm" onclick="document.getElementById('import-all-data').click()">📥 Importer des données sauvegardées</button>
+        <input type="file" id="import-all-data" accept=".json" style="display:none" onchange="importAllData(this)">
+        <button class="btn btn-sm btn-red" onclick="resetAllData()">🗑 Réinitialiser tout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+<script>
+// ── PDF.js worker ─────────────────────────────────────────────
+if (typeof pdfjsLib !== 'undefined')
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+// ── Storage keys ──────────────────────────────────────────────
+const KEYS = {
+  catalogue: 'dsp-catalogue',
+  rules:     'dsp-rules',
+  batch:     'dsp-batch',
+  settings:  'dsp-settings'
+};
+
+// ── State ─────────────────────────────────────────────────────
+let catalogue = loadLS(KEYS.catalogue, []);
+let rules     = loadLS(KEYS.rules, []);
+let batch     = loadLS(KEYS.batch, []);
+let settings  = loadLS(KEYS.settings, { publisher:'', sacemNum:'', siret:'', address:'', email:'' });
+let cues      = [];
+let matches   = [];
+let ruleCatId = null;
+
+// ── Bootstrap ─────────────────────────────────────────────────
+(function init() {
+  applySettings();
+  renderRules();
+  renderBatch();
+  updateCatStatus();
+})();
+
+// ── Helpers ───────────────────────────────────────────────────
+function loadLS(key, def) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; }
+}
+function saveLS(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let _tt;
+function toast(msg, type='default') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderLeftColor = type==='green'?'var(--green)':type==='red'?'var(--red)':type==='warn'?'var(--orange)':'var(--gold)';
+  el.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+// ── Tabs ──────────────────────────────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('tb-'  + name).classList.add('active');
+  if (name === 'match')     renderMatches();
+  if (name === 'decl')      renderDecl();
+  if (name === 'batch')     renderBatch();
+  if (name === 'catalogue') renderCatList();
+  if (name === 'settings')  loadSettingsForm();
+}
+
+// ── Settings ──────────────────────────────────────────────────
+function applySettings() {
+  const pub = settings.publisher || '';
+  document.getElementById('hdr-publisher').textContent = pub || 'Non configuré';
+}
+
+function loadSettingsForm() {
+  document.getElementById('s-publisher').value = settings.publisher || '';
+  document.getElementById('s-sacem-num').value = settings.sacemNum  || '';
+  document.getElementById('s-siret').value     = settings.siret     || '';
+  document.getElementById('s-address').value   = settings.address   || '';
+  document.getElementById('s-email').value     = settings.email     || '';
+}
+
+function saveSettings() {
+  settings = {
+    publisher: document.getElementById('s-publisher').value.trim(),
+    sacemNum:  document.getElementById('s-sacem-num').value.trim(),
+    siret:     document.getElementById('s-siret').value.trim(),
+    address:   document.getElementById('s-address').value.trim(),
+    email:     document.getElementById('s-email').value.trim()
+  };
+  saveLS(KEYS.settings, settings);
+  applySettings();
+  toast('Paramètres enregistrés', 'green');
+}
+
+// ── Catalogue loading ─────────────────────────────────────────
+function updateCatStatus() {
+  const dot  = document.getElementById('cat-dot');
+  const txt  = document.getElementById('cat-stat-text');
+  const badge = document.getElementById('badge-cat');
+  if (!catalogue.length) {
+    dot.className = 'cat-dot empty';
+    txt.innerHTML = '<strong>Aucun catalogue chargé</strong> — Le matching automatique est désactivé';
+    badge.style.display = 'inline-flex'; badge.textContent = '!';
+  } else {
+    dot.className = 'cat-dot';
+    const cats = [...new Set(catalogue.map(t=>t.category||''))].filter(Boolean);
+    txt.innerHTML = `<strong>${catalogue.length} titres</strong> — ${cats.length} catégorie${cats.length>1?'s':''} — Matching actif`;
+    badge.style.display = 'none';
+  }
+}
+
+async function loadCatalogueFile(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  try {
+    if (ext === 'json') {
+      const text = await readText(file);
+      const data = JSON.parse(text);
+      applyCatalogue(Array.isArray(data) ? data : (data.tracks || []));
+    } else if (['csv','xlsx','xls'].includes(ext)) {
+      const buf = await readBuf(file);
+      const wb  = XLSX.read(new Uint8Array(buf), { type:'array' });
+      const ws  = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { defval:'' });
+      applyCatalogue(rows.map(normCatRow));
+    } else {
+      toast('Format non supporté pour le catalogue', 'red'); return;
+    }
+  } catch(e) { toast('Erreur : ' + e.message, 'red'); }
+}
+
+function loadCatalogueJSON() {
+  const raw = document.getElementById('cat-json-input').value.trim();
+  if (!raw) { toast('Champ vide', 'red'); return; }
+  try {
+    const data = JSON.parse(raw);
+    applyCatalogue(Array.isArray(data) ? data : (data.tracks || []));
+    document.getElementById('cat-json-input').value = '';
+  } catch(e) { toast('JSON invalide : ' + e.message, 'red'); }
+}
+
+function normCatRow(row) {
+  const find = (keys) => {
+    for (const k of keys) {
+      const key = Object.keys(row).find(rk => rk.toLowerCase().replace(/[^a-z]/g,'').includes(k));
+      if (key && row[key] !== '') return String(row[key]);
+    }
+    return '';
+  };
+  return {
+    id:       find(['id']) || String(Math.random()).slice(2),
+    title:    find(['title','titre','nom','name','oeuvre','track']),
+    composer: find(['composer','compositeur','auteur','author']),
+    iswc:     find(['iswc']),
+    category: find(['category','categorie','playlist','genre','style']),
+    duration: find(['duration','duree','duree','length'])
+  };
+}
+
+function applyCatalogue(rows) {
+  const valid = rows.filter(r => r.title || r.titre);
+  if (!valid.length) { toast('Aucun titre valide trouvé dans le fichier', 'warn'); return; }
+  catalogue = valid.map((r, i) => ({
+    id:       r.id || ('cat_' + i),
+    title:    r.title || r.titre || '',
+    composer: r.composer || r.compositeur || '',
+    iswc:     r.iswc || '',
+    category: r.category || r.playlist || r.categorie || '',
+    duration: r.duration || r.duree || ''
+  })).filter(r => r.title);
+  saveLS(KEYS.catalogue, catalogue);
+  updateCatStatus();
+  renderCatList();
+  toast(`${catalogue.length} titres chargés dans le catalogue`, 'green');
+}
+
+function renderCatList() {
+  const el = document.getElementById('cat-list');
+  if (!catalogue.length) { el.innerHTML = ''; return; }
+  const preview = catalogue.slice(0, 200);
+  let h = `<div style="font-size:12px;color:var(--muted);margin-bottom:10px">${catalogue.length} titres${catalogue.length > 200 ? ' (200 premiers affichés)' : ''}</div>
+  <div class="tbl-wrap"><table><thead><tr>
+    <th>#</th><th>Titre</th><th>Compositeur</th><th>ISWC</th><th>Catégorie</th><th>Durée</th>
+  </tr></thead><tbody>`;
+  preview.forEach((t, i) => {
+    h += `<tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td><strong style="color:var(--text)">${esc(t.title)}</strong></td>
+      <td style="font-size:12px">${esc(t.composer)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">${esc(t.iswc)}</td>
+      <td><span class="badge badge-muted">${esc(t.category||'—')}</span></td>
+      <td class="dur">${esc(t.duration||'—')}</td>
+    </tr>`;
+  });
+  h += '</tbody></table></div>';
+  el.innerHTML = h;
+}
+
+function clearCatalogue() {
+  if (!catalogue.length) return;
+  if (!confirm(`Supprimer les ${catalogue.length} titres du catalogue ?`)) return;
+  catalogue = []; saveLS(KEYS.catalogue, catalogue);
+  updateCatStatus(); renderCatList();
+  toast('Catalogue vidé');
+}
+
+function exportCatJSON() {
+  if (!catalogue.length) { toast('Catalogue vide', 'red'); return; }
+  const blob = new Blob([JSON.stringify(catalogue, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'diapason-catalogue.json'; a.click();
+}
+
+// ── File handling (cue import) ────────────────────────────────
+function dzOver(e)  { e.preventDefault(); document.getElementById('dropzone').classList.add('over'); }
+function dzLeave(e) { document.getElementById('dropzone').classList.remove('over'); }
+function dzDrop(e)  { e.preventDefault(); document.getElementById('dropzone').classList.remove('over'); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); }
+
+async function handleFile(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  showProg('Lecture du fichier…', 10);
+  let rawCues = [];
+  try {
+    if (ext === 'edl') {
+      showProg('Analyse EDL CMX3600…', 40);
+      rawCues = parseEDL(await readText(file));
+    } else if (ext === 'txt') {
+      showProg('Analyse Pro Tools…', 40);
+      const t = await readText(file);
+      rawCues = parseProTools(t);
+      if (!rawCues.length) rawCues = parseGenericText(t);
+    } else if (ext === 'pdf') {
+      showProg('Extraction PDF…', 30);
+      const t = await extractPDF(file);
+      showProg('Analyse du texte PDF…', 60);
+      rawCues = parseGenericText(t);
+    } else if (ext === 'docx') {
+      showProg('Extraction Word…', 30);
+      const t = await extractDOCX(file);
+      showProg('Analyse du texte…', 60);
+      rawCues = parseGenericText(t);
+    } else if (['xlsx','xls','ods','csv'].includes(ext)) {
+      showProg('Lecture tableur…', 30);
+      rawCues = await parseSpreadsheet(file);
+    } else {
+      rawCues = parseGenericText(await readText(file));
+    }
+  } catch(err) {
+    toast('Erreur : ' + err.message, 'red');
+    document.getElementById('parse-progress').style.display = 'none';
+    return;
+  }
+  showProg('Matching automatique…', 80);
+  cues = rawCues;
+  matches = cues.map(c => autoMatch(c));
+  showProg('Terminé', 100);
+  setTimeout(() => {
+    document.getElementById('parse-progress').style.display = 'none';
+    renderCueList();
+    updateBadge();
+    toast(`${cues.length} cue${cues.length > 1 ? 's' : ''} importé${cues.length > 1 ? 's' : ''}`, 'green');
+    if (!catalogue.length) toast('⚠ Chargez un catalogue pour activer le matching', 'warn');
+  }, 600);
+}
+
+function showProg(msg, pct) {
+  document.getElementById('parse-progress').style.display = 'block';
+  document.getElementById('parse-status').textContent = msg;
+  document.getElementById('parse-bar').style.width = pct + '%';
+}
+
+function readText(f) {
+  return new Promise((ok,ko) => { const r=new FileReader(); r.onload=e=>ok(e.target.result); r.onerror=ko; r.readAsText(f,'utf-8'); });
+}
+function readBuf(f) {
+  return new Promise((ok,ko) => { const r=new FileReader(); r.onload=e=>ok(e.target.result); r.onerror=ko; r.readAsArrayBuffer(f); });
+}
+
+// ── Parsers ───────────────────────────────────────────────────
+function parseEDL(text) {
+  const lines = text.split(/\r?\n/);
+  const out = [];
+  let cur = null;
+  for (const line of lines) {
+    const l = line.trim();
+    if (!l || /^(TITLE|FCM):/.test(l)) continue;
+    const ev = l.match(/^(\d{3,4})\s+\S+\s+\S+\s+C\s+\S+\s+\S+\s+(\S+)\s+(\S+)/);
+    if (ev) { cur = { event:ev[1], tc_in:ev[2], tc_out:ev[3], title:'', source:'EDL' }; out.push(cur); continue; }
+    if (cur) {
+      for (const pfx of ['* FROM CLIP NAME:','* CLIP NAME:','* SOURCE FILE:']) {
+        if (l.startsWith(pfx)) cur.title = l.slice(pfx.length).trim().replace(/\.[a-z0-9]+$/i,'').trim();
+      }
+    }
+  }
+  return out.filter(c=>c.title).map(c => ({ ...c, duration_s: Math.max(0, tcS(c.tc_out) - tcS(c.tc_in)) }));
+}
+
+function parseProTools(text) {
+  const lines = text.split(/\r?\n/);
+  const out = [];
+  let inRegion = false;
+  for (const line of lines) {
+    if (/^TRACK NAME:/i.test(line)) { inRegion = false; continue; }
+    if (/^(REGION|CLIP|NAME)\s+(START|END|FINISH)/i.test(line)) { inRegion = true; continue; }
+    if (inRegion && line.trim()) {
+      const parts = line.split(/\t+/);
+      if (parts.length >= 3) {
+        const name = parts[0].trim();
+        const t1   = parts[1].trim();
+        const t2   = parts[2].trim();
+        if (name && isTC(t1)) {
+          const ds = parts[3] && isTC(parts[3].trim()) ? tcS(parts[3].trim()) : Math.max(0, tcS(t2) - tcS(t1));
+          out.push({ title:name, tc_in:t1, tc_out:t2, duration_s:ds, source:'ProTools' });
+        }
+      }
+    }
+  }
+  return out;
+}
+
+function parseGenericText(text) {
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const out = [];
+  const rx = /\b(\d{1,2}[:;]\d{2}[:;]\d{2}[:;]\d{2})\b/g;
+  for (const line of lines) {
+    const tcs = [...line.matchAll(rx)].map(m=>m[1]);
+    if (tcs.length >= 2) {
+      const title = line.replace(rx,'').replace(/[-–—:]+/g,' ').replace(/\s+/g,' ').trim();
+      if (title.length > 2) out.push({ title, tc_in:tcs[0], tc_out:tcs[1], duration_s:Math.max(0,tcS(tcs[1])-tcS(tcs[0])), source:'texte' });
+    }
+  }
+  if (out.length < 3) {
+    return lines.filter(l => l.length > 4 && l.length < 120 && /[A-Za-z]/.test(l) && !/^\d+[:.;]/.test(l))
+      .slice(0, 200).map(title => ({ title, tc_in:'', tc_out:'', duration_s:0, source:'texte' }));
+  }
+  return out;
+}
+
+async function parseSpreadsheet(file) {
+  const buf = await readBuf(file);
+  const wb = XLSX.read(new Uint8Array(buf), { type:'array' });
+  const ws = wb.Sheets[wb.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:'' });
+  if (!rows.length) return [];
+  const kTitle = ['titre','title','nom','name','oeuvre','morceau','musique','track'];
+  const kTC    = ['tc','timecode','time','debut','start','in'];
+  const kDur   = ['dur','sec','s'];
+  let hi=0, tc=-1, tci=-1, tco=-1, dc=-1;
+  for (let r=0; r<Math.min(5,rows.length); r++) {
+    const row = rows[r].map(c=>String(c).toLowerCase());
+    const t = row.findIndex(c=>kTitle.some(k=>c.includes(k)));
+    if (t>=0) { hi=r; tc=t; tci=row.findIndex(c=>kTC.some(k=>c.includes(k))); tco=row.findIndex((c,i)=>i>tci&&kTC.some(k=>c.includes(k))); dc=row.findIndex(c=>kDur.some(k=>c.includes(k))); break; }
+  }
+  const result = [];
+  for (let r=(tc>=0?hi+1:0); r<rows.length; r++) {
+    const row = rows[r];
+    const title = String(row[tc>=0?tc:0]||'').trim();
+    if (!title) continue;
+    const tIn=tci>=0?String(row[tci]||''):'', tOut=tco>=0?String(row[tco]||''):'';
+    let ds=0;
+    if (dc>=0&&row[dc]) ds=parseFloat(row[dc])||tcS(String(row[dc]));
+    else if (tIn&&tOut) ds=Math.max(0,tcS(tOut)-tcS(tIn));
+    result.push({ title, tc_in:tIn, tc_out:tOut, duration_s:ds, source:'tableur' });
+  }
+  return result;
+}
+
+async function extractPDF(file) {
+  if (typeof pdfjsLib==='undefined') throw new Error('PDF.js non disponible — connexion internet requise');
+  const buf = await readBuf(file);
+  const doc = await pdfjsLib.getDocument({ data:new Uint8Array(buf) }).promise;
+  let text = '';
+  for (let p=1; p<=doc.numPages; p++) {
+    const page = await doc.getPage(p);
+    const ct = await page.getTextContent();
+    text += ct.items.map(i=>i.str).join(' ') + '\n';
+  }
+  return text;
+}
+
+async function extractDOCX(file) {
+  if (typeof mammoth==='undefined') throw new Error('mammoth.js non disponible — connexion internet requise');
+  const buf = await readBuf(file);
+  const r = await mammoth.extractRawText({ arrayBuffer:buf });
+  return r.value;
+}
+
+// ── Timecode utils ────────────────────────────────────────────
+function isTC(s) { return /^\d{1,2}[:;]\d{2}[:;]\d{2}[:;]\d{2}$/.test(s); }
+function tcS(tc) {
+  if (!tc) return 0;
+  const p = tc.split(/[:;]/).map(Number);
+  if (p.length===4) return p[0]*3600+p[1]*60+p[2]+p[3]/25;
+  if (p.length===3) return p[0]*3600+p[1]*60+p[2];
+  if (p.length===2) return p[0]*60+p[1];
+  return parseFloat(tc)||0;
+}
+function mms(s) {
+  if (!s) return '00:00';
+  s = Math.round(s);
+  return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}
+
+// ── Matching engine ───────────────────────────────────────────
+function norm(s) {
+  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+}
+
+function score(a, b) {
+  const na=norm(a), nb=norm(b);
+  if (na===nb) return 1;
+  if (na.includes(nb)||nb.includes(na)) return 0.85 - Math.abs(na.length-nb.length)*0.002;
+  const wa=new Set(na.split(' ').filter(w=>w.length>1));
+  const wb=new Set(nb.split(' ').filter(w=>w.length>1));
+  const inter=[...wa].filter(w=>wb.has(w)).length;
+  return inter===0?0:inter/Math.sqrt(wa.size*wb.size);
+}
+
+function autoMatch(cue) {
+  if (!catalogue.length) return { cue, track:null, score:0, manual:false, rule:null };
+  const ns = norm(cue.title);
+  for (const rule of rules) {
+    const nr = norm(rule.src);
+    if (nr===ns||ns.includes(nr)||nr.includes(ns)) {
+      const track = catalogue.find(t=>t.id===rule.cat_id);
+      if (track) return { cue, track, score:1, manual:false, rule };
+    }
+  }
+  let best=null, bestS=0;
+  for (const t of catalogue) { const s=score(cue.title,t.title); if (s>bestS) { bestS=s; best=t; } }
+  return { cue, track:bestS>0.25?best:null, score:bestS, manual:false, rule:null };
+}
+
+function autoMatchAll() {
+  if (!catalogue.length) { toast('Chargez un catalogue d\'abord', 'warn'); return; }
+  matches = cues.map(c=>autoMatch(c));
+  renderMatches(); updateBadge();
+  toast('Matching relancé');
+}
+
+function updateBadge() {
+  const n = matches.filter(m=>!m.track).length;
+  const b = document.getElementById('badge-match');
+  b.textContent = n;
+  b.style.display = n>0?'inline-flex':'none';
+}
+
+function getComposers(id) {
+  const t = catalogue.find(t=>t.id===id);
+  return t && t.composer ? t.composer : '';
+}
+
+// ── Cue list ──────────────────────────────────────────────────
+function renderCueList() {
+  const el = document.getElementById('cue-list');
+  if (!cues.length) { el.innerHTML = ''; return; }
+  const un = matches.filter(m=>!m.track).length;
+  let h = `<div class="sec-hdr" style="margin-bottom:12px">
+    <div class="sec-title">${cues.length} cue${cues.length>1?'s':''}</div>
+    <div class="sec-spacer"></div>
+    ${un?`<span class="badge badge-warn">${un} non matché${un>1?'s':''}</span>`:'<span class="badge badge-ok">Tout matché</span>'}
+    <button class="btn btn-gold btn-sm" style="margin-left:12px" onclick="showTab('match')">Voir les correspondances →</button>
+  </div>
+  <div class="tbl-wrap"><table><thead><tr>
+    <th>#</th><th>Titre dans le fichier</th><th>TC In</th><th>TC Out</th><th>Durée</th><th>Source</th><th>Correspondance</th>
+  </tr></thead><tbody>`;
+  cues.forEach((c,i)=>{
+    const m=matches[i];
+    const mc=m.track
+      ?`<span class="badge ${m.score>.85?'badge-ok':m.score>.5?'badge-warn':'badge-muted'}">${esc(m.track.title)}</span>${m.rule?' <span class="badge badge-rule">règle</span>':''}`
+      :'<span class="badge badge-err">Non trouvé</span>';
+    h+=`<tr><td style="color:var(--muted)">${i+1}</td><td>${esc(c.title)}</td>
+      <td class="tc">${c.tc_in||'—'}</td><td class="tc">${c.tc_out||'—'}</td>
+      <td class="dur">${c.duration_s?mms(c.duration_s):'—'}</td>
+      <td><span class="badge badge-muted">${esc(c.source||'?')}</span></td>
+      <td>${mc}</td></tr>`;
+  });
+  h+='</tbody></table></div>';
+  el.innerHTML=h;
+}
+
+// ── Match editor ──────────────────────────────────────────────
+function renderMatches() {
+  const el = document.getElementById('match-content');
+  if (!cues.length) {
+    el.innerHTML='<div class="empty"><div class="empty-icon">🎵</div><div class="empty-title">Importez un programme d\'abord</div></div>';
+    return;
+  }
+  let h=`<div class="tbl-wrap"><table><thead><tr>
+    <th>#</th><th>Titre source</th><th>Durée</th><th>Titre catalogue</th>
+    <th>Score</th><th>Compositeur</th><th>Type</th><th></th>
+  </tr></thead><tbody>`;
+  matches.forEach((m,i)=>{
+    const t=m.track;
+    const comp=t?getComposers(t.id):'';
+    const sc=Math.round(m.score*100);
+    const col=m.score>.85?'var(--green)':m.score>.5?'var(--orange)':'var(--red)';
+    h+=`<tr id="mrow-${i}">
+      <td style="color:var(--muted)">${i+1}</td>
+      <td style="max-width:180px;word-break:break-word">${esc(m.cue.title)}</td>
+      <td class="dur">${m.cue.duration_s?mms(m.cue.duration_s):'—'}</td>
+      <td>
+        <div style="position:relative">
+          <input class="form-input" style="padding:5px 9px;font-size:12px;min-width:220px" id="mi-${i}"
+            value="${t?esc(t.title):''}" placeholder="Chercher un titre…"
+            oninput="searchInMatch(${i},this.value)" autocomplete="off">
+          ${m.rule?' <span class="badge badge-rule" title="Règle apprise">R</span>':''}
+          <div id="mac-${i}"></div>
+        </div>
+      </td>
+      <td>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span style="font-size:11px;color:${col}">${sc}%</span>
+          <div class="score-bar"><div class="score-fill" style="width:${sc}%;background:${col}"></div></div>
+        </div>
+      </td>
+      <td style="font-size:12px" id="comp-${i}">${esc(comp)}</td>
+      <td>
+        <select class="form-select" style="width:130px" id="type-${i}">
+          <option value="FM" selected>Fond musical</option>
+          <option value="GE">Générique début</option>
+          <option value="GF">Générique fin</option>
+          <option value="TH">Thème</option>
+          <option value="JS">Jingle</option>
+          <option value="IN">Interlude</option>
+        </select>
+      </td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm btn-red" onclick="removeCue(${i})" title="Supprimer">✕</button>
+        <button class="btn btn-ghost btn-sm" onclick="learnRule(${i})" title="Mémoriser cette règle">💾</button>
+      </td>
+    </tr>`;
+  });
+  h+='</tbody></table></div>';
+  el.innerHTML=h;
+}
+
+function searchInMatch(idx, q) {
+  const ac=document.getElementById('mac-'+idx);
+  if (!q||q.length<2) { ac.innerHTML=''; return; }
+  const res=catalogue.map(t=>({t,s:score(q,t.title)})).filter(r=>r.s>.15).sort((a,b)=>b.s-a.s).slice(0,8);
+  if (!res.length) { ac.innerHTML=''; return; }
+  ac.innerHTML=`<div class="ac-drop">${res.map(r=>`<div class="ac-item" onclick="pickMatch(${idx},'${r.t.id}')"><span>${esc(r.t.title)}</span><span style="font-size:10px;color:var(--muted)">${r.t.category||''} · ${Math.round(r.s*100)}%</span></div>`).join('')}</div>`;
+}
+
+function pickMatch(idx, id) {
+  const track=catalogue.find(t=>t.id===id);
+  if (!track) return;
+  matches[idx]={...matches[idx],track,score:1,manual:true,rule:null};
+  document.getElementById('mi-'+idx).value=track.title;
+  document.getElementById('mac-'+idx).innerHTML='';
+  document.getElementById('comp-'+idx).textContent=getComposers(id);
+  updateBadge(); renderCueList();
+}
+
+function removeCue(idx) {
+  cues.splice(idx,1); matches.splice(idx,1);
+  renderMatches(); renderCueList(); updateBadge();
+}
+
+function learnRule(idx) {
+  const m=matches[idx];
+  if (!m.track) { toast('Aucune correspondance à mémoriser','red'); return; }
+  if (rules.some(r=>norm(r.src)===norm(m.cue.title))) { toast('Règle déjà mémorisée','warn'); return; }
+  rules.push({ src:m.cue.title, cat_id:m.track.id, cat_title:m.track.title });
+  saveLS(KEYS.rules,rules); renderRules();
+  toast('Règle mémorisée : '+m.cue.title+' → '+m.track.title,'green');
+}
+
+// ── SACEM declaration ─────────────────────────────────────────
+function progDurS() {
+  const d=document.getElementById('prog-duration').value;
+  if (!d) return 0;
+  return tcS(d.includes(':')? '00:'+d : d);
+}
+
+function renderDecl() {
+  const el=document.getElementById('decl-content');
+  if (!cues.length) { el.innerHTML='<div class="empty"><div class="empty-icon">📋</div><div class="empty-title">Aucune déclaration</div></div>'; return; }
+  const title  =document.getElementById('prog-title').value   ||'Programme sans titre';
+  const channel=document.getElementById('prog-channel').value ||'—';
+  const dur    =document.getElementById('prog-duration').value||'—';
+  const date   =document.getElementById('prog-date').value    ||'—';
+  const ds     =progDurS();
+  const matched=matches.filter(m=>m.track);
+  const totalS =matched.reduce((s,m)=>s+(m.cue.duration_s||0),0);
+
+  let h=`<div class="sacem-hdr">
+    <div class="sacem-logo">SACEM — Feuille de relevé de musiques</div>
+    <div class="sacem-title">${esc(title)}</div>
+    <div class="sacem-meta">
+      <div class="sacem-field">Éditeur : <span>${esc(settings.publisher||'—')}</span></div>
+      <div class="sacem-field">Chaîne : <span>${esc(channel)}</span></div>
+      <div class="sacem-field">Durée programme : <span>${esc(dur)}</span></div>
+      <div class="sacem-field">Date : <span>${esc(date)}</span></div>
+      <div class="sacem-field">Durée musicale : <span>${mms(totalS)}</span></div>
+      <div class="sacem-field">Cues déclarés : <span>${matched.length}</span></div>
+    </div>
+  </div>`;
+
+  if (!matched.length) { h+='<div class="empty"><div class="empty-title">Aucun cue matché</div></div>'; el.innerHTML=h; return; }
+
+  h+=`<div class="tbl-wrap"><table><thead><tr>
+    <th>N°</th><th>Titre de l'œuvre</th><th>Compositeur(s)</th>
+    <th>ISWC</th><th>Durée</th><th>%</th><th>Type</th>
+  </tr></thead><tbody>`;
+
+  matched.forEach((m,i)=>{
+    const t=m.track;
+    const dS=m.cue.duration_s||0;
+    const pct=ds>0?((dS/ds)*100).toFixed(2)+'%':'—';
+    const comp=getComposers(t.id)||'—';
+    const idx=matches.indexOf(m);
+    const type=document.getElementById(`type-${idx}`)?.value||'FM';
+    h+=`<tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td><strong style="color:var(--text)">${esc(t.title)}</strong></td>
+      <td style="font-size:12px">${esc(comp)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">${esc(t.iswc||'')}</td>
+      <td class="dur">${mms(dS)}</td>
+      <td style="font-size:12px">${pct}</td>
+      <td><span class="badge badge-muted">${type}</span></td>
+    </tr>`;
+  });
+  h+='</tbody></table></div>';
+  const un=matches.filter(m=>!m.track).length;
+  if (un) h+=`<div style="margin-top:14px;padding:12px 16px;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:8px;font-size:12px;color:#fb923c">⚠️ ${un} cue${un>1?'s':''} sans correspondance — non inclus dans la déclaration</div>`;
+  el.innerHTML=h;
+}
+
+// ── Excel exports ─────────────────────────────────────────────
+function exportSACEM() {
+  if (!cues.length) { toast('Aucun cue à exporter','red'); return; }
+  const title  =document.getElementById('prog-title').value   ||'Programme';
+  const channel=document.getElementById('prog-channel').value ||'';
+  const dur    =document.getElementById('prog-duration').value||'';
+  const date   =document.getElementById('prog-date').value    ||'';
+  const ds     =progDurS();
+  const matched=matches.filter(m=>m.track);
+  const pub    =settings.publisher||'';
+  const sacNum =settings.sacemNum||'';
+  const wb = XLSX.utils.book_new();
+
+  const rows=[
+    ['DÉCLARATION SACEM — FEUILLE DE RELEVÉ DE MUSIQUES'],
+    [],
+    ['Éditeur musical :',pub],
+    ['N° SACEM :',sacNum||'—'],
+    ['Titre du programme :',title],
+    ['Chaîne / Diffuseur :',channel],
+    ['Durée du programme :',dur],
+    ['Date de diffusion :',date],
+    ['Généré le :',new Date().toLocaleDateString('fr-FR')],
+    [],
+    ['N°','Titre de l\'œuvre musicale','Prénom et Nom du compositeur','Code ISWC','Durée (mm:ss)','Durée (s)','% Programme','Type d\'usage']
+  ];
+  matched.forEach((m,i)=>{
+    const t=m.track;
+    const dS=m.cue.duration_s||0;
+    const pct=ds>0?((dS/ds)*100).toFixed(2)+'%':'';
+    const idx=matches.indexOf(m);
+    const tp=document.getElementById(`type-${idx}`)?.value||'FM';
+    rows.push([i+1,t.title,getComposers(t.id)||'',t.iswc||'',mms(dS),Math.round(dS),pct,tp]);
+  });
+  rows.push([],['Total musique :',mms(matched.reduce((s,m)=>s+(m.cue.duration_s||0),0))]);
+  const ws1=XLSX.utils.aoa_to_sheet(rows);
+  ws1['!cols']=[{wch:4},{wch:42},{wch:30},{wch:14},{wch:12},{wch:10},{wch:12},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,ws1,'Cue Sheet SACEM');
+
+  const raw=[['Titre source','TC In','TC Out','Durée (s)','Titre catalogue','Score','Catégorie','Source']];
+  matches.forEach(m=>raw.push([m.cue.title,m.cue.tc_in||'',m.cue.tc_out||'',Math.round(m.cue.duration_s||0),m.track?m.track.title:'NON MATCHÉ',m.track?Math.round(m.score*100)+'%':'',m.track?m.track.category:'',m.cue.source||'']));
+  const ws2=XLSX.utils.aoa_to_sheet(raw);
+  ws2['!cols']=[{wch:40},{wch:13},{wch:13},{wch:10},{wch:40},{wch:12},{wch:20},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws2,'Données brutes');
+
+  XLSX.writeFile(wb,`CueSheet_SACEM_${title.replace(/[^a-z0-9]/gi,'_')}_${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast('Export SACEM généré','green');
+}
+
+function exportCNC() {
+  if (!cues.length) { toast('Aucun cue à exporter','red'); return; }
+  const title  =document.getElementById('prog-title').value  ||'Programme';
+  const channel=document.getElementById('prog-channel').value||'';
+  const pub    =settings.publisher||'—';
+  const wb=XLSX.utils.book_new();
+  const rows=[
+    ['DÉCLARATION CNC — LISTE DES ŒUVRES MUSICALES'],
+    [],
+    ['Titre de l\'œuvre audiovisuelle :',title],
+    ['Producteur / Diffuseur :',channel],
+    ['Éditeur musical :',pub],
+    ['Date :',new Date().toLocaleDateString('fr-FR')],
+    [],
+    ['Titre de l\'œuvre musicale','Compositeur','Éditeur musical','ISWC','Durée (mm:ss)','Nature utilisation']
+  ];
+  matches.filter(m=>m.track).forEach(m=>{
+    const idx=matches.indexOf(m);
+    const tp=document.getElementById(`type-${idx}`)?.value||'FM';
+    rows.push([m.track.title,getComposers(m.track.id)||'',pub,m.track.iswc||'',mms(m.cue.duration_s||0),tp]);
+  });
+  const ws=XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols']=[{wch:42},{wch:30},{wch:25},{wch:14},{wch:12},{wch:20}];
+  XLSX.utils.book_append_sheet(wb,ws,'Déclaration CNC');
+  XLSX.writeFile(wb,`DeclarationCNC_${title.replace(/[^a-z0-9]/gi,'_')}_${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast('Export CNC généré','green');
+}
+
+// ── Rules ─────────────────────────────────────────────────────
+function renderRules() {
+  const el=document.getElementById('rules-list');
+  if (!rules.length) {
+    el.innerHTML='<div class="empty"><div class="empty-icon">📖</div><div class="empty-title">Aucune règle apprise</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Créez des règles depuis l\'onglet Correspondances (bouton 💾)</div></div>';
+    return;
+  }
+  let h=`<div class="tbl-wrap"><table><thead><tr>
+    <th>Titre source (fichier)</th><th>→ Titre catalogue</th><th>Catégorie</th><th></th>
+  </tr></thead><tbody>`;
+  rules.forEach((r,i)=>{
+    const t=catalogue.find(t=>t.id===r.cat_id);
+    h+=`<tr>
+      <td>${esc(r.src)}</td>
+      <td><strong style="color:var(--text)">${esc(r.cat_title)}</strong></td>
+      <td><span class="badge badge-muted">${t?t.category:'?'}</span></td>
+      <td><button class="btn btn-ghost btn-sm btn-red" onclick="deleteRule(${i})">Supprimer</button></td>
+    </tr>`;
+  });
+  h+='</tbody></table></div>';
+  el.innerHTML=h;
+}
+
+function showAddRule() {
+  document.getElementById('rule-form').style.display='block';
+  document.getElementById('rule-src').value='';
+  document.getElementById('rule-osm').value='';
+  document.getElementById('rule-ac').innerHTML='';
+  ruleCatId=null;
+}
+
+function searchCatInput(input) {
+  const q=input.value;
+  const ac=document.getElementById('rule-ac');
+  if (!q||q.length<2) { ac.innerHTML=''; return; }
+  const res=catalogue.map(t=>({t,s:score(q,t.title)})).filter(r=>r.s>.15).sort((a,b)=>b.s-a.s).slice(0,7);
+  if (!res.length) { ac.innerHTML=''; return; }
+  ac.innerHTML=`<div class="ac-drop">${res.map(r=>`<div class="ac-item" onclick="pickCatRule('${r.t.id}',this)"><span>${esc(r.t.title)}</span><span style="font-size:10px;color:var(--muted)">${r.t.category||''}</span></div>`).join('')}</div>`;
+}
+
+function pickCatRule(id) {
+  ruleCatId=id;
+  const t=catalogue.find(t=>t.id===id);
+  document.getElementById('rule-osm').value=t?t.title:'';
+  document.getElementById('rule-ac').innerHTML='';
+}
+
+function saveRule() {
+  const src=document.getElementById('rule-src').value.trim();
+  const catT=document.getElementById('rule-osm').value.trim();
+  if (!src)  { toast('Entrez le titre source','red'); return; }
+  if (!catT) { toast('Sélectionnez un titre du catalogue','red'); return; }
+  if (rules.some(r=>norm(r.src)===norm(src))) { toast('Règle déjà existante','warn'); return; }
+  const id=ruleCatId||catalogue.find(t=>t.title===catT)?.id||'';
+  rules.push({ src, cat_id:id, cat_title:catT });
+  saveLS(KEYS.rules,rules); ruleCatId=null;
+  document.getElementById('rule-form').style.display='none';
+  renderRules(); toast('Règle ajoutée','green');
+}
+
+function deleteRule(i) {
+  rules.splice(i,1); saveLS(KEYS.rules,rules); renderRules();
+  toast('Règle supprimée');
+}
+
+function exportRules() {
+  const blob=new Blob([JSON.stringify(rules,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='diapason-regles.json'; a.click();
+}
+
+function importRules(input) {
+  const f=input.files[0]; if (!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try {
+      const imp=JSON.parse(e.target.result);
+      if (!Array.isArray(imp)) return;
+      let added=0;
+      for (const rule of imp) {
+        const hasOsm = rule.osm_id && rule.osm_title;
+        const hasCat = rule.cat_id && rule.cat_title;
+        if (rule.src && (hasOsm||hasCat) && !rules.some(r=>r.src===rule.src)) {
+          rules.push({ src:rule.src, cat_id:rule.cat_id||rule.osm_id, cat_title:rule.cat_title||rule.osm_title });
+          added++;
+        }
+      }
+      saveLS(KEYS.rules,rules); renderRules();
+      toast(`${added} règle${added>1?'s':''} importée${added>1?'s':''},'green`);
+    } catch { toast('Fichier JSON invalide','red'); }
+  };
+  r.readAsText(f); input.value='';
+}
+
+// ── Batch ─────────────────────────────────────────────────────
+function addCurrentToBatch() {
+  if (!cues.length) { toast('Aucun programme à ajouter','red'); return; }
+  const prog={
+    title:   document.getElementById('prog-title').value   ||'Sans titre',
+    channel: document.getElementById('prog-channel').value ||'',
+    duration:document.getElementById('prog-duration').value||'',
+    date:    document.getElementById('prog-date').value    ||''
+  };
+  const idx=batch.findIndex(e=>e.prog.title===prog.title);
+  const entry={prog,cues:JSON.parse(JSON.stringify(cues)),matches:JSON.parse(JSON.stringify(matches))};
+  if (idx>=0) batch[idx]=entry; else batch.push(entry);
+  saveLS(KEYS.batch,batch); renderBatch(); showTab('batch');
+  toast(`"${prog.title}" ajouté au lot`,'green');
+}
+
+function clearBatch() {
+  if (!batch.length||!confirm('Vider le lot ?')) return;
+  batch=[]; saveLS(KEYS.batch,batch); renderBatch();
+}
+
+function renderBatch() {
+  const listEl =document.getElementById('batch-list');
+  const statsEl=document.getElementById('batch-stats');
+  if (!batch.length) {
+    listEl.innerHTML='<div class="empty"><div class="empty-icon">📁</div><div class="empty-title">Aucun programme en lot</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Importez un programme, puis "Ajouter le programme courant"</div></div>';
+    statsEl.style.display='none'; return;
+  }
+  let h=`<div class="tbl-wrap"><table><thead><tr>
+    <th>Programme</th><th>Chaîne</th><th>Date</th><th>Cues</th><th>Matchés</th><th></th>
+  </tr></thead><tbody>`;
+  batch.forEach((e,i)=>{
+    const mc=e.matches.filter(m=>m.track).length;
+    h+=`<tr>
+      <td><strong style="color:var(--text)">${esc(e.prog.title)}</strong></td>
+      <td style="font-size:12px">${esc(e.prog.channel||'—')}</td>
+      <td style="font-size:12px">${e.prog.date||'—'}</td>
+      <td>${e.cues.length}</td>
+      <td>${mc} / ${e.cues.length}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="loadBatchEntry(${i})">↩ Charger</button>
+        <button class="btn btn-ghost btn-sm btn-red" onclick="removeBatchEntry(${i})">✕</button>
+      </td>
+    </tr>`;
+  });
+  h+='</tbody></table></div>';
+  listEl.innerHTML=h;
+
+  let totalC=0,totalM=0,totalS=0;
+  const trackUse={};
+  for (const e of batch) {
+    totalC+=e.cues.length;
+    for (const m of e.matches) {
+      if (m.track) { totalM++; totalS+=m.cue.duration_s||0; trackUse[m.track.id]=(trackUse[m.track.id]||0)+(m.cue.duration_s||0); }
+    }
+  }
+  const top5=Object.entries(trackUse).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  let cards=`
+    <div class="card"><div class="card-num">${batch.length}</div><div class="card-lbl">Programmes</div></div>
+    <div class="card"><div class="card-num">${totalC}</div><div class="card-lbl">Cues total</div></div>
+    <div class="card"><div class="card-num">${totalM}</div><div class="card-lbl">Cues matchés</div></div>
+    <div class="card"><div class="card-num">${mms(totalS)}</div><div class="card-lbl">Musique totale</div></div>`;
+  if (top5.length) cards+=`<div class="card" style="grid-column:1/-1">
+    <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Top titres utilisés</div>
+    ${top5.map(([id,s])=>{const t=catalogue.find(x=>x.id===id);return`<div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text)">${esc(t?t.title:id)}</span><span style="color:var(--muted)">${mms(s)}</span></div>`;}).join('')}
+  </div>`;
+  document.getElementById('batch-stat-cards').innerHTML=cards;
+  statsEl.style.display='block';
+}
+
+function loadBatchEntry(i) {
+  const e=batch[i];
+  cues=JSON.parse(JSON.stringify(e.cues));
+  matches=JSON.parse(JSON.stringify(e.matches));
+  document.getElementById('prog-title').value   =e.prog.title   ||'';
+  document.getElementById('prog-channel').value =e.prog.channel ||'';
+  document.getElementById('prog-duration').value=e.prog.duration||'';
+  document.getElementById('prog-date').value    =e.prog.date    ||'';
+  renderCueList(); updateBadge(); showTab('import');
+  toast(`"${e.prog.title}" chargé`,'green');
+}
+
+function removeBatchEntry(i) {
+  batch.splice(i,1); saveLS(KEYS.batch,batch); renderBatch();
+}
+
+function exportBatchSACEM() {
+  if (!batch.length) { toast('Aucun programme dans le lot','red'); return; }
+  const pub=settings.publisher||'';
+  const wb=XLSX.utils.book_new();
+  for (const e of batch) {
+    const mc=e.matches.filter(m=>m.track);
+    const sht=e.prog.title.replace(/[^a-z0-9]/gi,'_').slice(0,28);
+    const rows=[
+      ['Titre :',e.prog.title],['Chaîne :',e.prog.channel||''],['Date :',e.prog.date||''],['Éditeur :',pub],[],
+      ['N°','Titre catalogue','Compositeur','ISWC','Durée (mm:ss)','Durée (s)','Type']
+    ];
+    mc.forEach((m,i)=>rows.push([i+1,m.track.title,getComposers(m.track.id)||'',m.track.iswc||'',mms(m.cue.duration_s||0),Math.round(m.cue.duration_s||0),'FM']));
+    const ws=XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols']=[{wch:4},{wch:40},{wch:28},{wch:12},{wch:12},{wch:10},{wch:10}];
+    XLSX.utils.book_append_sheet(wb,ws,sht);
+  }
+  const recap=[['Programme','Chaîne','Date','Cues','Matchés','Durée musicale']];
+  for (const e of batch) {
+    const mc=e.matches.filter(m=>m.track).length;
+    const ts=e.matches.reduce((s,m)=>s+(m.track?m.cue.duration_s||0:0),0);
+    recap.push([e.prog.title,e.prog.channel||'',e.prog.date||'',e.cues.length,mc,mms(ts)]);
+  }
+  const wsr=XLSX.utils.aoa_to_sheet(recap);
+  wsr['!cols']=[{wch:42},{wch:20},{wch:12},{wch:8},{wch:10},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,wsr,'Récapitulatif');
+  XLSX.writeFile(wb,`CueSheet_Saison_${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast('Export saison généré','green');
+}
+
+// ── Audit ─────────────────────────────────────────────────────
+async function runAudit() {
+  const el=document.getElementById('audit-result');
+  if (!catalogue.length) {
+    el.innerHTML='<div class="empty"><div class="empty-icon">📋</div><div class="empty-title">Chargez un catalogue pour lancer l\'audit</div></div>';
+    return;
+  }
+  el.innerHTML='<div class="empty"><div class="spin"></div><div class="empty-title" style="margin-top:12px">Analyse en cours…</div></div>';
+  await new Promise(r=>setTimeout(r,80));
+
+  const items=[];
+  const total=catalogue.length;
+
+  // Titres sans compositeur
+  const noComp=catalogue.filter(t=>!t.composer);
+  items.push({
+    color:noComp.length?'var(--orange)':'var(--green)',
+    title:noComp.length?`${noComp.length} titre${noComp.length>1?'s':''} sans compositeur`:`Tous les ${total} titres ont un compositeur`,
+    detail:noComp.length?'Complétez ces entrées dans votre catalogue source':'',
+    tags:noComp.slice(0,8).map(t=>t.title)
+  });
+
+  // Titres sans ISWC
+  const noISWC=catalogue.filter(t=>!t.iswc);
+  items.push({
+    color:noISWC.length?'var(--orange)':'var(--green)',
+    title:noISWC.length?`${noISWC.length} titre${noISWC.length>1?'s':''} sans code ISWC`:`Tous les ${total} titres ont un code ISWC`,
+    detail:'Les codes ISWC accélèrent le traitement SACEM',
+    tags:noISWC.slice(0,8).map(t=>t.title)
+  });
+
+  // Doublons
+  const byNorm={};
+  for (const t of catalogue) { const n=norm(t.title); if (!byNorm[n]) byNorm[n]=[]; byNorm[n].push(t); }
+  const dupes=Object.values(byNorm).filter(g=>g.length>1);
+  items.push({
+    color:dupes.length?'var(--orange)':'var(--green)',
+    title:dupes.length?`${dupes.length} groupe${dupes.length>1?'s':''} de titres en doublon`:'Aucun doublon de titre détecté',
+    detail:'Titres normalisés identiques',
+    tags:dupes.flat().slice(0,8).map(t=>`${t.title} (${t.category||'?'})`)
+  });
+
+  // Catégories
+  const cats=[...new Set(catalogue.map(t=>t.category||''))].filter(Boolean);
+  items.push({
+    color:'var(--blue)',
+    title:`${total} titres — ${cats.length} catégorie${cats.length!==1?'s':''}`,
+    detail:cats.join(', ')||'Aucune catégorie renseignée',
+    tags:[]
+  });
+
+  // Lot stats
+  if (batch.length) {
+    const used=new Set(batch.flatMap(e=>e.matches.filter(m=>m.track).map(m=>m.track.id)));
+    items.push({
+      color:'var(--blue)',
+      title:`${used.size} titres utilisés sur ${total} dans les ${batch.length} programmes du lot`,
+      detail:`${total-used.size} titres jamais placés (${((used.size/total)*100).toFixed(1)}% de couverture)`,
+      tags:[]
+    });
+  }
+
+  el.innerHTML=items.map(item=>`
+    <div class="audit-item">
+      <div class="audit-dot" style="background:${item.color}"></div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:13px">${item.title}</div>
+        ${item.detail?`<div style="font-size:12px;color:var(--muted);margin-top:3px">${item.detail}</div>`:''}
+        ${item.tags.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">${item.tags.map(s=>`<span class="badge badge-muted">${esc(s)}</span>`).join('')}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+// ── Misc ──────────────────────────────────────────────────────
+function resetProgramme() {
+  if (cues.length&&!confirm('Réinitialiser le programme courant ?')) return;
+  cues=[]; matches=[];
+  ['prog-title','prog-channel','prog-duration','prog-date'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cue-list').innerHTML='';
+  document.getElementById('badge-match').style.display='none';
+  toast('Programme réinitialisé');
+}
+
+// ── Data backup / restore ─────────────────────────────────────
+function exportAllData() {
+  const data={ catalogue, rules, batch, settings, exportedAt:new Date().toISOString() };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`diapason-backup-${new Date().toISOString().slice(0,10)}.json`; a.click();
+  toast('Sauvegarde exportée','green');
+}
+
+function importAllData(input) {
+  const f=input.files[0]; if (!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try {
+      const data=JSON.parse(e.target.result);
+      if (data.catalogue) { catalogue=data.catalogue; saveLS(KEYS.catalogue,catalogue); updateCatStatus(); }
+      if (data.rules)     { rules=data.rules;         saveLS(KEYS.rules,rules);         renderRules(); }
+      if (data.batch)     { batch=data.batch;          saveLS(KEYS.batch,batch);          renderBatch(); }
+      if (data.settings)  { settings=data.settings;    saveLS(KEYS.settings,settings);   applySettings(); loadSettingsForm(); }
+      toast('Données restaurées','green');
+    } catch(e) { toast('Fichier invalide : '+e.message,'red'); }
+  };
+  r.readAsText(f); input.value='';
+}
+
+function resetAllData() {
+  if (!confirm('Supprimer TOUTES les données locales (catalogue, règles, lots, paramètres) ?')) return;
+  Object.values(KEYS).forEach(k=>localStorage.removeItem(k));
+  catalogue=[]; rules=[]; batch=[]; settings={publisher:'',sacemNum:'',siret:'',address:'',email:''};
+  updateCatStatus(); renderRules(); renderBatch(); applySettings();
+  cues=[]; matches=[];
+  document.getElementById('cue-list').innerHTML='';
+  document.getElementById('badge-match').style.display='none';
+  toast('Toutes les données supprimées');
+}
+</script>
+</body>
+</html>
