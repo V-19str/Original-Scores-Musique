@@ -383,7 +383,12 @@ body {
   <button onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;color:#555;font-size:14px;padding:0;" id="btn-theme" title="Mode clair / sombre">🌙</button>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+const SUPABASE_URL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 // Comptes monteurs (en production : remplacer par un backend sécurisé)
 const MONTEURS = [
   { email: 'monteur@osm.fr',        password: 'osm2026',   name: 'Monteur OSM',      role: 'senior' },
@@ -500,20 +505,28 @@ function triggerLockout() {
   }, 1000);
 }
 
-function showForgot() {
+async function showForgot() {
   const email = document.getElementById('email').value.trim();
   if (!email) {
     showError('Entrez votre e-mail pour réinitialiser le mot de passe');
     return;
   }
   clearMessages();
-  const success = document.createElement('div');
-  success.className = 'success-msg';
-  success.style.cssText = 'display:flex;margin-top:12px;font-size:11px;';
-  success.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-    <span>Instructions envoyées à ${email}</span>`;
-  document.getElementById('loginForm').appendChild(success);
-  setTimeout(() => success.remove(), 4000);
+  try {
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://osm-music.fr/login-monteurs.html'
+    });
+    if (error) throw error;
+    const success = document.createElement('div');
+    success.className = 'success-msg';
+    success.style.cssText = 'display:flex;margin-top:12px;font-size:11px;';
+    success.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <span>Email envoyé à ${email} — vérifiez votre boîte (et les spams)</span>`;
+    document.getElementById('loginForm').appendChild(success);
+    setTimeout(() => success.remove(), 6000);
+  } catch (err) {
+    showError('Impossible d\'envoyer l\'email : ' + (err.message || 'erreur inconnue'));
+  }
 }
 
 // ── THEME ──
