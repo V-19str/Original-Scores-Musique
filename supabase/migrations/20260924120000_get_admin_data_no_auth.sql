@@ -54,8 +54,8 @@ begin
         from downloads d
       ),
       'plays', (
-        select coalesce(json_agg(row_to_json(pl.*) order by pl.played_at desc limit 200), '[]'::json)
-        from plays pl
+        select coalesce(json_agg(row_to_json(pl.*)), '[]'::json)
+        from (select * from plays order by played_at desc limit 200) pl
       ),
       'top_tracks', (
         select coalesce(json_agg(t order by t.nb_plays desc), '[]'::json)
