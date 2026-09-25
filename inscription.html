@@ -224,8 +224,8 @@ footer a:hover{color:var(--text2)}
     <!-- Success -->
     <div class="success-screen" id="success-screen">
       <div class="success-icon">✓</div>
-      <div class="success-title">Accès accordé !</div>
-      <p class="success-sub">
+      <div class="success-title" id="success-title">Accès accordé !</div>
+      <p class="success-sub" id="success-msg">
         Votre compte est créé.<br>
         Redirection vers le catalogue…
       </p>
@@ -286,8 +286,13 @@ form.addEventListener('submit', async function(e) {
 
   if (signupErr) {
     if (signupErr.message.toLowerCase().includes('already')) {
-      // Compte existant : magic link
+      // Compte existant : envoyer un magic link, ne pas rediriger automatiquement
       await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://osm-music.fr/index.html' } });
+      document.getElementById('success-title').textContent = 'Vérifiez votre email !';
+      document.getElementById('success-msg').innerHTML = 'Vous avez déjà un compte.<br>Un lien de connexion vous a été envoyé.<br><br><strong>Vérifiez aussi vos spams.</strong>';
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+      return;
     } else {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Envoyer ma demande';
