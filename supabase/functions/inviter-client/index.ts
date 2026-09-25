@@ -88,3 +88,4 @@ Deno.serve(async (req) => {
     user_id: data?.user?.id ?? null,
   });
 });
+
