@@ -224,11 +224,10 @@ footer a:hover{color:var(--text2)}
     <!-- Success -->
     <div class="success-screen" id="success-screen">
       <div class="success-icon">✓</div>
-      <div class="success-title">Vérifiez votre email !</div>
+      <div class="success-title">Accès accordé !</div>
       <p class="success-sub">
-        Un lien d'accès au catalogue vous a été envoyé.<br>
-        Cliquez dessus pour vous connecter et télécharger.<br><br>
-        <strong>Vérifiez aussi vos spams.</strong>
+        Votre compte est créé.<br>
+        Redirection vers le catalogue…
       </p>
       <a href="index.html" class="btn-home">← Retour au site</a>
     </div>
@@ -277,21 +276,21 @@ form.addEventListener('submit', async function(e) {
     await sb.from('access_requests').insert({ email, prenom, nom, societe, telephone, metier, projet, message });
   } catch {}
 
-  // Envoi automatique du lien d'accès au catalogue
-  const { error: otpErr } = await sb.auth.signInWithOtp({
+  // Création du compte Supabase automatique (Confirm email désactivé)
+  const tempPw = 'OSM' + Math.random().toString(36).slice(2,10).toUpperCase() + '!';
+  const { error: signupErr } = await sb.auth.signUp({
     email,
-    options: { emailRedirectTo: 'https://osm-music.fr/index.html' }
+    password: tempPw,
+    options: { data: { prenom, nom, societe } }
   });
-
-  if (otpErr) {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Envoyer ma demande';
-    alert('Erreur envoi accès : ' + otpErr.message);
-    return;
+  // Si compte existant : envoyer un magic link pour reconnecter
+  if (signupErr && signupErr.message.toLowerCase().includes('already')) {
+    await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://osm-music.fr/index.html' } });
   }
 
   document.getElementById('form-section').style.display = 'none';
   document.getElementById('success-screen').style.display = 'block';
+  setTimeout(() => { window.location.href = 'index.html'; }, 2500);
 });
 </script>
 
