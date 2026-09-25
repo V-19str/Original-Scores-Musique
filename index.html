@@ -2537,8 +2537,7 @@ function osmClearUser() {
 }
 
 function canDownload(){
-  if(osmUser)return true;
-  showDlGate();return false;
+  return true;
 }
 function showDlGate(){
   const g=document.getElementById('dl-modal');if(!g)return;
