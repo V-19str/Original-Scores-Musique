@@ -278,15 +278,17 @@ form.addEventListener('submit', async function(e) {
   } catch {}
 
   // Envoi automatique du lien d'accès au catalogue
-  try {
-    await sb.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: 'https://osm-music.fr/index.html',
-        data: { prenom, nom, societe }
-      }
-    });
-  } catch {}
+  const { error: otpErr } = await sb.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: 'https://osm-music.fr/index.html' }
+  });
+
+  if (otpErr) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Envoyer ma demande';
+    alert('Erreur envoi accès : ' + otpErr.message);
+    return;
+  }
 
   document.getElementById('form-section').style.display = 'none';
   document.getElementById('success-screen').style.display = 'block';
