@@ -224,11 +224,11 @@ footer a:hover{color:var(--text2)}
     <!-- Success -->
     <div class="success-screen" id="success-screen">
       <div class="success-icon">✓</div>
-      <div class="success-title">Demande envoyée !</div>
+      <div class="success-title">Vérifiez votre email !</div>
       <p class="success-sub">
-        Vladimir a bien reçu votre demande et vous contactera<br>
-        sous <strong>24h</strong> avec le lien d'accès au catalogue.<br><br>
-        <strong>Merci de votre confiance.</strong>
+        Un lien d'accès au catalogue vous a été envoyé.<br>
+        Cliquez dessus pour vous connecter et télécharger.<br><br>
+        <strong>Vérifiez aussi vos spams.</strong>
       </p>
       <a href="index.html" class="btn-home">← Retour au site</a>
     </div>
@@ -275,6 +275,17 @@ form.addEventListener('submit', async function(e) {
   // Enregistrement Supabase (silencieux si table absente)
   try {
     await sb.from('access_requests').insert({ email, prenom, nom, societe, telephone, metier, projet, message });
+  } catch {}
+
+  // Envoi automatique du lien d'accès au catalogue
+  try {
+    await sb.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: 'https://osm-music.fr/index.html',
+        data: { prenom, nom, societe }
+      }
+    });
   } catch {}
 
   document.getElementById('form-section').style.display = 'none';
