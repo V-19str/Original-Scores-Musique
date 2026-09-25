@@ -278,14 +278,22 @@ form.addEventListener('submit', async function(e) {
 
   // Création du compte Supabase automatique (Confirm email désactivé)
   const tempPw = 'OSM' + Math.random().toString(36).slice(2,10).toUpperCase() + '!';
-  const { error: signupErr } = await sb.auth.signUp({
+  const { data: signupData, error: signupErr } = await sb.auth.signUp({
     email,
     password: tempPw,
     options: { data: { prenom, nom, societe } }
   });
-  // Si compte existant : envoyer un magic link pour reconnecter
-  if (signupErr && signupErr.message.toLowerCase().includes('already')) {
-    await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://osm-music.fr/index.html' } });
+
+  if (signupErr) {
+    if (signupErr.message.toLowerCase().includes('already')) {
+      // Compte existant : magic link
+      await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://osm-music.fr/index.html' } });
+    } else {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Envoyer ma demande';
+      alert('Erreur création compte : ' + signupErr.message);
+      return;
+    }
   }
 
   document.getElementById('form-section').style.display = 'none';
