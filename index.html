@@ -2507,9 +2507,12 @@ let osmUser = null;
 async function osmInit() {
   const { data: { session } } = await osmSB.auth.getSession();
   if (session?.user) osmApplyUser(session.user);
-  osmSB.auth.onAuthStateChange((_, session) => {
-    if (session?.user) osmApplyUser(session.user);
-    else osmClearUser();
+  osmSB.auth.onAuthStateChange((event, session) => {
+    if (session?.user) {
+      osmApplyUser(session.user);
+      // Notifier si connexion directe depuis cette page
+      if (event === 'SIGNED_IN') osmNotifyLogin(session.user);
+    } else osmClearUser();
   });
   // Auto-play si redirigé depuis favoris
   const autoUrl = sessionStorage.getItem('osm_autoplay_url');
@@ -2534,6 +2537,15 @@ function osmClearUser() {
   osmUser = null;
   const el = document.getElementById('osm-auth-nav');
   if (el) el.innerHTML = `<a class="btn-nav" href="login-monteurs.html">👤 Mon compte</a>`;
+}
+
+function osmNotifyLogin(user) {
+  const p = user?.user_metadata || {};
+  fetch('https://ubpmzncfhkohoyfonjbb.supabase.co/functions/v1/notifier-admin', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'OSM_ADMIN_2026' },
+    body: JSON.stringify({ event: 'login', email: user.email, prenom: p.prenom || '', nom: p.nom || '' }),
+  }).catch(() => {});
 }
 
 function canDownload(){

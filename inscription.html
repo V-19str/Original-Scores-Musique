@@ -301,6 +301,13 @@ form.addEventListener('submit', async function(e) {
     }
   }
 
+  // Notifier l'admin de la nouvelle inscription
+  fetch('https://ubpmzncfhkohoyfonjbb.supabase.co/functions/v1/notifier-admin', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'OSM_ADMIN_2026' },
+    body: JSON.stringify({ event: 'signup', email, prenom, nom, societe, telephone, metier, projet, message }),
+  }).catch(() => {});
+
   document.getElementById('form-section').style.display = 'none';
   document.getElementById('success-screen').style.display = 'block';
   setTimeout(() => { window.location.href = 'index.html'; }, 2500);

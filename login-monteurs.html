@@ -339,9 +339,12 @@ async function init() {
   const { data: { session } } = await sb.auth.getSession();
   if (session?.user) await setUser(session.user);
 
-  sb.auth.onAuthStateChange(async (_, session) => {
-    if (session?.user) await setUser(session.user);
-    else showAuth();
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (session?.user) {
+      await setUser(session.user);
+      // Notifier l'admin uniquement sur une vraie nouvelle connexion
+      if (event === 'SIGNED_IN') notifyLogin(session.user);
+    } else showAuth();
   });
 }
 
@@ -560,6 +563,15 @@ document.getElementById('modal-proj').addEventListener('click', e => {
 // ── ADMIN ─────────────────────────────────────────
 function showAdminDash() {
   window.location.href = 'admin.html';
+}
+
+function notifyLogin(user) {
+  const p = user?.user_metadata || {};
+  fetch('https://ubpmzncfhkohoyfonjbb.supabase.co/functions/v1/notifier-admin', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'OSM_ADMIN_2026' },
+    body: JSON.stringify({ event: 'login', email: user.email, prenom: p.prenom || '', nom: p.nom || '' }),
+  }).catch(() => {});
 }
 
 init();
