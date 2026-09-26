@@ -31,3 +31,8 @@ jobs:
         run: supabase functions deploy notifier-admin --project-ref ubpmzncfhkohoyfonjbb
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      - name: Deploy daily-recap
+        run: supabase functions deploy daily-recap --project-ref ubpmzncfhkohoyfonjbb
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}

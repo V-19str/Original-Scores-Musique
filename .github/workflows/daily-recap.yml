@@ -1,0 +1,25 @@
+name: Récap quotidien OSM
+
+on:
+  schedule:
+    # 6h00 UTC = 8h00 Paris (heure d'été CEST) / 7h00 Paris (heure d'hiver CET)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Permet de déclencher manuellement pour tester
+
+jobs:
+  send-recap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Appeler la fonction daily-recap
+        run: |
+          response=$(curl -s -o /tmp/resp.json -w "%{http_code}" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "x-admin-secret: ${{ secrets.OSM_ADMIN_SECRET }}" \
+            https://ubpmzncfhkohoyfonjbb.supabase.co/functions/v1/daily-recap)
+          echo "HTTP status: $response"
+          cat /tmp/resp.json
+          if [ "$response" != "200" ]; then
+            echo "Erreur : statut HTTP $response"
+            exit 1
+          fi
