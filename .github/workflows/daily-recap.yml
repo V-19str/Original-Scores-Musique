@@ -15,7 +15,8 @@ jobs:
           response=$(curl -s -o /tmp/resp.json -w "%{http_code}" \
             -X POST \
             -H "Content-Type: application/json" \
-            -H "x-admin-secret: ${{ secrets.OSM_ADMIN_SECRET }}" \
+            -H "Authorization: Bearer sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh" \
+            -H "x-admin-secret: OSM_ADMIN_2026" \
             https://ubpmzncfhkohoyfonjbb.supabase.co/functions/v1/daily-recap)
           echo "HTTP status: $response"
           cat /tmp/resp.json
