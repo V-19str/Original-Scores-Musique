@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OSM — Original Scores Music</title>
+  <link rel="stylesheet" href="css/panel.css">
+</head>
+<body>
+
+  <!-- ── En-tête ── -->
+  <div class="osm-header">
+    <div class="osm-logo">OSM</div>
+    <div>
+      <div class="osm-title">Original Scores Music</div>
+      <div class="osm-subtitle">Musique originale libre de droits</div>
+    </div>
+    <div class="header-right" id="auth-area"></div>
+  </div>
+
+  <!-- ── Recherche + filtres ── -->
+  <div class="search-bar">
+    <input class="search-input" id="search-input" type="search"
+           placeholder="Rechercher titre, playlist, ambiance…" autocomplete="off">
+    <div class="filters" id="filters"></div>
+  </div>
+
+  <!-- ── Liste des morceaux ── -->
+  <div class="track-list" id="track-list">
+    <div class="state-msg"><div class="spinner"></div><br>Chargement…</div>
+  </div>
+
+  <!-- ── Lecteur ── -->
+  <div class="player-bar" id="player-bar">
+    <div class="player-top">
+      <div>
+        <div class="player-title" id="player-title"></div>
+        <div class="player-playlist" id="player-playlist"></div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <span class="time-label" id="time-label">0:00</span>
+    </div>
+
+    <div class="player-controls" style="margin-bottom:8px">
+      <button class="ctrl-btn primary" id="ctrl-play" title="Lecture / Pause">▶</button>
+    </div>
+
+    <button class="import-btn" id="import-btn">Importer dans Premiere Pro</button>
+  </div>
+
+  <!-- ── Modal connexion ── -->
+  <div class="modal-overlay" id="login-modal">
+    <div class="modal-card">
+      <h3>Connexion OSM</h3>
+      <p style="font-size:10px;color:#888;margin-bottom:12px">
+        Connectez-vous pour accéder aux données compositeurs et activer les cue sheets automatiques.
+      </p>
+      <form id="login-form">
+        <input id="login-email" type="email" placeholder="Email" autocomplete="email">
+        <input id="login-password" type="password" placeholder="Mot de passe" autocomplete="current-password">
+        <div class="modal-err" id="login-err"></div>
+        <div class="modal-actions" style="margin-top:10px">
+          <button type="button" class="btn-ghost" id="cancel-login">Annuler</button>
+          <button type="submit" class="btn-primary" id="login-btn">Connexion</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CEP / ExtendScript bridge -->
+  <script src="js/CSInterface.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
