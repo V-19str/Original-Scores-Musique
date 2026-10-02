@@ -23,9 +23,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,
 
 /* HERO */
 .hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:flex-end;overflow:hidden;padding-top:64px}
-.hero-bg{position:absolute;inset:0;background:url('assets/automne-hero-desktop.webp') center/cover no-repeat,linear-gradient(135deg,#2d1a08,#4a2c10);animation:heroZoom 14s ease-in-out infinite alternate}
-/* Sur mobile, le recadrage 2:1 perd la composition : on sert la version 2:3. */
-@media(max-width:700px){.hero-bg{background-image:url('assets/automne-hero-mobile.webp'),linear-gradient(135deg,#2d1a08,#4a2c10)}}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1476611338391-6f395a0dd82e?w=1920&q=85&fit=crop&crop=center') center/cover no-repeat,linear-gradient(135deg,#2d1a08,#4a2c10);animation:heroZoom 14s ease-in-out infinite alternate}
+/* Sur mobile, recadrage portrait. */
+@media(max-width:700px){.hero-bg{background-image:url('https://images.unsplash.com/photo-1476611338391-6f395a0dd82e?w=800&h=1200&q=85&fit=crop&crop=left'),linear-gradient(135deg,#2d1a08,#4a2c10)}}
 @keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.06)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.55) 50%,rgba(0,0,0,0.2) 100%)}
 .hero-content{position:relative;z-index:2;padding:0 72px 72px;max-width:900px;animation:fadeUp 1s .3s ease both}
