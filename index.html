@@ -112,21 +112,21 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px));pointer-events:none;border:0}
 .hero-video-cover{position:absolute;inset:0;z-index:1;background:#000;pointer-events:none;transition:opacity 0.8s ease}
 
-/* Mise en avant « La rentrée » posée dans le hero, sous la recherche. */
+/* Mise en avant « L'automne » posée dans le hero, sous la recherche. */
 .hero-rentree{margin-top:28px;display:inline-flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;
   background:rgba(0,0,0,0.46);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);
   border-radius:14px;padding:15px 22px;animation:fadeUp 1s 1.5s ease both}
 .hero-rentree-left{display:flex;align-items:center;gap:13px;text-align:left}
-.hero-rentree-sun{font-size:26px;line-height:1;filter:drop-shadow(0 0 10px rgba(255,190,60,0.55))}
+.hero-rentree-sun{font-size:26px;line-height:1;filter:drop-shadow(0 0 10px rgba(180,110,40,0.6))}
 .hero-rentree-txt{display:flex;flex-direction:column;gap:3px}
-.hero-rentree-kicker{font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#ffd48a}
+.hero-rentree-kicker{font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#f5c87a}
 .hero-rentree-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:0.2px}
 .hero-rentree-sub{font-size:11.5px;font-weight:300;color:rgba(255,255,255,0.8)}
 .hero-rentree-btns{display:flex;gap:9px;flex-wrap:wrap}
 .hero-rentree-btn{padding:9px 17px;font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:1.4px;
   text-transform:uppercase;border-radius:5px;cursor:pointer;text-decoration:none;border:1px solid transparent;transition:all .15s;white-space:nowrap}
-.hero-rentree-btn-sun{background:linear-gradient(135deg,#ff9500,#ff5e3a);color:#fff}
-.hero-rentree-btn-sun:hover{filter:brightness(1.1)}
+.hero-rentree-btn-sun{background:linear-gradient(135deg,#c8731a,#8b4513);color:#fff}
+.hero-rentree-btn-sun:hover{filter:brightness(1.15)}
 .hero-rentree-btn-ghost{background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.3)}
 .hero-rentree-btn-ghost:hover{background:rgba(255,255,255,0.22)}
 @media(max-width:700px){
@@ -841,11 +841,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       </div>
       <div class="hero-rentree">
         <div class="hero-rentree-left">
-          <span class="hero-rentree-sun">📚</span>
+          <span class="hero-rentree-sun">🍂</span>
           <div class="hero-rentree-txt">
             <div class="hero-rentree-kicker">Sélection de saison</div>
-            <div class="hero-rentree-title">La rentrée — bureau, business et dynamisme</div>
-            <div class="hero-rentree-sub"><span id="rentree-count">—</span> titres pour vos sujets de rentrée</div>
+            <div class="hero-rentree-title">L'automne — mélancolie, folk et piano</div>
+            <div class="hero-rentree-sub"><span id="rentree-count">—</span> titres pour vos ambiances d'automne</div>
           </div>
         </div>
         <div class="hero-rentree-btns">
@@ -1407,39 +1407,19 @@ function plSlug(s){return String(s||'').normalize('NFD').replace(/\p{M}/gu,'').t
 
 let allTracks=[],filteredTracks=[],currentIndex=-1,currentFolder=null,activeTag=null;
 
-/* ── SÉLECTION « LA RENTRÉE » (playlist virtuelle) ─────────────────────────
-   Les tags de catalogue.json sont purement musicaux (mode, tonalite, tempo,
-   energie, humeur) : il n'existe aucun tag thematique « bureau » ou
-   « business ». La selection croise donc plusieurs criteres :
-     1. la playlist d'origine, pour l'axe corporate/instrumental ;
-     2. une humeur confiante et dynamique, pour ecarter les versions sombres
-        d'un meme morceau ;
-     3. les mots-cles de titre, qui rattrapent les morceaux corporate ranges
-        ailleurs ;
-     4. l'exclusion des playlists hors-sujet (suspense, action...) meme en
-        cas de mot-cle correspondant, pour eviter les faux positifs de genre.
-   Aucune modification de catalogue.json : la regle est evaluee a la volee.
-   Le meme jeu de regles est duplique dans nouveautes.html — toute evolution
-   doit etre reportee des deux cotes. */
-const RENTREE_PLAYLISTS=new Set(['Neutre Positif','Pop Acoustique','Orchestral','Électro','Électro-Pop']);
-const RENTREE_MOODS_A=['positif','lumineux'];
-const RENTREE_MOODS_B=['énergique','équilibré','modéré','majeur'];
-const RENTREE_KW=['corporate','business','professionnel','entreprise','company','meeting','success',
-  'achievement','growth','innovation','technology','digital','startup','enterprise','presentation',
-  'conference','motivation','inspir','future','progress','ambition','vision','strategy','confident'];
-const RENTREE_BLOCK_KW=['fuck','shit','bitch'];
-const RENTREE_EXCLUDED_PLAYLISTS=new Set(['Suspense','Action','Paranormal','Hard Rock','Burlesque','Romance',
-  'Ludique','Paname','Piano','Pizzicato','Country Blues','Swing Jazz']);
+/* ── SÉLECTION « L'AUTOMNE » (playlist virtuelle) ───────────────────────────
+   Sélection de morceaux aux ambiances d'automne : contemplatifs, mélancoliques,
+   folk, piano, acoustique. Évalue les tags musicaux à la volée sans toucher
+   à catalogue.json. Même logique dupliquée dans nouveautes.html. */
+const RENTREE_PLAYLISTS=new Set(['Piano','Folk Acoustique','Pop Acoustique','Mélancolie','Atmosphère']);
+const RENTREE_MOODS=['mélancolique','nostalgique','contemplatif','doux','intimiste','poétique'];
+const RENTREE_EXCLUDED_PLAYLISTS=new Set(['Action','Hard Rock','Suspense','Paranormal','Burlesque',
+  'Ludique','Reggae','Groovy','Électro','Pizzicato']);
 function isRentree(t){
   const tags=t.tags||[];
   if(RENTREE_EXCLUDED_PLAYLISTS.has(t.playlistLabel))return false;
-  if(tags.includes('sombre')||tags.includes('mélancolique')||tags.includes('tendu'))return false;
-  const title=(t.title||'').toLowerCase();
-  if(RENTREE_BLOCK_KW.some(b=>title.includes(b)))return false;
-  if(RENTREE_KW.some(k=>title.includes(k)))return true;
-  return RENTREE_PLAYLISTS.has(t.playlistLabel)
-    &&RENTREE_MOODS_A.some(m=>tags.includes(m))
-    &&RENTREE_MOODS_B.some(m=>tags.includes(m));
+  if(tags.includes('intense')||tags.includes('urgent')||tags.includes('énergique'))return false;
+  return RENTREE_PLAYLISTS.has(t.playlistLabel)&&RENTREE_MOODS.some(m=>tags.includes(m));
 }
 /* Deduplication par titre : un meme morceau existe parfois dans plusieurs
    playlists (Atmosphere + Divers + Folk), ce qui gonflerait le compteur. */
@@ -2073,7 +2053,7 @@ function renderTracks(){
   const q=heroSearchQuery.toLowerCase().trim();
   const kws=q?getKws(q):[];
   document.getElementById('section-title').textContent=
-    currentFolder==='__rentree'?"La rentrée":(currentFolder||'Catalogue Complet');
+    currentFolder==='__rentree'?"L'automne":(currentFolder||'Catalogue Complet');
   document.getElementById('section-count').textContent=`${filteredTracks.length} ${window.osmLang&&osmLang()==='en'?'tracks':'morceaux'}`;
   if(!filteredTracks.length){list.innerHTML='<div class="empty">Aucun résultat</div>';return;}
   const qIds=new Set(queue.map(t=>t.id));
