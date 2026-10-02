@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Raccord, la musique OSM calée sur le montage | OSM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E6EBE4; --panel:#F5F7F2; --ink:#1D2622; --muted:#5A6962; --line:#C2CCC4;
+  --grease:#C2352B; --steen:#7FA08E; --steen-deep:#4F7564; --tape:#E2C35C;
+  --font:"Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#161C19; --panel:#1F2723; --ink:#E2E8E1; --muted:#97A69E; --line:#35423B;
+    --grease:#EE6152; --steen:#7DAE94; --steen-deep:#4C7A64; --tape:#D6BA58;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#161C19; --panel:#1F2723; --ink:#E2E8E1; --muted:#97A69E; --line:#35423B;
+  --grease:#EE6152; --steen:#7DAE94; --steen-deep:#4C7A64; --tape:#D6BA58;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.5 var(--font);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:28px clamp(16px,4vw,40px) 64px}
+header{display:grid;grid-template-columns:auto 1fr;gap:12px 40px;align-items:end;margin-bottom:28px}
+h1{margin:0;font-weight:820;font-stretch:125%;font-size:clamp(3.2rem,10vw,7rem);line-height:.86;letter-spacing:-.035em}
+h1 .cut{display:inline-block;width:.09em;height:.9em;background:var(--grease);margin:0 .06em;vertical-align:-.02em;transform:rotate(4deg);border-radius:2px}
+.lede{margin:0;max-width:46ch;color:var(--muted);font-size:1.02rem;padding-bottom:.5em}
+.lede strong{color:var(--ink);font-weight:600}
+.drops{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.zone{position:relative;display:block;background:var(--panel);border:1.5px dashed var(--line);border-radius:10px;padding:20px 22px;cursor:pointer;min-height:132px}
+.zone:hover,.zone.over{border-color:var(--steen-deep)}
+.zone.busy{cursor:progress}
+.zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.zone input:focus-visible + .zt{outline:2px solid var(--grease);outline-offset:6px;border-radius:4px}
+.zt{display:block;font-weight:700;font-stretch:110%;font-size:1.25rem;line-height:1.2}
+.zs{display:block;color:var(--muted);font-size:.92rem;margin-top:4px;max-width:44ch}
+.status{display:block;margin-top:12px;font-size:.92rem;font-weight:500;min-height:1.4em}
+#tList{list-style:none;margin:8px 0 0;padding:0;font-size:.9rem;position:relative;z-index:1;pointer-events:none}
+#tList li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-top:1px solid var(--line)}
+#tList li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#tList .meta{color:var(--muted);flex:none}
+#work{margin-top:28px}
+.stage{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;align-items:start}
+.screen{background:#000;border-radius:10px;overflow:hidden;aspect-ratio:16/9}
+.screen video{display:block;width:100%;height:100%;object-fit:contain;background:#000}
+.under{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;font-size:.9rem;color:var(--muted)}
+.under label{display:flex;gap:8px;align-items:center;cursor:pointer}
+.under input{accent-color:var(--steen-deep);width:16px;height:16px}
+h2{margin:0 0 10px;font-weight:700;font-stretch:110%;font-size:1.05rem}
+#results{display:flex;flex-direction:column;gap:8px}
+.res{all:unset;display:block;background:var(--panel);border:1.5px solid transparent;border-radius:10px;padding:12px 14px;cursor:pointer}
+.res:hover{border-color:var(--line)}
+.res[aria-pressed="true"]{border-color:var(--steen-deep)}
+.res:focus-visible{outline:2px solid var(--grease);outline-offset:2px}
+.res-top{display:flex;align-items:baseline;gap:10px}
+.rank{font-weight:820;font-stretch:125%;font-size:1.3rem;line-height:1;color:var(--steen-deep);min-width:1.1em}
+.res-name{font-weight:650;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-score{font-weight:600;color:var(--muted);font-size:.9rem}
+.res ul{margin:8px 0 0;padding:0 0 0 1.9em;font-size:.88rem;color:var(--muted);list-style:none}
+.res li{margin:2px 0}
+.res[aria-pressed="false"] ul li:nth-child(n+3){display:none}
+.empty,.note{margin:0;color:var(--muted);font-size:.95rem}
+.empty{background:var(--panel);border-radius:10px;padding:16px}
+.strip{margin-top:22px;background:var(--panel);border-radius:10px;padding:14px 14px 6px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:.84rem;color:var(--muted);margin-bottom:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.lg-cut{background:var(--grease);width:3px!important}
+.lg-hit{background:var(--grease);border-radius:50%!important}
+.lg-mus{background:var(--steen)}
+.lg-tape{background:var(--tape)}
+.tl-scroll{overflow-x:auto}
+#timeline{display:block;width:100%;min-width:560px;height:178px;cursor:pointer}
+#export{margin-top:22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 28px;align-items:end;background:var(--panel);border-radius:10px;padding:18px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.fields label{display:flex;flex-direction:column;gap:4px;font-size:.82rem;color:var(--muted)}
+.fields input{font:inherit;font-size:.95rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:0}
+.fields input:focus-visible{outline:2px solid var(--grease);outline-offset:1px}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+button.act{font:inherit;font-weight:650;font-size:.95rem;border-radius:8px;padding:10px 16px;cursor:pointer;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper)}
+button.act.ghost{background:transparent;color:var(--ink)}
+button.act:disabled{opacity:.5;cursor:progress}
+button.act:focus-visible{outline:2px solid var(--grease);outline-offset:2px}
+#exMsg{grid-column:1/-1;margin:0;font-size:.88rem;color:var(--muted);min-height:1.3em}
+footer{margin-top:36px;color:var(--muted);font-size:.84rem;max-width:72ch}
+@media (max-width:820px){
+  header{grid-template-columns:1fr}
+  .drops,.stage{grid-template-columns:1fr}
+  #export{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Rac<span class="cut" aria-hidden="true"></span>cord</h1>
+  <p class="lede">Dépose ta séquence. Raccord trouve les trois meilleurs titres du catalogue OSM, repère les changements de plan, coupe la musique sur les fins de mesure pour qu’elle tombe sur tes images et finisse sur la dernière, puis prépare <strong>le fichier audio et la cue sheet</strong>.</p>
+</header>
+
+<section class="drops" aria-label="Fichiers">
+  <label class="zone" id="vZone">
+    <input type="file" id="vInput" accept="video/*" aria-label="Choisir la vidéo du montage">
+    <span class="zt">Ton montage</span>
+    <span class="zs">Un export vidéo de la séquence à habiller (MP4 conseillé). Tout reste sur ton ordinateur.</span>
+    <span class="status" id="vStatus" aria-live="polite"></span>
+  </label>
+  <div class="zone" id="pZone" style="cursor:default">
+    <span class="zt">Le catalogue OSM</span>
+    <span class="zs">Raccord choisit lui-même les meilleurs titres, les cale sur tes plans et te les fait écouter.</span>
+    <span class="status" id="tStatus" aria-live="polite"></span>
+    <span class="btns" style="margin-top:10px"><button class="act ghost" id="btnMore" type="button" hidden>Autres propositions</button></span>
+  </div>
+</section>
+
+<section id="work" hidden>
+  <div class="stage">
+    <div>
+      <div class="screen"><video id="player" controls playsinline muted></video></div>
+      <div class="under">
+        <span>La musique proposée joue avec l’image.</span>
+        <label><input type="checkbox" id="keepSound"> Garder le son du montage</label>
+      </div>
+    </div>
+    <div>
+      <h2>Propositions</h2>
+      <div id="results" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="legend">
+      <span><i class="lg-cut"></i>changement de plan</span>
+      <span><i class="lg-hit"></i>plan qui tombe sur un temps (vide : à côté)</span>
+      <span><i class="lg-mus"></i>musique, traits hauts sur les débuts de mesure</span>
+      <span><i class="lg-tape"></i>coupe dans le morceau</span>
+    </div>
+    <div class="tl-scroll"><canvas id="timeline" aria-label="Frise : plans de la vidéo et musique calée. Clique pour te déplacer."></canvas></div>
+  </div>
+
+  <section id="export" hidden aria-label="Export">
+    <div class="fields">
+      <label>Titre<input id="ctTitle"></label>
+      <label>Compositeur(s)<input id="ctComp" placeholder="Nom, part"></label>
+      <label>Éditeur<input id="ctPub" value="OSM (Original Scores Music)"></label>
+      <label>Producteur phonographique<input id="ctProd" value="OSM"></label>
+      <label>TC début de séquence (25 i/s)<input id="ctStart" value="00:00:00:00" inputmode="numeric"></label>
+    </div>
+    <div class="btns">
+      <button class="act" id="btnPack" type="button">Télécharger audio et cue sheet</button>
+      <button class="act ghost" id="btnCue" type="button">Cue sheet seule</button>
+    </div>
+    <p id="exMsg" aria-live="polite"></p>
+  </section>
+</section>
+
+<footer>La vidéo reste sur ton ordinateur : seules 6 petites images de la séquence sont envoyées pour déterminer l’ambiance. Le calage repose sur le tempo détecté : sur un morceau sans pulsation nette (nappes, ambiances), vérifie la coupe à l’oreille avant de livrer.</footer>
+</div>
+<script src="raccord-engine.js"></script>
+<script src="analysis-format.js"></script>
+<script src="config.js"></script>
+<script>
+/* ===== Raccord : interface ===== */
+(function () {
+  const $ = s => document.querySelector(s);
+  const state = { video: null, ranked: [], page: 0, results: [], sel: 0, rendered: null };
+  let actx = null, srcNode = null, raf = 0;
+  const ctx = () => (actx ||= new (window.AudioContext || window.webkitAudioContext)());
+
+  const fmt = t => { t = Math.max(0, t); const m = Math.floor(t / 60), s = Math.floor(t % 60); return m + ':' + String(s).padStart(2, '0'); };
+  const cleanName = f => f.replace(/\.[^.]+$/, '').replace(/[_]+/g, ' ').replace(/\s+/g, ' ').trim();
+  const once = (el, ev) => new Promise((res, rej) => { el.addEventListener(ev, res, { once: true }); el.addEventListener('error', rej, { once: true }); });
+  const tick = () => new Promise(r => setTimeout(r, 0));
+
+  /* ---------- Vidéo ---------- */
+  function seek(v, t) {
+    return new Promise(res => {
+      const done = () => { v.removeEventListener('seeked', done); clearTimeout(to); res(); };
+      const to = setTimeout(done, 2000);
+      v.addEventListener('seeked', done); v.currentTime = t;
+    });
+  }
+
+  async function analyzeVideo(file, onProgress) {
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
+    await once(v, 'loadedmetadata');
+    const D = v.duration;
+    if (!isFinite(D) || D <= 0) throw new Error('Durée de la vidéo illisible.');
+    const AD = Math.min(D, 300), step = Math.max(0.1, AD / 500), n = Math.floor((AD - 0.05) / step) + 1;
+    const W = 80, H = 45, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    const c2 = cv.getContext('2d', { willReadFrequently: true });
+    const times = [], score = [], motion = [], frames = [];
+    let pg = null, ph = null;
+    for (let k = 0; k < n; k++) {
+      const t = Math.min(k * step, D - 0.05);
+      await seek(v, t);
+      c2.drawImage(v, 0, 0, W, H);
+      const id = c2.getImageData(0, 0, W, H), px = id.data;
+      const g = new Uint8Array(W * H), h = new Float32Array(24);
+      for (let i = 0, q = 0; i < px.length; i += 4, q++) {
+        g[q] = (px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114) | 0;
+        h[px[i] >> 5]++; h[8 + (px[i + 1] >> 5)]++; h[16 + (px[i + 2] >> 5)]++;
+      }
+      let hd = 0, md = 0;
+      if (pg) {
+        for (let b = 0; b < 24; b++) hd += Math.abs(h[b] - ph[b]);
+        hd /= (3 * 2 * W * H);
+        for (let q = 0; q < g.length; q++) md += Math.abs(g[q] - pg[q]);
+        md /= (g.length * 255);
+      }
+      times.push(t); score.push(0.6 * hd + 0.4 * md); motion.push(md); frames.push(id);
+      pg = g; ph = h;
+      if (k % 5 === 0) onProgress(k / n);
+    }
+    const sorted = score.slice(1).sort((a, b) => a - b), med = sorted[Math.floor(sorted.length / 2)] || 0;
+    const thr = Math.max(0.16, med * 3.5), cuts = [], isCut = new Uint8Array(n);
+    let last = -1;
+    for (let k = 1; k < n; k++) {
+      const s = score[k];
+      if (s > thr && s >= (score[k - 1] || 0) && s >= (score[k + 1] || 0) && times[k] - last > 0.45) {
+        const t = (times[k - 1] + times[k]) / 2;
+        cuts.push({ t, w: Math.min(1.5, s / thr), k }); isCut[k] = 1; last = times[k];
+      }
+    }
+    // intensité : mouvement lissé + densité de plans
+    const mo = motion.map((m, k) => isCut[k] ? (motion[k - 1] || 0) : m);
+    const half = Math.max(1, Math.round(0.5 / step)), inten = new Float32Array(n);
+    const sm = mo.map((_, k) => { let s = 0, c = 0; for (let q = k - half; q <= k + half; q++) if (q >= 0 && q < n) { s += mo[q]; c++; } return s / c; });
+    const ss = [...sm].sort((a, b) => a - b), p95 = ss[Math.floor(ss.length * 0.95)] || 1e-6;
+    const dens = times.map(t => cuts.reduce((a, c) => a + Math.exp(-0.5 * Math.pow((t - c.t) / 1.2, 2)), 0));
+    const dmax = Math.max(1e-6, ...dens);
+    for (let k = 0; k < n; k++) inten[k] = 0.6 * Math.min(1, sm[k] / p95) + 0.4 * dens[k] / dmax;
+    const vAt = (t0, t1) => {
+      let s = 0, c = 0; for (let k = 0; k < n; k++) if (times[k] >= t0 && times[k] < t1) { s += inten[k]; c++; }
+      if (c) return s / c;
+      const k = Math.min(n - 1, Math.max(0, Math.round(t0 / step))); return times[k] <= AD ? inten[k] : 0;
+    };
+    URL.revokeObjectURL(url);
+    return { name: file.name, D, AD, step, times, inten, cuts, frames, W, H, vAt };
+  }
+
+  /* ---------- Catalogue ---------- */
+  const CFG = window.RACCORD_CONFIG;
+  const FMT = window.RaccordFormat;
+  let indexCache = null;
+  async function getIndex() {
+    if (!indexCache) { const r = await fetch(CFG.INDEX_URL); if (!r.ok) throw new Error('index'); indexCache = await r.json(); }
+    return indexCache;
+  }
+
+  /* 6 images JPEG (~512 px) réparties sur la séquence */
+  async function extractFrames(file, D) {
+    const url = URL.createObjectURL(file), v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
+    await once(v, 'loadedmetadata');
+    const w = 512, h = Math.round(w * (v.videoHeight || 288) / (v.videoWidth || 512)), cv = document.createElement('canvas');
+    cv.width = w; cv.height = h; const g = cv.getContext('2d'), out = [];
+    for (let k = 0; k < 6; k++) {
+      await seek(v, Math.min(D - 0.05, D * (k + 0.5) / 6));
+      g.drawImage(v, 0, 0, w, h);
+      out.push(cv.toDataURL('image/jpeg', 0.7).split(',')[1]);
+    }
+    URL.revokeObjectURL(url); return out;
+  }
+
+  async function askAmbiance(images) {
+    const ctrl = new AbortController(), to = setTimeout(() => ctrl.abort(), 20000);
+    try {
+      const r = await fetch(CFG.RELAIS_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ images }), signal: ctrl.signal });
+      if (!r.ok) throw new Error('relais ' + r.status);
+      return await r.json();
+    } finally { clearTimeout(to); }
+  }
+
+  const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  /* Présélection : playlists et mots-clés, énergie, rythme, durée. Sans ambiance (plan B) : énergie et rythme seulement. */
+  function preselect(rows, V, amb) {
+    const cutRate = V.cuts.length / V.D;              // plans par seconde
+    const inten = V.inten.length ? V.inten.reduce((a, b) => a + b, 0) / V.inten.length : 0.5;
+    const wantE = amb ? amb.energie : Math.min(1, 0.25 + inten * 0.75 + cutRate * 0.2);
+    const wantB = amb ? ({ lent: 80, moyen: 105, rapide: 130 })[amb.rythme] : Math.max(70, Math.min(150, 70 + cutRate * 90));
+    const pls = amb ? amb.playlists.map(norm) : [];
+    const kws = amb ? amb.mots_cles.concat(amb.ambiances).map(norm) : [];
+    return rows.filter(r => r.d >= V.D * 0.4).map(r => {
+      let s = 0;
+      const pi = pls.indexOf(norm(r.pl)); if (pi >= 0) s += 1 - pi * 0.2;
+      if (kws.length) { const hay = norm(r.t + ' ' + r.tg.join(' ')); s += 0.1 * kws.filter(k => hay.includes(k)).length; }
+      s += 0.6 * (1 - Math.min(1, Math.abs(r.en - wantE) * 2));
+      s += 0.4 * Math.exp(-0.5 * Math.pow(Math.log2(r.bpm / wantB) / 0.35, 2));
+      if (r.c < 2) s -= 0.3;                           // pulsation faible : calage peu fiable
+      return { r, s };
+    }).sort((a, b) => b.s - a.s).slice(0, CFG.CANDIDATS).map(x => x.r);
+  }
+
+  async function fitCandidates(cands, V) {
+    const out = [];
+    for (let k = 0; k < cands.length; k++) {
+      const r = cands[k];
+      try {
+        const res = await fetch(CFG.ANALYSES_URL + encodeURIComponent(r.id) + '.json'); if (!res.ok) continue;
+        const R = FMT.decode(await res.json()), fit = fitTrack(R, V);
+        if (fit) out.push({ t: { id: r.id, title: r.t, url: r.u, R }, fit });
+      } catch (e) { /* analyse illisible : on passe */ }
+      if (k % 10 === 0) await tick();
+    }
+    return out.sort((a, b) => b.fit.score - a.fit.score);
+  }
+
+  async function loadAudio(t) {
+    if (t.buffer) return;
+    const r = await fetch(t.url); if (!r.ok) throw new Error('audio');
+    t.buffer = await ctx().decodeAudioData(await r.arrayBuffer());
+  }
+
+  async function showBatch() {
+    const st = $('#tStatus'), from = state.page * CFG.PROPOSITIONS, batch = state.ranked.slice(from, from + CFG.PROPOSITIONS);
+    if (!batch.length) { st.textContent = 'Plus d’autre proposition pour cette séquence.'; $('#btnMore').hidden = true; return; }
+    st.textContent = 'Chargement des titres…';
+    const ok = [];
+    for (const r of batch) { try { await loadAudio(r.t); ok.push(r); } catch (e) { /* titre indisponible */ } }
+    state.results = ok; state.sel = 0;
+    st.textContent = ok.length ? `${ok.length} proposition${ok.length > 1 ? 's' : ''} prête${ok.length > 1 ? 's' : ''}.` : 'Ces titres ne sont pas disponibles. Essaie d’autres propositions.';
+    $('#btnMore').hidden = from + CFG.PROPOSITIONS >= state.ranked.length;
+    renderResults(); if (ok.length) select(0);
+  }
+
+  async function runPipeline(file) {
+    const V = state.video, st = $('#tStatus'); state.page = 0; state.results = []; state.ranked = [];
+    let amb = null;
+    try {
+      st.textContent = 'Lecture de l’ambiance…';
+      amb = await askAmbiance(await extractFrames(file, V.D));
+    } catch (e) { st.textContent = 'Le service d’ambiance ne répond pas : sélection sur le rythme et l’énergie seulement.'; }
+    try {
+      const rows = await getIndex();
+      if (!st.textContent.startsWith('Le service')) st.textContent = 'Recherche dans le catalogue…';
+      const cands = preselect(rows, V, amb);
+      await tick();
+      state.ranked = await fitCandidates(cands, V);
+      state.tooShort = 0;
+      if (!state.ranked.length) { st.textContent = 'Aucun titre du catalogue ne convient à cette séquence.'; renderResults(); return; }
+      const warn = amb ? '' : ' (ambiance non lue)';
+      await showBatch(); if (!amb) st.textContent += warn;
+    } catch (e) { st.textContent = 'Le catalogue est indisponible pour le moment. Réessaie dans un instant.'; }
+  }
+
+  /* ---------- Fichiers ---------- */
+  function wireDrop(zone, input, handler) {
+    input.addEventListener('change', () => { if (input.files.length) handler([...input.files]); input.value = ''; });
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('over'); if (e.dataTransfer.files.length) handler([...e.dataTransfer.files]); });
+  }
+
+  async function onVideo(files) {
+    const file = files.find(f => f.type.startsWith('video/')) || files[0];
+    const st = $('#vStatus'); stopAudio();
+    st.textContent = 'Lecture des plans… 0 %'; $('#vZone').classList.add('busy');
+    try {
+      state.video = await analyzeVideo(file, p => st.textContent = 'Lecture des plans… ' + Math.round(p * 100) + ' %');
+      const V = state.video;
+      st.textContent = `${file.name}, ${fmt(V.D)}, ${V.cuts.length} changement${V.cuts.length > 1 ? 's' : ''} de plan` + (V.D > V.AD ? ' (analyse des 5 premières minutes)' : '');
+      const player = $('#player');
+      if (player.dataset.url) URL.revokeObjectURL(player.dataset.url);
+      player.dataset.url = URL.createObjectURL(file); player.src = player.dataset.url;
+      $('#work').hidden = false;
+      renderResults(); runPipeline(file);
+    } catch (e) {
+      st.textContent = 'Cette vidéo ne peut pas être lue ici. Essaie un MP4 (H.264) exporté depuis ton logiciel.';
+      state.video = null;
+    } finally { $('#vZone').classList.remove('busy'); }
+  }
+
+  /* ---------- Calage ---------- */
+  function explain(r) {
+    const { fit, t } = r, R = t.R, bs = R.bars, out = [];
+    const startT = fit.i >= fit.s ? bs[fit.s] : bs[fit.j];
+    out.push(`Démarre à ${fmt(Math.max(0, startT))} du morceau, mesure ${(fit.i >= fit.s ? fit.s : fit.j) + 1}.`);
+    if (fit.edit === 'none') out.push('Aucune coupe : le morceau joue d’un seul tenant.');
+    else if (fit.edit === 'skip') out.push(`Une coupe sur une fin de mesure : saute de ${fmt(bs[fit.i + 1])} à ${fmt(bs[fit.j])} (${fit.j - fit.i - 1} mesures retirées).`);
+    else out.push(`Une reprise sur une fin de mesure : rejoue ${fit.i + 1 - fit.j} mesures à partir de ${fmt(bs[fit.j])} pour rallonger.`);
+    out.push(fit.cutsCount ? `${fit.hits} changement${fit.hits > 1 ? 's' : ''} de plan sur ${fit.cutsCount} tombe${fit.hits > 1 ? 'nt' : ''} sur un temps.` : 'Plan-séquence : calage sur la durée seulement.');
+    out.push(fit.gap > 0.15 ? `Finit sur la vraie fin du morceau, ${fit.gap.toFixed(1).replace('.', ',')} s avant la dernière image.` : 'Finit sur la vraie fin du morceau, sur la dernière image.');
+    return out;
+  }
+
+  function renderResults() {
+    const box = $('#results'); box.innerHTML = '';
+    if (!state.video || (!state.results.length && !state.ranked.length && !state.tooShort)) {
+      const p = document.createElement('p'); p.className = 'empty';
+      p.textContent = !state.video ? 'Dépose ton montage pour commencer.' : 'Je cherche les meilleurs titres pour ta séquence…';
+      box.append(p); $('#export').hidden = true; return;
+    }
+    if (!state.results.length) {
+      const p = document.createElement('p'); p.className = 'empty';
+      p.textContent = 'Aucune proposition à afficher.';
+      box.append(p); $('#export').hidden = true; return;
+    }
+    state.results.forEach((r, k) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'res'; b.setAttribute('aria-pressed', k === state.sel);
+      const top = document.createElement('div'); top.className = 'res-top';
+      const rk = document.createElement('span'); rk.className = 'rank'; rk.textContent = k + 1;
+      const nm = document.createElement('span'); nm.className = 'res-name'; nm.textContent = r.t.title;
+      const sc = document.createElement('span'); sc.className = 'res-score'; sc.textContent = Math.round(Math.min(1, r.fit.score) * 100) + ' %';
+      sc.title = 'Accord entre la musique et les images';
+      top.append(rk, nm, sc);
+      const ul = document.createElement('ul');
+      explain(r).forEach(line => { const li = document.createElement('li'); li.textContent = line; ul.append(li); });
+      b.append(top, ul);
+      b.addEventListener('click', () => select(k));
+      box.append(b);
+    });
+    if (state.tooShort) { const p = document.createElement('p'); p.className = 'note'; p.textContent = `${state.tooShort} morceau${state.tooShort > 1 ? 'x' : ''} trop court${state.tooShort > 1 ? 's' : ''} pour cette séquence, écarté${state.tooShort > 1 ? 's' : ''}.`; box.append(p); }
+  }
+
+  function select(k) {
+    state.sel = k;
+    document.querySelectorAll('.res').forEach((b, q) => b.setAttribute('aria-pressed', q === k));
+    const r = state.results[k]; if (!r) return;
+    const wasPlaying = !$('#player').paused;
+    stopAudio();
+    const buf = r.t.buffer, chs = []; for (let c = 0; c < buf.numberOfChannels; c++) chs.push(buf.getChannelData(c));
+    const out = renderChannels(chs, buf.sampleRate, r.t.R, r.fit, state.video.D);
+    const ab = ctx().createBuffer(out.length, out[0].length, buf.sampleRate);
+    out.forEach((d, c) => ab.copyToChannel(d, c));
+    state.rendered = { r, ab, chs: out, sr: buf.sampleRate, span: audibleSpan(out, buf.sampleRate) };
+    $('#ctTitle').value = r.t.title;
+    $('#export').hidden = false;
+    drawTimeline();
+    if (wasPlaying) startAudio();
+  }
+
+  /* ---------- Lecture synchronisée ---------- */
+  function startAudio() {
+    stopAudio(true);
+    const R = state.rendered, v = $('#player'); if (!R) return;
+    const a = ctx(); if (a.state === 'suspended') a.resume();
+    if (v.currentTime >= R.ab.duration) return;
+    srcNode = a.createBufferSource(); srcNode.buffer = R.ab; srcNode.connect(a.destination);
+    srcNode.start(0, v.currentTime);
+    cancelAnimationFrame(raf); const loop = () => { drawTimeline(); raf = requestAnimationFrame(loop); }; loop();
+  }
+  function stopAudio(keepRaf) {
+    if (srcNode) { try { srcNode.stop(); } catch (e) { } srcNode.disconnect(); srcNode = null; }
+    if (!keepRaf) { cancelAnimationFrame(raf); drawTimeline(); }
+  }
+
+  /* ---------- Frise ---------- */
+  function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function drawTimeline() {
+    const cv = $('#timeline'), V = state.video; if (!V || cv.offsetParent === null) return;
+    const dpr = window.devicePixelRatio || 1, Wc = cv.clientWidth, Hc = cv.clientHeight;
+    if (cv.width !== Math.round(Wc * dpr) || cv.height !== Math.round(Hc * dpr)) { cv.width = Math.round(Wc * dpr); cv.height = Math.round(Hc * dpr); }
+    const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, Wc, Hc);
+    const ink = cssVar('--ink'), muted = cssVar('--muted'), line = cssVar('--line'), grease = cssVar('--grease'), steen = cssVar('--steen'), steen2 = cssVar('--steen-deep'), tape = cssVar('--tape'), panel = cssVar('--panel');
+    const D = V.D, X = t => t / D * Wc;
+    const stripH = 46, curveY = 52, curveH = 34, musY = 98, musH = 44, rulerY = 152;
+    // pellicule
+    const tw = stripH * 16 / 9, tmp = document.createElement('canvas'); tmp.width = V.W; tmp.height = V.H; const tg = tmp.getContext('2d');
+    for (let x = 0; x < Wc; x += tw) {
+      const t = (x + tw / 2) / Wc * D, k = Math.min(V.frames.length - 1, Math.max(0, Math.round(t / V.step)));
+      tg.putImageData(V.frames[k], 0, 0); g.drawImage(tmp, x, 0, Math.min(tw, Wc - x) - 1, stripH);
+    }
+    // intensité
+    g.fillStyle = steen; g.globalAlpha = 0.35; g.beginPath(); g.moveTo(0, curveY + curveH);
+    V.times.forEach((t, k) => g.lineTo(X(t), curveY + curveH - V.inten[k] * curveH));
+    g.lineTo(X(V.times[V.times.length - 1]), curveY + curveH); g.closePath(); g.fill(); g.globalAlpha = 1;
+    g.strokeStyle = line; g.lineWidth = 1; g.beginPath(); g.moveTo(0, curveY + curveH + 0.5); g.lineTo(Wc, curveY + curveH + 0.5); g.stroke();
+    // musique
+    const RR = state.rendered;
+    if (RR) {
+      const { fit, t } = RR.r, R = t.R, bd = R.barDur, p = R.p, aBars = fit.i >= fit.s ? fit.i + 1 - fit.s : 0;
+      const aEnd = fit.off + aBars * bd, end = Math.min(D, fit.off + aBars * bd + (R.E - R.bars[fit.j]));
+      if (fit.off > 0) { g.fillStyle = steen; g.globalAlpha = 0.3; g.fillRect(0, musY, X(fit.off), musH); g.globalAlpha = 1; }
+      if (aBars) { g.fillStyle = steen; g.fillRect(X(fit.off), musY, X(aEnd) - X(fit.off), musH); }
+      g.fillStyle = steen2; g.fillRect(X(aEnd), musY, X(end) - X(aEnd), musH);
+      g.strokeStyle = panel; g.globalAlpha = 0.85;
+      for (let n = 0; fit.off + n * p < end; n++) {
+        const x = Math.round(X(fit.off + n * p)) + 0.5, down = n % 4 === 0;
+        g.lineWidth = down ? 1.5 : 1; g.beginPath(); g.moveTo(x, down ? musY : musY + musH * 0.62); g.lineTo(x, musY + musH); g.stroke();
+      }
+      g.globalAlpha = 1;
+      if (fit.edit !== 'none') { // collure
+        const x = X(aEnd); g.fillStyle = tape; g.fillRect(x - 5, musY - 4, 10, musH + 8);
+        g.strokeStyle = ink; g.lineWidth = 1; g.beginPath(); g.moveTo(x - 5, musY + musH + 4); g.lineTo(x + 5, musY - 4); g.stroke();
+      }
+      // coups de crayon sur les plans
+      for (const c of V.cuts) {
+        if (c.t < 0.3 || c.t > D - 0.3) continue;
+        const rel = (c.t - fit.off) / p, d = Math.abs(rel - Math.round(rel)) * p, hit = c.t >= fit.off - 0.05 && d < 0.09;
+        g.beginPath(); g.arc(X(c.t), musY + musH + 9, 3.5, 0, Math.PI * 2);
+        if (hit) { g.fillStyle = grease; g.fill(); } else { g.strokeStyle = grease; g.lineWidth = 1.2; g.stroke(); }
+      }
+    } else {
+      g.fillStyle = muted; g.font = '13px Archivo, system-ui, sans-serif'; g.fillText('La musique calée apparaîtra ici.', 4, musY + musH / 2 + 4);
+    }
+    g.strokeStyle = grease; g.lineWidth = 2; g.lineCap = 'round';
+    for (const c of V.cuts) { const x = X(c.t); g.beginPath(); g.moveTo(x + 1, -2); g.lineTo(x - 1, musY - 6); g.stroke(); }
+    g.lineCap = 'butt';
+    // règle
+    g.fillStyle = muted; g.strokeStyle = line; g.font = '11px Archivo, system-ui, sans-serif'; g.lineWidth = 1;
+    const every = D > 120 ? 30 : D > 40 ? 10 : 5;
+    for (let s = 0; s <= D; s++) {
+      const x = Math.round(X(s)) + 0.5, big = s % every === 0;
+      g.beginPath(); g.moveTo(x, rulerY); g.lineTo(x, rulerY + (big ? 8 : 4)); g.stroke();
+      if (big && x < Wc - 24) g.fillText(fmt(s), x + 3, rulerY + 18);
+    }
+    // tête de lecture
+    const v = $('#player'), x = X(v.currentTime || 0);
+    g.strokeStyle = ink; g.lineWidth = 1.5; g.beginPath(); g.moveTo(x, 0); g.lineTo(x, rulerY + 8); g.stroke();
+  }
+
+  /* ---------- Export ---------- */
+  function wavBytes(chs, sr) {
+    const n = chs[0].length, nc = chs.length, buf = new ArrayBuffer(44 + n * nc * 2), dv = new DataView(buf);
+    const w = (o, s) => { for (let i = 0; i < s.length; i++) dv.setUint8(o + i, s.charCodeAt(i)); };
+    w(0, 'RIFF'); dv.setUint32(4, 36 + n * nc * 2, true); w(8, 'WAVE'); w(12, 'fmt '); dv.setUint32(16, 16, true);
+    dv.setUint16(20, 1, true); dv.setUint16(22, nc, true); dv.setUint32(24, sr, true); dv.setUint32(28, sr * nc * 2, true);
+    dv.setUint16(32, nc * 2, true); dv.setUint16(34, 16, true); w(36, 'data'); dv.setUint32(40, n * nc * 2, true);
+    let o = 44;
+    for (let i = 0; i < n; i++) for (let c = 0; c < nc; c++) { const s = Math.max(-1, Math.min(1, chs[c][i])); dv.setInt16(o, s < 0 ? s * 0x8000 : s * 0x7fff, true); o += 2; }
+    return new Uint8Array(buf);
+  }
+  const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc32 = b => { let c = 0xffffffff; for (let i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 0xff] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; };
+  function zip(files) {
+    const enc = new TextEncoder(), parts = [], central = []; let off = 0;
+    for (const f of files) {
+      const name = enc.encode(f.name), crc = crc32(f.data), sz = f.data.length;
+      const h = new DataView(new ArrayBuffer(30));
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true);
+      h.setUint32(14, crc, true); h.setUint32(18, sz, true); h.setUint32(22, sz, true); h.setUint16(26, name.length, true);
+      parts.push(new Uint8Array(h.buffer), name, f.data);
+      const c = new DataView(new ArrayBuffer(46));
+      c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true);
+      c.setUint32(16, crc, true); c.setUint32(20, sz, true); c.setUint32(24, sz, true); c.setUint16(28, name.length, true); c.setUint32(42, off, true);
+      central.push(new Uint8Array(c.buffer), name);
+      off += 30 + name.length + sz;
+    }
+    const csize = central.reduce((a, b) => a + b.length, 0), e = new DataView(new ArrayBuffer(22));
+    e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true); e.setUint32(12, csize, true); e.setUint32(16, off, true);
+    return new Blob([...parts, ...central, new Uint8Array(e.buffer)]);
+  }
+  function tc(sec) {
+    const FPS = 25, base = parseTC($('#ctStart').value);
+    let f = Math.round(sec * FPS) + base; const ff = f % FPS; f = (f - ff) / FPS;
+    const s = f % 60, m = Math.floor(f / 60) % 60, h = Math.floor(f / 3600);
+    return [h, m, s, ff].map(x => String(x).padStart(2, '0')).join(':');
+  }
+  function parseTC(s) { const p = (s || '').split(/[:;.]/).map(Number); if (p.length !== 4 || p.some(isNaN)) return 0; return ((p[0] * 60 + p[1]) * 60 + p[2]) * 25 + p[3]; }
+  function cueCSV() {
+    const R = state.rendered, { fit, t } = R.r, bs = t.R.bars, bd = t.R.barDur, [a, b] = R.span;
+    const ex = [];
+    if (fit.i >= fit.s) ex.push(`${fmt(Math.max(0, bs[fit.s] - fit.off))}–${fmt(bs[fit.i + 1])}`);
+    ex.push(`${fmt(Math.max(0, bs[fit.j] - (fit.i >= fit.s ? 0 : fit.off)))}–${fmt(t.R.E)}`);
+    const dur = b - a, durTxt = `${Math.floor(dur / 60)}'${String(Math.round(dur % 60)).padStart(2, '0')}"`;
+    const head = ['Titre', 'Compositeur(s)', 'Éditeur', 'Producteur phonographique', 'Durée utilisée', 'TC entrée', 'TC sortie', 'Extraits du morceau', 'Utilisation'];
+    const row = [$('#ctTitle').value, $('#ctComp').value, $('#ctPub').value, $('#ctProd').value, durTxt, tc(a), tc(b), ex.join(' + '), 'Fond musical'];
+    const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+    return '\ufeff' + head.map(q).join(';') + '\r\n' + row.map(q).join(';') + '\r\n';
+  }
+  const safe = s => (s || 'musique').replace(/[\\/:*?"<>|]+/g, '').trim().slice(0, 60) || 'musique';
+  function save(filename, data, btn) {
+    const msg = $('#exMsg');
+    const blob = data instanceof Blob ? data : new Blob([data], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = filename; document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    msg.textContent = 'Fichier téléchargé : ' + filename;
+  }
+
+  /* ---------- Démarrage ---------- */
+  wireDrop($('#vZone'), $('#vInput'), onVideo);
+  $('#btnMore').addEventListener('click', () => { stopAudio(); state.page++; showBatch(); });
+  const v = $('#player');
+  v.addEventListener('play', startAudio);
+  v.addEventListener('pause', () => stopAudio());
+  v.addEventListener('seeked', () => { if (!v.paused) startAudio(); else drawTimeline(); });
+  v.addEventListener('ended', () => stopAudio());
+  $('#keepSound').addEventListener('change', e => { v.muted = !e.target.checked; });
+  $('#timeline').addEventListener('click', e => {
+    if (!state.video) return; const r = e.currentTarget.getBoundingClientRect();
+    v.currentTime = Math.max(0, Math.min(state.video.D - 0.01, (e.clientX - r.left) / r.width * state.video.D));
+  });
+  window.addEventListener('resize', drawTimeline);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', drawTimeline);
+  $('#btnPack').addEventListener('click', e => {
+    const R = state.rendered; if (!R) return; const name = safe($('#ctTitle').value);
+    const blob = zip([{ name: name + ' - cale.wav', data: wavBytes(R.chs, R.sr) }, { name: name + ' - cue sheet.csv', data: new TextEncoder().encode(cueCSV()) }]);
+    save(name + ' - Raccord.zip', blob, e.currentTarget);
+  });
+  $('#btnCue').addEventListener('click', e => { if (!state.rendered) return; save(safe($('#ctTitle').value) + ' - cue sheet.csv', cueCSV(), e.currentTarget); });
+  renderResults();
+})();
+</script>
+</body></html>
