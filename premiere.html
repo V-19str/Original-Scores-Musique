@@ -84,6 +84,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   max-width:1100px;margin:0 auto;padding:0 40px;width:100%
 }
 .hero-text{}
+.hero-pp-logo{display:block;margin-bottom:24px}
+.hero-pp-logo svg{display:block;filter:drop-shadow(0 8px 32px rgba(153,153,255,.35))}
 .hero-eyebrow{
   display:inline-flex;align-items:center;gap:8px;
   font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;
@@ -683,8 +685,21 @@ footer{
     <div class="hero-inner">
 
       <div class="hero-text">
+        <!-- Grand logo Premiere Pro -->
+        <div class="hero-pp-logo">
+          <svg width="88" height="88" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="88" height="88" rx="14" fill="#1e0f45"/>
+            <rect width="88" height="88" rx="14" fill="url(#pp-grad)"/>
+            <defs>
+              <linearGradient id="pp-grad" x1="0" y1="0" x2="88" y2="88" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#2e1860"/>
+                <stop offset="100%" stop-color="#150830"/>
+              </linearGradient>
+            </defs>
+            <text x="11" y="67" font-family="'Helvetica Neue',Arial,sans-serif" font-size="55" font-weight="900" fill="#9999FF" letter-spacing="-2">Pr</text>
+          </svg>
+        </div>
         <div class="hero-eyebrow">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:4px;flex-shrink:0"><rect width="24" height="24" fill="#2C1E5B"/><text x="3" y="18" font-family="'Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="900" fill="#9999FF">Pr</text></svg>
           Extension pour Adobe Premiere Pro
         </div>
         <h1 class="hero-title">OSM Music,<br>directement dans<br><span>votre montage</span></h1>
