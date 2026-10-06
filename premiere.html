@@ -582,7 +582,7 @@ footer{
 const SB_URL='https://ubpmzncfhkohoyfonjbb.supabase.co';
 const SB_KEY='sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
 function trackDownload(){
-  fetch(SB_URL+'/rest/v1/downloads',{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({file:'OSM-Music.ccx',referrer:document.referrer||'direct',ua:navigator.userAgent.slice(0,120)})}).catch(()=>{});
+  fetch(SB_URL+'/rest/v1/ccx_downloads',{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({file:'OSM-Music.ccx',referrer:document.referrer||'direct',ua:navigator.userAgent.slice(0,120)})}).catch(()=>{});
 }
 document.querySelectorAll('a[download]').forEach(function(a){a.addEventListener('click',trackDownload)});
 function toggleFaq(btn) {
