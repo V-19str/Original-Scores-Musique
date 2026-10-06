@@ -36,8 +36,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
 .logo-mark{background:var(--grad);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
 .logo-name{font-size:13px;font-weight:600;letter-spacing:2px}
-.nav-tabs{display:flex;align-items:center;gap:4px}
-.nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;padding:8px 16px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;position:relative;text-decoration:none}
+.nav-tabs{display:flex;align-items:center;gap:2px}
+.nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.8px;padding:8px 12px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;position:relative;text-decoration:none}
 .nav-tab:hover{color:var(--text);background:var(--bg3)}
 .nav-tab.active{color:var(--text)}
 
@@ -624,6 +624,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .tl-img{max-height:38px;max-width:110px;object-fit:contain}
 .tl-name{font-size:13px;font-weight:900;color:var(--text);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;display:none}
 
+@media(max-width:1100px){
+  .nav-tab[href="premiere.html"],.nav-tab[href="qui-sommes-nous.html"]{display:none}
+}
 @media(max-width:900px){
   header{padding:0 16px}
   .hero-content{padding:0 24px 48px}
@@ -695,6 +698,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <button class="nav-tab" id="tab-playlists" onclick="showView('playlists')">Playlists</button>
     <button class="nav-tab" id="tab-catalogue" onclick="showView('catalogue')">Catalogue</button>
     <a class="nav-tab" href="nouveautes.html">Actu</a>
+    <a class="nav-tab" href="premiere.html">Premiere Pro</a>
+    <a class="nav-tab" href="qui-sommes-nous.html">Qui sommes-nous</a>
   </div>
   <div class="header-right">
     <span data-osm-langpicker></span>
@@ -708,9 +713,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       </div>
     </div>
     <div id="osm-auth-nav"><a class="btn-nav" href="login-monteurs.html">👤 Mon compte</a></div>
-    <a id="btn-admin" class="btn-nav" style="border-color:rgba(229,9,20,0.4);color:var(--red)" title="Panneau admin" onclick="window.location.href=osmUser?'admin.html':'login-monteurs.html';return false;" href="#">⚙ Admin</a>
     <button class="btn-nav" onclick="toggleQueue()" style="position:relative">🎵 Ma liste <span class="queue-badge" id="queue-badge"></span></button>
-    <a class="btn-nav" href="Diapason.html" title="Outil cue sheets SACEM" id="btn-diapason">🎚️ Diapason</a>
     <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
   </div>
 </header>
