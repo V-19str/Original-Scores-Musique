@@ -8,6 +8,12 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="theme-color" content="#FF5500">
 <link rel="canonical" href="https://osm-music.fr/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+  {"@type":"WebSite","@id":"https://osm-music.fr/#website","url":"https://osm-music.fr/","name":"OSM – Original Scores Music","description":"Musique originale pour l'image. Cinéma, Télévision, Publicité. Plus de 2560 titres.","inLanguage":"fr-FR","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://osm-music.fr/?q={search_term_string}"},"query-input":"required name=search_term_string"}},
+  {"@type":"MusicGroup","@id":"https://osm-music.fr/#organization","name":"Original Scores Music","url":"https://osm-music.fr/","logo":"https://osm-music.fr/favicon.svg","description":"Bibliothèque de musiques originales pour les professionnels de l'image — cinéma, télévision, publicité, documentaire.","email":"vladimirstreiff@gmail.com","sameAs":["https://www.linkedin.com/company/original-scores-music"]}
+]}
+</script>
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://osm-music.fr/">
 <meta property="og:title" content="OSM – Original Scores Music">
@@ -79,7 +85,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 /* HERO */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#000}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1800&q=80') center/cover no-repeat;animation:heroZoom 12s ease-in-out infinite alternate}
+.hero-bg{position:absolute;inset:0;background:url('assets/ete-hero-desktop.webp') center/cover no-repeat,linear-gradient(135deg,#1a0a00,#2d1808);animation:heroZoom 12s ease-in-out infinite alternate}
+@media(max-width:700px){.hero-bg{background-image:url('assets/ete-hero-mobile.webp'),linear-gradient(135deg,#1a0a00,#2d1808)}}
 @keyframes heroZoom{from{transform:scale(1.0)}to{transform:scale(1.07)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.1) 100%)}
 .hero-content{position:relative;z-index:2;padding:0 64px 72px;animation:fadeUp 1s ease both}
@@ -1489,12 +1496,9 @@ function loadCatalogue(){
   fetch('./catalogue.json').then(r=>r.json()).then(async data=>{
     const cataloguePlaylists=data.playlists||[];
     const tagsMapKeys=Object.keys(TAGS_MAP);
-    console.log('[OSM] Playlists dans catalogue.json (%d):', cataloguePlaylists.length, cataloguePlaylists);
-    console.log('[OSM] Clés TAGS_MAP (%d):', tagsMapKeys.length, tagsMapKeys);
     const orphanTags=tagsMapKeys.filter(k=>!cataloguePlaylists.includes(k));
     const unmappedPlaylists=cataloguePlaylists.filter(p=>!TAGS_MAP[p]);
     if(orphanTags.length)console.warn('[OSM] Tags sans playlist correspondante:', orphanTags);
-    else console.log('[OSM] Tous les tags TAGS_MAP correspondent à une playlist catalogue.');
     if(unmappedPlaylists.length)console.info('[OSM] Playlists catalogue sans entrée TAGS_MAP:', unmappedPlaylists);
 
     let tracks=(data.tracks||[]).filter(t=>t.playlist!=='samples');
@@ -1515,7 +1519,6 @@ function loadCatalogue(){
     if(recls.length){
       const rmap={};recls.forEach(r=>{if(r.track_id&&r.to_playlist)rmap[r.track_id]=r.to_playlist;});
       tracks.forEach(t=>{if(rmap[t.id])t.playlist=rmap[t.id];});
-      console.log('[OSM] Reclassements appliqués (%d)', recls.length);
     }
 
     allTracks=tracks.map(t=>({...t,playlistLabel:getLabel(t.playlist)}));
@@ -1592,7 +1595,7 @@ function renderPlaylists(){
       <div class="pl-grid">${theme.playlists.map(p=>`
         <div class="pl-card" onclick="openPlaylistDetail('${p.label.replace(/'/g,"\\'")}')">
           <div class="pl-photo-wrap">
-            <div class="pl-photo" style="background-image:url('${p.photo}')"></div>
+            <div class="pl-photo" style="background-image:url('${p.photo}'),linear-gradient(135deg,${p.color}33,${p.color}99);background-size:cover"></div>
             <div class="pl-photo-ov"></div>
             <div class="pl-color-bar" style="background:${p.color}"></div>
             <div class="pl-play-btn">▶</div>
@@ -1614,8 +1617,13 @@ function openPlaylistDetail(label){
   const info=getInfo(label);if(!info)return;
   const tracks=allTracks.filter(t=>t.playlistLabel===label);
   currentDetailTracks=tracks;detailIndex=-1;
-  document.getElementById('pd-hero-bg').style.backgroundImage=`url('${info.photo}')`;
-  document.getElementById('pd-cover-img').src=info.photo;
+  const heroBg=document.getElementById('pd-hero-bg');
+  heroBg.style.backgroundImage=`url('${info.photo}'),linear-gradient(135deg,${info.color}22,${info.color}66)`;
+  heroBg.style.backgroundSize='cover';
+  const coverImg=document.getElementById('pd-cover-img');
+  coverImg.src=info.photo||'';
+  coverImg.onerror=()=>{coverImg.style.display='none';};
+  coverImg.closest('.pd-cover').style.background=`linear-gradient(135deg,${info.color}40,${info.color}cc)`;
   document.getElementById('pd-title').textContent=info.label;
   document.getElementById('pd-genres').textContent=info.genres;
   document.getElementById('pd-desc').textContent=info.desc;
@@ -1646,7 +1654,7 @@ function playDetailTrack(i){
   const info=getInfo(t.playlistLabel);
   document.getElementById('p-title').textContent=t.title;
   document.getElementById('p-playlist').textContent=t.playlistLabel;
-  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  if(info){const th=document.getElementById('player-thumb');th.style.backgroundImage=`url('${info.photo}'),linear-gradient(135deg,${info.color}22,${info.color}66)`;th.style.backgroundSize='cover';}
   document.getElementById('player').classList.add('visible');
   wsLoad(t.url,parseDur(t.duration));
   renderDetailTracks();
@@ -1998,7 +2006,7 @@ function playTrackById(id){
   const info=getInfo(t.playlistLabel);
   document.getElementById('p-title').textContent=t.title;
   document.getElementById('p-playlist').textContent=t.playlistLabel;
-  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  if(info){const th=document.getElementById('player-thumb');th.style.backgroundImage=`url('${info.photo}'),linear-gradient(135deg,${info.color}22,${info.color}66)`;th.style.backgroundSize='cover';}
   document.getElementById('player').classList.add('visible');
   wsLoad(t.url,parseDur(t.duration));
   renderTracks();
@@ -2110,7 +2118,7 @@ function playTrack(i){
   const info=getInfo(t.playlistLabel);
   document.getElementById('p-title').textContent=t.title;
   document.getElementById('p-playlist').textContent=t.playlistLabel;
-  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  if(info){const th=document.getElementById('player-thumb');th.style.backgroundImage=`url('${info.photo}'),linear-gradient(135deg,${info.color}22,${info.color}66)`;th.style.backgroundSize='cover';}
   document.getElementById('player').classList.add('visible');
   wsLoad(t.url,parseDur(t.duration));
   renderTracks();
@@ -2431,7 +2439,7 @@ function playFavTrack(id){
   const info=getInfo(t.playlistLabel);
   document.getElementById('p-title').textContent=t.title;
   document.getElementById('p-playlist').textContent=t.playlistLabel;
-  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  if(info){const th=document.getElementById('player-thumb');th.style.backgroundImage=`url('${info.photo}'),linear-gradient(135deg,${info.color}22,${info.color}66)`;th.style.backgroundSize='cover';}
   document.getElementById('player').classList.add('visible');
   wsLoad(t.url,parseDur(t.duration));
 }
@@ -2491,7 +2499,7 @@ function playRecTrack(id){
   const info=getInfo(t.playlistLabel);
   document.getElementById('p-title').textContent=t.title;
   document.getElementById('p-playlist').textContent=t.playlistLabel;
-  if(info)document.getElementById('player-thumb').style.backgroundImage=`url('${info.photo}')`;
+  if(info){const th=document.getElementById('player-thumb');th.style.backgroundImage=`url('${info.photo}'),linear-gradient(135deg,${info.color}22,${info.color}66)`;th.style.backgroundSize='cover';}
   document.getElementById('player').classList.add('visible');
   wsLoad(t.url,parseDur(t.duration));
 }
