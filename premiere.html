@@ -179,6 +179,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   font-family:'Montserrat',sans-serif
 }
 
+/* ── Hero PP Background ── */
+.hero-pp-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-pp-bg svg{width:100%;height:100%;opacity:.42}
+.hero-pp-overlay{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,rgba(14,14,15,.97) 0%,rgba(14,14,15,.82) 38%,rgba(14,14,15,.25) 100%)}
+
 /* ── Sections communes ── */
 .section{padding:80px 40px;max-width:1100px;margin:0 auto}
 .section-eyebrow{
@@ -359,7 +365,321 @@ footer{
 
   <!-- ── HERO ── -->
   <section class="hero">
-    <div class="hero-noise"></div>
+    <!-- Premiere Pro interface illustration -->
+    <div class="hero-pp-bg" aria-hidden="true">
+<svg viewBox="0 0 1440 810" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="g-vid" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#05111e"/><stop offset="50%" stop-color="#0a1e35"/><stop offset="100%" stop-color="#0d1a10"/></linearGradient>
+<linearGradient id="g-prog" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#07141f"/><stop offset="40%" stop-color="#0c2240"/><stop offset="100%" stop-color="#061410"/></linearGradient>
+<radialGradient id="g-light" cx="55%" cy="35%" r="50%"><stop offset="0%" stop-color="#1a3a6a" stop-opacity=".7"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></radialGradient>
+</defs>
+<!-- App bg -->
+<rect width="1440" height="810" fill="#1b1b1b"/>
+<!-- ── MENU BAR ── -->
+<rect width="1440" height="26" fill="#2e2e2e"/>
+<rect x="4" y="4" width="18" height="18" rx="3" fill="#2C1E5B"/>
+<text x="6.5" y="17" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" font-weight="900" fill="#9999FF">Pr</text>
+<text x="28" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Fichier</text>
+<text x="71" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Édition</text>
+<text x="112" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Clip</text>
+<text x="144" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Séquence</text>
+<text x="202" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Marqueurs</text>
+<text x="260" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Graphiques</text>
+<text x="325" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Affichage</text>
+<text x="376" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Fenêtre</text>
+<text x="420" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Aide</text>
+<!-- ── WORKSPACE TABS BAR ── -->
+<rect y="26" width="1440" height="32" fill="#242424"/>
+<rect y="57" width="1440" height="1" fill="#111"/>
+<rect x="4" y="30" width="66" height="22" rx="3" fill="#1a1a1a"/>
+<text x="10" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Montage</text>
+<text x="80" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#666">Couleur</text>
+<text x="126" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#666">Effets</text>
+<text x="164" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#666">Audio</text>
+<text x="202" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#666">Graphiques</text>
+<!-- Timecode centre -->
+<rect x="620" y="31" width="100" height="20" rx="2" fill="#141414"/>
+<text x="625" y="45" font-family="monospace" font-size="11.5" fill="#e0e0e0">00:00:12:08</text>
+<!-- ── LEFT PANEL: Source Monitor ── -->
+<rect x="0" y="58" width="376" height="486" fill="#222"/>
+<rect x="0" y="58" width="376" height="28" fill="#2a2a2a"/>
+<rect x="0" y="85" width="376" height="1" fill="#111"/>
+<text x="10" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Source</text>
+<text x="62" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#555">Effets</text>
+<text x="96" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#555">Historique</text>
+<!-- Source video area -->
+<rect x="4" y="90" width="368" height="248" fill="url(#g-vid)"/>
+<!-- Safe zone frame -->
+<rect x="34" y="112" width="308" height="200" fill="none" stroke="#2a2a2a" stroke-width="0.8"/>
+<text x="8" y="102" font-family="monospace" font-size="9" fill="#666">00:00:08:12</text>
+<!-- Progress bar source -->
+<rect x="4" y="338" width="368" height="3" fill="#2a2a2a"/>
+<rect x="4" y="338" width="110" height="3" fill="#9999FF"/>
+<!-- Controls -->
+<rect x="4" y="341" width="368" height="30" fill="#1e1e1e"/>
+<rect x="162" y="347" width="18" height="18" rx="9" fill="#2a2a2a"/>
+<polygon points="167,352 167,362 175,357" fill="#aaa"/>
+<text x="148" y="359" font-family="monospace" font-size="11" fill="#666">|&lt;</text>
+<text x="188" y="359" font-family="monospace" font-size="11" fill="#666">&gt;|</text>
+<!-- Project media panel -->
+<rect x="0" y="374" width="376" height="28" fill="#2a2a2a"/>
+<rect x="0" y="401" width="376" height="1" fill="#111"/>
+<text x="10" y="392" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Médias</text>
+<text x="60" y="392" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#555">Projet: Film_Corp_2025</text>
+<!-- Media items -->
+<rect x="4" y="404" width="368" height="18" rx="2" fill="#2a2a2a"/>
+<rect x="6" y="407" width="12" height="12" rx="2" fill="#2a5580"/>
+<text x="22" y="418" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#aaa">Plan_01_interview.mp4</text>
+<text x="306" y="418" font-family="monospace" font-size="9" fill="#555">02:34</text>
+<rect x="6" y="428" width="12" height="12" rx="2" fill="#2a5580"/>
+<text x="22" y="439" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#aaa">Plan_02_broll_ville.mp4</text>
+<text x="306" y="439" font-family="monospace" font-size="9" fill="#555">01:12</text>
+<rect x="6" y="448" width="12" height="12" rx="2" fill="#3a2070"/>
+<text x="22" y="459" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">OSM_Soir_novembre.wav</text>
+<text x="306" y="459" font-family="monospace" font-size="9" fill="#9999FF">03:42</text>
+<rect x="6" y="468" width="12" height="12" rx="2" fill="#3a2070"/>
+<text x="22" y="479" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">OSM_Brume_matin.wav</text>
+<text x="306" y="479" font-family="monospace" font-size="9" fill="#555">03:22</text>
+<!-- Panel border right -->
+<rect x="375" y="58" width="1" height="486" fill="#111"/>
+<!-- ── CENTER PANEL: Program Monitor ── -->
+<rect x="376" y="58" width="528" height="486" fill="#1e1e1e"/>
+<rect x="376" y="58" width="528" height="28" fill="#2a2a2a"/>
+<rect x="376" y="85" width="528" height="1" fill="#111"/>
+<text x="386" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Programme: Film_Corp_2025</text>
+<!-- Program monitor video -->
+<rect x="380" y="90" width="520" height="348" fill="#0a0a0a"/>
+<rect x="380" y="90" width="520" height="348" fill="url(#g-prog)"/>
+<rect x="380" y="90" width="520" height="348" fill="url(#g-light)"/>
+<!-- Subtle detail in frame -->
+<rect x="450" y="160" width="200" height="130" fill="#102040" opacity=".4"/>
+<rect x="470" y="180" width="155" height="90" fill="#153060" opacity=".3"/>
+<text x="384" y="434" font-family="monospace" font-size="9.5" fill="#666">00:00:12:08</text>
+<text x="836" y="434" font-family="monospace" font-size="9.5" fill="#666">00:00:24:00</text>
+<!-- Progress in program monitor -->
+<rect x="380" y="440" width="520" height="3" fill="#252525"/>
+<rect x="380" y="440" width="185" height="3" fill="#9999FF"/>
+<rect x="563" y="437" width="4" height="9" rx="2" fill="#9999FF"/>
+<!-- Controls program monitor -->
+<rect x="380" y="443" width="520" height="34" fill="#1e1e1e"/>
+<rect x="560" y="449" width="22" height="22" rx="11" fill="#2a2a2a"/>
+<polygon points="565,454 565,466 575,460" fill="#ccc"/>
+<text x="540" y="463" font-family="monospace" font-size="12" fill="#666">|&lt;</text>
+<text x="590" y="463" font-family="monospace" font-size="12" fill="#666">&gt;|</text>
+<!-- Lumetri row -->
+<rect x="380" y="478" width="520" height="24" fill="#222"/>
+<text x="386" y="494" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#555">Resolution: 1/2</text>
+<text x="806" y="494" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#555">100%</text>
+<!-- Panel border right -->
+<rect x="903" y="58" width="1" height="486" fill="#111"/>
+<!-- ── RIGHT PANEL: Effects Controls ── -->
+<rect x="904" y="58" width="196" height="486" fill="#222"/>
+<rect x="904" y="58" width="196" height="28" fill="#2a2a2a"/>
+<rect x="904" y="85" width="196" height="1" fill="#111"/>
+<text x="914" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#9999FF" font-weight="600">Contrôle Effets</text>
+<rect x="908" y="90" width="188" height="20" rx="2" fill="#2a2a2a"/>
+<text x="912" y="104" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">Plan_01_interview.mp4</text>
+<text x="916" y="125" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">Mouvement</text>
+<text x="920" y="144" font-family="Helvetica Neue,Arial,sans-serif" font-size="9" fill="#666">Position</text>
+<text x="990" y="144" font-family="monospace" font-size="9" fill="#9999FF">960 · 540</text>
+<text x="920" y="161" font-family="Helvetica Neue,Arial,sans-serif" font-size="9" fill="#666">Echelle</text>
+<text x="990" y="161" font-family="monospace" font-size="9" fill="#9999FF">100,0</text>
+<text x="920" y="178" font-family="Helvetica Neue,Arial,sans-serif" font-size="9" fill="#666">Rotation</text>
+<text x="990" y="178" font-family="monospace" font-size="9" fill="#9999FF">0,0°</text>
+<text x="916" y="200" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">Opacite</text>
+<text x="990" y="200" font-family="monospace" font-size="9" fill="#9999FF">100%</text>
+<rect x="908" y="210" width="188" height="1" fill="#333"/>
+<text x="912" y="228" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">OSM_Soir_novembre.wav</text>
+<text x="916" y="246" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">Volume</text>
+<text x="990" y="246" font-family="monospace" font-size="9" fill="#9999FF">0,0 dB</text>
+<text x="916" y="264" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">Canal</text>
+<text x="990" y="264" font-family="monospace" font-size="9" fill="#9999FF">Stereo</text>
+<!-- Panel border right -->
+<rect x="1099" y="58" width="1" height="486" fill="#111"/>
+<!-- ── FAR RIGHT PANEL: OSM Music Plugin ── -->
+<rect x="1100" y="58" width="340" height="486" fill="#1d1822"/>
+<rect x="1100" y="58" width="340" height="28" fill="#21192e"/>
+<rect x="1100" y="85" width="340" height="1" fill="#111"/>
+<!-- Plugin header -->
+<rect x="1106" y="63" width="16" height="16" rx="2.5" fill="#2C1E5B"/>
+<text x="1108.5" y="75" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" font-weight="900" fill="#9999FF">Pr</text>
+<text x="1127" y="75" font-family="Helvetica Neue,Arial,sans-serif" font-size="11.5" font-weight="700" fill="#d0c8f8">OSM Music</text>
+<!-- Search in OSM panel -->
+<rect x="1105" y="91" width="328" height="24" rx="4" fill="#141414" stroke="#2a2a2a" stroke-width="1"/>
+<text x="1116" y="107" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#404040">melancolie, piano, automne...</text>
+<!-- Filter chips -->
+<rect x="1105" y="121" width="44" height="16" rx="8" fill="rgba(153,153,255,.18)" stroke="#9999ff" stroke-width=".8"/>
+<text x="1111" y="133" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#9999FF">Piano</text>
+<rect x="1154" y="121" width="36" height="16" rx="8" fill="#252525" stroke="#333" stroke-width=".8"/>
+<text x="1160" y="133" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#666">Folk</text>
+<rect x="1195" y="121" width="62" height="16" rx="8" fill="#252525" stroke="#333" stroke-width=".8"/>
+<text x="1201" y="133" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#666">Atmosphere</text>
+<rect x="1262" y="121" width="48" height="16" rx="8" fill="#252525" stroke="#333" stroke-width=".8"/>
+<text x="1267" y="133" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#666">Automne</text>
+<!-- Track 1 — active/playing -->
+<rect x="1100" y="142" width="340" height="42" fill="#26202e"/>
+<rect x="1100" y="183" width="340" height="1" fill="#111"/>
+<rect x="1106" y="150" width="26" height="26" rx="13" fill="#9999FF"/>
+<polygon points="1113,157 1113,169 1123,163" fill="#0a0020"/>
+<text x="1138" y="160" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" font-weight="600" fill="#eeeeff">Soir de novembre</text>
+<text x="1138" y="175" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#555">Piano  ·  3:42</text>
+<rect x="1336" y="150" width="56" height="20" rx="3" fill="#9999FF"/>
+<text x="1342" y="164" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="700" fill="#0a0020">Importer</text>
+<!-- Track 2 -->
+<rect x="1100" y="184" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="221" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="192" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,197 1113,208 1122,202" fill="#777"/>
+<text x="1136" y="200" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Marche silencieuse</text>
+<text x="1136" y="215" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Folk Acoustique  ·  2:58</text>
+<!-- Track 3 -->
+<rect x="1100" y="222" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="259" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="230" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,235 1113,246 1122,240" fill="#777"/>
+<text x="1136" y="238" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Dernier regard</text>
+<text x="1136" y="253" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Melancolie  ·  4:11</text>
+<!-- Track 4 -->
+<rect x="1100" y="260" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="297" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="268" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,273 1113,284 1122,278" fill="#777"/>
+<text x="1136" y="276" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Brume du matin</text>
+<text x="1136" y="291" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Atmosphere  ·  3:22</text>
+<!-- Track 5 -->
+<rect x="1100" y="298" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="335" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="306" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,311 1113,322 1122,316" fill="#777"/>
+<text x="1136" y="314" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Lumiere froide</text>
+<text x="1136" y="329" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Cinematique  ·  3:58</text>
+<!-- Track 6 -->
+<rect x="1100" y="336" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="373" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="344" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,349 1113,360 1122,354" fill="#777"/>
+<text x="1136" y="352" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Passage d'hiver</text>
+<text x="1136" y="367" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Orchestral  ·  5:02</text>
+<!-- Mini player at bottom of OSM panel -->
+<rect x="1100" y="410" width="340" height="60" fill="#130f1c"/>
+<rect x="1100" y="410" width="340" height="1" fill="#2a2a2a"/>
+<text x="1110" y="424" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">En lecture: Soir de novembre — Piano</text>
+<rect x="1110" y="430" width="300" height="2" fill="#222"/>
+<rect x="1110" y="430" width="106" height="2" fill="#9999FF"/>
+<rect x="1214" y="427" width="3" height="8" rx="1.5" fill="#9999FF"/>
+<polygon points="1150,442 1150,454 1160,448" fill="#bbb"/>
+<rect x="1135" y="444" width="5" height="12" rx="1" fill="#888"/>
+<rect x="1142" y="444" width="5" height="12" rx="1" fill="#888"/>
+<rect x="1163" y="446" width="5" height="8" rx="1" fill="#888"/>
+<rect x="1170" y="446" width="5" height="8" rx="1" fill="#888"/>
+<rect x="1270" y="438" width="100" height="20" rx="3" fill="rgba(153,153,255,.12)"/>
+<text x="1276" y="452" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">osm-music.fr</text>
+<!-- ── TIMELINE ── -->
+<rect x="0" y="544" width="1440" height="266" fill="#1c1c1c"/>
+<rect x="0" y="544" width="1440" height="1" fill="#111"/>
+<!-- Timeline header -->
+<rect x="0" y="544" width="1440" height="26" fill="#252525"/>
+<text x="10" y="561" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Sequence: Film_Corp_2025</text>
+<!-- Ruler -->
+<rect x="130" y="570" width="1310" height="20" fill="#222"/>
+<rect x="130" y="570" width="1310" height="1" fill="#111"/>
+<line x1="130" y1="570" x2="130" y2="590" stroke="#333" stroke-width="1"/>
+<text x="133" y="584" font-family="monospace" font-size="8" fill="#444">00:00:00</text>
+<line x1="261" y1="575" x2="261" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="264" y="584" font-family="monospace" font-size="8" fill="#444">00:00:05</text>
+<line x1="392" y1="575" x2="392" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="395" y="584" font-family="monospace" font-size="8" fill="#444">00:00:10</text>
+<line x1="523" y1="575" x2="523" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="526" y="584" font-family="monospace" font-size="8" fill="#444">00:00:15</text>
+<line x1="654" y1="575" x2="654" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="657" y="584" font-family="monospace" font-size="8" fill="#444">00:00:20</text>
+<line x1="785" y1="575" x2="785" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="788" y="584" font-family="monospace" font-size="8" fill="#444">00:00:25</text>
+<line x1="916" y1="575" x2="916" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="919" y="584" font-family="monospace" font-size="8" fill="#444">00:00:30</text>
+<!-- PLAYHEAD -->
+<line x1="470" y1="570" x2="470" y2="810" stroke="#9999FF" stroke-width="1.5" opacity=".85"/>
+<polygon points="463,570 477,570 470,581" fill="#9999FF"/>
+<!-- Track headers -->
+<rect x="0" y="590" width="130" height="30" fill="#252525"/>
+<rect x="0" y="619" width="130" height="1" fill="#111"/>
+<text x="6" y="609" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" fill="#777">V3</text>
+<rect x="0" y="620" width="130" height="30" fill="#252525"/>
+<rect x="0" y="649" width="130" height="1" fill="#111"/>
+<text x="6" y="639" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" fill="#888">V2</text>
+<rect x="0" y="650" width="130" height="36" fill="#252525"/>
+<rect x="0" y="685" width="130" height="1" fill="#111"/>
+<text x="6" y="672" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" font-weight="700" fill="#ddd">V1</text>
+<rect x="0" y="686" width="130" height="28" fill="#222"/>
+<rect x="0" y="713" width="130" height="1" fill="#111"/>
+<text x="6" y="704" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" font-weight="700" fill="#ccc">A1</text>
+<rect x="0" y="714" width="130" height="26" fill="#222"/>
+<rect x="0" y="739" width="130" height="1" fill="#111"/>
+<text x="6" y="731" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" fill="#777">A2</text>
+<rect x="0" y="740" width="130" height="26" fill="#222"/>
+<text x="6" y="757" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" fill="#555">A3</text>
+<!-- Track areas -->
+<!-- V3 -->
+<rect x="130" y="590" width="1310" height="30" fill="#1e1e1e"/>
+<rect x="130" y="619" width="1310" height="1" fill="#171717"/>
+<rect x="390" y="593" width="175" height="24" rx="2" fill="#1a3860"/>
+<text x="394" y="607" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#8aa">Titre_generique.mogrt</text>
+<!-- V2 -->
+<rect x="130" y="620" width="1310" height="30" fill="#1e1e1e"/>
+<rect x="130" y="649" width="1310" height="1" fill="#171717"/>
+<rect x="130" y="623" width="155" height="24" rx="2" fill="#1a3860"/>
+<text x="134" y="638" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#8aa">broll_ville.mp4</text>
+<rect x="300" y="623" width="185" height="24" rx="2" fill="#1a3860"/>
+<text x="304" y="638" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#8aa">broll_bureau.mp4</text>
+<rect x="660" y="623" width="240" height="24" rx="2" fill="#1a3860"/>
+<text x="664" y="638" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#8aa">broll_exterieur.mp4</text>
+<!-- V1 main video -->
+<rect x="130" y="650" width="1310" height="36" fill="#1c1c1c"/>
+<rect x="130" y="685" width="1310" height="1" fill="#171717"/>
+<rect x="130" y="653" width="250" height="30" rx="2" fill="#1b4278"/>
+<text x="135" y="663" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="600" fill="#b8c8e0">Plan_01_interview.mp4</text>
+<rect x="142" y="667" width="6" height="4" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="150" y="665" width="4" height="8" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="156" y="666" width="10" height="6" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="168" y="664" width="6" height="10" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="176" y="667" width="12" height="4" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="400" y="653" width="310" height="30" rx="2" fill="#1b4278"/>
+<text x="405" y="663" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="600" fill="#b8c8e0">Plan_02_rue_nuit.mp4</text>
+<rect x="730" y="653" width="200" height="30" rx="2" fill="#1b4278"/>
+<text x="735" y="663" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#b8c8e0">Plan_03_fin.mp4</text>
+<!-- A1: OSM Music audio — highlighted purple -->
+<rect x="130" y="686" width="1310" height="28" fill="#1c1c1c"/>
+<rect x="130" y="713" width="1310" height="1" fill="#171717"/>
+<rect x="130" y="689" width="940" height="22" rx="2" fill="#221640"/>
+<rect x="130" y="689" width="940" height="22" rx="2" fill="none" stroke="#9999FF" stroke-width=".8" stroke-opacity=".5"/>
+<text x="136" y="703" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="600" fill="#9999FF">OSM — Soir de novembre — Piano</text>
+<!-- Waveform bars purple -->
+<rect x="285" y="692" width="2" height="6" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="289" y="690" width="2" height="10" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="293" y="692" width="2" height="7" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="297" y="691" width="2" height="9" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="301" y="693" width="2" height="5" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="305" y="689" width="2" height="12" rx="1" fill="rgba(153,153,255,.6)"/>
+<rect x="309" y="691" width="2" height="8" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="313" y="690" width="2" height="10" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="317" y="692" width="2" height="7" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="321" y="691" width="2" height="9" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="325" y="688" width="2" height="14" rx="1" fill="rgba(153,153,255,.6)"/>
+<rect x="329" y="690" width="2" height="10" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="333" y="692" width="2" height="7" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="337" y="691" width="2" height="9" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="341" y="693" width="2" height="5" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="345" y="690" width="2" height="11" rx="1" fill="rgba(153,153,255,.6)"/>
+<!-- A2 natural sound -->
+<rect x="130" y="714" width="1310" height="26" fill="#1c1c1c"/>
+<rect x="130" y="739" width="1310" height="1" fill="#171717"/>
+<rect x="130" y="717" width="250" height="20" rx="2" fill="#152515"/>
+<text x="135" y="730" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#5a8a5a">son direct interview</text>
+<!-- A3 empty -->
+<rect x="130" y="740" width="1310" height="26" fill="#1c1c1c"/>
+</svg>
+    </div>
+    <div class="hero-pp-overlay"></div>
     <div class="hero-inner">
 
       <div class="hero-text">
