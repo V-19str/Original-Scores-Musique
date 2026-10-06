@@ -509,6 +509,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .dur-pill.active{background:rgba(255,85,0,0.12);border-color:var(--red);color:#ff8844}
 
 
+/* PREMIERE BANNER */
+.pp-banner{background:#0e0e0f;border-top:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);padding:18px 48px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap}
+.pp-banner-badge{background:linear-gradient(135deg,#9999ff,#6666cc);color:#fff;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:3px;flex-shrink:0}
+.pp-banner-text{color:rgba(255,255,255,0.85);font-size:13px;font-weight:500;letter-spacing:0.3px}
+.pp-banner-text strong{color:#fff;font-weight:700}
+.pp-banner-btn{background:linear-gradient(135deg,#9999ff,#6666cc);color:#fff;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:9px 20px;border-radius:4px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;flex-shrink:0}
+.pp-banner-btn:hover{opacity:0.88;transform:translateY(-1px)}
+.pp-banner-sep{color:rgba(255,255,255,0.2);font-size:13px}
+@media(max-width:700px){.pp-banner{padding:14px 16px;gap:12px}.pp-banner-sep{display:none}}
 /* SERVICES STRIP */
 .services-strip{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 48px}
 .services-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
@@ -856,6 +865,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       </div>
     </div>
     <div class="hero-scroll"><div class="hero-scroll-line"></div>SCROLL</div>
+  </div>
+  <!-- PREMIERE BANNER -->
+  <div class="pp-banner">
+    <span class="pp-banner-badge">Nouveau</span>
+    <span class="pp-banner-text"><strong>Extension Premiere Pro</strong> — OSM Music directement dans votre timeline</span>
+    <span class="pp-banner-sep">·</span>
+    <a class="pp-banner-btn" href="downloads/com.musicometre.premiere_premierepro.ccx" download>↓ Télécharger .ccx</a>
+    <span class="pp-banner-sep">·</span>
+    <a class="pp-banner-btn" href="premiere.html" style="background:rgba(255,255,255,0.08);backdrop-filter:blur(4px)">En savoir plus</a>
   </div>
   <!-- SERVICES STRIP -->
   <div class="services-strip">
