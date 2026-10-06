@@ -578,18 +578,18 @@ footer{
 
 </div><!-- .page -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-const SB_URL='https://ubpmzncfhkohoyfonjbb.supabase.co';
-const SB_KEY='sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+const ppSB = supabase.createClient(
+  'https://ubpmzncfhkohoyfonjbb.supabase.co',
+  'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh'
+);
 function trackDownload(){
-  var payload=JSON.stringify({file:'OSM-Music.ccx',referrer:document.referrer||'direct',ua:navigator.userAgent.slice(0,120)});
-  var url=SB_URL+'/rest/v1/ccx_downloads';
-  // sendBeacon survit à la navigation ; fallback sur fetch si non dispo
-  if(navigator.sendBeacon){
-    var blob=new Blob([payload],{type:'application/json'});
-    // sendBeacon ne permet pas de headers customs → on utilise fetch en async
-  }
-  fetch(url,{method:'POST',keepalive:true,headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:payload}).catch(()=>{});
+  ppSB.from('ccx_downloads').insert({
+    file:'OSM-Music.ccx',
+    referrer:document.referrer||'direct',
+    ua:navigator.userAgent.slice(0,120)
+  }).then(function(r){ if(r.error) console.warn('[OSM] tracking:', r.error.message); });
 }
 document.querySelectorAll('a[download]').forEach(function(a){a.addEventListener('click',trackDownload)});
 function toggleFaq(btn) {
