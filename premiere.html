@@ -6,7 +6,7 @@
 <title>OSM Music pour Premiere Pro | Pour les monteurs</title>
 <meta name="description" content="OSM Music pour Adobe Premiere Pro — Cherchez, écoutez et importez tout le catalogue de musique originale directement dans un panneau de Premiere Pro, sans quitter votre timeline.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<meta name="theme-color" content="#FF5500">
+<meta name="theme-color" content="#2C1E5B">
 <link rel="canonical" href="https://osm-music.fr/premiere">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://osm-music.fr/premiere">
@@ -20,7 +20,7 @@
 <style>
 /* ── Design tokens — repris du site OSM ───────────────────────────────────── */
 :root{
-  --red:#FF5500;--grad:linear-gradient(135deg,#FF5500,#FF006E);
+  --red:#9999FF;--grad:linear-gradient(135deg,#7b61ff,#9999ff);
   --bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;
   --bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);
   --text:#111111;--text2:#2c2c2c;--muted:#666666;
@@ -61,7 +61,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .btn-nav{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 13px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;white-space:nowrap;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
 .btn-nav:hover{border-color:#555;color:var(--text)}
 .btn-red{background:var(--red);border-color:var(--red);color:#fff}
-.btn-red:hover{background:#cc4400;border-color:#cc4400}
+.btn-red:hover{background:#7b61ff;border-color:#7b61ff}
 @media(max-width:680px){.nav-tabs{display:none}.logo-name{display:none}}
 
 /* ── Page wrapper ── */
@@ -74,8 +74,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 }
 .hero-noise{
   position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 60% 40%, rgba(255,85,0,0.07) 0%, transparent 70%),
-             radial-gradient(ellipse 60% 80% at 20% 80%, rgba(255,0,110,0.05) 0%, transparent 70%);
+  background:radial-gradient(ellipse 80% 60% at 60% 40%, rgba(153,153,255,0.1) 0%, transparent 70%),
+             radial-gradient(ellipse 60% 80% at 20% 80%, rgba(123,97,255,0.08) 0%, transparent 70%);
   pointer-events:none
 }
 .hero-inner{
@@ -89,8 +89,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;
   color:var(--red);text-transform:uppercase;margin-bottom:20px
 }
-.hero-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 1.8s ease infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .hero-title{
   font-family:'Bebas Neue',Impact,sans-serif;
   font-size:clamp(48px,6vw,84px);line-height:.95;letter-spacing:1px;
@@ -108,7 +107,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   border:none;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px
 }
 .hero-btn-primary{background:var(--red);color:#fff}
-.hero-btn-primary:hover{background:#ff7700;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,85,0,.4)}
+.hero-btn-primary:hover{background:#7b61ff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(153,153,255,.4)}
 .hero-btn-ghost{background:rgba(255,255,255,.07);color:#e0e0dc;border:1px solid rgba(255,255,255,.18)}
 .hero-btn-ghost:hover{background:rgba(255,255,255,.13);transform:translateY(-2px)}
 .hero-compat{font-size:11px;color:#666;font-family:'Montserrat',sans-serif;letter-spacing:.5px}
@@ -117,7 +116,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 /* ── Panel illustration (CSS) ── */
 .panel-demo{
   position:relative;display:flex;justify-content:center;
-  filter:drop-shadow(0 32px 60px rgba(0,0,0,.7)) drop-shadow(0 0 1px rgba(255,85,0,.25))
+  filter:drop-shadow(0 32px 60px rgba(0,0,0,.7)) drop-shadow(0 0 1px rgba(153,153,255,.25))
 }
 .panel-demo-label{
   position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);
@@ -135,7 +134,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .pp-dot{width:9px;height:9px;border-radius:50%}
 .pp-tab{
   margin-left:auto;background:#1e1e1e;border:1px solid #3a3a3a;border-radius:3px;
-  padding:3px 10px;font-size:9px;color:#ff5500;letter-spacing:1px;font-weight:700
+  padding:3px 10px;font-size:9px;color:#9999ff;letter-spacing:1px;font-weight:700
 }
 .pp-search{
   margin:10px;background:#141414;border:1px solid #333;border-radius:4px;
@@ -147,7 +146,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   background:#2a2a2a;border:1px solid #3a3a3a;border-radius:12px;
   padding:3px 9px;font-size:9px;color:#888;letter-spacing:.5px
 }
-.pp-chip.on{background:rgba(255,85,0,.15);border-color:#ff5500;color:#ff5500}
+.pp-chip.on{background:rgba(153,153,255,.15);border-color:#9999ff;color:#9999ff}
 .pp-tracks{padding:0 0 6px}
 .pp-track{
   display:flex;align-items:center;gap:8px;padding:7px 10px;
@@ -175,7 +174,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .pp-ctrl{background:none;border:none;color:#666;font-size:13px;cursor:pointer;padding:0 4px}
 .pp-ctrl.main{color:#ccc;font-size:16px}
 .pp-import{
-  background:#ff5500;border:none;border-radius:3px;color:#fff;
+  background:#9999ff;border:none;border-radius:3px;color:#0a0020;
   font-size:8px;font-weight:700;letter-spacing:.5px;padding:4px 8px;cursor:pointer;
   font-family:'Montserrat',sans-serif
 }
@@ -199,10 +198,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   background:var(--card-bg);border:1px solid var(--card-border);
   border-radius:10px;padding:28px;transition:border-color .2s
 }
-.feat-card:hover{border-color:rgba(255,85,0,.3)}
+.feat-card:hover{border-color:rgba(153,153,255,.3)}
 .feat-icon{
   width:44px;height:44px;border-radius:10px;
-  background:rgba(255,85,0,.1);border:1px solid rgba(255,85,0,.2);
+  background:rgba(153,153,255,.1);border:1px solid rgba(153,153,255,.2);
   display:flex;align-items:center;justify-content:center;
   font-size:20px;margin-bottom:18px
 }
@@ -246,7 +245,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   font-weight:700;letter-spacing:1px;cursor:pointer;text-decoration:none;
   transition:all .2s;text-transform:uppercase
 }
-.step-dl-btn:hover{background:#cc4400;transform:translateY(-1px)}
+.step-dl-btn:hover{background:#7b61ff;transform:translateY(-1px)}
 
 /* ── FAQ ── */
 .faq-list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
@@ -283,7 +282,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 }
 .cta-section::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(255,85,0,.08) 0%,transparent 70%);
+  background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(153,153,255,.1) 0%,transparent 70%);
   pointer-events:none
 }
 .cta-inner{position:relative;z-index:1;max-width:600px;margin:0 auto}
@@ -347,7 +346,7 @@ footer{
   <nav class="nav-tabs">
     <a class="nav-tab" href="index.html">Accueil</a>
     <a class="nav-tab" href="index.html#catalogue">Catalogue</a>
-    <a class="nav-tab active" href="premiere.html">Premiere Pro</a>
+    <a class="nav-tab active" href="premiere.html" style="gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:2px;flex-shrink:0"><rect width="24" height="24" fill="#2C1E5B"/><text x="3" y="18" font-family="'Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="900" fill="#9999FF">Pr</text></svg>Premiere Pro</a>
     <a class="nav-tab" href="nouveautes.html">Actu</a>
   </nav>
   <div class="header-right">
@@ -365,7 +364,7 @@ footer{
 
       <div class="hero-text">
         <div class="hero-eyebrow">
-          <span class="hero-eyebrow-dot"></span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:4px;flex-shrink:0"><rect width="24" height="24" fill="#2C1E5B"/><text x="3" y="18" font-family="'Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="900" fill="#9999FF">Pr</text></svg>
           Extension pour Adobe Premiere Pro
         </div>
         <h1 class="hero-title">OSM Music,<br>directement dans<br><span>votre montage</span></h1>
