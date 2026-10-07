@@ -371,9 +371,50 @@ footer{
     <div class="hero-pp-bg" aria-hidden="true">
 <svg viewBox="0 0 1440 810" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
 <defs>
-<linearGradient id="g-vid" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#05111e"/><stop offset="50%" stop-color="#0a1e35"/><stop offset="100%" stop-color="#0d1a10"/></linearGradient>
-<linearGradient id="g-prog" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#07141f"/><stop offset="40%" stop-color="#0c2240"/><stop offset="100%" stop-color="#061410"/></linearGradient>
-<radialGradient id="g-light" cx="55%" cy="35%" r="50%"><stop offset="0%" stop-color="#1a3a6a" stop-opacity=".7"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></radialGradient>
+<!-- Film grain filter applied to video monitors -->
+<filter id="grain" color-interpolation-filters="sRGB" x="0%" y="0%" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" seed="12" result="noise"/>
+  <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.055 0" result="a"/>
+  <feBlend in="SourceGraphic" in2="a" mode="overlay"/>
+</filter>
+<!-- Source monitor video — dark blue interior scene -->
+<linearGradient id="g-vid" x1="0%" y1="0%" x2="100%" y2="100%">
+  <stop offset="0%" stop-color="#060d18"/>
+  <stop offset="20%" stop-color="#0c1e34"/>
+  <stop offset="60%" stop-color="#091408"/>
+  <stop offset="100%" stop-color="#040904"/>
+</linearGradient>
+<!-- Program monitor video — wider cinematic shot -->
+<linearGradient id="g-prog" x1="0%" y1="100%" x2="100%" y2="0%">
+  <stop offset="0%" stop-color="#03080f"/>
+  <stop offset="30%" stop-color="#091930"/>
+  <stop offset="65%" stop-color="#0b1c0a"/>
+  <stop offset="100%" stop-color="#060606"/>
+</linearGradient>
+<!-- Key light in scene (left-center) -->
+<radialGradient id="g-light" cx="40%" cy="32%" r="48%">
+  <stop offset="0%" stop-color="#1c3d70" stop-opacity=".85"/>
+  <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+</radialGradient>
+<!-- Practical light (warm, far right) -->
+<radialGradient id="g-warm" cx="82%" cy="65%" r="32%">
+  <stop offset="0%" stop-color="#3a2010" stop-opacity=".7"/>
+  <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+</radialGradient>
+<!-- Vignette overlay on monitors -->
+<radialGradient id="g-vig" cx="50%" cy="50%" r="70%">
+  <stop offset="50%" stop-color="#000" stop-opacity="0"/>
+  <stop offset="100%" stop-color="#000" stop-opacity=".7"/>
+</radialGradient>
+<!-- Clip inner gradient (subtle sheen) -->
+<linearGradient id="g-clip-v" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#fff" stop-opacity=".06"/>
+  <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="g-clip-osc" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#9999ff" stop-opacity=".08"/>
+  <stop offset="100%" stop-color="#9999ff" stop-opacity="0"/>
+</linearGradient>
 </defs>
 <!-- App bg -->
 <rect width="1440" height="810" fill="#1b1b1b"/>
@@ -409,8 +450,15 @@ footer{
 <text x="10" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Source</text>
 <text x="62" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#555">Effets</text>
 <text x="96" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#555">Historique</text>
-<!-- Source video area -->
-<rect x="4" y="90" width="368" height="248" fill="url(#g-vid)"/>
+<!-- Source video area — layered render -->
+<rect x="4" y="90" width="368" height="248" fill="url(#g-vid)" filter="url(#grain)"/>
+<rect x="4" y="90" width="368" height="248" fill="url(#g-light)"/>
+<rect x="4" y="90" width="368" height="248" fill="url(#g-warm)"/>
+<rect x="4" y="90" width="368" height="248" fill="url(#g-vig)"/>
+<!-- Subject silhouette -->
+<ellipse cx="188" cy="200" rx="52" ry="80" fill="#0a1830" opacity=".55"/>
+<!-- Subtle highlight on subject -->
+<ellipse cx="172" cy="175" rx="22" ry="30" fill="#1a3560" opacity=".3"/>
 <!-- Safe zone frame -->
 <rect x="34" y="112" width="308" height="200" fill="none" stroke="#2a2a2a" stroke-width="0.8"/>
 <text x="8" y="102" font-family="monospace" font-size="9" fill="#666">00:00:08:12</text>
@@ -449,13 +497,23 @@ footer{
 <rect x="376" y="58" width="528" height="28" fill="#2a2a2a"/>
 <rect x="376" y="85" width="528" height="1" fill="#111"/>
 <text x="386" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Programme: Film_Corp_2025</text>
-<!-- Program monitor video -->
-<rect x="380" y="90" width="520" height="348" fill="#0a0a0a"/>
-<rect x="380" y="90" width="520" height="348" fill="url(#g-prog)"/>
+<!-- Program monitor video — layered cinematic render -->
+<rect x="380" y="90" width="520" height="348" fill="#030608"/>
+<rect x="380" y="90" width="520" height="348" fill="url(#g-prog)" filter="url(#grain)"/>
 <rect x="380" y="90" width="520" height="348" fill="url(#g-light)"/>
-<!-- Subtle detail in frame -->
-<rect x="450" y="160" width="200" height="130" fill="#102040" opacity=".4"/>
-<rect x="470" y="180" width="155" height="90" fill="#153060" opacity=".3"/>
+<rect x="380" y="90" width="520" height="348" fill="url(#g-warm)"/>
+<!-- Mid-ground scene elements (buildings / environment) -->
+<rect x="390" y="200" width="500" height="238" fill="#060e06" opacity=".6"/>
+<rect x="430" y="170" width="60" height="268" fill="#06100a" opacity=".4"/>
+<rect x="560" y="185" width="80" height="253" fill="#061006" opacity=".35"/>
+<rect x="760" y="195" width="55" height="243" fill="#06100a" opacity=".4"/>
+<!-- Window lights suggestion -->
+<rect x="445" y="195" width="8" height="5" rx="1" fill="#d4a840" opacity=".45"/>
+<rect x="460" y="210" width="6" height="4" rx="1" fill="#d4a840" opacity=".3"/>
+<rect x="575" y="205" width="10" height="5" rx="1" fill="#d4a840" opacity=".4"/>
+<rect x="590" y="220" width="7" height="4" rx="1" fill="#d4a840" opacity=".25"/>
+<!-- Vignette -->
+<rect x="380" y="90" width="520" height="348" fill="url(#g-vig)"/>
 <text x="384" y="434" font-family="monospace" font-size="9.5" fill="#666">00:00:12:08</text>
 <text x="836" y="434" font-family="monospace" font-size="9.5" fill="#666">00:00:24:00</text>
 <!-- Progress in program monitor -->
@@ -639,6 +697,7 @@ footer{
 <rect x="130" y="650" width="1310" height="36" fill="#1c1c1c"/>
 <rect x="130" y="685" width="1310" height="1" fill="#171717"/>
 <rect x="130" y="653" width="250" height="30" rx="2" fill="#1b4278"/>
+<rect x="130" y="653" width="250" height="30" rx="2" fill="url(#g-clip-v)"/>
 <text x="135" y="663" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="600" fill="#b8c8e0">Plan_01_interview.mp4</text>
 <rect x="142" y="667" width="6" height="4" rx="1" fill="rgba(100,140,200,.5)"/>
 <rect x="150" y="665" width="4" height="8" rx="1" fill="rgba(100,140,200,.5)"/>
@@ -646,13 +705,16 @@ footer{
 <rect x="168" y="664" width="6" height="10" rx="1" fill="rgba(100,140,200,.5)"/>
 <rect x="176" y="667" width="12" height="4" rx="1" fill="rgba(100,140,200,.5)"/>
 <rect x="400" y="653" width="310" height="30" rx="2" fill="#1b4278"/>
+<rect x="400" y="653" width="310" height="30" rx="2" fill="url(#g-clip-v)"/>
 <text x="405" y="663" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="600" fill="#b8c8e0">Plan_02_rue_nuit.mp4</text>
 <rect x="730" y="653" width="200" height="30" rx="2" fill="#1b4278"/>
+<rect x="730" y="653" width="200" height="30" rx="2" fill="url(#g-clip-v)"/>
 <text x="735" y="663" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#b8c8e0">Plan_03_fin.mp4</text>
 <!-- A1: OSM Music audio — highlighted purple -->
 <rect x="130" y="686" width="1310" height="28" fill="#1c1c1c"/>
 <rect x="130" y="713" width="1310" height="1" fill="#171717"/>
 <rect x="130" y="689" width="940" height="22" rx="2" fill="#221640"/>
+<rect x="130" y="689" width="940" height="22" rx="2" fill="url(#g-clip-osc)"/>
 <rect x="130" y="689" width="940" height="22" rx="2" fill="none" stroke="#9999FF" stroke-width=".8" stroke-opacity=".5"/>
 <text x="136" y="703" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="600" fill="#9999FF">OSM — Soir de novembre — Piano</text>
 <!-- Waveform bars purple -->
