@@ -40,7 +40,7 @@ audio{display:none}
 /* HEADER */
 header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo-mark{background:var(--grad);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px}
+
 .logo-name{font-size:13px;font-weight:600;letter-spacing:2px}
 .nav-tabs{display:flex;align-items:center;gap:2px}
 .nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.8px;padding:8px 12px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;position:relative;text-decoration:none}
@@ -144,9 +144,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
 /* OSM LOGO HERO */
 .hero-osm-logo{margin-bottom:24px;display:flex;flex-direction:column;align-items:center;gap:14px;animation:fadeUp 1.2s 1.2s ease both}
-.hero-osm-mark{background:var(--grad);color:#fff;font-size:clamp(20px,3.5vw,38px);font-weight:900;letter-spacing:10px;padding:14px 34px;border-radius:4px;text-transform:uppercase;animation:logoReveal 1.4s 1s ease both;box-shadow:0 0 80px rgba(255,85,0,0.45),0 4px 24px rgba(255,85,0,0.3)}
-@keyframes logoReveal{0%{opacity:0;transform:scale(0.8) translateY(10px);box-shadow:0 0 0 rgba(255,85,0,0)}60%{opacity:1;transform:scale(1.04) translateY(-2px);box-shadow:0 0 110px rgba(255,85,0,0.65)}100%{transform:scale(1) translateY(0);box-shadow:0 0 80px rgba(255,85,0,0.45),0 4px 24px rgba(255,85,0,0.3)}}
-.hero-osm-divider{width:50px;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.4),transparent);animation:fadeUp 1s 2s ease both}
 .hero-osm-name{font-size:clamp(11px,2vw,17px);font-weight:700;letter-spacing:clamp(8px,2vw,16px);color:rgba(255,255,255,0.88);text-transform:uppercase;animation:fadeUp 1s 1.8s ease both}
 .hero-osm-name span{color:var(--red)}
 /* TAGLINE */
@@ -669,8 +666,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   .nav-tabs{display:none}
   .header-right .btn-nav.btn-red{display:none}
   .hero-center{padding:16px 14px}
-  .hero-osm-mark{font-size:22px;padding:10px 20px;letter-spacing:6px}
-  .hero-osm-divider{width:80px}
   .hero-osm-name{font-size:8px;letter-spacing:3px}
   .hero-tagline{font-size:11px;letter-spacing:0.8px;margin-bottom:20px}
   .hero-search-bar{padding:5px 5px 5px 14px;gap:8px}
@@ -771,8 +766,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <div class="hero-ov"></div>
     <div class="hero-center">
       <div class="hero-osm-logo">
-        <div class="hero-osm-mark">OSM</div>
-        <div class="hero-osm-divider"></div>
         <div class="hero-osm-name">ORIGINAL &nbsp;<span>SCORES</span>&nbsp; MUSIC</div>
       </div>
       <p class="hero-tagline">Musique originale pour l'image &nbsp;·&nbsp; Cinéma &nbsp;·&nbsp; Télévision &nbsp;·&nbsp; Publicité</p>
