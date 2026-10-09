@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSM Music pour Premiere Pro | Pour les monteurs</title>
+<meta name="description" content="OSM Music pour Adobe Premiere Pro — Cherchez, écoutez et importez tout le catalogue de musique originale directement dans un panneau de Premiere Pro, sans quitter votre timeline.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#2C1E5B">
+<link rel="canonical" href="https://osm-music.fr/premiere">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://osm-music.fr/premiere">
+<meta property="og:title" content="OSM Music pour Premiere Pro | Pour les monteurs">
+<meta property="og:description" content="Tout le catalogue OSM dans un panneau de Premiere Pro, sans quitter votre timeline.">
+<meta property="og:image" content="https://osm-music.fr/osm_linkedin_banner.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script>
+(function(){const t=localStorage.getItem('osm-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<style>
+/* ── Design tokens — repris du site OSM ───────────────────────────────────── */
+:root{
+  --red:#9999FF;--grad:linear-gradient(135deg,#7b61ff,#9999ff);
+  --bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;
+  --bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);
+  --text:#111111;--text2:#2c2c2c;--muted:#666666;
+  --border:rgba(0,0,0,0.1);--card-bg:#ffffff;--card-border:rgba(0,0,0,0.08)
+}
+[data-theme="dark"]{
+  --bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;
+  --bg-alt:#0a0a0a;--bg-deep:#080808;--bg-header:rgba(10,10,10,0.98);
+  --text:#ffffff;--text2:#e2e2e2;--muted:#b0b0b0;
+  --border:rgba(255,255,255,0.12);--card-bg:#111111;--card-border:rgba(255,255,255,0.07)
+}
+[data-theme="creme"]{
+  --bg:#f4ecd8;--bg2:#efe5cd;--bg3:#e8dbbe;--bg4:#ddcda6;
+  --bg-alt:#f1e7d1;--bg-deep:#ece1c8;--bg-header:rgba(244,236,216,0.98);
+  --text:#3a2e1a;--text2:#584732;--muted:#8a755a;
+  --border:rgba(90,70,40,0.16);--card-bg:#fbf5e6;--card-border:rgba(90,70,40,0.1)
+}
+[data-theme="nuit"]{
+  --bg:#0d1b2a;--bg2:#152536;--bg3:#1d3149;--bg4:#284158;
+  --bg-alt:#0a1622;--bg-deep:#081019;--bg-header:rgba(10,20,32,0.98);
+  --text:#eaf2fb;--text2:#c6d6e6;--muted:#8ba4bc;
+  --border:rgba(130,170,210,0.16);--card-bg:#0f2033;--card-border:rgba(130,170,210,0.1)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ── Header ── */
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+.logo-mark{background:var(--grad);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 8px;border-radius:3px;font-family:'Montserrat',sans-serif}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px;color:var(--text);font-family:'Montserrat',sans-serif}
+.nav-tabs{display:flex;align-items:center;gap:4px}
+.nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;padding:8px 16px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;position:relative;text-decoration:none;display:inline-flex;align-items:center}
+.nav-tab:hover{color:var(--text);background:var(--bg3)}
+.nav-tab.active{color:var(--text)}
+.nav-tab.active::after{content:'';position:absolute;bottom:-1px;left:16px;right:16px;height:2px;background:var(--red);border-radius:2px 2px 0 0}
+.header-right{display:flex;align-items:center;gap:8px}
+.btn-nav{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 13px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;white-space:nowrap;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.btn-nav:hover{border-color:#555;color:var(--text)}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff}
+.btn-red:hover{background:#7b61ff;border-color:#7b61ff}
+@media(max-width:680px){.nav-tabs{display:none}.logo-name{display:none}}
+
+/* ── Page wrapper ── */
+.page{padding-top:64px}
+
+/* ── HERO ── */
+.hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;
+  background:#0e0e0f;overflow:hidden;padding:80px 0 60px
+}
+.hero-noise{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 60% 40%, rgba(153,153,255,0.1) 0%, transparent 70%),
+             radial-gradient(ellipse 60% 80% at 20% 80%, rgba(123,97,255,0.08) 0%, transparent 70%);
+  pointer-events:none
+}
+.hero-inner{
+  position:relative;z-index:2;display:grid;
+  grid-template-columns:1fr 1fr;gap:64px;align-items:center;
+  max-width:1100px;margin:0 auto;padding:0 40px;width:100%
+}
+.hero-text{}
+.hero-pp-logo{display:block;margin-bottom:24px}
+.hero-pp-logo svg{display:block;filter:drop-shadow(0 8px 32px rgba(153,153,255,.35))}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;
+  color:var(--red);text-transform:uppercase;margin-bottom:20px
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.hero-title{
+  font-family:'Bebas Neue',Impact,sans-serif;
+  font-size:clamp(48px,6vw,84px);line-height:.95;letter-spacing:1px;
+  color:#f4f4f2;margin-bottom:24px;text-wrap:balance
+}
+.hero-title span{color:var(--red)}
+.hero-sub{
+  font-size:15px;font-weight:300;color:#a8a8a4;line-height:1.7;
+  margin-bottom:32px;max-width:420px
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.hero-btn{
+  padding:13px 26px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:1.5px;cursor:pointer;border-radius:5px;text-transform:uppercase;
+  border:none;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px
+}
+.hero-btn-primary{background:var(--red);color:#fff}
+.hero-btn-primary:hover{background:#7b61ff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(153,153,255,.4)}
+.hero-btn-ghost{background:rgba(255,255,255,.07);color:#e0e0dc;border:1px solid rgba(255,255,255,.18)}
+.hero-btn-ghost:hover{background:rgba(255,255,255,.13);transform:translateY(-2px)}
+.hero-compat{font-size:11px;color:#666;font-family:'Montserrat',sans-serif;letter-spacing:.5px}
+.hero-compat strong{color:#888}
+
+/* ── Panel illustration (CSS) ── */
+.panel-demo{
+  position:relative;display:flex;justify-content:center;
+  filter:drop-shadow(0 32px 60px rgba(0,0,0,.7)) drop-shadow(0 0 1px rgba(153,153,255,.25))
+}
+.panel-demo-label{
+  position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);
+  font-size:10px;color:#555;font-family:'Montserrat',sans-serif;letter-spacing:2px;
+  text-transform:uppercase;white-space:nowrap
+}
+.pp-window{
+  width:280px;background:#1e1e1e;border-radius:6px;overflow:hidden;
+  border:1px solid #333;font-family:'Montserrat',sans-serif
+}
+.pp-title-bar{
+  background:#2a2a2a;height:32px;display:flex;align-items:center;
+  padding:0 10px;gap:8px;border-bottom:1px solid #333
+}
+.pp-dot{width:9px;height:9px;border-radius:50%}
+.pp-tab{
+  margin-left:auto;background:#1e1e1e;border:1px solid #3a3a3a;border-radius:3px;
+  padding:3px 10px;font-size:9px;color:#9999ff;letter-spacing:1px;font-weight:700
+}
+.pp-search{
+  margin:10px;background:#141414;border:1px solid #333;border-radius:4px;
+  padding:7px 10px;font-size:11px;color:#888;display:flex;align-items:center;gap:6px
+}
+.pp-search-icon{color:#555;font-size:12px}
+.pp-filters{display:flex;gap:5px;padding:0 10px 8px;flex-wrap:wrap}
+.pp-chip{
+  background:#2a2a2a;border:1px solid #3a3a3a;border-radius:12px;
+  padding:3px 9px;font-size:9px;color:#888;letter-spacing:.5px
+}
+.pp-chip.on{background:rgba(153,153,255,.15);border-color:#9999ff;color:#9999ff}
+.pp-tracks{padding:0 0 6px}
+.pp-track{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;
+  border-bottom:1px solid #1a1a1a;cursor:pointer;transition:background .1s
+}
+.pp-track:last-child{border-bottom:none}
+.pp-track:hover,.pp-track.active{background:#2a2a2a}
+.pp-play{
+  width:22px;height:22px;border-radius:50%;background:#333;
+  display:flex;align-items:center;justify-content:center;
+  font-size:7px;color:#ccc;flex-shrink:0
+}
+.pp-track.active .pp-play{background:var(--red);color:#fff}
+.pp-track-info{flex:1;min-width:0}
+.pp-track-name{font-size:10px;color:#ccc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-track-meta{font-size:9px;color:#555;margin-top:1px}
+.pp-track-dur{font-size:9px;color:#555;font-variant-numeric:tabular-nums;flex-shrink:0}
+.pp-player{
+  background:#161616;border-top:1px solid #2a2a2a;padding:8px 10px
+}
+.pp-player-title{font-size:9px;color:#aaa;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-prog{height:2px;background:#2a2a2a;border-radius:1px;margin-bottom:6px;position:relative}
+.pp-prog-fill{position:absolute;left:0;top:0;height:100%;width:42%;background:var(--red);border-radius:1px}
+.pp-controls{display:flex;align-items:center;justify-content:space-between}
+.pp-ctrl{background:none;border:none;color:#666;font-size:13px;cursor:pointer;padding:0 4px}
+.pp-ctrl.main{color:#ccc;font-size:16px}
+.pp-import{
+  background:#9999ff;border:none;border-radius:3px;color:#0a0020;
+  font-size:8px;font-weight:700;letter-spacing:.5px;padding:4px 8px;cursor:pointer;
+  font-family:'Montserrat',sans-serif
+}
+
+/* ── Hero PP Background ── */
+.hero-pp-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-pp-bg svg{width:100%;height:100%;opacity:.42}
+.hero-pp-overlay{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,rgba(14,14,15,.97) 0%,rgba(14,14,15,.82) 38%,rgba(14,14,15,.25) 100%)}
+
+/* ── Sections communes ── */
+.section{padding:80px 40px;max-width:1100px;margin:0 auto}
+.section-eyebrow{
+  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:14px
+}
+.section-title{
+  font-family:'Bebas Neue',Impact,sans-serif;
+  font-size:clamp(36px,4vw,56px);line-height:1;color:var(--text);
+  margin-bottom:16px;letter-spacing:.5px
+}
+.section-sub{font-size:15px;color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:48px}
+
+/* ── Features cards ── */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feat-card{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:10px;padding:28px;transition:border-color .2s
+}
+.feat-card:hover{border-color:rgba(153,153,255,.3)}
+.feat-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:rgba(153,153,255,.1);border:1px solid rgba(153,153,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:18px
+}
+.feat-title{
+  font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;
+  color:var(--text);margin-bottom:10px;letter-spacing:.3px
+}
+.feat-body{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ── Installation steps ── */
+.install-section{background:var(--bg-alt);padding:80px 0}
+.install-inner{max-width:1100px;margin:0 auto;padding:0 40px}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:48px}
+.step{position:relative}
+.step-connector{
+  display:none;position:absolute;top:22px;left:calc(100% + 4px);
+  width:calc(100% - 8px);height:1px;background:var(--border);z-index:0
+}
+.step:not(:last-child) .step-connector{display:block}
+.step-num{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--grad);color:#fff;
+  font-family:'Bebas Neue',sans-serif;font-size:20px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;position:relative;z-index:1;flex-shrink:0
+}
+.step-title{
+  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text);margin-bottom:10px
+}
+.step-body{font-size:13px;color:var(--muted);line-height:1.7}
+.step-body code{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:3px;padding:1px 6px;font-size:12px;
+  font-family:'Montserrat',monospace;color:var(--text2)
+}
+.step-dl-btn{
+  display:inline-flex;align-items:center;gap:7px;margin-top:14px;
+  background:var(--red);color:#fff;border:none;border-radius:5px;
+  padding:10px 18px;font-family:'Montserrat',sans-serif;font-size:11px;
+  font-weight:700;letter-spacing:1px;cursor:pointer;text-decoration:none;
+  transition:all .2s;text-transform:uppercase
+}
+.step-dl-btn:hover{background:#7b61ff;transform:translateY(-1px)}
+
+/* ── FAQ ── */
+.faq-list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.faq-item{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:8px;overflow:hidden
+}
+.faq-q{
+  width:100%;background:none;border:none;padding:18px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  cursor:pointer;text-align:left;transition:background .15s
+}
+.faq-q:hover{background:var(--bg2)}
+.faq-q-text{
+  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;
+  color:var(--text);line-height:1.4
+}
+.faq-arrow{
+  color:var(--muted);font-size:12px;flex-shrink:0;transition:transform .2s;
+  font-style:normal
+}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+.faq-a{
+  display:none;padding:0 20px 18px;
+  font-size:13px;color:var(--muted);line-height:1.75
+}
+.faq-a a{color:var(--red);text-decoration:none}
+.faq-a a:hover{text-decoration:underline}
+.faq-item.open .faq-a{display:block}
+
+/* ── CTA final ── */
+.cta-section{
+  background:#0e0e0f;padding:80px 40px;text-align:center;position:relative;overflow:hidden
+}
+.cta-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(153,153,255,.1) 0%,transparent 70%);
+  pointer-events:none
+}
+.cta-inner{position:relative;z-index:1;max-width:600px;margin:0 auto}
+.cta-title{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,64px);
+  color:#f4f4f2;line-height:.95;margin-bottom:18px;letter-spacing:.5px
+}
+.cta-title span{color:var(--red)}
+.cta-sub{font-size:15px;color:#888;line-height:1.7;margin-bottom:36px}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ── Footer ── */
+footer{
+  background:#0e0e0f;border-top:1px solid #1e1e1e;
+  padding:28px 40px;text-align:center
+}
+.footer-links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.footer-link{
+  font-family:'Montserrat',sans-serif;font-size:11px;color:#555;
+  text-decoration:none;letter-spacing:.5px;transition:color .15s
+}
+.footer-link:hover{color:#888}
+.footer-legal{
+  font-family:'Montserrat',sans-serif;font-size:10px;color:#3a3a3a;
+  line-height:1.6;max-width:600px;margin:0 auto
+}
+
+/* ── Responsive ── */
+@media(max-width:860px){
+  .hero-inner{grid-template-columns:1fr;gap:40px;text-align:center}
+  .hero-sub{margin-left:auto;margin-right:auto}
+  .hero-btns{justify-content:center}
+  .panel-demo{margin:0 auto}
+  .features-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr}
+  .step-connector{display:none !important}
+  .section,.install-inner{padding-inline:24px}
+  .cta-section{padding-inline:24px}
+  footer{padding-inline:24px}
+}
+@media(max-width:480px){
+  .hero{padding:60px 0 48px}
+  .hero-inner{padding-inline:20px}
+  .hero-btns{flex-direction:column;align-items:center}
+  .hero-btn{width:100%;justify-content:center}
+  .pp-window{width:240px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OSM</div>
+    <div class="logo-name">Original Scores Music</div>
+  </a>
+  <nav class="nav-tabs">
+    <a class="nav-tab" href="index.html">Accueil</a>
+    <a class="nav-tab" href="index.html#catalogue">Catalogue</a>
+    <a class="nav-tab active" href="premiere.html" style="gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:2px;flex-shrink:0"><rect width="24" height="24" fill="#2C1E5B"/><text x="3" y="18" font-family="'Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="900" fill="#9999FF">Pr</text></svg>Premiere Pro</a>
+    <a class="nav-tab" href="nouveautes.html">Actu</a>
+  </nav>
+  <div class="header-right">
+    <a class="btn-nav" href="index.html">← Accueil</a>
+    <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <!-- Premiere Pro interface illustration -->
+    <div class="hero-pp-bg" aria-hidden="true">
+<svg viewBox="0 0 1440 810" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs>
+<!-- Film grain filter applied to video monitors -->
+<filter id="grain" color-interpolation-filters="sRGB" x="0%" y="0%" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" seed="12" result="noise"/>
+  <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.055 0" result="a"/>
+  <feBlend in="SourceGraphic" in2="a" mode="overlay"/>
+</filter>
+<!-- Source monitor video — dark blue interior scene -->
+<linearGradient id="g-vid" x1="0%" y1="0%" x2="100%" y2="100%">
+  <stop offset="0%" stop-color="#060d18"/>
+  <stop offset="20%" stop-color="#0c1e34"/>
+  <stop offset="60%" stop-color="#091408"/>
+  <stop offset="100%" stop-color="#040904"/>
+</linearGradient>
+<!-- Program monitor video — wider cinematic shot -->
+<linearGradient id="g-prog" x1="0%" y1="100%" x2="100%" y2="0%">
+  <stop offset="0%" stop-color="#03080f"/>
+  <stop offset="30%" stop-color="#091930"/>
+  <stop offset="65%" stop-color="#0b1c0a"/>
+  <stop offset="100%" stop-color="#060606"/>
+</linearGradient>
+<!-- Key light in scene (left-center) -->
+<radialGradient id="g-light" cx="40%" cy="32%" r="48%">
+  <stop offset="0%" stop-color="#1c3d70" stop-opacity=".85"/>
+  <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+</radialGradient>
+<!-- Practical light (warm, far right) -->
+<radialGradient id="g-warm" cx="82%" cy="65%" r="32%">
+  <stop offset="0%" stop-color="#3a2010" stop-opacity=".7"/>
+  <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+</radialGradient>
+<!-- Vignette overlay on monitors -->
+<radialGradient id="g-vig" cx="50%" cy="50%" r="70%">
+  <stop offset="50%" stop-color="#000" stop-opacity="0"/>
+  <stop offset="100%" stop-color="#000" stop-opacity=".7"/>
+</radialGradient>
+<!-- Clip inner gradient (subtle sheen) -->
+<linearGradient id="g-clip-v" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#fff" stop-opacity=".06"/>
+  <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="g-clip-osc" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#9999ff" stop-opacity=".08"/>
+  <stop offset="100%" stop-color="#9999ff" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<!-- App bg -->
+<rect width="1440" height="810" fill="#1b1b1b"/>
+<!-- ── MENU BAR ── -->
+<rect width="1440" height="26" fill="#2e2e2e"/>
+<rect x="4" y="4" width="18" height="18" rx="3" fill="#2C1E5B"/>
+<text x="6.5" y="17" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" font-weight="900" fill="#9999FF">Pr</text>
+<text x="28" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Fichier</text>
+<text x="71" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Édition</text>
+<text x="112" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Clip</text>
+<text x="144" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Séquence</text>
+<text x="202" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Marqueurs</text>
+<text x="260" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Graphiques</text>
+<text x="325" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Affichage</text>
+<text x="376" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Fenêtre</text>
+<text x="420" y="18" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Aide</text>
+<!-- ── WORKSPACE TABS BAR ── -->
+<rect y="26" width="1440" height="32" fill="#242424"/>
+<rect y="57" width="1440" height="1" fill="#111"/>
+<rect x="4" y="30" width="66" height="22" rx="3" fill="#1a1a1a"/>
+<text x="10" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Montage</text>
+<text x="80" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#666">Couleur</text>
+<text x="126" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#666">Effets</text>
+<text x="164" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#666">Audio</text>
+<text x="202" y="45" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#666">Graphiques</text>
+<!-- Timecode centre -->
+<rect x="620" y="31" width="100" height="20" rx="2" fill="#141414"/>
+<text x="625" y="45" font-family="monospace" font-size="11.5" fill="#e0e0e0">00:00:12:08</text>
+<!-- ── LEFT PANEL: Source Monitor ── -->
+<rect x="0" y="58" width="376" height="486" fill="#222"/>
+<rect x="0" y="58" width="376" height="28" fill="#2a2a2a"/>
+<rect x="0" y="85" width="376" height="1" fill="#111"/>
+<text x="10" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Source</text>
+<text x="62" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#555">Effets</text>
+<text x="96" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#555">Historique</text>
+<!-- Source video area — layered render -->
+<rect x="4" y="90" width="368" height="248" fill="url(#g-vid)" filter="url(#grain)"/>
+<rect x="4" y="90" width="368" height="248" fill="url(#g-light)"/>
+<rect x="4" y="90" width="368" height="248" fill="url(#g-warm)"/>
+<rect x="4" y="90" width="368" height="248" fill="url(#g-vig)"/>
+<!-- Subject silhouette -->
+<ellipse cx="188" cy="200" rx="52" ry="80" fill="#0a1830" opacity=".55"/>
+<!-- Subtle highlight on subject -->
+<ellipse cx="172" cy="175" rx="22" ry="30" fill="#1a3560" opacity=".3"/>
+<!-- Safe zone frame -->
+<rect x="34" y="112" width="308" height="200" fill="none" stroke="#2a2a2a" stroke-width="0.8"/>
+<text x="8" y="102" font-family="monospace" font-size="9" fill="#666">00:00:08:12</text>
+<!-- Progress bar source -->
+<rect x="4" y="338" width="368" height="3" fill="#2a2a2a"/>
+<rect x="4" y="338" width="110" height="3" fill="#9999FF"/>
+<!-- Controls -->
+<rect x="4" y="341" width="368" height="30" fill="#1e1e1e"/>
+<rect x="162" y="347" width="18" height="18" rx="9" fill="#2a2a2a"/>
+<polygon points="167,352 167,362 175,357" fill="#aaa"/>
+<text x="148" y="359" font-family="monospace" font-size="11" fill="#666">|&lt;</text>
+<text x="188" y="359" font-family="monospace" font-size="11" fill="#666">&gt;|</text>
+<!-- Project media panel -->
+<rect x="0" y="374" width="376" height="28" fill="#2a2a2a"/>
+<rect x="0" y="401" width="376" height="1" fill="#111"/>
+<text x="10" y="392" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Médias</text>
+<text x="60" y="392" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#555">Projet: Film_Corp_2025</text>
+<!-- Media items -->
+<rect x="4" y="404" width="368" height="18" rx="2" fill="#2a2a2a"/>
+<rect x="6" y="407" width="12" height="12" rx="2" fill="#2a5580"/>
+<text x="22" y="418" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#aaa">Plan_01_interview.mp4</text>
+<text x="306" y="418" font-family="monospace" font-size="9" fill="#555">02:34</text>
+<rect x="6" y="428" width="12" height="12" rx="2" fill="#2a5580"/>
+<text x="22" y="439" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#aaa">Plan_02_broll_ville.mp4</text>
+<text x="306" y="439" font-family="monospace" font-size="9" fill="#555">01:12</text>
+<rect x="6" y="448" width="12" height="12" rx="2" fill="#3a2070"/>
+<text x="22" y="459" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">OSM_Soir_novembre.wav</text>
+<text x="306" y="459" font-family="monospace" font-size="9" fill="#9999FF">03:42</text>
+<rect x="6" y="468" width="12" height="12" rx="2" fill="#3a2070"/>
+<text x="22" y="479" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">OSM_Brume_matin.wav</text>
+<text x="306" y="479" font-family="monospace" font-size="9" fill="#555">03:22</text>
+<!-- Panel border right -->
+<rect x="375" y="58" width="1" height="486" fill="#111"/>
+<!-- ── CENTER PANEL: Program Monitor ── -->
+<rect x="376" y="58" width="528" height="486" fill="#1e1e1e"/>
+<rect x="376" y="58" width="528" height="28" fill="#2a2a2a"/>
+<rect x="376" y="85" width="528" height="1" fill="#111"/>
+<text x="386" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Programme: Film_Corp_2025</text>
+<!-- Program monitor video — layered cinematic render -->
+<rect x="380" y="90" width="520" height="348" fill="#030608"/>
+<rect x="380" y="90" width="520" height="348" fill="url(#g-prog)" filter="url(#grain)"/>
+<rect x="380" y="90" width="520" height="348" fill="url(#g-light)"/>
+<rect x="380" y="90" width="520" height="348" fill="url(#g-warm)"/>
+<!-- Mid-ground scene elements (buildings / environment) -->
+<rect x="390" y="200" width="500" height="238" fill="#060e06" opacity=".6"/>
+<rect x="430" y="170" width="60" height="268" fill="#06100a" opacity=".4"/>
+<rect x="560" y="185" width="80" height="253" fill="#061006" opacity=".35"/>
+<rect x="760" y="195" width="55" height="243" fill="#06100a" opacity=".4"/>
+<!-- Window lights suggestion -->
+<rect x="445" y="195" width="8" height="5" rx="1" fill="#d4a840" opacity=".45"/>
+<rect x="460" y="210" width="6" height="4" rx="1" fill="#d4a840" opacity=".3"/>
+<rect x="575" y="205" width="10" height="5" rx="1" fill="#d4a840" opacity=".4"/>
+<rect x="590" y="220" width="7" height="4" rx="1" fill="#d4a840" opacity=".25"/>
+<!-- Vignette -->
+<rect x="380" y="90" width="520" height="348" fill="url(#g-vig)"/>
+<text x="384" y="434" font-family="monospace" font-size="9.5" fill="#666">00:00:12:08</text>
+<text x="836" y="434" font-family="monospace" font-size="9.5" fill="#666">00:00:24:00</text>
+<!-- Progress in program monitor -->
+<rect x="380" y="440" width="520" height="3" fill="#252525"/>
+<rect x="380" y="440" width="185" height="3" fill="#9999FF"/>
+<rect x="563" y="437" width="4" height="9" rx="2" fill="#9999FF"/>
+<!-- Controls program monitor -->
+<rect x="380" y="443" width="520" height="34" fill="#1e1e1e"/>
+<rect x="560" y="449" width="22" height="22" rx="11" fill="#2a2a2a"/>
+<polygon points="565,454 565,466 575,460" fill="#ccc"/>
+<text x="540" y="463" font-family="monospace" font-size="12" fill="#666">|&lt;</text>
+<text x="590" y="463" font-family="monospace" font-size="12" fill="#666">&gt;|</text>
+<!-- Lumetri row -->
+<rect x="380" y="478" width="520" height="24" fill="#222"/>
+<text x="386" y="494" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#555">Resolution: 1/2</text>
+<text x="806" y="494" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#555">100%</text>
+<!-- Panel border right -->
+<rect x="903" y="58" width="1" height="486" fill="#111"/>
+<!-- ── RIGHT PANEL: Effects Controls ── -->
+<rect x="904" y="58" width="196" height="486" fill="#222"/>
+<rect x="904" y="58" width="196" height="28" fill="#2a2a2a"/>
+<rect x="904" y="85" width="196" height="1" fill="#111"/>
+<text x="914" y="76" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" fill="#9999FF" font-weight="600">Contrôle Effets</text>
+<rect x="908" y="90" width="188" height="20" rx="2" fill="#2a2a2a"/>
+<text x="912" y="104" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">Plan_01_interview.mp4</text>
+<text x="916" y="125" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">Mouvement</text>
+<text x="920" y="144" font-family="Helvetica Neue,Arial,sans-serif" font-size="9" fill="#666">Position</text>
+<text x="990" y="144" font-family="monospace" font-size="9" fill="#9999FF">960 · 540</text>
+<text x="920" y="161" font-family="Helvetica Neue,Arial,sans-serif" font-size="9" fill="#666">Echelle</text>
+<text x="990" y="161" font-family="monospace" font-size="9" fill="#9999FF">100,0</text>
+<text x="920" y="178" font-family="Helvetica Neue,Arial,sans-serif" font-size="9" fill="#666">Rotation</text>
+<text x="990" y="178" font-family="monospace" font-size="9" fill="#9999FF">0,0°</text>
+<text x="916" y="200" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">Opacite</text>
+<text x="990" y="200" font-family="monospace" font-size="9" fill="#9999FF">100%</text>
+<rect x="908" y="210" width="188" height="1" fill="#333"/>
+<text x="912" y="228" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">OSM_Soir_novembre.wav</text>
+<text x="916" y="246" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">Volume</text>
+<text x="990" y="246" font-family="monospace" font-size="9" fill="#9999FF">0,0 dB</text>
+<text x="916" y="264" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#888">Canal</text>
+<text x="990" y="264" font-family="monospace" font-size="9" fill="#9999FF">Stereo</text>
+<!-- Panel border right -->
+<rect x="1099" y="58" width="1" height="486" fill="#111"/>
+<!-- ── FAR RIGHT PANEL: OSM Music Plugin ── -->
+<rect x="1100" y="58" width="340" height="486" fill="#1d1822"/>
+<rect x="1100" y="58" width="340" height="28" fill="#21192e"/>
+<rect x="1100" y="85" width="340" height="1" fill="#111"/>
+<!-- Plugin header -->
+<rect x="1106" y="63" width="16" height="16" rx="2.5" fill="#2C1E5B"/>
+<text x="1108.5" y="75" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" font-weight="900" fill="#9999FF">Pr</text>
+<text x="1127" y="75" font-family="Helvetica Neue,Arial,sans-serif" font-size="11.5" font-weight="700" fill="#d0c8f8">OSM Music</text>
+<!-- Search in OSM panel -->
+<rect x="1105" y="91" width="328" height="24" rx="4" fill="#141414" stroke="#2a2a2a" stroke-width="1"/>
+<text x="1116" y="107" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#404040">melancolie, piano, automne...</text>
+<!-- Filter chips -->
+<rect x="1105" y="121" width="44" height="16" rx="8" fill="rgba(153,153,255,.18)" stroke="#9999ff" stroke-width=".8"/>
+<text x="1111" y="133" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#9999FF">Piano</text>
+<rect x="1154" y="121" width="36" height="16" rx="8" fill="#252525" stroke="#333" stroke-width=".8"/>
+<text x="1160" y="133" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#666">Folk</text>
+<rect x="1195" y="121" width="62" height="16" rx="8" fill="#252525" stroke="#333" stroke-width=".8"/>
+<text x="1201" y="133" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#666">Atmosphere</text>
+<rect x="1262" y="121" width="48" height="16" rx="8" fill="#252525" stroke="#333" stroke-width=".8"/>
+<text x="1267" y="133" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#666">Automne</text>
+<!-- Track 1 — active/playing -->
+<rect x="1100" y="142" width="340" height="42" fill="#26202e"/>
+<rect x="1100" y="183" width="340" height="1" fill="#111"/>
+<rect x="1106" y="150" width="26" height="26" rx="13" fill="#9999FF"/>
+<polygon points="1113,157 1113,169 1123,163" fill="#0a0020"/>
+<text x="1138" y="160" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" font-weight="600" fill="#eeeeff">Soir de novembre</text>
+<text x="1138" y="175" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#555">Piano  ·  3:42</text>
+<rect x="1336" y="150" width="56" height="20" rx="3" fill="#9999FF"/>
+<text x="1342" y="164" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="700" fill="#0a0020">Importer</text>
+<!-- Track 2 -->
+<rect x="1100" y="184" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="221" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="192" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,197 1113,208 1122,202" fill="#777"/>
+<text x="1136" y="200" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Marche silencieuse</text>
+<text x="1136" y="215" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Folk Acoustique  ·  2:58</text>
+<!-- Track 3 -->
+<rect x="1100" y="222" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="259" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="230" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,235 1113,246 1122,240" fill="#777"/>
+<text x="1136" y="238" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Dernier regard</text>
+<text x="1136" y="253" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Melancolie  ·  4:11</text>
+<!-- Track 4 -->
+<rect x="1100" y="260" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="297" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="268" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,273 1113,284 1122,278" fill="#777"/>
+<text x="1136" y="276" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Brume du matin</text>
+<text x="1136" y="291" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Atmosphere  ·  3:22</text>
+<!-- Track 5 -->
+<rect x="1100" y="298" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="335" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="306" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,311 1113,322 1122,316" fill="#777"/>
+<text x="1136" y="314" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Lumiere froide</text>
+<text x="1136" y="329" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Cinematique  ·  3:58</text>
+<!-- Track 6 -->
+<rect x="1100" y="336" width="340" height="38" fill="transparent"/>
+<rect x="1100" y="373" width="340" height="1" fill="#1a1a1a"/>
+<rect x="1106" y="344" width="24" height="24" rx="12" fill="#252525"/>
+<polygon points="1113,349 1113,360 1122,354" fill="#777"/>
+<text x="1136" y="352" font-family="Helvetica Neue,Arial,sans-serif" font-size="10.5" fill="#b8b8b8">Passage d'hiver</text>
+<text x="1136" y="367" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#444">Orchestral  ·  5:02</text>
+<!-- Mini player at bottom of OSM panel -->
+<rect x="1100" y="410" width="340" height="60" fill="#130f1c"/>
+<rect x="1100" y="410" width="340" height="1" fill="#2a2a2a"/>
+<text x="1110" y="424" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">En lecture: Soir de novembre — Piano</text>
+<rect x="1110" y="430" width="300" height="2" fill="#222"/>
+<rect x="1110" y="430" width="106" height="2" fill="#9999FF"/>
+<rect x="1214" y="427" width="3" height="8" rx="1.5" fill="#9999FF"/>
+<polygon points="1150,442 1150,454 1160,448" fill="#bbb"/>
+<rect x="1135" y="444" width="5" height="12" rx="1" fill="#888"/>
+<rect x="1142" y="444" width="5" height="12" rx="1" fill="#888"/>
+<rect x="1163" y="446" width="5" height="8" rx="1" fill="#888"/>
+<rect x="1170" y="446" width="5" height="8" rx="1" fill="#888"/>
+<rect x="1270" y="438" width="100" height="20" rx="3" fill="rgba(153,153,255,.12)"/>
+<text x="1276" y="452" font-family="Helvetica Neue,Arial,sans-serif" font-size="9.5" fill="#9999FF">osm-music.fr</text>
+<!-- ── TIMELINE ── -->
+<rect x="0" y="544" width="1440" height="266" fill="#1c1c1c"/>
+<rect x="0" y="544" width="1440" height="1" fill="#111"/>
+<!-- Timeline header -->
+<rect x="0" y="544" width="1440" height="26" fill="#252525"/>
+<text x="10" y="561" font-family="Helvetica Neue,Arial,sans-serif" font-size="11" font-weight="600" fill="#9999FF">Sequence: Film_Corp_2025</text>
+<!-- Ruler -->
+<rect x="130" y="570" width="1310" height="20" fill="#222"/>
+<rect x="130" y="570" width="1310" height="1" fill="#111"/>
+<line x1="130" y1="570" x2="130" y2="590" stroke="#333" stroke-width="1"/>
+<text x="133" y="584" font-family="monospace" font-size="8" fill="#444">00:00:00</text>
+<line x1="261" y1="575" x2="261" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="264" y="584" font-family="monospace" font-size="8" fill="#444">00:00:05</text>
+<line x1="392" y1="575" x2="392" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="395" y="584" font-family="monospace" font-size="8" fill="#444">00:00:10</text>
+<line x1="523" y1="575" x2="523" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="526" y="584" font-family="monospace" font-size="8" fill="#444">00:00:15</text>
+<line x1="654" y1="575" x2="654" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="657" y="584" font-family="monospace" font-size="8" fill="#444">00:00:20</text>
+<line x1="785" y1="575" x2="785" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="788" y="584" font-family="monospace" font-size="8" fill="#444">00:00:25</text>
+<line x1="916" y1="575" x2="916" y2="590" stroke="#2a2a2a" stroke-width=".5"/>
+<text x="919" y="584" font-family="monospace" font-size="8" fill="#444">00:00:30</text>
+<!-- PLAYHEAD -->
+<line x1="470" y1="570" x2="470" y2="810" stroke="#9999FF" stroke-width="1.5" opacity=".85"/>
+<polygon points="463,570 477,570 470,581" fill="#9999FF"/>
+<!-- Track headers -->
+<rect x="0" y="590" width="130" height="30" fill="#252525"/>
+<rect x="0" y="619" width="130" height="1" fill="#111"/>
+<text x="6" y="609" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" fill="#777">V3</text>
+<rect x="0" y="620" width="130" height="30" fill="#252525"/>
+<rect x="0" y="649" width="130" height="1" fill="#111"/>
+<text x="6" y="639" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" fill="#888">V2</text>
+<rect x="0" y="650" width="130" height="36" fill="#252525"/>
+<rect x="0" y="685" width="130" height="1" fill="#111"/>
+<text x="6" y="672" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" font-weight="700" fill="#ddd">V1</text>
+<rect x="0" y="686" width="130" height="28" fill="#222"/>
+<rect x="0" y="713" width="130" height="1" fill="#111"/>
+<text x="6" y="704" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" font-weight="700" fill="#ccc">A1</text>
+<rect x="0" y="714" width="130" height="26" fill="#222"/>
+<rect x="0" y="739" width="130" height="1" fill="#111"/>
+<text x="6" y="731" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" fill="#777">A2</text>
+<rect x="0" y="740" width="130" height="26" fill="#222"/>
+<text x="6" y="757" font-family="Helvetica Neue,Arial,sans-serif" font-size="10" fill="#555">A3</text>
+<!-- Track areas -->
+<!-- V3 -->
+<rect x="130" y="590" width="1310" height="30" fill="#1e1e1e"/>
+<rect x="130" y="619" width="1310" height="1" fill="#171717"/>
+<rect x="390" y="593" width="175" height="24" rx="2" fill="#1a3860"/>
+<text x="394" y="607" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#8aa">Titre_generique.mogrt</text>
+<!-- V2 -->
+<rect x="130" y="620" width="1310" height="30" fill="#1e1e1e"/>
+<rect x="130" y="649" width="1310" height="1" fill="#171717"/>
+<rect x="130" y="623" width="155" height="24" rx="2" fill="#1a3860"/>
+<text x="134" y="638" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#8aa">broll_ville.mp4</text>
+<rect x="300" y="623" width="185" height="24" rx="2" fill="#1a3860"/>
+<text x="304" y="638" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#8aa">broll_bureau.mp4</text>
+<rect x="660" y="623" width="240" height="24" rx="2" fill="#1a3860"/>
+<text x="664" y="638" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#8aa">broll_exterieur.mp4</text>
+<!-- V1 main video -->
+<rect x="130" y="650" width="1310" height="36" fill="#1c1c1c"/>
+<rect x="130" y="685" width="1310" height="1" fill="#171717"/>
+<rect x="130" y="653" width="250" height="30" rx="2" fill="#1b4278"/>
+<rect x="130" y="653" width="250" height="30" rx="2" fill="url(#g-clip-v)"/>
+<text x="135" y="663" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="600" fill="#b8c8e0">Plan_01_interview.mp4</text>
+<rect x="142" y="667" width="6" height="4" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="150" y="665" width="4" height="8" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="156" y="666" width="10" height="6" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="168" y="664" width="6" height="10" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="176" y="667" width="12" height="4" rx="1" fill="rgba(100,140,200,.5)"/>
+<rect x="400" y="653" width="310" height="30" rx="2" fill="#1b4278"/>
+<rect x="400" y="653" width="310" height="30" rx="2" fill="url(#g-clip-v)"/>
+<text x="405" y="663" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="600" fill="#b8c8e0">Plan_02_rue_nuit.mp4</text>
+<rect x="730" y="653" width="200" height="30" rx="2" fill="#1b4278"/>
+<rect x="730" y="653" width="200" height="30" rx="2" fill="url(#g-clip-v)"/>
+<text x="735" y="663" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#b8c8e0">Plan_03_fin.mp4</text>
+<!-- A1: OSM Music audio — highlighted purple -->
+<rect x="130" y="686" width="1310" height="28" fill="#1c1c1c"/>
+<rect x="130" y="713" width="1310" height="1" fill="#171717"/>
+<rect x="130" y="689" width="940" height="22" rx="2" fill="#221640"/>
+<rect x="130" y="689" width="940" height="22" rx="2" fill="url(#g-clip-osc)"/>
+<rect x="130" y="689" width="940" height="22" rx="2" fill="none" stroke="#9999FF" stroke-width=".8" stroke-opacity=".5"/>
+<text x="136" y="703" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" font-weight="600" fill="#9999FF">OSM — Soir de novembre — Piano</text>
+<!-- Waveform bars purple -->
+<rect x="285" y="692" width="2" height="6" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="289" y="690" width="2" height="10" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="293" y="692" width="2" height="7" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="297" y="691" width="2" height="9" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="301" y="693" width="2" height="5" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="305" y="689" width="2" height="12" rx="1" fill="rgba(153,153,255,.6)"/>
+<rect x="309" y="691" width="2" height="8" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="313" y="690" width="2" height="10" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="317" y="692" width="2" height="7" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="321" y="691" width="2" height="9" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="325" y="688" width="2" height="14" rx="1" fill="rgba(153,153,255,.6)"/>
+<rect x="329" y="690" width="2" height="10" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="333" y="692" width="2" height="7" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="337" y="691" width="2" height="9" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="341" y="693" width="2" height="5" rx="1" fill="rgba(153,153,255,.55)"/>
+<rect x="345" y="690" width="2" height="11" rx="1" fill="rgba(153,153,255,.6)"/>
+<!-- A2 natural sound -->
+<rect x="130" y="714" width="1310" height="26" fill="#1c1c1c"/>
+<rect x="130" y="739" width="1310" height="1" fill="#171717"/>
+<rect x="130" y="717" width="250" height="20" rx="2" fill="#152515"/>
+<text x="135" y="730" font-family="Helvetica Neue,Arial,sans-serif" font-size="8.5" fill="#5a8a5a">son direct interview</text>
+<!-- A3 empty -->
+<rect x="130" y="740" width="1310" height="26" fill="#1c1c1c"/>
+</svg>
+    </div>
+    <div class="hero-pp-overlay"></div>
+    <div class="hero-inner">
+
+      <div class="hero-text">
+        <!-- Grand logo Premiere Pro -->
+        <div class="hero-pp-logo">
+          <svg width="88" height="88" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="88" height="88" rx="14" fill="#1e0f45"/>
+            <rect width="88" height="88" rx="14" fill="url(#pp-grad)"/>
+            <defs>
+              <linearGradient id="pp-grad" x1="0" y1="0" x2="88" y2="88" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#2e1860"/>
+                <stop offset="100%" stop-color="#150830"/>
+              </linearGradient>
+            </defs>
+            <text x="11" y="67" font-family="'Helvetica Neue',Arial,sans-serif" font-size="55" font-weight="900" fill="#9999FF" letter-spacing="-2">Pr</text>
+          </svg>
+        </div>
+        <div class="hero-eyebrow">
+          Extension pour Adobe Premiere Pro
+        </div>
+        <h1 class="hero-title">OSM Music,<br>directement dans<br><span>votre montage</span></h1>
+        <p class="hero-sub">Cherchez une ambiance, écoutez, choisissez&nbsp;: tout le catalogue de musique originale OSM dans un panneau de Premiere Pro, sans quitter votre timeline.</p>
+        <div class="hero-btns">
+          <a class="hero-btn hero-btn-primary" href="downloads/com.musicometre.premiere_premierepro.ccx" download>
+            ↓ Télécharger l'extension
+          </a>
+          <a class="hero-btn hero-btn-ghost" href="#installation">
+            Comment l'installer
+          </a>
+        </div>
+        <p class="hero-compat">Compatible <strong>Premiere Pro 25.6</strong> et versions plus récentes · Creative Cloud Desktop requis</p>
+      </div>
+
+      <!-- Illustration CSS du panneau -->
+      <div class="panel-demo" aria-hidden="true">
+        <div class="pp-window">
+          <div class="pp-title-bar">
+            <div class="pp-dot" style="background:#e05050"></div>
+            <div class="pp-dot" style="background:#e0a030"></div>
+            <div class="pp-dot" style="background:#50a050"></div>
+            <div class="pp-tab">OSM Music</div>
+          </div>
+          <div class="pp-search">
+            <span class="pp-search-icon">🔍</span>
+            <span style="font-size:10px;color:#555">mélancolie, folk, piano…</span>
+          </div>
+          <div class="pp-filters">
+            <span class="pp-chip on">Piano</span>
+            <span class="pp-chip">Folk</span>
+            <span class="pp-chip">Atmosphère</span>
+            <span class="pp-chip">Automne</span>
+          </div>
+          <div class="pp-tracks">
+            <div class="pp-track active">
+              <div class="pp-play">▶</div>
+              <div class="pp-track-info">
+                <div class="pp-track-name">Soir de novembre</div>
+                <div class="pp-track-meta">Piano · 3:42</div>
+              </div>
+              <div class="pp-track-dur">3:42</div>
+            </div>
+            <div class="pp-track">
+              <div class="pp-play">▶</div>
+              <div class="pp-track-info">
+                <div class="pp-track-name">Marche silencieuse</div>
+                <div class="pp-track-meta">Folk Acoustique · 2:58</div>
+              </div>
+              <div class="pp-track-dur">2:58</div>
+            </div>
+            <div class="pp-track">
+              <div class="pp-play">▶</div>
+              <div class="pp-track-info">
+                <div class="pp-track-name">Dernier regard</div>
+                <div class="pp-track-meta">Mélancolie · 4:11</div>
+              </div>
+              <div class="pp-track-dur">4:11</div>
+            </div>
+            <div class="pp-track">
+              <div class="pp-play">▶</div>
+              <div class="pp-track-info">
+                <div class="pp-track-name">Brume du matin</div>
+                <div class="pp-track-meta">Atmosphère · 3:22</div>
+              </div>
+              <div class="pp-track-dur">3:22</div>
+            </div>
+          </div>
+          <div class="pp-player">
+            <div class="pp-player-title">▶ Soir de novembre — Piano</div>
+            <div class="pp-prog"><div class="pp-prog-fill"></div></div>
+            <div class="pp-controls">
+              <button class="pp-ctrl">⏮</button>
+              <button class="pp-ctrl main">⏸</button>
+              <button class="pp-ctrl">⏭</button>
+              <button class="pp-import">Importer</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-demo-label">Illustration — représentation du panneau OSM</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FEATURES ── -->
+  <section class="section" id="fonctions">
+    <div class="section-eyebrow">Pensé pour les monteurs</div>
+    <h2 class="section-title">Ce que vous faites en moins</h2>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🎵</div>
+        <div class="feat-title">Tout OSM dans Premiere</div>
+        <p class="feat-body">L'intégralité du catalogue OSM — musiques originales composées par des musiciens français — accessible directement depuis un panneau ancré dans votre interface de montage. Plus besoin de jongler entre le site et Premiere.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔍</div>
+        <div class="feat-title">Trouvez la bonne ambiance</div>
+        <p class="feat-body">Cherchez par mood, style, instrument, playlist ou sélection de saison. Le moteur de recherche OSM dans votre panneau retrouve le titre qu'il vous faut en quelques secondes, même au milieu d'une session.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎧</div>
+        <div class="feat-title">Écoutez sans changer de fenêtre</div>
+        <p class="feat-body">Préécoutez chaque morceau directement dans le panneau, sans interrompre votre timeline. Quand vous avez trouvé le bon titre, il s'ouvre dans le site pour l'importation dans votre projet.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── INSTALLATION ── -->
+  <div class="install-section" id="installation">
+    <div class="install-inner">
+      <div class="section-eyebrow">Prêt en 3 minutes</div>
+      <h2 class="section-title">Installation en 3 étapes</h2>
+      <p class="section-sub" style="margin-bottom:0">Pas de compte développeur, pas de manipulations techniques. Juste un fichier à double-cliquer.</p>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-connector"></div>
+          <div class="step-num">1</div>
+          <div class="step-title">Télécharger le fichier</div>
+          <p class="step-body">Cliquez sur le bouton ci-dessous pour télécharger le fichier <code>OSM-Music.ccx</code> sur votre ordinateur. C'est le format d'extension officiel d'Adobe.</p>
+          <a class="step-dl-btn" href="downloads/com.musicometre.premiere_premierepro.ccx" download>↓ Télécharger .ccx</a>
+        </div>
+        <div class="step">
+          <div class="step-connector"></div>
+          <div class="step-num">2</div>
+          <div class="step-title">Installer l'extension</div>
+          <p class="step-body">Fermez Premiere Pro s'il est ouvert. Double-cliquez sur le fichier <code>.ccx</code> téléchargé. Creative Cloud Desktop s'ouvre et vous propose d'installer l'extension — cliquez sur Installer.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-title">Ouvrir le panneau</div>
+          <p class="step-body">Relancez Premiere Pro et ouvrez un projet. Allez dans le menu <code>Fenêtre → Extensions → OSM Music</code>. Le panneau s'affiche — ancrez-le en glissant son onglet où vous le souhaitez dans l'interface.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FAQ ── -->
+  <section class="section" id="faq">
+    <div class="section-eyebrow">Questions fréquentes</div>
+    <h2 class="section-title">Avant de commencer</h2>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Quelle version de Premiere Pro est nécessaire&nbsp;?</span>
+          <i class="faq-arrow">▼</i>
+        </button>
+        <div class="faq-a">L'extension fonctionne avec <strong>Adobe Premiere Pro 25.6 et toutes les versions plus récentes</strong>. Creative Cloud Desktop doit être installé et connecté à votre compte Adobe pour permettre l'installation. Les versions antérieures à 25.6 ne sont pas compatibles avec le format UXP utilisé.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Faut-il un compte OSM Music&nbsp;?</span>
+          <i class="faq-arrow">▼</i>
+        </button>
+        <div class="faq-a">Une connexion internet est nécessaire pour afficher le catalogue. Certaines fonctions du site OSM — comme le téléchargement de fichiers audio ou l'accès aux données compositeurs pour les cue sheets SACEM — peuvent demander un compte OSM. La navigation et l'écoute sont accessibles sans connexion obligatoire.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Les morceaux sont-ils libres de droits une fois l'extension installée&nbsp;?</span>
+          <i class="faq-arrow">▼</i>
+        </button>
+        <div class="faq-a">Non. L'extension est un outil de navigation et d'écoute — elle ne modifie pas les conditions d'utilisation des musiques. Chaque morceau du catalogue OSM reste soumis aux <strong>conditions de licence OSM</strong> disponibles sur <a href="index.html">osm-music.fr</a>. L'installation de l'extension ne constitue pas une licence d'utilisation.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Le panneau n'apparaît pas dans le menu Fenêtre — que faire&nbsp;?</span>
+          <i class="faq-arrow">▼</i>
+        </button>
+        <div class="faq-a">
+          Vérifiez ces points dans l'ordre&nbsp;:<br><br>
+          1. <strong>Version de Premiere&nbsp;:</strong> allez dans Aide → À propos de Premiere Pro et vérifiez que vous utilisez la version 25.6 ou une version plus récente.<br>
+          2. <strong>Redémarrage complet&nbsp;:</strong> fermez Premiere Pro complètement et relancez-le.<br>
+          3. <strong>Creative Cloud Desktop&nbsp;:</strong> ouvrez Creative Cloud Desktop et vérifiez que l'extension OSM Music apparaît bien dans la liste de vos extensions installées.<br>
+          4. Si le problème persiste, contactez le support&nbsp;: <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CTA FINAL ── -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <h2 class="cta-title">Prêt à l'essayer&nbsp;?<br><span>C'est gratuit.</span></h2>
+      <p class="cta-sub">Téléchargez l'extension, installez-la en 3 minutes, et retrouvez tout le catalogue OSM directement dans Premiere Pro.</p>
+      <div class="cta-btns">
+        <a class="hero-btn hero-btn-primary" href="downloads/com.musicometre.premiere_premierepro.ccx" download>↓ Télécharger l'extension</a>
+        <a class="hero-btn hero-btn-ghost" href="index.html">Explorer le catalogue</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-links">
+      <a class="footer-link" href="index.html">Catalogue OSM</a>
+      <a class="footer-link" href="qui-sommes-nous.html">À propos</a>
+      <a class="footer-link" href="mentions-legales.html">Mentions légales</a>
+      <a class="footer-link" href="mailto:vladimirstreiff@gmail.com">Contact support</a>
+    </div>
+    <p class="footer-legal">
+      Adobe, Adobe Premiere Pro et Creative Cloud sont des marques d'Adobe Inc., déposées aux États-Unis et/ou dans d'autres pays. OSM Music n'est pas affilié à Adobe Inc.<br>
+      © 2026 Original Scores Music — osm-music.fr
+    </p>
+  </footer>
+
+</div><!-- .page -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const ppSB = supabase.createClient(
+  'https://ubpmzncfhkohoyfonjbb.supabase.co',
+  'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh'
+);
+function trackDownload(){
+  ppSB.from('ccx_downloads').insert({
+    file:'OSM-Music.ccx',
+    referrer:document.referrer||'direct',
+    ua:navigator.userAgent.slice(0,120)
+  }).then(function(r){ if(r.error) console.warn('[OSM] tracking:', r.error.message); });
+}
+document.querySelectorAll('a[download]').forEach(function(a){a.addEventListener('click',trackDownload)});
+function toggleFaq(btn) {
+  var item = btn.closest('.faq-item');
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el) { el.classList.remove('open'); });
+  if (!wasOpen) item.classList.add('open');
+}
+// Smooth scroll pour les ancres
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    var id = a.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
+
+</body>
+</html>
