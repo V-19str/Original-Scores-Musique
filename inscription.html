@@ -86,7 +86,7 @@ footer a:hover{color:var(--text2)}
       <form id="reg-form" action="https://formspree.io/f/xbdqdrkq" method="POST">
         <!-- Hidden subject for Formspree -->
         <input type="hidden" name="_subject" id="form-subject" value="Nouvelle demande d'accès OSM">
-        <input type="hidden" name="_next" value="about:blank">
+        <input type="hidden" name="_next" value="inscription.html?ok=1">
 
         <div class="section-label">Vos coordonnées</div>
 
@@ -224,10 +224,11 @@ footer a:hover{color:var(--text2)}
     <!-- Success -->
     <div class="success-screen" id="success-screen">
       <div class="success-icon">✓</div>
-      <div class="success-title" id="success-title">Accès accordé !</div>
-      <p class="success-sub" id="success-msg">
-        Votre compte est créé.<br>
-        Redirection vers le catalogue…
+      <div class="success-title">Vérifiez votre email !</div>
+      <p class="success-sub">
+        Un <strong>lien de connexion</strong> vous a été envoyé à l'adresse indiquée.<br>
+        Cliquez dessus pour accéder immédiatement au catalogue.<br><br>
+        <em>Le lien expire dans 24h. Pensez à vérifier vos spams.</em>
       </p>
       <a href="index.html" class="btn-home">← Retour au site</a>
     </div>
@@ -241,12 +242,26 @@ footer a:hover{color:var(--text2)}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-const SB_URL = 'https://ubpmzncfhkohoyfonjbb.supabase.co';
-const SB_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
-const sb = supabase.createClient(SB_URL, SB_KEY);
+const ADMIN_EMAIL = 'vladimirstreiff@gmail.com';
+let sb = null;
+try {
+  sb = supabase.createClient(
+    'https://ubpmzncfhkohoyfonjbb.supabase.co',
+    'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh'
+  );
+} catch(e) {}
+
+// Si la page charge avec ?ok=1 (fallback soumission native), afficher succès
+if (location.search.includes('ok=1')) {
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('success-screen').style.display = 'block';
+}
 
 const form = document.getElementById('reg-form');
 const submitBtn = document.getElementById('submit-btn');
+const errDiv = document.createElement('p');
+errDiv.style.cssText = 'color:#ff6b6b;font-size:12px;text-align:center;margin-top:12px;display:none;line-height:1.7';
+form.appendChild(errDiv);
 
 form.addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -260,57 +275,49 @@ form.addEventListener('submit', async function(e) {
   const message  = document.getElementById('notes').value.trim();
 
   document.getElementById('form-subject').value = `Nouvelle demande OSM : ${prenom} ${nom} — ${societe}`;
-
+  errDiv.style.display = 'none';
   submitBtn.disabled = true;
   submitBtn.textContent = 'Envoi en cours…';
 
-  // Envoi Formspree (email)
-  const formData = new FormData(form);
-  try {
-    const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
-    if (!res.ok) throw new Error('Formspree error');
-  } catch {}
+  let magicOk    = false;
+  let formspreeOk = false;
 
-  // Enregistrement Supabase (silencieux si table absente)
-  try {
-    await sb.from('access_requests').insert({ email, prenom, nom, societe, telephone, metier, projet, message });
-  } catch {}
-
-  // Création du compte Supabase automatique (Confirm email désactivé)
-  const tempPw = 'OSM' + Math.random().toString(36).slice(2,10).toUpperCase() + '!';
-  const { data: signupData, error: signupErr } = await sb.auth.signUp({
-    email,
-    password: tempPw,
-    options: { data: { prenom, nom, societe } }
-  });
-
-  if (signupErr) {
-    if (signupErr.message.toLowerCase().includes('already')) {
-      // Compte existant : envoyer un magic link, ne pas rediriger automatiquement
-      await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://osm-music.fr/index.html' } });
-      document.getElementById('success-title').textContent = 'Vérifiez votre email !';
-      document.getElementById('success-msg').innerHTML = 'Vous avez déjà un compte.<br>Un lien de connexion vous a été envoyé.<br><br><strong>Vérifiez aussi vos spams.</strong>';
-      document.getElementById('form-section').style.display = 'none';
-      document.getElementById('success-screen').style.display = 'block';
-      return;
-    } else {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Envoyer ma demande';
-      alert('Erreur création compte : ' + signupErr.message);
-      return;
-    }
+  // Canal principal : Magic link Supabase — crée le compte ET envoie le lien de connexion
+  if (sb) {
+    try {
+      const { error } = await sb.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: 'https://osm-music.fr',
+          data: { prenom, nom, societe, metier }
+        }
+      });
+      if (!error) {
+        magicOk = true;
+        // Enregistrer aussi dans access_requests (silencieux)
+        sb.from('access_requests').insert({ email, prenom, nom, societe, telephone, metier, projet, message }).then(()=>{});
+      }
+    } catch(e) {}
   }
 
-  // Notifier l'admin de la nouvelle inscription
-  fetch('https://ubpmzncfhkohoyfonjbb.supabase.co/functions/v1/notifier-admin', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'OSM_ADMIN_2026' },
-    body: JSON.stringify({ event: 'signup', email, prenom, nom, societe, telephone, metier, projet, message }),
-  }).catch(() => {});
+  // Canal secondaire : Formspree (notification email à Vladimir)
+  try {
+    const formData = new FormData(form);
+    const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+    if (res.ok) formspreeOk = true;
+  } catch(e) {}
 
-  document.getElementById('form-section').style.display = 'none';
-  document.getElementById('success-screen').style.display = 'block';
-  setTimeout(() => { window.location.href = 'index.html'; }, 2500);
+  if (magicOk || formspreeOk) {
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+  } else {
+    // Fallback : lien mailto pré-rempli
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Envoyer ma demande';
+    const body = encodeURIComponent(`Prénom: ${prenom}\nNom: ${nom}\nEmail: ${email}\nSociété: ${societe}\nMétier: ${metier}\nMessage: ${message}`);
+    errDiv.innerHTML = `Une erreur s'est produite. <a href="mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent('Demande accès OSM — ' + prenom + ' ' + nom)}&body=${body}" style="color:#ff9f43;font-weight:700">Cliquez ici pour envoyer par email directement →</a>`;
+    errDiv.style.display = 'block';
+  }
 });
 </script>
 
