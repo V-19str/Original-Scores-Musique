@@ -1649,6 +1649,7 @@ function downloadDetailTrack(i){
   if(osmUser&&typeof osmSB!=='undefined'){
     osmSB.from('downloads').insert({user_id:osmUser.id,track_id:t.id||t.title,track_title:t.title,track_playlist:t.playlistLabel,track_url:t.url}).then(()=>{});
   }
+  osmNotify(`⬇️ Téléchargement OSM : ${t.title}`, `Titre : ${t.title}\nPlaylist : ${t.playlistLabel||'—'}\nUtilisateur : ${osmUser?.email||'—'}\nDate : ${new Date().toLocaleString('fr-FR')}`);
 }
 
 function renderNavPills(){
@@ -2237,6 +2238,7 @@ function downloadTrack(i){
   if(osmUser&&typeof osmSB!=='undefined'){
     osmSB.from('downloads').insert({user_id:osmUser.id,track_id:t.id||t.title,track_title:t.title,track_playlist:t.playlistLabel,track_url:t.url}).then(()=>{});
   }
+  osmNotify(`⬇️ Téléchargement OSM : ${t.title}`, `Titre : ${t.title}\nPlaylist : ${t.playlistLabel||'—'}\nUtilisateur : ${osmUser?.email||'—'}\nDate : ${new Date().toLocaleString('fr-FR')}`);
 }
 function downloadCurrent(){
   if(detailIndex>=0&&currentDetailTracks[detailIndex]){downloadDetailTrack(detailIndex);}
@@ -2434,6 +2436,7 @@ function downloadFavTrack(id){
   if(osmUser&&typeof osmSB!=='undefined'){
     osmSB.from('downloads').insert({user_id:osmUser.id,track_id:t.id||t.title,track_title:t.title,track_playlist:t.playlistLabel,track_url:t.url}).then(()=>{});
   }
+  osmNotify(`⬇️ Téléchargement OSM : ${t.title}`, `Titre : ${t.title}\nPlaylist : ${t.playlistLabel||'—'}\nUtilisateur : ${osmUser?.email||'—'}\nDate : ${new Date().toLocaleString('fr-FR')}`);
 }
 function shareFavoris(){
   if(!favorites.size){alert('Ajoutez d\'abord des favoris !');return;}
@@ -2527,13 +2530,17 @@ function osmClearUser() {
   if (el) el.innerHTML = `<a class="btn-nav" href="login-monteurs.html">👤 Mon compte</a>`;
 }
 
+function osmNotify(subject, body) {
+  const fd = new FormData();
+  fd.append('_subject', subject);
+  fd.append('message', body);
+  fd.append('_replyto', 'noreply@osm-music.fr');
+  fetch('https://formspree.io/f/xbdqdrkq', { method: 'POST', body: fd, headers: { Accept: 'application/json' } }).catch(() => {});
+}
 function osmNotifyLogin(user) {
   const p = user?.user_metadata || {};
-  fetch('https://ubpmzncfhkohoyfonjbb.supabase.co/functions/v1/notifier-admin', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'OSM_ADMIN_2026' },
-    body: JSON.stringify({ event: 'login', email: user.email, prenom: p.prenom || '', nom: p.nom || '' }),
-  }).catch(() => {});
+  const name = [p.prenom, p.nom].filter(Boolean).join(' ') || '—';
+  osmNotify(`🔑 Connexion OSM : ${user.email}`, `Email : ${user.email}\nNom : ${name}\nDate : ${new Date().toLocaleString('fr-FR')}`);
 }
 
 function canDownload(){
