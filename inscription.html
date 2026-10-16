@@ -88,136 +88,28 @@ footer a:hover{color:var(--text2)}
         <input type="hidden" name="_subject" id="form-subject" value="Nouvelle demande d'accès OSM">
         <input type="hidden" name="_next" value="inscription.html?ok=1">
 
-        <div class="section-label">Vos coordonnées</div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="prenom">Prénom</label>
-            <input type="text" id="prenom" name="Prénom" placeholder="Jean" required>
-          </div>
-          <div class="form-group">
-            <label for="nom">Nom</label>
-            <input type="text" id="nom" name="Nom" placeholder="Dupont" required>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="email">Adresse email</label>
-            <input type="email" id="email" name="Email" placeholder="jean@société.fr" required>
-          </div>
-          <div class="form-group">
-            <label for="telephone">Téléphone <span class="opt">(optionnel)</span></label>
-            <input type="tel" id="telephone" name="Téléphone" placeholder="06 00 00 00 00">
-          </div>
+        <div class="form-group">
+          <label for="prenom">Prénom</label>
+          <input type="text" id="prenom" name="Prénom" placeholder="Jean" required>
         </div>
 
         <div class="form-group">
-          <label for="societe">Société / Production</label>
-          <input type="text" id="societe" name="Société" placeholder="Nom de votre société ou production" required>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="adresse">Adresse <span class="opt">(optionnel)</span></label>
-            <input type="text" id="adresse" name="Adresse" placeholder="12 rue des Arts">
-          </div>
-          <div class="form-group">
-            <label for="ville">Ville</label>
-            <input type="text" id="ville" name="Ville" placeholder="Paris" required>
-          </div>
-        </div>
-
-        <div class="section-label">Votre activité</div>
-
-        <div class="form-group">
-          <label for="metier">Métier</label>
-          <select id="metier" name="Métier" required>
-            <option value="" disabled selected>Choisissez votre métier</option>
-            <option>Monteur / Monteuse</option>
-            <option>Réalisateur / Réalisatrice</option>
-            <option>Producteur / Productrice</option>
-            <option>Directeur artistique</option>
-            <option>Chef de projet</option>
-            <option>Chargé(e) de production</option>
-            <option>Journaliste / Rédacteur</option>
-            <option>Directeur / Directrice de création</option>
-            <option>Autre</option>
-          </select>
+          <label for="nom">Nom</label>
+          <input type="text" id="nom" name="Nom" placeholder="Dupont" required>
         </div>
 
         <div class="form-group">
-          <label>Types de projets</label>
-          <div class="checkbox-grid">
-            <label class="check-item"><input type="checkbox" name="Types de projets" value="Documentaire"><span>Documentaire</span></label>
-            <label class="check-item"><input type="checkbox" name="Types de projets" value="Reportage"><span>Reportage</span></label>
-            <label class="check-item"><input type="checkbox" name="Types de projets" value="Fiction / Série"><span>Fiction / Série</span></label>
-            <label class="check-item"><input type="checkbox" name="Types de projets" value="Long métrage"><span>Long métrage</span></label>
-            <label class="check-item"><input type="checkbox" name="Types de projets" value="Publicité"><span>Publicité</span></label>
-            <label class="check-item"><input type="checkbox" name="Types de projets" value="Web / Réseaux sociaux"><span>Web / Réseaux</span></label>
-            <label class="check-item"><input type="checkbox" name="Types de projets" value="Podcast"><span>Podcast</span></label>
-            <label class="check-item"><input type="checkbox" name="Types de projets" value="Jeu vidéo"><span>Jeu vidéo</span></label>
-          </div>
+          <label for="email">Email professionnel</label>
+          <input type="email" id="email" name="Email" placeholder="jean@société.fr" required>
         </div>
 
         <div class="form-group">
-          <label>Diffuseurs principaux <span class="opt">(optionnel)</span></label>
-          <div class="checkbox-grid">
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="TF1"><span>TF1</span></label>
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="France 2"><span>France 2</span></label>
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="France 3"><span>France 3</span></label>
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="M6"><span>M6</span></label>
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="Arte"><span>Arte</span></label>
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="Canal+"><span>Canal+</span></label>
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="Netflix"><span>Netflix</span></label>
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="Amazon"><span>Amazon</span></label>
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="BFM TV"><span>BFM TV</span></label>
-            <label class="check-item"><input type="checkbox" name="Diffuseurs" value="Autre"><span>Autre</span></label>
-          </div>
+          <label for="societe">Société <span class="opt">(optionnel)</span></label>
+          <input type="text" id="societe" name="Société" placeholder="Nom de votre société ou production">
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="logiciel">Logiciel de montage <span class="opt">(optionnel)</span></label>
-            <select id="logiciel" name="Logiciel de montage">
-              <option value="" disabled selected>Choisissez</option>
-              <option>Avid Media Composer</option>
-              <option>Adobe Premiere Pro</option>
-              <option>Final Cut Pro</option>
-              <option>DaVinci Resolve</option>
-              <option>Autre</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="comment_connu">Comment nous avez-vous connu ? <span class="opt">(optionnel)</span></label>
-            <select id="comment_connu" name="Comment connu OSM">
-              <option value="" disabled selected>Choisissez</option>
-              <option>Recommandation d'un collègue</option>
-              <option>Recherche internet</option>
-              <option>Réseaux sociaux</option>
-              <option>Festival / Événement</option>
-              <option>Contact direct de Vladimir</option>
-              <option>Autre</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="section-label">Votre projet</div>
-
-        <div class="form-group">
-          <label for="projet">Projet en cours <span class="opt">(optionnel)</span></label>
-          <textarea id="projet" name="Projet en cours" placeholder="Décrivez brièvement votre projet actuel, le type de musique recherchée…"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="notes">Message libre <span class="opt">(optionnel)</span></label>
-          <textarea id="notes" name="Message" placeholder="Toute information utile pour Vladimir…"></textarea>
-        </div>
-
-        <button type="submit" class="btn-submit" id="submit-btn">Envoyer ma demande</button>
-        <p class="form-note">Vous recevrez le lien d'accès au catalogue sous 24h.<br>
-          Questions ? <a href="mailto:vladimirstreiff@gmail.com">vladimirstreiff@gmail.com</a> · <a href="tel:+33682985752">06 82 98 57 52</a>
-        </p>
+        <button type="submit" class="btn-submit" id="submit-btn">Accéder au catalogue →</button>
+        <p class="form-note">Vous recevrez un lien de connexion immédiatement par email.</p>
       </form>
     </div>
 
@@ -263,16 +155,48 @@ const errDiv = document.createElement('p');
 errDiv.style.cssText = 'color:#ff6b6b;font-size:12px;text-align:center;margin-top:12px;display:none;line-height:1.7';
 form.appendChild(errDiv);
 
+async function sendMagicLink(prenom, nom, email, societe) {
+  let magicOk = false, formspreeOk = false;
+  if (sb) {
+    try {
+      const { error } = await sb.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: 'https://osm-music.fr', data: { prenom, nom, societe } }
+      });
+      if (!error) {
+        magicOk = true;
+        sb.from('access_requests').insert({ email, prenom, nom, societe }).then(()=>{});
+      }
+    } catch(e) {}
+  }
+  try {
+    const fd = new FormData();
+    fd.append('_subject', `Nouvelle demande OSM : ${prenom} ${nom} — ${societe}`);
+    fd.append('Prénom', prenom); fd.append('Nom', nom); fd.append('Email', email); fd.append('Société', societe);
+    const res = await fetch(form.action, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+    if (res.ok) formspreeOk = true;
+  } catch(e) {}
+  return magicOk || formspreeOk;
+}
+
+// Auto-inscription via URL : inscription.html?email=x&prenom=y&nom=z
+(async function() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('email')) {
+    const email = p.get('email'), prenom = p.get('prenom')||'', nom = p.get('nom')||'', societe = p.get('societe')||'';
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    await sendMagicLink(prenom, nom, email, societe);
+  }
+})();
+
 form.addEventListener('submit', async function(e) {
   e.preventDefault();
   const prenom   = document.getElementById('prenom').value.trim();
   const nom      = document.getElementById('nom').value.trim();
   const email    = document.getElementById('email').value.trim();
   const societe  = document.getElementById('societe').value.trim();
-  const telephone= document.getElementById('telephone').value.trim();
-  const metier   = document.getElementById('metier').value.trim();
-  const projet   = document.getElementById('projet').value.trim();
-  const message  = document.getElementById('notes').value.trim();
+  const telephone= '', metier = '', projet = '', message = '';
 
   document.getElementById('form-subject').value = `Nouvelle demande OSM : ${prenom} ${nom} — ${societe}`;
   errDiv.style.display = 'none';
