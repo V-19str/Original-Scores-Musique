@@ -1231,6 +1231,7 @@ let wsPendingPlay = false;
 function parseDur(s){const d=parseDurSecs(s);return d>0?d:undefined;}
 function wsLoad(url,dur){
   wsPendingPlay = true;
+  if(window.wfGenBars) window.wfGenBars(url);
   document.getElementById('waveform-container').classList.add('ws-loading');
   ws.load(url,[[0]],dur).catch(()=>{
     wsPendingPlay=false;
