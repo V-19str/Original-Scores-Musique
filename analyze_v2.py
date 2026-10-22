@@ -247,11 +247,13 @@ def analyze_v2(url, existing_tags):
 
     new_tags = []
 
-    # 1. Vocal / Instrumental
-    if not any(t in ('vocal', 'instrumental') for t in existing_tags):
-        new_tags.append(detect_vocal(y, sr))
+    # 1. BPM comme tag searchable (si pas déjà présent)
+    bpm_rounded = round(bpm / 5) * 5  # arrondi à 5 près : 118 → 120
+    bpm_tag = f"{bpm_rounded} bpm"
+    if not any('bpm' in t.lower() for t in existing_tags):
+        new_tags.append(bpm_tag)
 
-    # 3. Genre
+    # 2. Genre
     genre_tags = ('orchestral', 'électronique', 'acoustique', 'jazz', 'ambient', 'hybride')
     if not any(t in genre_tags for t in existing_tags):
         genre = detect_genre(y, sr, bpm, zcr, centroid, contrast, onset)
