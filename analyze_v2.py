@@ -247,13 +247,7 @@ def analyze_v2(url, existing_tags):
 
     new_tags = []
 
-    # 1. Tonalité précise (24 clés) — seulement si pas déjà une clé précise
-    has_key = any(any(n in t for n in NOTE_NAMES) and ('majeur' in t or 'mineur' in t)
-                  for t in existing_tags)
-    if not has_key:
-        new_tags.append(detect_key(y, sr))
-
-    # 2. Vocal / Instrumental
+    # 1. Vocal / Instrumental
     if not any(t in ('vocal', 'instrumental') for t in existing_tags):
         new_tags.append(detect_vocal(y, sr))
 
