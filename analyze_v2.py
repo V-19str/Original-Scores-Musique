@@ -248,67 +248,68 @@ def analyze_v2(url, existing_tags):
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-with open(CATALOGUE, encoding='utf-8') as f:
-    data = json.load(f)
-tracks = data['tracks']
+if __name__ == '__main__':
+    with open(CATALOGUE, encoding='utf-8') as f:
+        data = json.load(f)
+    tracks = data['tracks']
 
-done = set(json.loads(PROGRESS.read_text())) if PROGRESS.exists() else set()
-todo = [
-    t for t in tracks
-    if t['id'] not in done
-    and not any(tag in V2_MARKERS for tag in t.get('tags', []))
-]
+    done = set(json.loads(PROGRESS.read_text())) if PROGRESS.exists() else set()
+    todo = [
+        t for t in tracks
+        if t['id'] not in done
+        and not any(tag in V2_MARKERS for tag in t.get('tags', []))
+    ]
 
-print(f"\n🎵 OSM — Analyse v2  ·  Tonalité · Vocal · Genre · Instruments · Usage")
-print(f"   {len(tracks)} morceaux  ·  {len(done)} déjà faits  ·  {len(todo)} à analyser")
-est_min = len(todo) * 2 // 60
-print(f"   Durée estimée : ~{est_min // 60}h{est_min % 60:02d}min  (reprend si interrompu)\n")
+    print(f"\n🎵 OSM — Analyse v2  ·  Tonalité · Vocal · Genre · Instruments · Usage")
+    print(f"   {len(tracks)} morceaux  ·  {len(done)} déjà faits  ·  {len(todo)} à analyser")
+    est_min = len(todo) * 2 // 60
+    print(f"   Durée estimée : ~{est_min // 60}h{est_min % 60:02d}min  (reprend si interrompu)\n")
 
-errors   = []
-saved_at = len(done)
+    errors   = []
+    saved_at = len(done)
 
-for track in todo:
-    existing = track.get('tags', [])
-    pct  = (len(done) + 1) / len(tracks) * 100
-    print(f"[{len(done)+1}/{len(tracks)}  {pct:.1f}%]  {track['title'][:44]:<44}", end=' ', flush=True)
-    try:
-        new_tags = analyze_v2(track['url'], existing)
-        if new_tags is None:
-            print("⚠  trop court, ignoré")
-        else:
-            track['tags'] = existing + new_tags
-            summary = ' · '.join(new_tags) if new_tags else '(déjà complet)'
-            print(f"✓  {summary}")
-    except Exception as e:
-        msg = str(e)[:65]
-        print(f"✗  {msg}")
-        errors.append({'title': track['title'], 'error': msg})
+    for track in todo:
+        existing = track.get('tags', [])
+        pct  = (len(done) + 1) / len(tracks) * 100
+        print(f"[{len(done)+1}/{len(tracks)}  {pct:.1f}%]  {track['title'][:44]:<44}", end=' ', flush=True)
+        try:
+            new_tags = analyze_v2(track['url'], existing)
+            if new_tags is None:
+                print("⚠  trop court, ignoré")
+            else:
+                track['tags'] = existing + new_tags
+                summary = ' · '.join(new_tags) if new_tags else '(déjà complet)'
+                print(f"✓  {summary}")
+        except Exception as e:
+            msg = str(e)[:65]
+            print(f"✗  {msg}")
+            errors.append({'title': track['title'], 'error': msg})
 
-    done.add(track['id'])
-    PROGRESS.write_text(json.dumps(list(done)))
+        done.add(track['id'])
+        PROGRESS.write_text(json.dumps(list(done)))
 
-    if len(done) - saved_at >= SAVE_EVERY:
-        data['tracks'] = tracks
-        with open(CATALOGUE, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
-        saved_at = len(done)
-        print(f"\n   💾  Sauvegarde catalogue.json — {len(done)}/{len(tracks)} faits\n")
+        if len(done) - saved_at >= SAVE_EVERY:
+            data['tracks'] = tracks
+            with open(CATALOGUE, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
+            saved_at = len(done)
+            print(f"\n   💾  Sauvegarde catalogue.json — {len(done)}/{len(tracks)} faits\n")
 
-# Sauvegarde finale
-data['tracks'] = tracks
-with open(CATALOGUE, 'w', encoding='utf-8') as f:
-    json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
-PROGRESS.unlink(missing_ok=True)
+    # Sauvegarde finale
+    data['tracks'] = tracks
+    with open(CATALOGUE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
+    PROGRESS.unlink(missing_ok=True)
 
-print(f"\n✅  Terminé !  {len(done)} analysés,  {len(errors)} erreurs.")
-if errors:
-    print("Erreurs :")
-    for e in errors[:10]:
-        print(f"  • {e['title']}: {e['error']}")
+    print(f"\n✅  Terminé !  {len(done)} analysés,  {len(errors)} erreurs.")
+    if errors:
+        print("Erreurs :")
+        for e in errors[:10]:
+            print(f"  • {e['title']}: {e['error']}")
 
-if not errors:
-    import shutil
-    shutil.rmtree(CACHE_DIR, ignore_errors=True)
-    print("🗑  Cache audio supprimé.")
+    if not errors:
+        import shutil
+        shutil.rmtree(CACHE_DIR, ignore_errors=True)
+        print("🗑  Cache audio supprimé.")
 
-input("\nAppuie sur Entrée pour fermer...")
+    input("\nAppuie sur Entrée pour fermer...")
