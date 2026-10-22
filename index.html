@@ -2567,7 +2567,7 @@ osmInit();
 
 // ── AI Search ────────────────────────────────────────────────────────────────
 // URL à mettre à jour après déploiement Vercel (ex: https://osm-search-api.vercel.app/api/search)
-const AI_SEARCH_URL = 'https://osm-search-api.vercel.app/api/search';
+const AI_SEARCH_URL = 'https://ubpmzncfhkohoyfonjbb.supabase.co/functions/v1/recherche-ia';
 
 function aiEsc(s) {
   if (!s) return '';
@@ -2595,7 +2595,21 @@ async function aiSearch() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `Erreur ${res.status}`);
-    renderAiResults(query, data.results);
+
+    // Filtrage local : scorer les pistes par nombre de tags correspondants
+    const aiTags = (data.tags || []).map(t => t.toLowerCase());
+    const intention = data.intention || '';
+    const results = allTracks
+      .map(t => {
+        const tTags = (t.tags || []).map(x => x.toLowerCase());
+        const score = aiTags.filter(at => tTags.some(tt => tt.includes(at) || at.includes(tt))).length;
+        return { ...t, score, justification: intention };
+      })
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 12);
+
+    renderAiResults(query, results);
   } catch (e) {
     panel.innerHTML = `<div class="ai-error-msg">⚠ ${aiEsc(e.message)}</div>`;
   } finally {
