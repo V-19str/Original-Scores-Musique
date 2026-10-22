@@ -286,6 +286,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .pd-track-icon{display:none;color:var(--red);font-size:13px;text-align:center}
 .pd-track.playing .pd-track-icon{display:block}
 .pd-thumb{width:44px;height:44px;border-radius:4px;background-size:cover;background-position:center;flex-shrink:0}
+.pd-track-info{min-width:0}
 .pd-track-title{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pd-track.playing .pd-track-title{color:var(--red)}
 .pd-track-dur{font-size:12px;color:var(--muted);text-align:right}
@@ -1632,7 +1633,10 @@ function renderDetailTracks(){
     <div class="pd-track${detailIndex===i?' playing':''}" data-url="${t.url}" onclick="playDetailTrack(${i})">
       <div><div class="pd-track-num">${i+1}</div><div class="pd-track-icon">▶</div></div>
       <div class="pd-thumb" style="background-image:url('${photo}')"></div>
-      <div class="pd-track-title">${t.title}</div>
+      <div class="pd-track-info">
+        <div class="pd-track-title">${t.title}</div>
+        ${(t.tags&&t.tags.length)?`<div class="track-tags-row">${t.tags.slice(0,5).map(tag=>`<span class="track-tag-chip" onmouseenter="showTagPopup(this,'${tag.replace(/'/g,"\\'")}');event.stopPropagation()" onmouseleave="hideTagPopup()" onclick="event.stopPropagation();tagChipSearch('${tag.replace(/'/g,"\\'")}');">${tag}</span>`).join('')}</div>`:''}
+      </div>
       <div class="pd-track-dur">${fmt(t.duration)}</div>
       <button class="pd-track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFavDetail('${t.id}',${i})" title="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}" aria-label="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}">♥</button>
       <button class="pd-track-btn" onclick="event.stopPropagation();copyLink('${t.url}')" title="Copier le lien" aria-label="Copier le lien">🔗</button>
@@ -2447,6 +2451,7 @@ function renderFavoris(){
       <div class="track-info">
         <div style="display:flex;align-items:center"><div class="track-title">${t.title}</div></div>
         <div class="track-artist">${t.playlistLabel}</div>
+        ${(t.tags&&t.tags.length)?`<div class="track-tags-row">${t.tags.slice(0,5).map(tag=>`<span class="track-tag-chip" onmouseenter="showTagPopup(this,'${tag.replace(/'/g,"\\'")}');event.stopPropagation()" onmouseleave="hideTagPopup()" onclick="event.stopPropagation();tagChipSearch('${tag.replace(/'/g,"\\'")}');">${tag}</span>`).join('')}</div>`:''}
       </div>
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
