@@ -61,16 +61,7 @@ def detect_key(y, sr):
 
 
 def detect_vocal(y, sr):
-    """Détecte voix ou instrumental."""
-    harm = librosa.effects.harmonic(y)
-    harm_ratio  = _f(np.mean(np.abs(harm))) / max(_f(np.mean(np.abs(y))), 1e-6)
-    zcr         = _f(np.mean(librosa.feature.zero_crossing_rate(y)))
-    rolloff     = _f(np.mean(librosa.feature.spectral_rolloff(y=y, sr=sr, roll_percent=0.85)))
-    mfcc        = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
-    mfcc2_var   = _f(np.var(mfcc[2]))
-    # La voix tend à avoir : rolloff bas (< 5500Hz), harm_ratio élevé, ZCR intermédiaire
-    if rolloff < 5500 and harm_ratio > 0.25 and zcr < 0.18 and mfcc2_var > 40:
-        return 'vocal'
+    """Catalogue OSM = 100% instrumental."""
     return 'instrumental'
 
 
