@@ -6,7 +6,7 @@ Aucune nouvelle dépendance — utilise uniquement librosa (déjà installé).
 Compatible Windows · Tourne en tâche de fond · Reprend là où il s'est arrêté.
 """
 
-import json, hashlib, sys, concurrent.futures
+import json, hashlib, sys, multiprocessing
 from pathlib import Path
 
 try:
@@ -26,7 +26,7 @@ CACHE_DIR  = BASE / '_audio_cache'
 CACHE_DIR.mkdir(exist_ok=True)
 
 SAVE_EVERY  = 20
-ANALYZE_SEC = 60  # 60s pour mieux capter genre et instruments
+ANALYZE_SEC = 30  # 30s suffisent pour la détection
 
 # ── Marqueurs v2 (sert à détecter si un morceau est déjà traité) ──────────────
 V2_MARKERS = {
@@ -284,9 +284,19 @@ def analyze_v2(url, existing_tags):
     return new_tags
 
 
+# ── Worker multiprocessing ────────────────────────────────────────────────────
+
+def _worker(url, existing, q):
+    try:
+        q.put(('ok', analyze_v2(url, existing)))
+    except Exception as e:
+        q.put(('error', str(e)))
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 if __name__ == '__main__':
+    multiprocessing.freeze_support()
     with open(CATALOGUE, encoding='utf-8') as f:
         data = json.load(f)
     tracks = data['tracks']
@@ -311,18 +321,26 @@ if __name__ == '__main__':
         pct  = (len(done) + 1) / len(tracks) * 100
         print(f"[{len(done)+1}/{len(tracks)}  {pct:.1f}%]  {track['title'][:44]:<44}", end=' ', flush=True)
         try:
-            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
-                future = ex.submit(analyze_v2, track['url'], existing)
-                new_tags = future.result(timeout=90)
+            q   = multiprocessing.Queue()
+            p   = multiprocessing.Process(target=_worker, args=(track['url'], existing, q))
+            p.start()
+            p.join(timeout=60)
+            if p.is_alive():
+                p.terminate(); p.join()
+                print("⏱  timeout, ignoré")
+                errors.append({'title': track['title'], 'error': 'timeout 60s'})
+                done.add(track['id']); PROGRESS.write_text(json.dumps(list(done)))
+                continue
+            kind, val = q.get_nowait()
+            if kind == 'error':
+                raise Exception(val)
+            new_tags = val
             if new_tags is None:
                 print("⚠  trop court, ignoré")
             else:
                 track['tags'] = existing + new_tags
                 summary = ' · '.join(new_tags) if new_tags else '(déjà complet)'
                 print(f"✓  {summary}")
-        except concurrent.futures.TimeoutError:
-            print("⏱  timeout, ignoré")
-            errors.append({'title': track['title'], 'error': 'timeout 90s'})
         except Exception as e:
             msg = str(e)[:65]
             print(f"✗  {msg}")
