@@ -382,4 +382,16 @@ if __name__ == '__main__':
         shutil.rmtree(CACHE_DIR, ignore_errors=True)
         print("🗑  Cache audio supprimé.")
 
+    # ── Git : commit + push automatique ──────────────────────────────────────
+    import subprocess
+    print("\n📤  Commit et push du catalogue.json…")
+    try:
+        subprocess.run(['git', 'add', 'catalogue.json'], cwd=BASE, check=True)
+        msg = f"data: tags v2 — {len(done)} titres analysés"
+        subprocess.run(['git', 'commit', '-m', msg], cwd=BASE, check=True)
+        subprocess.run(['git', 'push'], cwd=BASE, check=True)
+        print("✅  Poussé sur GitHub.")
+    except subprocess.CalledProcessError as e:
+        print(f"⚠  Git a échoué ({e}). Lance manuellement :\n   git add catalogue.json && git commit -m 'tags v2' && git push")
+
     input("\nAppuie sur Entrée pour fermer...")
