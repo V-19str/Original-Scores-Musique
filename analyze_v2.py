@@ -248,6 +248,9 @@ def analyze_v2(url, existing_tags):
     new_tags = []
 
     # 1. BPM comme tag searchable (si pas déjà présent)
+    # Librosa double/divise parfois le tempo — on le ramène dans 60-180
+    while bpm > 180: bpm /= 2
+    while bpm < 60:  bpm *= 2
     bpm_rounded = round(bpm / 5) * 5  # arrondi à 5 près : 118 → 120
     bpm_tag = f"{bpm_rounded} bpm"
     if not any('bpm' in t.lower() for t in existing_tags):
