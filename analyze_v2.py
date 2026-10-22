@@ -6,7 +6,7 @@ Aucune nouvelle dépendance — utilise uniquement librosa (déjà installé).
 Compatible Windows · Tourne en tâche de fond · Reprend là où il s'est arrêté.
 """
 
-import json, hashlib, sys
+import json, hashlib, sys, concurrent.futures
 from pathlib import Path
 
 try:
@@ -311,13 +311,18 @@ if __name__ == '__main__':
         pct  = (len(done) + 1) / len(tracks) * 100
         print(f"[{len(done)+1}/{len(tracks)}  {pct:.1f}%]  {track['title'][:44]:<44}", end=' ', flush=True)
         try:
-            new_tags = analyze_v2(track['url'], existing)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+                future = ex.submit(analyze_v2, track['url'], existing)
+                new_tags = future.result(timeout=90)
             if new_tags is None:
                 print("⚠  trop court, ignoré")
             else:
                 track['tags'] = existing + new_tags
                 summary = ' · '.join(new_tags) if new_tags else '(déjà complet)'
                 print(f"✓  {summary}")
+        except concurrent.futures.TimeoutError:
+            print("⏱  timeout, ignoré")
+            errors.append({'title': track['title'], 'error': 'timeout 90s'})
         except Exception as e:
             msg = str(e)[:65]
             print(f"✗  {msg}")
