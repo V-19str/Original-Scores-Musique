@@ -165,6 +165,51 @@ def detect_usage(genre, energy_tag, tempo, bpm):
     return None
 
 
+# ── Expansion sémantique des tags existants ───────────────────────────────────
+
+SYNONYMES = {
+    # Atmosphère / Émotion
+    'tendu':         ['suspense', 'angoisse', 'thriller', 'anxieux', 'inquiétant', 'oppressant', 'stress'],
+    'sombre':        ['ténébreux', 'obscur', 'noir', 'pesant', 'menaçant', 'dark'],
+    'dramatique':    ['cinématique', 'théâtral', 'bouleversant', 'poignant', 'tragique'],
+    'mélancolique':  ['nostalgique', 'triste', 'élégiaque', 'plaintif', 'lacrimeux'],
+    'épique':        ['héroïque', 'grandiose', 'triomphal', 'aventure', 'conquête'],
+    'intense':       ['percutant', 'fort', 'vigoureux', 'impactant'],
+    'puissant':      ['robuste', 'massif', 'imposant', 'écrasant'],
+    'énergique':     ['dynamique', 'tonique', 'vif', 'nerveux'],
+    'festif':        ['célébration', 'fête', 'allègre', 'jubilant', 'exubérant'],
+    'joyeux':        ['gai', 'enjoué', 'pétillant', 'léger', 'radieux'],
+    'lumineux':      ['clair', 'ensoleillé', 'optimiste', 'radieux', 'brillant'],
+    'positif':       ['optimiste', 'encourageant', 'inspirant', 'motivant'],
+    'calme':         ['paisible', 'serein', 'tranquille', 'apaisant', 'zen'],
+    'introspectif':  ['méditatif', 'recueilli', 'intérieur', 'contemplatif'],
+    'contemplatif':  ['méditatif', 'recueilli', 'introspectif', 'pensif'],
+    'doux':          ['tendre', 'délicat', 'velouté', 'suave'],
+    # Énergie
+    'haute énergie': ['action', 'boost', 'puissant', 'percutant'],
+    'faible énergie':['ambient', 'discret', 'fond sonore'],
+    # Tempo
+    'rapide':        ['nerveux', 'pressé', 'entraînant'],
+    'très rapide':   ['frénétique', 'effréné', 'haletant'],
+    'lent':          ['posé', 'grave', 'solennel'],
+    'très lent':     ['solennel', 'majestueux', 'hypnotique'],
+    # Usage contextuel
+    'cinéma':        ['film', 'bande originale', 'BO', 'soundtrack', 'score'],
+    'publicité':     ['spot', 'commercial', 'jingle', 'marque'],
+    'documentaire':  ['reportage', 'nature', 'exploration', 'témoignage'],
+}
+
+def expand_synonyms(existing_tags):
+    """Retourne les synonymes des tags existants pas encore présents."""
+    existing_lower = {t.lower() for t in existing_tags}
+    additions = []
+    for tag in existing_tags:
+        for syn in SYNONYMES.get(tag.lower(), []):
+            if syn not in existing_lower and syn not in additions:
+                additions.append(syn)
+    return additions
+
+
 # ── Téléchargement ────────────────────────────────────────────────────────────
 
 def download(url):
@@ -231,6 +276,9 @@ def analyze_v2(url, existing_tags):
         usage = detect_usage(genre, energy_tag, bpm, bpm)
         if usage:
             new_tags.append(usage)
+
+    # 6. Expansion sémantique des tags existants
+    new_tags.extend(expand_synonyms(existing_tags))
 
     # Dédoublonnage final
     new_tags = [t for t in new_tags if t.lower() not in existing_lower]
