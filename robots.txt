@@ -3,6 +3,9 @@ Allow: /
 Disallow: /admin.html
 Disallow: /admin-sacem.html
 Disallow: /Diapason-standalone.html
+Disallow: /Diapason.html
 Disallow: /qrcode.html
+Disallow: /login-monteurs.html
+Disallow: /finaliser-inscription.html
 
 Sitemap: https://osm-music.fr/sitemap.xml

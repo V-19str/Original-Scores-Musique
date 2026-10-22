@@ -7,6 +7,7 @@
   <url><loc>https://osm-music.fr/service.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://osm-music.fr/qui-sommes-nous.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://osm-music.fr/inscription.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://osm-music.fr/apropos.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://osm-music.fr/aide.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://osm-music.fr/mentions-legales.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>
