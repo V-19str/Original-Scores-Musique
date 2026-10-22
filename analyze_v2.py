@@ -199,12 +199,21 @@ SYNONYMES = {
     'documentaire':  ['reportage', 'nature', 'exploration', 'témoignage'],
 }
 
+GENRE_USAGE_SKIP = {
+    'orchestral','électronique','acoustique','jazz','ambient','hybride',
+    'cinéma','publicité','documentaire','instrumental',
+    'piano','cordes','cuivres','guitare','percussions','basse','synthétiseur',
+}
+
 def expand_synonyms(existing_tags):
-    """Retourne les synonymes des tags existants pas encore présents."""
+    """Retourne les synonymes des tags mood/tempo — ignore les tags genre/instrument/usage."""
     existing_lower = {t.lower() for t in existing_tags}
     additions = []
     for tag in existing_tags:
-        for syn in SYNONYMES.get(tag.lower(), []):
+        tl = tag.lower()
+        if tl in GENRE_USAGE_SKIP:
+            continue
+        for syn in SYNONYMES.get(tl, []):
             if syn not in existing_lower and syn not in additions:
                 additions.append(syn)
     return additions

@@ -1358,11 +1358,12 @@ ws.on('error',  ()=>{ wsPendingPlay=false; document.getElementById('waveform-con
       const y=(H-bh)/2;
 
       if(i===pi){
-        ctx.fillStyle='#FF8800'; /* playhead bar: brighter orange */
+        ctx.fillStyle='#FF8800';
       } else if(i<pi){
-        ctx.fillStyle='#FF5500'; /* played: red-orange */
+        ctx.fillStyle='#FF5500';
       } else {
-        ctx.fillStyle='rgba(255,255,255,0.13)'; /* upcoming: grey */
+        const th=document.documentElement.getAttribute('data-theme');
+        ctx.fillStyle=(th==='dark'||th==='nuit')?'rgba(255,255,255,0.28)':'rgba(0,0,0,0.18)';
       }
       ctx.fillRect(x,y,bw,bh);
     }
@@ -1636,7 +1637,7 @@ function renderDetailTracks(){
       <div class="pd-thumb" style="background-image:url('${photo}')"></div>
       <div class="pd-track-info">
         <div class="pd-track-title">${t.title}</div>
-        ${(t.tags&&t.tags.length)?`<div class="track-tags-row">${t.tags.slice(0,5).map(tag=>`<span class="track-tag-chip" onmouseenter="showTagPopup(this,'${tag.replace(/'/g,"\\'")}');event.stopPropagation()" onmouseleave="hideTagPopup()" onclick="event.stopPropagation();tagChipSearch('${tag.replace(/'/g,"\\'")}');">${tag}</span>`).join('')}</div>`:''}
+        ${(()=>{const chips=trackTagChips(t.tags).slice(0,5);return chips.length?`<div class="track-tags-row">${chips.map(tag=>`<span class="track-tag-chip" onmouseenter="showTagPopup(this,'${tag.replace(/'/g,"\\'")}');event.stopPropagation()" onmouseleave="hideTagPopup()" onclick="event.stopPropagation();tagChipSearch('${tag.replace(/'/g,"\\'")}');">${tag}</span>`).join('')}</div>`:''})()}
       </div>
       <div class="pd-track-dur">${fmt(t.duration)}</div>
       <button class="pd-track-btn track-fav${isFav(t.id)?' faved':''}" onclick="event.stopPropagation();toggleFavDetail('${t.id}',${i})" title="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}" aria-label="${isFav(t.id)?'Retirer des favoris':'Ajouter aux favoris'}">♥</button>
@@ -1918,6 +1919,17 @@ function tagChipSearch(tag){
   filterTracks();
 }
 
+/* Tags trop génériques pour les chips (genre/instrument/usage) — restent cherchables */
+const TAGS_CHIP_SKIP=new Set(['orchestral','électronique','acoustique','jazz','ambient','hybride',
+  'cinéma','publicité','documentaire','instrumental','vocal',
+  'piano','cordes','cuivres','guitare','percussions','basse','synthétiseur',
+  'film','bande originale','bo','soundtrack','score',
+  'spot','commercial','jingle','marque',
+  'reportage','nature','exploration','témoignage','fond sonore','discret']);
+function trackTagChips(tags){
+  return (tags||[]).filter(t=>!TAGS_CHIP_SKIP.has(t.toLowerCase()));
+}
+
 function onSearch(){
   activeTag=null;document.querySelectorAll('.tag-pill').forEach(b=>b.classList.remove('active'));
   showView('catalogue');filterTracks();
@@ -2121,7 +2133,7 @@ function renderTracks(){
       <div class="track-info">
         <div style="display:flex;align-items:center"><div class="track-title">${highlight(t.title,kws)}</div></div>
         <div class="track-artist">${t.playlistLabel}</div>
-        ${(t.tags&&t.tags.length)?`<div class="track-tags-row">${t.tags.slice(0,5).map(tag=>`<span class="track-tag-chip" onmouseenter="showTagPopup(this,'${tag.replace(/'/g,"\\'")}');event.stopPropagation()" onmouseleave="hideTagPopup()" onclick="event.stopPropagation();tagChipSearch('${tag.replace(/'/g,"\\'")}');">${tag}</span>`).join('')}</div>`:''}
+        ${(()=>{const chips=trackTagChips(t.tags).slice(0,5);return chips.length?`<div class="track-tags-row">${chips.map(tag=>`<span class="track-tag-chip" onmouseenter="showTagPopup(this,'${tag.replace(/'/g,"\\'")}');event.stopPropagation()" onmouseleave="hideTagPopup()" onclick="event.stopPropagation();tagChipSearch('${tag.replace(/'/g,"\\'")}');">${tag}</span>`).join('')}</div>`:''})()}
       </div>
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
@@ -2452,7 +2464,7 @@ function renderFavoris(){
       <div class="track-info">
         <div style="display:flex;align-items:center"><div class="track-title">${t.title}</div></div>
         <div class="track-artist">${t.playlistLabel}</div>
-        ${(t.tags&&t.tags.length)?`<div class="track-tags-row">${t.tags.slice(0,5).map(tag=>`<span class="track-tag-chip" onmouseenter="showTagPopup(this,'${tag.replace(/'/g,"\\'")}');event.stopPropagation()" onmouseleave="hideTagPopup()" onclick="event.stopPropagation();tagChipSearch('${tag.replace(/'/g,"\\'")}');">${tag}</span>`).join('')}</div>`:''}
+        ${(()=>{const chips=trackTagChips(t.tags).slice(0,5);return chips.length?`<div class="track-tags-row">${chips.map(tag=>`<span class="track-tag-chip" onmouseenter="showTagPopup(this,'${tag.replace(/'/g,"\\'")}');event.stopPropagation()" onmouseleave="hideTagPopup()" onclick="event.stopPropagation();tagChipSearch('${tag.replace(/'/g,"\\'")}');">${tag}</span>`).join('')}</div>`:''})()}
       </div>
       <div><span class="track-badge">${t.playlistLabel}</span></div>
       <div class="track-duration">${fmt(t.duration)}</div>
