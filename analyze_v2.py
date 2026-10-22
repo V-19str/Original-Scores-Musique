@@ -216,7 +216,7 @@ def download(url):
     fname = CACHE_DIR / (hashlib.md5(url.encode()).hexdigest() + '.mp3')
     if fname.exists():
         return fname
-    r = requests.get(url, timeout=60, headers={'User-Agent': 'Mozilla/5.0'})
+    r = requests.get(url, timeout=20, headers={'User-Agent': 'Mozilla/5.0'})
     r.raise_for_status()
     fname.write_bytes(r.content)
     return fname
