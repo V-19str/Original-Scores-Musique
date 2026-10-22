@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 _audio_cache/
 analysis_progress.json
+analysis_v2_progress.json
 catalogue_backup.json
 
 # Compositeurs et cles de repartition : donnee reservee aux monteurs connectes,
