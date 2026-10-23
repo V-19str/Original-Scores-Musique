@@ -1963,12 +1963,36 @@ function tagChipSearch(tag){
 }
 
 /* Tags trop génériques pour les chips (genre/instrument/usage) — restent cherchables */
-const TAGS_CHIP_SKIP=new Set(['orchestral','électronique','acoustique','jazz','ambient','hybride',
+const TAGS_CHIP_SKIP=new Set([
+  /* genres & instruments */
+  'orchestral','électronique','acoustique','jazz','ambient','hybride',
   'cinéma','publicité','documentaire','instrumental','vocal',
   'piano','cordes','cuivres','guitare','percussions','basse','synthétiseur',
   'film','bande originale','bo','soundtrack','score',
   'spot','commercial','jingle','marque',
-  'reportage','nature','exploration','témoignage','fond sonore','discret']);
+  'reportage','nature','exploration','témoignage','fond sonore','discret',
+  /* synonymes expansion — valeurs des SYNONYMES Python, trop répétitives comme chips */
+  'suspense','angoisse','thriller','anxieux','inquiétant','oppressant','stress',
+  'ténébreux','obscur','noir','pesant','menaçant','dark',
+  'cinématique','théâtral','bouleversant','poignant','tragique',
+  'nostalgique','triste','élégiaque','plaintif','lacrimeux',
+  'héroïque','grandiose','triomphal','aventure','conquête',
+  'percutant','fort','vigoureux','impactant',
+  'robuste','massif','imposant','écrasant',
+  'dynamique','tonique','vif','nerveux',
+  'célébration','fête','allègre','jubilant','exubérant',
+  'gai','enjoué','pétillant','léger','radieux',
+  'clair','ensoleillé','optimiste','brillant',
+  'encourageant','inspirant','motivant',
+  'paisible','serein','tranquille','apaisant','zen',
+  'méditatif','recueilli','intérieur','contemplatif','pensif',
+  'tendre','délicat','velouté','suave',
+  'action','boost',
+  'pressé','entraînant',
+  'frénétique','effréné','haletant',
+  'posé','grave','solennel',
+  'majestueux','hypnotique'
+]);
 function trackTagChips(tags){
   return (tags||[]).filter(t=>!TAGS_CHIP_SKIP.has(t.toLowerCase()));
 }
