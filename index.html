@@ -306,6 +306,23 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .tag-pill{background:transparent;border:1px solid rgba(255,255,255,0.07);color:var(--muted);padding:4px 11px;font-size:11px;cursor:pointer;transition:all 0.15s;font-family:'Montserrat',sans-serif;border-radius:12px;white-space:nowrap}
 .tag-pill:hover{border-color:var(--red);color:var(--red)}
 .tag-pill.active{background:rgba(255,85,0,0.12);border-color:var(--red);color:#ff8844}
+.cz-bar{display:flex;align-items:center;gap:8px;padding:10px 48px;border-bottom:1px solid var(--border);background:var(--bg);flex-wrap:wrap;position:sticky;top:64px;z-index:50;transition:box-shadow 0.2s}
+.cz-wrap{position:relative}
+.cz-btn{display:flex;align-items:center;gap:5px;padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text2);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.cz-btn:hover{border-color:var(--red);color:var(--red)}
+.cz-btn.active{border-color:var(--red);color:var(--red);background:rgba(255,85,0,0.07)}
+.cz-btn .cz-chev{font-size:8px;transition:transform 0.2s;display:inline-block}
+.cz-btn.open .cz-chev{transform:rotate(180deg)}
+.cz-drop{position:absolute;top:calc(100% + 6px);left:0;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px;display:none;flex-wrap:wrap;gap:6px;min-width:260px;max-width:380px;box-shadow:0 8px 24px rgba(0,0,0,0.18);z-index:501}
+.cz-drop.open{display:flex}
+.cz-chip{padding:5px 12px;border:1px solid var(--border);border-radius:16px;font-family:'Montserrat',sans-serif;font-size:11px;color:var(--text2);cursor:pointer;transition:all 0.15s;background:transparent;white-space:nowrap}
+.cz-chip:hover{border-color:var(--red);color:var(--red);background:rgba(255,85,0,0.07)}
+.cz-chip.active{border-color:var(--red);color:var(--red);background:rgba(255,85,0,0.12);font-weight:600}
+.cz-active-area{display:flex;flex-wrap:wrap;gap:5px;align-items:center;flex:1;min-width:0}
+.cz-active-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(255,85,0,0.12);border:1px solid rgba(255,85,0,0.35);border-radius:14px;font-size:10px;font-weight:600;color:var(--red);cursor:pointer;font-family:'Montserrat',sans-serif;transition:background 0.15s}
+.cz-active-chip:hover{background:rgba(255,85,0,0.2)}
+.cz-reset{background:none;border:none;color:var(--muted);cursor:pointer;font-size:10px;font-family:'Montserrat',sans-serif;padding:4px 8px;transition:color 0.15s;white-space:nowrap;flex-shrink:0}
+.cz-reset:hover{color:var(--red)}
 .tracks-section{padding:16px 48px 160px}
 .section-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .section-title{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
@@ -386,7 +403,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .sim-empty{padding:36px 20px;text-align:center;color:var(--muted);font-size:13px}
 
 /* PLAYER */
-#player{position:fixed;bottom:0;left:0;right:0;background:var(--bg-deep);border-top:1px solid var(--border);padding:0 32px;height:88px;z-index:200;display:none;align-items:center}
+#player{position:fixed;bottom:0;left:0;right:0;background:var(--bg-deep);border-top:1px solid var(--border);padding:0 32px;height:96px;z-index:200;display:none;align-items:center}
 #player.visible{display:flex}
 .player-inner{width:100%;display:flex;flex-direction:column;justify-content:center;gap:5px}
 .player-top{display:flex;align-items:center;gap:0;width:100%}
@@ -410,7 +427,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 #bg-speaker:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(255,85,0,0.6)}
 #bg-speaker.muted{background:var(--bg3);color:var(--muted);box-shadow:none}
 .wf-bar{display:flex;align-items:center;gap:8px;width:100%}
-#wf-canvas{flex:1;height:38px;display:block;cursor:pointer;border-radius:2px}
+#wf-canvas{flex:1;height:50px;display:block;cursor:pointer;border-radius:2px}
 #waveform-container{position:absolute;visibility:hidden;width:1px;height:1px;overflow:hidden;pointer-events:none}
 .time{font-size:11px;color:var(--muted);min-width:36px}
 .time:last-child{text-align:right}
@@ -657,12 +674,14 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   .services-strip{padding:32px 16px}
   .services-inner{grid-template-columns:repeat(2,1fr);gap:16px}
   .trust-section{padding:32px 16px}
-  #player{padding:0 12px;height:80px}
+  .cz-bar{padding:8px 16px;gap:6px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+  .cz-reset{display:none}
+  #player{padding:0 12px;height:86px}
   .player-top{gap:8px}
   .player-track-info{flex:1;min-width:0}
   .player-right{display:none}
   .wf-bar{gap:5px}
-  #wf-canvas{height:28px}
+  #wf-canvas{height:36px}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .hero-tag-cat-label{min-width:52px;font-size:8px;letter-spacing:2px}
   .hero-search-field{font-size:13px}
@@ -1082,6 +1101,30 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       <div class="search-active-bar" id="search-active-bar"></div>
       <div id="pl-nav" style="display:none"></div>
       <div id="tag-nav" style="display:none"></div>
+      <div class="cz-bar" id="cz-bar">
+        <div class="cz-wrap">
+          <button class="cz-btn" onclick="czOpen('moods',this)" id="czb-moods">Moods <span class="cz-chev">▾</span></button>
+          <div class="cz-drop" id="czd-moods"></div>
+        </div>
+        <div class="cz-wrap">
+          <button class="cz-btn" onclick="czOpen('genre',this)" id="czb-genre">Genre <span class="cz-chev">▾</span></button>
+          <div class="cz-drop" id="czd-genre"></div>
+        </div>
+        <div class="cz-wrap">
+          <button class="cz-btn" onclick="czOpen('tempo',this)" id="czb-tempo">Tempo <span class="cz-chev">▾</span></button>
+          <div class="cz-drop" id="czd-tempo"></div>
+        </div>
+        <div class="cz-wrap">
+          <button class="cz-btn" onclick="czOpen('instruments',this)" id="czb-instruments">Instruments <span class="cz-chev">▾</span></button>
+          <div class="cz-drop" id="czd-instruments"></div>
+        </div>
+        <div class="cz-wrap">
+          <button class="cz-btn" onclick="czOpen('usage',this)" id="czb-usage">Usage <span class="cz-chev">▾</span></button>
+          <div class="cz-drop" id="czd-usage"></div>
+        </div>
+        <div class="cz-active-area" id="cz-active-area"></div>
+        <button class="cz-reset" id="cz-reset" style="display:none" onclick="czReset()">✕ Effacer tout</button>
+      </div>
       <div class="tracks-section">
         <div class="section-header">
           <span class="section-title" id="section-title">Catalogue complet</span>
@@ -1916,7 +1959,7 @@ function tagChipSearch(tag){
   document.getElementById('hero-search-input').value=tag;
   heroSearchQuery=tag;
   showView('catalogue');
-  filterTracks();
+  filterTracks();czSync();
 }
 
 /* Tags trop génériques pour les chips (genre/instrument/usage) — restent cherchables */
@@ -1929,6 +1972,88 @@ const TAGS_CHIP_SKIP=new Set(['orchestral','électronique','acoustique','jazz','
 function trackTagChips(tags){
   return (tags||[]).filter(t=>!TAGS_CHIP_SKIP.has(t.toLowerCase()));
 }
+
+/* ── CEZAME FILTER BAR ── */
+const CZ_FILTERS={
+  moods:['Épique','Mélancolique','Tendu','Dramatique','Joyeux','Calme','Intense','Lumineux','Festif','Nostalgique','Romantique','Contemplatif','Doux','Énergique','Puissant','Sombre','Introspectif'],
+  genre:['Orchestral','Jazz','Électronique','Acoustique','Ambient','Hybride','Rock','Folk','Classique','Funk','Swing','Lounge','World'],
+  tempo:['Lent','Modéré','Rapide','Très rapide'],
+  instruments:['Piano','Cordes','Cuivres','Guitare','Percussions','Synthétiseur','Violon','Batterie','Basse','Flûte','Accordéon'],
+  usage:['Cinéma','Publicité','Documentaire','Trailer','Corporate','Podcast','Gaming','Mariage'],
+};
+let czOpenId=null;
+
+function czOpen(id,btn){
+  if(czOpenId&&czOpenId!==id){czClose();}
+  const drop=document.getElementById('czd-'+id);
+  const b=document.getElementById('czb-'+id);
+  if(!drop)return;
+  if(drop.classList.contains('open')){czClose();return;}
+  // populate
+  const chips=CZ_FILTERS[id]||[];
+  drop.innerHTML=chips.map(c=>{
+    const active=activeHeroTags.has(c.toLowerCase());
+    return `<button class="cz-chip${active?' active':''}" onclick="czChipClick('${c.toLowerCase()}','${id}')">${c}</button>`;
+  }).join('');
+  drop.classList.add('open');
+  if(b){b.classList.add('open','active');}
+  czOpenId=id;
+}
+function czClose(){
+  if(!czOpenId)return;
+  const drop=document.getElementById('czd-'+czOpenId);
+  const b=document.getElementById('czb-'+czOpenId);
+  if(drop)drop.classList.remove('open');
+  // keep btn active if any chip from this category is selected
+  if(b){
+    b.classList.remove('open');
+    const hasSel=(CZ_FILTERS[czOpenId]||[]).some(c=>activeHeroTags.has(c.toLowerCase()));
+    if(!hasSel)b.classList.remove('active');
+  }
+  czOpenId=null;
+}
+function czChipClick(tag,catId){
+  if(activeHeroTags.has(tag))activeHeroTags.delete(tag);
+  else activeHeroTags.add(tag);
+  showView('catalogue');filterTracks();
+  // re-render open dropdown in place
+  const chips=CZ_FILTERS[catId]||[];
+  const drop=document.getElementById('czd-'+catId);
+  if(drop&&drop.classList.contains('open')){
+    drop.innerHTML=chips.map(c=>{
+      const active=activeHeroTags.has(c.toLowerCase());
+      return `<button class="cz-chip${active?' active':''}" onclick="czChipClick('${c.toLowerCase()}','${catId}')">${c}</button>`;
+    }).join('');
+  }
+  czSync();
+}
+function czRemoveTag(tag){
+  activeHeroTags.delete(tag);
+  showView('catalogue');filterTracks();czSync();
+}
+function czReset(){
+  Object.values(CZ_FILTERS).flat().forEach(c=>activeHeroTags.delete(c.toLowerCase()));
+  showView('catalogue');filterTracks();czSync();
+}
+function czSync(){
+  // update active-area chips
+  const area=document.getElementById('cz-active-area');
+  const reset=document.getElementById('cz-reset');
+  if(!area)return;
+  const czTags=Object.values(CZ_FILTERS).flat().map(c=>c.toLowerCase());
+  const active=czTags.filter(t=>activeHeroTags.has(t));
+  area.innerHTML=active.map(t=>`<span class="cz-active-chip">${t} <button onclick="czRemoveTag('${t}')">✕</button></span>`).join('');
+  if(reset)reset.style.display=active.length?'':'none';
+  // update button active states
+  Object.keys(CZ_FILTERS).forEach(id=>{
+    const b=document.getElementById('czb-'+id);
+    if(!b)return;
+    const hasSel=(CZ_FILTERS[id]||[]).some(c=>activeHeroTags.has(c.toLowerCase()));
+    if(hasSel)b.classList.add('active');else if(!b.classList.contains('open'))b.classList.remove('active');
+  });
+}
+document.addEventListener('click',e=>{if(czOpenId&&!e.target.closest('.cz-wrap'))czClose();},{capture:true});
+/* ── END CEZAME FILTER BAR ── */
 
 function onSearch(){
   activeTag=null;document.querySelectorAll('.tag-pill').forEach(b=>b.classList.remove('active'));
@@ -2108,7 +2233,7 @@ function clearSearch(){
   document.querySelectorAll('.hero-tag-pill,.cat-fpill').forEach(b=>b.classList.remove('active'));
   updateCatSectionHeaders();
   document.getElementById('search-active-bar').classList.remove('visible');
-  filterTracks();
+  czSync();filterTracks();
 }
 
 function highlight(text,kws){
@@ -2371,7 +2496,7 @@ function toggleHeroTags(){
 function heroTagClick(tag,btn){
   if(activeHeroTags.has(tag)){activeHeroTags.delete(tag);btn.classList.remove('active');}
   else{activeHeroTags.add(tag);btn.classList.add('active');}
-  showView('catalogue');filterTracks();
+  showView('catalogue');filterTracks();czSync();
 }
 
 function heroSearchLive(val){
