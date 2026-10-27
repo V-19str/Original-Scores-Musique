@@ -2,7 +2,7 @@ SUBJECT: OSM - Musique originale française pour vos productions
 
 Bonjour {prenom},
 
-Je me permets de vous contacter car j'ai créé OSM (Original Scores Music), une bibliothèque française de 2 500 morceaux de musique originale destinés au montage audiovisuel.
+Je me permets de vous contacter car j'ai créé OSM (Open Screen Music), une bibliothèque française de 2 500 morceaux de musique originale destinés au montage audiovisuel.
 
 osm-music.fr propose :
 - Catalogue navigable par playlist, mood, BPM
@@ -16,4 +16,4 @@ Le site est en libre accès : osm-music.fr
 
 Bien cordialement,
 Vladimir Streiff
-OSM - Original Scores Music
+OSM - Open Screen Music
