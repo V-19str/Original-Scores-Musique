@@ -27,7 +27,7 @@ Brevo n'envoie qu'avec une adresse d'expéditeur vérifiée.
 
 1. Menu **Senders, Domains & Dedicated IPs** → **Senders**
    (https://app.brevo.com/senders/list).
-2. **Add a sender** : nom `OSM — Original Scores Music`, email
+2. **Add a sender** : nom `OSM — Open Screen Music`, email
    `vladimirstreiff@gmail.com` (ou une autre adresse que tu contrôles).
 3. Valider le lien de confirmation reçu par email.
    → C'est cette adresse qui ira dans le secret `SENDER_EMAIL` (étape 3).
@@ -44,14 +44,14 @@ Dashboard Supabase → projet OSM → **Edge Functions** → **Manage secrets**
 |-----|--------|
 | `BREVO_API_KEY` | la clé `xkeysib-…` de l'étape 1 |
 | `SENDER_EMAIL` | l'adresse vérifiée à l'étape 2 |
-| `SENDER_NAME` | `OSM — Original Scores Music` (optionnel) |
+| `SENDER_NAME` | `OSM — Open Screen Music` (optionnel) |
 | `ADMIN_EMAIL` | `vladimirstreiff@gmail.com` (optionnel, c'est le défaut) |
 | `OSM_WEBHOOK_SECRET` | une chaîne aléatoire que tu choisis, ex. `osm-hook-9f3a…` |
 
 **B. CLI** :
 ```bash
 supabase secrets set BREVO_API_KEY="xkeysib-…" SENDER_EMAIL="vladimirstreiff@gmail.com" \
-  SENDER_NAME="OSM — Original Scores Music" ADMIN_EMAIL="vladimirstreiff@gmail.com" \
+  SENDER_NAME="OSM — Open Screen Music" ADMIN_EMAIL="vladimirstreiff@gmail.com" \
   OSM_WEBHOOK_SECRET="osm-hook-9f3a…" --project-ref ubpmzncfhkohoyfonjbb
 ```
 

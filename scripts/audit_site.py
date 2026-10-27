@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Audit du site Original Scores Music.
+Audit du site Open Screen Music.
 
 Trois contrôles :
   1. Intégrité de catalogue.json (JSON valide, champs url/title/playlist, aucun .wav)
@@ -215,7 +215,7 @@ def audit_audio(tracks, workers, timeout, limit=None):
 
 # ── main ─────────────────────────────────────────────────────────────────
 def main():
-    ap = argparse.ArgumentParser(description="Audit du site Original Scores Music")
+    ap = argparse.ArgumentParser(description="Audit du site Open Screen Music")
     ap.add_argument("--workers", type=int, default=24, help="threads pour l'audit audio (défaut 24)")
     ap.add_argument("--timeout", type=int, default=20, help="timeout HTTP en secondes (défaut 20)")
     ap.add_argument("--limit", type=int, default=None, help="limiter le nombre d'URLs audio testées (debug)")
@@ -224,7 +224,7 @@ def main():
     args = ap.parse_args()
 
     print("=" * 60)
-    print(" AUDIT ORIGINAL SCORES MUSIC")
+    print(" AUDIT OPEN SCREEN MUSIC")
     print("=" * 60)
 
     all_problems = []

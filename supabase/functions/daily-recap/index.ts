@@ -20,7 +20,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const ADMIN_SECRET  = "OSM_ADMIN_2026";
 const ADMIN_EMAIL   = Deno.env.get("ADMIN_EMAIL")  ?? "vladimirstreiff@gmail.com";
 const SENDER_EMAIL  = Deno.env.get("SENDER_EMAIL") ?? "";
-const SENDER_NAME   = Deno.env.get("SENDER_NAME")  ?? "OSM — Original Scores Music";
+const SENDER_NAME   = Deno.env.get("SENDER_NAME")  ?? "OSM — Open Screen Music";
 const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY") ?? "";
 
 const cors = {

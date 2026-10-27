@@ -1,6 +1,6 @@
 # Agent commercial OSM — POC
 
-Outil de prospection musicale semi-automatisée pour Original Scores Music.
+Outil de prospection musicale semi-automatisée pour Open Screen Music.
 
 ## Objectif
 

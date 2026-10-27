@@ -109,7 +109,7 @@ header {
 <header>
   <a class="logo" href="index.html">
     <span class="logo-mark">OSM</span>
-    <span class="logo-name">ORIGINAL SCORES MUSIC</span>
+    <span class="logo-name">OPEN SCREEN MUSIC</span>
   </a>
   <span data-osm-langpicker></span>
   <a class="btn-sm" href="index.html">← Retour au catalogue</a>
@@ -129,7 +129,7 @@ header {
   <div class="auth-box" id="box-form" style="display:none">
     <div class="auth-icon">🔑</div>
     <h2 class="auth-title">Finalisez votre inscription</h2>
-    <p class="auth-sub" id="form-sub">Choisissez votre mot de passe pour activer votre accès à Original Scores Music.</p>
+    <p class="auth-sub" id="form-sub">Choisissez votre mot de passe pour activer votre accès à Open Screen Music.</p>
     <div class="field">
       <label for="pw">Mot de passe (min. 8 caractères)</label>
       <input type="password" id="pw" placeholder="••••••••" autocomplete="new-password">
@@ -220,7 +220,7 @@ async function finaliser() {
 
   if (error) { showMsg(errEl, error.message); return; }
 
-  showMsg(okEl, '✓ Compte activé ! Bienvenue chez Original Scores Music. Redirection…');
+  showMsg(okEl, '✓ Compte activé ! Bienvenue chez Open Screen Music. Redirection…');
   document.getElementById('btn-finaliser').disabled = true;
   setTimeout(() => { window.location.href = 'index.html'; }, 1800);
 }
@@ -230,7 +230,7 @@ async function finaliser() {
   "← Retour au catalogue": "← Back to catalogue",
   "Finalisez votre inscription": "Complete your registration",
   "Vérification de votre lien d'invitation…": "Verifying your invitation link…",
-  "Choisissez votre mot de passe pour activer votre accès à Original Scores Music.": "Choose your password to activate your access to Original Scores Music.",
+  "Choisissez votre mot de passe pour activer votre accès à Open Screen Music.": "Choose your password to activate your access to Open Screen Music.",
   "Mot de passe (min. 8 caractères)": "Password (min. 8 characters)",
   "Confirmer le mot de passe": "Confirm password",
   "Activer mon compte": "Activate my account",
@@ -241,7 +241,7 @@ async function finaliser() {
   "Session d'invitation introuvable. Rechargez le lien reçu par email.": "Invitation session not found. Reload the link received by email.",
   "Mot de passe : 8 caractères minimum.": "Password: 8 characters minimum.",
   "Les mots de passe ne correspondent pas.": "The passwords do not match.",
-  "✓ Compte activé ! Bienvenue chez Original Scores Music. Redirection…": "✓ Account activated! Welcome to Original Scores Music. Redirecting…"
+  "✓ Compte activé ! Bienvenue chez Open Screen Music. Redirection…": "✓ Account activated! Welcome to Open Screen Music. Redirecting…"
 });</script>
 <script src="assets/i18n.js"></script>
 

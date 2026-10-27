@@ -258,7 +258,7 @@ def head_html(title, description, canonical, image, extra_ld=""):
 </head>
 <body>
 <header>
-  <a class="logo" href="/"><span class="logo-mark">OSM</span><span class="logo-name">ORIGINAL SCORES MUSIC</span></a>
+  <a class="logo" href="/"><span class="logo-mark">OSM</span><span class="logo-name">OPEN SCREEN MUSIC</span></a>
   <nav class="head-links">%(links)s</nav>
 </header>
 """ % {
@@ -270,7 +270,7 @@ def head_html(title, description, canonical, image, extra_ld=""):
 
 def footer_html():
     return """<footer>
-  <p>© Original Scores Music — musique originale pour l'image.
+  <p>© Open Screen Music — musique originale pour l'image.
   <a href="/">Écouter le catalogue</a> ·
   <a href="/inscription.html">Demander un accès</a> ·
   <a href="/qui-sommes-nous.html">Qui sommes-nous</a></p>
@@ -312,14 +312,14 @@ def render_playlist(info, tracks, others):
         "@context": "https://schema.org",
         "@type": "MusicPlaylist",
         "@id": url,
-        "name": "%s — Original Scores Music" % label,
+        "name": "%s — Open Screen Music" % label,
         "url": url,
         "description": info["desc"],
         "numTracks": len(tracks),
         "genre": [g.strip() for g in info["genres"].split("·")] if info["genres"] else [],
         "keywords": ", ".join(info["tags"]),
         "image": info["photo"],
-        "author": {"@type": "Organization", "name": "Original Scores Music", "url": SITE + "/"},
+        "author": {"@type": "Organization", "name": "Open Screen Music", "url": SITE + "/"},
         "track": ld_tracks,
     }) + jsonld({
         "@context": "https://schema.org",
@@ -386,8 +386,8 @@ def render_playlist(info, tracks, others):
 
 def render_index(themes, counts, infos, total):
     url = SITE + "/playlists/"
-    title = "Les %d playlists du catalogue OSM | Original Scores Music" % len(counts)
-    description = ("Les %d univers musicaux d'Original Scores Music : %s titres "
+    title = "Les %d playlists du catalogue OSM | Open Screen Music" % len(counts)
+    description = ("Les %d univers musicaux d'Open Screen Music : %s titres "
                    "originaux pour le cinéma, la télévision et la publicité."
                    % (len(counts), total))
 

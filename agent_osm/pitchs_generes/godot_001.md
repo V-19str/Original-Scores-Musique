@@ -6,7 +6,7 @@ Bonjour l'équipe,
 
 Je suis tombé sur L'œuvre invisible (portrait, 2026) — un beau sujet qui mérite une musique à sa hauteur.
 
-Je dirige OSM (Original Scores Music), un catalogue de 2564 musiques originales pour le documentaire et la fiction.
+Je dirige OSM (Open Screen Music), un catalogue de 2564 musiques originales pour le documentaire et la fiction.
 
 Pour vos prochains projets, voici 3 morceaux qui pourraient résonner avec votre univers :
 

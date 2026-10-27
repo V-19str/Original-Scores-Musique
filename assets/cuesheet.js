@@ -299,7 +299,7 @@
         var page = doc.internal.getNumberOfPages();
         doc.setFontSize(7.5);
         doc.setTextColor(120);
-        doc.text('Original Scores Music — osm-music.fr', data.settings.margin.left,
+        doc.text('Open Screen Music — osm-music.fr', data.settings.margin.left,
                  doc.internal.pageSize.getHeight() - 8);
         doc.text('Page ' + page, doc.internal.pageSize.getWidth() - 24,
                  doc.internal.pageSize.getHeight() - 8);

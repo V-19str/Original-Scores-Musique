@@ -2,7 +2,7 @@ Bonjour {{contact_prenom}},
 
 Je suis tombé sur {{projet_recent}} — {{accroche}}.
 
-Je dirige OSM (Original Scores Music), un catalogue de {{nb_tracks}} musiques originales pour le documentaire et la fiction.
+Je dirige OSM (Open Screen Music), un catalogue de {{nb_tracks}} musiques originales pour le documentaire et la fiction.
 
 Pour vos prochains projets, voici 3 morceaux qui pourraient résonner avec votre univers :
 

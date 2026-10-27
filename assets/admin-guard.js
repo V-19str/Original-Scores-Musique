@@ -47,7 +47,7 @@
     g.innerHTML =
       '<div style="display:flex;align-items:center;gap:12px">' +
         '<div style="background:#E50914;color:#fff;font-size:13px;font-weight:700;letter-spacing:2px;padding:6px 10px;border-radius:3px">OSM</div>' +
-        '<div style="font-size:15px;font-weight:600;letter-spacing:3px">ORIGINAL SCORES MUSIC</div>' +
+        '<div style="font-size:15px;font-weight:600;letter-spacing:3px">OPEN SCREEN MUSIC</div>' +
       '</div>' +
       '<div style="background:#1f1f1f;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:40px;width:360px;max-width:90vw;text-align:center">' +
         '<div style="font-size:13px;font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px">Connexion Admin</div>' +

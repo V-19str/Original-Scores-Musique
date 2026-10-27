@@ -889,7 +889,7 @@ function exportCNC() {
   matches.filter(m=>m.track).forEach(m => {
     const idx = matches.indexOf(m);
     const tp  = document.getElementById(`type-${idx}`)?.value || 'FM';
-    rows.push([m.track.title, getComposers(m.track.id)||'', 'Original Scores Music', '', mms(m.cue.duration_s||0), tp]);
+    rows.push([m.track.title, getComposers(m.track.id)||'', 'Open Screen Music', '', mms(m.cue.duration_s||0), tp]);
   });
   const ws = XLSX.utils.aoa_to_sheet(rows);
   ws['!cols'] = [{wch:42},{wch:30},{wch:25},{wch:14},{wch:12},{wch:20}];
