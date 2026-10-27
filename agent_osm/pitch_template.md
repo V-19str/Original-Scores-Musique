@@ -1,15 +1,17 @@
 Bonjour {{contact_prenom}},
 
-Je suis tombé sur {{projet_recent}} — {{accroche}}.
+J'ai regardé {{projet_recent}} — {{accroche}}.
 
-Je dirige OSM (Open Screen Music), un catalogue de {{nb_tracks}} musiques originales pour le documentaire et la fiction.
-
-Pour vos prochains projets, voici 3 morceaux qui pourraient résonner avec votre univers :
+Je me permets de vous envoyer 3 morceaux de notre catalogue qui pourraient s'y glisser naturellement :
 
 {{tracks_html}}
 
-Si l'un vous parle, je vous envoie volontiers la fiche technique et les conditions de licence.
+Open Screen Music, c'est {{nb_tracks}} titres originaux — accès gratuit pour les monteurs et réalisateurs, droits récupérés à la diffusion via SACEM/SPPF.
 
-Belle continuation,
-Vladimir — OSM
-osm-music.fr
+Si l'un vous convient, répondez à cet e-mail et je vous envoie le fichier HD.
+
+Bonne journée,
+
+Vladimir Streiff
+Compositeur & directeur artistique
+Open Screen Music · osm-music.fr
