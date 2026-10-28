@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing musical — OSM Open Screen Music</title>
+<meta name="description" content="Décrivez votre projet et recevez une sélection musicale OSM personnalisée par intelligence artificielle.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#FF5500">
+<link rel="canonical" href="https://osm-music.fr/briefing.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script>
+(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<style>
+:root{--red:#C0392B;--purple:#8B5CF6;--blue:#00B4D8;--green:#06D6A0;--pink:#6E1E61;--grad:linear-gradient(135deg,#C0392B,#6E1E61);--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff;--card-border:rgba(0,0,0,0.08)}
+[data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--bg-alt:#0a0a0a;--bg-deep:#080808;--bg-header:rgba(10,10,10,0.98);--text:#ffffff;--text2:#e2e2e2;--muted:#b0b0b0;--border:rgba(255,255,255,0.12);--card-bg:#111111;--card-border:rgba(255,255,255,0.07)}
+[data-theme="creme"]{--bg:#f4ecd8;--bg2:#efe5cd;--bg3:#e8dbbe;--bg4:#ddcda6;--bg-alt:#f1e7d1;--bg-deep:#ece1c8;--bg-header:rgba(244,236,216,0.98);--text:#3a2e1a;--text2:#584732;--muted:#8a755a;--border:rgba(90,70,40,0.16);--card-bg:#fbf5e6;--card-border:rgba(90,70,40,0.1)}
+[data-theme="nuit"]{--bg:#0d1b2a;--bg2:#152536;--bg3:#1d3149;--bg4:#284158;--bg-alt:#0a1622;--bg-deep:#081019;--bg-header:rgba(10,20,32,0.98);--text:#eaf2fb;--text2:#c6d6e6;--muted:#8ba4bc;--border:rgba(130,170,210,0.16);--card-bg:#0f2033;--card-border:rgba(130,170,210,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;animation:pageIn 0.4s ease both}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.logo-bar{width:3px;height:22px;background:var(--grad);border-radius:2px;flex-shrink:0}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px}
+.back-btn{background:none;border:1px solid var(--border);color:var(--text2);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all 0.2s;text-decoration:none;display:flex;align-items:center;gap:6px}
+.back-btn:hover{background:var(--bg2);border-color:var(--red);color:var(--red)}
+
+.page-wrap{padding:96px 24px 60px;max-width:860px;margin:0 auto}
+
+.page-hero{margin-bottom:40px;text-align:center}
+.page-hero h1{font-size:clamp(22px,4vw,36px);font-weight:900;letter-spacing:-0.5px;line-height:1.15;margin-bottom:12px}
+.page-hero h1 span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-hero p{color:var(--muted);font-size:14px;max-width:520px;margin:0 auto;line-height:1.6}
+
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:32px;margin-bottom:24px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+.field label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.field select,.field input,.field textarea{background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:13px;padding:10px 14px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;width:100%}
+.field select:focus,.field input:focus,.field textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,0.12)}
+.field textarea{resize:vertical;min-height:100px;line-height:1.6}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer}
+
+.hint{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+
+.nb-selector{display:flex;gap:8px}
+.nb-btn{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text2);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:center}
+.nb-btn.active{border-color:var(--red);background:rgba(192,57,43,0.1);color:var(--red)}
+
+.submit-btn{width:100%;padding:14px 24px;background:var(--grad);border:none;border-radius:10px;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:opacity 0.2s,transform 0.15s;margin-top:8px;position:relative;overflow:hidden}
+.submit-btn:hover{opacity:0.88;transform:translateY(-1px)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+.spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto}
+.submit-btn.loading .btn-text{display:none}
+.submit-btn.loading .spinner{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Results */
+.results-section{display:none}
+.results-section.visible{display:block}
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.results-header h2{font-size:16px;font-weight:700;letter-spacing:.5px}
+.reset-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all 0.2s}
+.reset-btn:hover{border-color:var(--text);color:var(--text)}
+
+.results-grid{display:flex;flex-direction:column;gap:12px}
+.track-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:all 0.2s;cursor:pointer}
+.track-card:hover{border-color:var(--red);box-shadow:0 2px 12px rgba(192,57,43,0.1);transform:translateY(-1px)}
+.track-card.playing{border-color:var(--red);background:rgba(192,57,43,0.04)}
+.tc-num{font-size:12px;font-weight:700;color:var(--muted);min-width:20px}
+.tc-play{width:36px;height:36px;border-radius:50%;border:none;background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:all 0.15s;color:var(--text)}
+.tc-play:hover,.track-card.playing .tc-play{background:var(--red);color:#fff}
+.tc-info{flex:1;min-width:0}
+.tc-title{font-size:13px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tc-meta{font-size:11px;color:var(--muted)}
+.tc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tc-tag{font-size:9.5px;font-weight:600;letter-spacing:.3px;padding:2px 6px;border-radius:4px;background:var(--bg2);color:var(--muted);border:1px solid var(--border)}
+.tc-reason{font-size:11px;color:var(--blue);font-style:italic;margin-top:4px;line-height:1.4}
+.tc-listen{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;text-decoration:none;padding:6px 10px;border-radius:6px;border:1px solid var(--border);transition:all 0.15s;flex-shrink:0}
+.tc-listen:hover{border-color:var(--red);color:var(--red)}
+
+.export-row{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}
+.export-btn{background:none;border:1px solid var(--border);color:var(--text2);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;padding:8px 16px;border-radius:7px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px}
+.export-btn:hover{background:var(--bg2);border-color:var(--text)}
+
+.error-msg{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.3);border-radius:8px;padding:14px 18px;color:var(--red);font-size:13px;display:none;margin-bottom:16px}
+.error-msg.visible{display:block}
+
+audio{display:none}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/">
+    <div class="logo-bar"></div>
+    <span class="logo-name">Open Screen Music</span>
+  </a>
+  <a class="back-btn" href="/">← Retour</a>
+</header>
+
+<div class="page-wrap">
+  <div class="page-hero">
+    <h1>Briefing <span>musical</span></h1>
+    <p>Décrivez votre projet en quelques mots. Notre IA sélectionne les morceaux OSM les plus adaptés à votre univers.</p>
+  </div>
+
+  <div class="card" id="form-card">
+    <div class="error-msg" id="error-msg"></div>
+    <form id="briefing-form" onsubmit="handleSubmit(event)">
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Type de production</label>
+          <select name="type" id="f-type" required>
+            <option value="">— Choisir —</option>
+            <option value="documentaire">Documentaire</option>
+            <option value="fiction">Fiction / Série</option>
+            <option value="cinema">Cinéma</option>
+            <option value="publicite">Publicité / Spot</option>
+            <option value="animation">Animation</option>
+            <option value="corporate">Corporate / Institutionnel</option>
+            <option value="reportage">Reportage</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Durée du projet</label>
+          <select name="duree" id="f-duree">
+            <option value="">— Optionnel —</option>
+            <option value="spot">Spot court (&lt; 1 min)</option>
+            <option value="court">Court métrage</option>
+            <option value="magazine">Magazine TV (26–52 min)</option>
+            <option value="long">Long métrage / Série</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Ambiance souhaitée</label>
+          <textarea name="ambiance" id="f-ambiance" placeholder="Décrivez l'émotion, l'atmosphère, l'image que vous avez en tête… Ex : « Une scène de retrouvailles émouvante, mélancolique mais avec de l'espoir, style cinéma européen des années 90. »" required></textarea>
+          <div class="hint">Plus vous êtes précis, meilleure sera la sélection.</div>
+        </div>
+
+        <div class="field">
+          <label>Chaîne / Diffusion</label>
+          <input type="text" name="chaine" id="f-chaine" placeholder="Ex : ARTE, Netflix, TF1…">
+        </div>
+
+        <div class="field">
+          <label>Nombre de morceaux</label>
+          <div class="nb-selector">
+            <button type="button" class="nb-btn active" data-nb="3" onclick="selectNb(this)">3</button>
+            <button type="button" class="nb-btn" data-nb="5" onclick="selectNb(this)">5</button>
+            <button type="button" class="nb-btn" data-nb="10" onclick="selectNb(this)">10</button>
+          </div>
+        </div>
+
+      </div>
+
+      <button type="submit" class="submit-btn" id="submit-btn">
+        <span class="btn-text">Générer ma sélection →</span>
+        <div class="spinner"></div>
+      </button>
+    </form>
+  </div>
+
+  <div class="results-section" id="results-section">
+    <div class="results-header">
+      <h2 id="results-title">Sélection personnalisée</h2>
+      <button class="reset-btn" onclick="resetForm()">← Nouveau briefing</button>
+    </div>
+    <div class="results-grid" id="results-grid"></div>
+    <div class="export-row">
+      <button class="export-btn" onclick="exportEmail()">✉️ Envoyer par e-mail</button>
+      <button class="export-btn" onclick="exportCopy()">📋 Copier les liens</button>
+    </div>
+  </div>
+</div>
+
+<audio id="audio-player" onended="onAudioEnd()"></audio>
+
+<script>
+const SUPABASE_URL = 'https://iimkdflwpjwgcflhqsnd.supabase.co/functions/v1/recherche-ia';
+const SUPABASE_KEY = 'sb_publishable_8rWkPwFktGZLsk79WCq7PQ_3Gb1xykh';
+
+let selectedNb = 3;
+let currentResults = [];
+let currentAudio = null;
+let playingIdx = -1;
+
+function selectNb(btn){
+  document.querySelectorAll('.nb-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedNb = parseInt(btn.dataset.nb);
+}
+
+async function handleSubmit(e){
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('submit-btn');
+  const errEl = document.getElementById('error-msg');
+
+  const type = form.querySelector('#f-type').value;
+  const ambiance = form.querySelector('#f-ambiance').value.trim();
+  const duree = form.querySelector('#f-duree').value;
+  const chaine = form.querySelector('#f-chaine').value.trim();
+
+  errEl.classList.remove('visible');
+
+  if(!type || !ambiance){
+    errEl.textContent = 'Merci de renseigner le type de production et l\'ambiance souhaitée.';
+    errEl.classList.add('visible');
+    return;
+  }
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const query = buildQuery(type, ambiance, duree, chaine);
+
+  try {
+    const res = await fetch(SUPABASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'apikey': SUPABASE_KEY
+      },
+      body: JSON.stringify({
+        query,
+        top_n: selectedNb
+      })
+    });
+
+    if(!res.ok){
+      let msg = `Erreur serveur (${res.status})`;
+      try { const d = await res.json(); msg = d.error || d.message || msg; } catch(ex){}
+      throw new Error(msg);
+    }
+
+    const data = await res.json();
+    const tracks = data.tracks || data.results || data || [];
+
+    if(!Array.isArray(tracks) || tracks.length === 0){
+      throw new Error('Aucun morceau trouvé. Essayez de reformuler votre demande.');
+    }
+
+    currentResults = tracks;
+    showResults(tracks, ambiance);
+
+  } catch(err){
+    errEl.textContent = err.message || 'Une erreur est survenue. Veuillez réessayer.';
+    errEl.classList.add('visible');
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+function buildQuery(type, ambiance, duree, chaine){
+  let parts = [ambiance];
+  if(type && type !== 'autre') parts.push(`pour ${type}`);
+  if(chaine) parts.push(`diffusion ${chaine}`);
+  if(duree === 'spot') parts.push('format court');
+  return parts.join(', ');
+}
+
+function showResults(tracks, ambiance){
+  const btn = document.getElementById('submit-btn');
+  btn.classList.remove('loading');
+  btn.disabled = false;
+
+  document.getElementById('form-card').style.display = 'none';
+  const section = document.getElementById('results-section');
+  section.classList.add('visible');
+  document.getElementById('results-title').textContent = `Sélection pour « ${ambiance.slice(0,60)}${ambiance.length>60?'…':''} »`;
+
+  const grid = document.getElementById('results-grid');
+  grid.innerHTML = '';
+
+  tracks.forEach((t, i) => {
+    const title = t.title || t.titre || t.name || `Morceau ${i+1}`;
+    const url = t.url || t.audio_url || '';
+    const bpm = t.bpm || '';
+    const playlist = t.playlist || t.genre || '';
+    const reason = t.reason || t.explication || t.matching_reason || '';
+    const rawTags = t.tags || [];
+    const displayTags = rawTags.filter(tg => {
+      const tl = tg.toLowerCase();
+      return !tl.match(/^(majeur|mineur|bpm|do|ré|mi|fa|sol|la|si|hz|\d)/) && tl.length > 3;
+    }).slice(0, 4);
+
+    const card = document.createElement('div');
+    card.className = 'track-card';
+    card.id = `track-${i}`;
+    card.innerHTML = `
+      <span class="tc-num">${i+1}</span>
+      <button class="tc-play" onclick="toggleTrack(${i},'${url.replace(/'/g,"\\'")}','${title.replace(/'/g,"\\'")}');event.stopPropagation()" title="Écouter">▶</button>
+      <div class="tc-info">
+        <div class="tc-title">${title}</div>
+        <div class="tc-meta">${[bpm ? bpm+' bpm' : '', playlist].filter(Boolean).join(' · ')}</div>
+        ${displayTags.length ? `<div class="tc-tags">${displayTags.map(tg=>`<span class="tc-tag">${tg}</span>`).join('')}</div>` : ''}
+        ${reason ? `<div class="tc-reason">"${reason}"</div>` : ''}
+      </div>
+      ${url ? `<a class="tc-listen" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Écouter ↗</a>` : ''}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+const audio = document.getElementById('audio-player');
+
+function toggleTrack(idx, url, title){
+  if(playingIdx === idx){
+    if(audio.paused){ audio.play(); setPlayIcon(idx, '⏸'); }
+    else { audio.pause(); setPlayIcon(idx, '▶'); }
+    return;
+  }
+  if(playingIdx >= 0){
+    setPlayIcon(playingIdx, '▶');
+    document.getElementById(`track-${playingIdx}`)?.classList.remove('playing');
+  }
+  playingIdx = idx;
+  audio.src = url;
+  audio.play();
+  setPlayIcon(idx, '⏸');
+  document.getElementById(`track-${idx}`)?.classList.add('playing');
+}
+
+function setPlayIcon(idx, icon){
+  const btn = document.querySelector(`#track-${idx} .tc-play`);
+  if(btn) btn.textContent = icon;
+}
+
+function onAudioEnd(){
+  if(playingIdx >= 0){
+    setPlayIcon(playingIdx, '▶');
+    document.getElementById(`track-${playingIdx}`)?.classList.remove('playing');
+    playingIdx = -1;
+  }
+}
+
+function resetForm(){
+  audio.pause();
+  audio.src = '';
+  playingIdx = -1;
+  currentResults = [];
+  document.getElementById('form-card').style.display = '';
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('error-msg').classList.remove('visible');
+}
+
+function exportEmail(){
+  if(!currentResults.length) return;
+  const lines = currentResults.map((t,i) => {
+    const title = t.title || t.titre || `Morceau ${i+1}`;
+    const url = t.url || t.audio_url || '';
+    return `${i+1}. ${title}${url ? '\n   ' + url : ''}`;
+  }).join('\n\n');
+  const subject = encodeURIComponent('Sélection musicale OSM');
+  const body = encodeURIComponent(`Bonjour,\n\nVoici ma sélection de morceaux Open Screen Music :\n\n${lines}\n\nDisponibles sur osm-music.fr`);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+function exportCopy(){
+  if(!currentResults.length) return;
+  const lines = currentResults.map((t,i) => {
+    const title = t.title || t.titre || `Morceau ${i+1}`;
+    const url = t.url || t.audio_url || '';
+    return `${i+1}. ${title}${url ? ' — ' + url : ''}`;
+  }).join('\n');
+  navigator.clipboard.writeText(lines).then(() => {
+    const btn = document.querySelector('.export-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copié !';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  });
+}
+</script>
+</body>
+</html>

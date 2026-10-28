@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte des émotions — OSM Open Screen Music</title>
+<meta name="description" content="Explorez 2500+ morceaux OSM sur une carte d'émotions interactive. Naviguez par énergie et sentiment pour trouver la musique parfaite.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#FF5500">
+<link rel="canonical" href="https://osm-music.fr/carte-emotions.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script>
+(function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<style>
+:root{--red:#C0392B;--purple:#8B5CF6;--blue:#00B4D8;--green:#06D6A0;--pink:#6E1E61;--grad:linear-gradient(135deg,#C0392B,#6E1E61);--bg:#f6f6f6;--bg2:#eeeeee;--bg3:#e4e4e4;--bg4:#d8d8d8;--bg-alt:#f0f0f0;--bg-deep:#e8e8e8;--bg-header:rgba(246,246,246,0.98);--text:#111111;--text2:#2c2c2c;--muted:#666666;--border:rgba(0,0,0,0.1);--card-bg:#ffffff;--card-border:rgba(0,0,0,0.08)}
+[data-theme="dark"]{--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--bg-alt:#0a0a0a;--bg-deep:#080808;--bg-header:rgba(10,10,10,0.98);--text:#ffffff;--text2:#e2e2e2;--muted:#b0b0b0;--border:rgba(255,255,255,0.12);--card-bg:#111111;--card-border:rgba(255,255,255,0.07)}
+[data-theme="creme"]{--bg:#f4ecd8;--bg2:#efe5cd;--bg3:#e8dbbe;--bg4:#ddcda6;--bg-alt:#f1e7d1;--bg-deep:#ece1c8;--bg-header:rgba(244,236,216,0.98);--text:#3a2e1a;--text2:#584732;--muted:#8a755a;--border:rgba(90,70,40,0.16);--card-bg:#fbf5e6;--card-border:rgba(90,70,40,0.1)}
+[data-theme="nuit"]{--bg:#0d1b2a;--bg2:#152536;--bg3:#1d3149;--bg4:#284158;--bg-alt:#0a1622;--bg-deep:#081019;--bg-header:rgba(10,20,32,0.98);--text:#eaf2fb;--text2:#c6d6e6;--muted:#8ba4bc;--border:rgba(130,170,210,0.16);--card-bg:#0f2033;--card-border:rgba(130,170,210,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;animation:pageIn 0.4s ease both}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.logo-bar{width:3px;height:22px;background:var(--grad);border-radius:2px;flex-shrink:0}
+.logo-name{font-size:13px;font-weight:600;letter-spacing:2px}
+.back-btn{background:none;border:1px solid var(--border);color:var(--text2);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all 0.2s;text-decoration:none;display:flex;align-items:center;gap:6px}
+.back-btn:hover{background:var(--bg2);border-color:var(--red);color:var(--red)}
+
+main{padding-top:64px;height:100vh;display:flex;flex-direction:column}
+.toolbar{padding:12px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:var(--bg-header);flex-shrink:0}
+.toolbar h1{font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-right:8px;white-space:nowrap}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;min-width:220px}
+.search-box input{background:none;border:none;color:var(--text);font-family:'Montserrat',sans-serif;font-size:12px;width:100%;outline:none}
+.search-box input::placeholder{color:var(--muted)}
+.count-badge{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+.legend{display:flex;align-items:center;gap:14px;margin-left:auto}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:var(--muted)}
+.legend-dot{width:9px;height:9px;border-radius:50%}
+
+.canvas-wrap{position:relative;flex:1;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%;height:100%;cursor:crosshair}
+
+.axis-label{position:absolute;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);pointer-events:none;opacity:0.6}
+.axis-x-left{bottom:24px;left:24px}
+.axis-x-right{bottom:24px;right:24px}
+.axis-y-top{top:16px;left:50%;transform:translateX(-50%)}
+.axis-y-bottom{bottom:24px;left:50%;transform:translateX(-50%)}
+
+.quadrant-label{position:absolute;font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--muted);pointer-events:none;opacity:0.3;text-align:center;line-height:1.4}
+.q-tl{top:30px;left:30px}
+.q-tr{top:30px;right:30px;text-align:right}
+.q-bl{bottom:50px;left:30px}
+.q-br{bottom:50px;right:30px;text-align:right}
+
+.tooltip{position:absolute;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:10;min-width:160px;max-width:240px;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+.tooltip.visible{opacity:1}
+.tt-title{font-size:12px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.tt-info{font-size:10px;color:var(--muted);margin-bottom:6px}
+.tt-tags{display:flex;flex-wrap:wrap;gap:3px}
+.tt-tag{font-size:9px;font-weight:600;letter-spacing:.3px;padding:2px 5px;border-radius:3px;background:var(--bg2);color:var(--muted);border:1px solid var(--border)}
+.tt-play{margin-top:8px;font-size:10px;font-weight:600;color:var(--red);display:flex;align-items:center;gap:4px}
+
+.play-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg-header);border-top:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:16px;z-index:50;transform:translateY(100%);transition:transform 0.3s ease}
+.play-bar.visible{transform:translateY(0)}
+.pb-title{font-size:13px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pb-tags{display:flex;gap:4px;flex-wrap:nowrap;overflow:hidden}
+.pb-tag{font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;background:var(--bg2);color:var(--muted);border:1px solid var(--border);white-space:nowrap}
+.pb-btn{background:var(--grad);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity 0.2s}
+.pb-btn:hover{opacity:0.85}
+.pb-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:4px;flex-shrink:0}
+audio{display:none}
+
+.zoom-hint{position:absolute;bottom:56px;right:20px;font-size:9.5px;color:var(--muted);opacity:0.5;pointer-events:none}
+
+@media(max-width:600px){
+  .toolbar{flex-wrap:wrap;gap:8px;padding:10px 16px}
+  .legend{display:none}
+  .search-box{min-width:0;flex:1}
+}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/">
+    <div class="logo-bar"></div>
+    <span class="logo-name">Open Screen Music</span>
+  </a>
+  <a class="back-btn" href="/">← Retour</a>
+</header>
+
+<main>
+  <div class="toolbar">
+    <h1>Carte des émotions</h1>
+    <div class="search-box">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Rechercher un titre, une ambiance…" autocomplete="off">
+    </div>
+    <span class="count-badge" id="count-badge">Chargement…</span>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#e53e3e"></div>Épique / Intense</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#C0392B"></div>Dynamique / Action</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4a90e2"></div>Calme / Mélancolique</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#38a169"></div>Lumineux / Joyeux</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>Mystérieux</div>
+    </div>
+  </div>
+
+  <div class="canvas-wrap" id="canvas-wrap">
+    <canvas id="map-canvas"></canvas>
+    <div class="axis-label axis-x-left">← CALME</div>
+    <div class="axis-label axis-x-right">ÉNERGIQUE →</div>
+    <div class="axis-label axis-y-top">POSITIF ↑</div>
+    <div class="axis-label axis-y-bottom">↓ SOMBRE</div>
+    <div class="quadrant-label q-tl">Léger<br>Paisible</div>
+    <div class="quadrant-label q-tr">Épique<br>Joyeux</div>
+    <div class="quadrant-label q-bl">Méditatif<br>Introspectif</div>
+    <div class="quadrant-label q-br">Intense<br>Sombre</div>
+    <div class="tooltip" id="tooltip"></div>
+    <div class="zoom-hint">Molette pour zoomer · Cliquer pour écouter</div>
+  </div>
+</main>
+
+<div class="play-bar" id="play-bar">
+  <button class="pb-btn" id="pb-play-btn" onclick="togglePlay()">▶</button>
+  <div>
+    <div class="pb-title" id="pb-title">—</div>
+    <div class="pb-tags" id="pb-tags"></div>
+  </div>
+  <button class="pb-close" onclick="closePlayer()" title="Fermer">✕</button>
+</div>
+<audio id="audio-player" onended="onAudioEnd()"></audio>
+
+<script>
+const CATALOGUE_URL = 'catalogue.json';
+
+// ── Scoring ──────────────────────────────────────────────────────────────────
+
+const ENERGY_PLUS = new Set(['haute énergie','action','boost','percutant','puissant','fort','vigoureux','impactant','dynamique','tonique','vif','nerveux','rapide','frénétique','effréné','haletant','pressé','entraînant']);
+const ENERGY_MINUS = new Set(['calme','doux','lent','tranquille','paisible','serein','apaisant','zen','méditatif','ambient','discret','contemplatif','fond sonore','grave','posé','lento','adagio']);
+const VALENCE_PLUS = new Set(['positif','lumineux','gai','enjoué','pétillant','léger','radieux','clair','ensoleillé','optimiste','brillant','encourageant','inspirant','motivant','joyeux','célébration','fête','allègre','jubilant','exubérant']);
+const VALENCE_MINUS = new Set(['sombre','mélancolique','triste','nostalgique','élégiaque','plaintif','ténébreux','obscur','noir','pesant','menaçant','dark','angoisse','suspense','inquiétant','oppressant','stress','épique','héroïque']);
+
+function scoreTrack(tags){
+  let energy = 0, valence = 0;
+  for(const tag of tags){
+    const t = tag.toLowerCase();
+    if(ENERGY_PLUS.has(t)) energy++;
+    if(ENERGY_MINUS.has(t)) energy--;
+    if(VALENCE_PLUS.has(t)) valence++;
+    if(VALENCE_MINUS.has(t)) valence--;
+  }
+  return {energy, valence};
+}
+
+function getColor(energy, valence){
+  if(valence > 1 && energy > 1) return '#e53e3e';        // epic joyful — red
+  if(valence > 1 && energy <= 1) return '#38a169';        // light joyful — green
+  if(valence <= 0 && energy > 1) return '#C0392B';       // dark intense — deep red
+  if(valence <= 0 && energy <= 0) return '#4a90e2';      // meditative — blue
+  if(valence <= 0 && energy > 0) return '#8B5CF6';       // mysterious — purple
+  return '#8a8a8a';                                       // neutral
+}
+
+// ── Canvas map ───────────────────────────────────────────────────────────────
+
+let tracks = [];
+let plotData = [];
+let hoveredIdx = -1;
+let playingIdx = -1;
+let searchQuery = '';
+let transform = {x:0, y:0, scale:1};
+let isDragging = false;
+let dragStart = {x:0, y:0};
+let lastTransform = {x:0, y:0};
+
+const canvas = document.getElementById('map-canvas');
+const ctx = canvas.getContext('2d');
+const wrap = document.getElementById('canvas-wrap');
+const tooltip = document.getElementById('tooltip');
+
+function resizeCanvas(){
+  canvas.width = wrap.clientWidth * window.devicePixelRatio;
+  canvas.height = wrap.clientHeight * window.devicePixelRatio;
+  canvas.style.width = wrap.clientWidth + 'px';
+  canvas.style.height = wrap.clientHeight + 'px';
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  draw();
+}
+
+function worldToScreen(wx, wy){
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  const cx = w/2 + transform.x, cy = h/2 + transform.y;
+  const range = Math.min(w, h) * 0.42 * transform.scale;
+  return {
+    x: cx + wx * range,
+    y: cy - wy * range
+  };
+}
+
+function screenToWorld(sx, sy){
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  const cx = w/2 + transform.x, cy = h/2 + transform.y;
+  const range = Math.min(w, h) * 0.42 * transform.scale;
+  return {
+    x: (sx - cx) / range,
+    y: -(sy - cy) / range
+  };
+}
+
+function draw(){
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  ctx.clearRect(0, 0, w, h);
+
+  // Background
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#f6f6f6';
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid lines
+  const origin = worldToScreen(0, 0);
+  ctx.save();
+  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || 'rgba(0,0,0,0.1)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 6]);
+  ctx.beginPath();
+  ctx.moveTo(0, origin.y); ctx.lineTo(w, origin.y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(origin.x, 0); ctx.lineTo(origin.x, h);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  if(!plotData.length) return;
+
+  const q = searchQuery.toLowerCase();
+
+  // Draw dots
+  for(let i = 0; i < plotData.length; i++){
+    const p = plotData[i];
+    const pos = worldToScreen(p.nx, p.ny);
+
+    // Skip off-screen
+    if(pos.x < -20 || pos.x > w+20 || pos.y < -20 || pos.y > h+20) continue;
+
+    const isHovered = i === hoveredIdx;
+    const isPlaying = i === playingIdx;
+    const matched = q && p.titleLower.includes(q);
+    const dimmed = q && !matched;
+
+    let radius = isPlaying ? 7 : isHovered ? 6 : 4;
+    let alpha = dimmed ? 0.12 : (q && !matched ? 0.12 : 0.75);
+    if(matched) alpha = 1;
+    if(isHovered || isPlaying) alpha = 1;
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    if(isPlaying){
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, radius + 4, 0, Math.PI*2);
+      ctx.fillStyle = p.color + '30';
+      ctx.fill();
+    }
+
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, radius, 0, Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+
+    if(isHovered || isPlaying){
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+}
+
+function buildPlot(data){
+  let minE = Infinity, maxE = -Infinity, minV = Infinity, maxV = -Infinity;
+  const raw = data.map(t => {
+    const {energy, valence} = scoreTrack(t.tags || []);
+    if(energy < minE) minE = energy;
+    if(energy > maxE) maxE = energy;
+    if(valence < minV) minV = valence;
+    if(valence > maxV) maxV = valence;
+    return {energy, valence, track: t};
+  });
+
+  // Add slight jitter to avoid total overlap
+  const rangeE = (maxE - minE) || 1;
+  const rangeV = (maxV - minV) || 1;
+
+  plotData = raw.map((r, i) => {
+    const nx = ((r.energy - minE) / rangeE) * 2 - 1 + (Math.random()-0.5)*0.04;
+    const ny = ((r.valence - minV) / rangeV) * 2 - 1 + (Math.random()-0.5)*0.04;
+    const displayTags = (r.track.tags || []).filter(t => {
+      const tl = t.toLowerCase();
+      return !tl.match(/^(majeur|mineur|bpm|do|ré|mi|fa|sol|la|si|hz|\d)/i) && t.length > 3 && t.length < 20;
+    }).slice(0, 4);
+    return {
+      nx, ny,
+      color: getColor(r.energy, r.valence),
+      title: r.track.title || '',
+      titleLower: (r.track.title || '').toLowerCase(),
+      url: r.track.url || '',
+      tags: displayTags,
+      bpm: r.track.bpm || '',
+      playlist: r.track.playlist || ''
+    };
+  });
+
+  document.getElementById('count-badge').textContent = plotData.length.toLocaleString('fr-FR') + ' morceaux';
+  draw();
+}
+
+// ── Hover / click ─────────────────────────────────────────────────────────────
+
+function findNearest(mx, my, radius=18){
+  let best = -1, bestD = radius * radius;
+  for(let i = 0; i < plotData.length; i++){
+    const p = plotData[i];
+    const pos = worldToScreen(p.nx, p.ny);
+    const dx = pos.x - mx, dy = pos.y - my;
+    const d = dx*dx + dy*dy;
+    if(d < bestD){ bestD = d; best = i; }
+  }
+  return best;
+}
+
+canvas.addEventListener('mousemove', e => {
+  if(isDragging){
+    transform.x = lastTransform.x + (e.clientX - dragStart.x);
+    transform.y = lastTransform.y + (e.clientY - dragStart.y);
+    draw();
+    tooltip.classList.remove('visible');
+    return;
+  }
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const idx = findNearest(mx, my);
+  if(idx !== hoveredIdx){
+    hoveredIdx = idx;
+    draw();
+  }
+  if(idx >= 0){
+    showTooltip(idx, e.clientX, e.clientY);
+  } else {
+    tooltip.classList.remove('visible');
+  }
+});
+
+canvas.addEventListener('mouseleave', () => {
+  hoveredIdx = -1;
+  tooltip.classList.remove('visible');
+  draw();
+});
+
+canvas.addEventListener('click', e => {
+  if(isDragging) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const idx = findNearest(mx, my, 20);
+  if(idx >= 0) playTrack(idx);
+});
+
+canvas.addEventListener('mousedown', e => {
+  isDragging = false;
+  dragStart = {x: e.clientX, y: e.clientY};
+  lastTransform = {...transform};
+  canvas.style.cursor = 'grabbing';
+  const onMove = ev => {
+    const dx = Math.abs(ev.clientX - dragStart.x), dy = Math.abs(ev.clientY - dragStart.y);
+    if(dx > 4 || dy > 4) isDragging = true;
+    if(isDragging){
+      transform.x = lastTransform.x + (ev.clientX - dragStart.x);
+      transform.y = lastTransform.y + (ev.clientY - dragStart.y);
+      draw();
+    }
+  };
+  const onUp = () => {
+    canvas.style.cursor = 'crosshair';
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    setTimeout(() => { isDragging = false; }, 50);
+  };
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+});
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const factor = e.deltaY < 0 ? 1.12 : 0.89;
+  const newScale = Math.max(0.3, Math.min(8, transform.scale * factor));
+  // Zoom toward mouse
+  const wx = mx - wrap.clientWidth/2 - transform.x;
+  const wy = my - wrap.clientHeight/2 - transform.y;
+  transform.x -= wx * (newScale/transform.scale - 1);
+  transform.y -= wy * (newScale/transform.scale - 1);
+  transform.scale = newScale;
+  draw();
+}, {passive:false});
+
+// Touch zoom
+let lastPinchDist = 0;
+canvas.addEventListener('touchstart', e => {
+  if(e.touches.length === 2){
+    lastPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  }
+});
+canvas.addEventListener('touchmove', e => {
+  if(e.touches.length === 2){
+    e.preventDefault();
+    const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    const factor = dist / lastPinchDist;
+    transform.scale = Math.max(0.3, Math.min(8, transform.scale * factor));
+    lastPinchDist = dist;
+    draw();
+  }
+}, {passive:false});
+
+function showTooltip(idx, cx, cy){
+  const p = plotData[idx];
+  const visibleTags = p.tags.slice(0, 3);
+  tooltip.innerHTML = `
+    <div class="tt-title">${p.title}</div>
+    <div class="tt-info">${p.bpm ? p.bpm + ' bpm' : ''}${p.playlist ? ' · ' + p.playlist : ''}</div>
+    <div class="tt-tags">${visibleTags.map(t=>`<span class="tt-tag">${t}</span>`).join('')}</div>
+    <div class="tt-play">▶ Cliquer pour écouter</div>
+  `;
+  const tw = 220, th = 110;
+  let tx = cx + 12, ty = cy - 20;
+  if(tx + tw > window.innerWidth) tx = cx - tw - 12;
+  if(ty + th > window.innerHeight) ty = cy - th;
+  tooltip.style.left = tx + 'px';
+  tooltip.style.top = ty + 'px';
+  tooltip.classList.add('visible');
+}
+
+// ── Audio player ─────────────────────────────────────────────────────────────
+
+const audio = document.getElementById('audio-player');
+const playBar = document.getElementById('play-bar');
+let currentIdx = -1;
+let isPlaying = false;
+
+function playTrack(idx){
+  const p = plotData[idx];
+  if(!p.url){ return; }
+  currentIdx = idx;
+  playingIdx = idx;
+  audio.src = p.url;
+  audio.play();
+  isPlaying = true;
+  document.getElementById('pb-play-btn').textContent = '⏸';
+  document.getElementById('pb-title').textContent = p.title;
+  document.getElementById('pb-tags').innerHTML = p.tags.slice(0,3).map(t=>`<span class="pb-tag">${t}</span>`).join('');
+  playBar.classList.add('visible');
+  draw();
+}
+
+function togglePlay(){
+  if(audio.paused){
+    audio.play();
+    isPlaying = true;
+    document.getElementById('pb-play-btn').textContent = '⏸';
+  } else {
+    audio.pause();
+    isPlaying = false;
+    document.getElementById('pb-play-btn').textContent = '▶';
+  }
+}
+
+function closePlayer(){
+  audio.pause();
+  audio.src = '';
+  isPlaying = false;
+  currentIdx = -1;
+  playingIdx = -1;
+  playBar.classList.remove('visible');
+  document.getElementById('pb-play-btn').textContent = '▶';
+  draw();
+}
+
+function onAudioEnd(){
+  isPlaying = false;
+  document.getElementById('pb-play-btn').textContent = '▶';
+}
+
+// ── Search ────────────────────────────────────────────────────────────────────
+
+document.getElementById('search-input').addEventListener('input', e => {
+  searchQuery = e.target.value.trim();
+  draw();
+});
+
+// ── Load data ─────────────────────────────────────────────────────────────────
+
+fetch(CATALOGUE_URL)
+  .then(r => r.json())
+  .then(data => {
+    tracks = data.tracks || [];
+    buildPlot(tracks);
+  })
+  .catch(err => {
+    document.getElementById('count-badge').textContent = 'Erreur de chargement';
+    console.error(err);
+  });
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+</script>
+</body>
+</html>
