@@ -58,14 +58,23 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .ham-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
 .ham-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .ham-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-.ham-menu{position:fixed;top:64px;left:0;width:280px;background:var(--bg-deep);border-right:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:0 0 12px 0;z-index:99;padding:12px 0;visibility:hidden;opacity:0;pointer-events:none;transform:translateX(-16px);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0.2s}
+.ham-menu{position:fixed;top:64px;left:0;width:300px;background:var(--bg-deep);border-right:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:0 0 14px 0;z-index:99;padding:8px 0 16px;visibility:hidden;opacity:0;pointer-events:none;transform:translateX(-16px);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0.2s;max-height:calc(100vh - 64px);overflow-y:auto}
 .ham-menu.open{visibility:visible;opacity:1;pointer-events:all;transform:translateX(0);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0s}
-.ham-section{padding:6px 16px 2px;font-size:9px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:6px}
-.ham-item{display:flex;align-items:center;gap:10px;padding:11px 20px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.15s;background:none;border:none;width:100%;text-align:left;text-decoration:none}
+/* Quick-nav row at top of hamburger */
+.ham-quicknav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px 14px 10px;border-bottom:1px solid var(--border);margin-bottom:4px}
+.ham-qbtn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.5px;color:var(--text2);cursor:pointer;text-decoration:none;transition:all 0.15s;text-transform:uppercase}
+.ham-qbtn:hover{background:var(--bg3);color:var(--text);border-color:#888}
+.ham-qbtn.active{background:rgba(192,57,43,0.1);border-color:rgba(192,57,43,0.35);color:var(--red)}
+.ham-qbtn-icon{font-size:16px;line-height:1}
+/* Section headers */
+.ham-section{padding:14px 18px 4px;font-size:9px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase}
+/* Items */
+.ham-item{display:flex;align-items:center;gap:12px;padding:10px 18px;font-family:'Montserrat',sans-serif;font-size:12.5px;font-weight:500;color:var(--text2);cursor:pointer;transition:background 0.12s,color 0.12s;background:none;border:none;width:100%;text-align:left;text-decoration:none;border-radius:0;line-height:1.3}
 .ham-item:hover{background:var(--bg2);color:var(--text)}
-.ham-item.active{color:var(--red);background:rgba(255,85,0,0.06)}
-.ham-item-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
-.ham-divider{height:1px;background:var(--border);margin:8px 16px}
+.ham-item.active{color:var(--red);background:rgba(192,57,43,0.06)}
+.ham-item-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0;opacity:0.75}
+.ham-item:hover .ham-item-icon{opacity:1}
+.ham-divider{height:1px;background:var(--border);margin:6px 14px}
 .nav-tab.active::after{content:'';position:absolute;bottom:-1px;left:16px;right:16px;height:2px;background:var(--red);border-radius:2px 2px 0 0}
 .header-right{display:flex;align-items:center;gap:10px}
 .search-wrap{position:relative}
@@ -848,32 +857,53 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 <!-- HAMBURGER MENU PANEL -->
 <div class="ham-menu" id="ham-menu">
-  <div class="ham-section">Navigation</div>
-  <button class="ham-item" id="ham-tab-accueil" onclick="closeHamMenu();showView('accueil')"><span class="ham-item-icon">🏠</span>Accueil</button>
-  <button class="ham-item" id="ham-tab-playlists" onclick="closeHamMenu();showView('playlists')"><span class="ham-item-icon">🎵</span>Playlists</button>
-  <button class="ham-item" id="ham-tab-catalogue" onclick="closeHamMenu();showView('catalogue')"><span class="ham-item-icon">📂</span>Catalogue</button>
-  <button class="ham-item" id="ham-tab-favoris" onclick="closeHamMenu();showView('favoris')"><span class="ham-item-icon">♥</span>Favoris<span id="fav-count-nav" style="font-size:9px;color:var(--red);margin-left:4px"></span></button>
-  <div class="ham-divider"></div>
-  <div class="ham-section">Pages</div>
-  <a class="ham-item" href="nouveautes.html"><span class="ham-item-icon">⭐</span>Actu</a>
-  <a class="ham-item" href="playlists/"><span class="ham-item-icon">🗂️</span>Les 28 playlists</a>
-  <a class="ham-item" href="television.html"><span class="ham-item-icon">📺</span>Télévision</a>
+
+  <!-- Raccourcis navigation principale -->
+  <div class="ham-quicknav">
+    <button class="ham-qbtn" id="ham-tab-accueil" onclick="closeHamMenu();showView('accueil')">
+      <span class="ham-qbtn-icon">🏠</span>Accueil
+    </button>
+    <button class="ham-qbtn" id="ham-tab-catalogue" onclick="closeHamMenu();showView('catalogue')">
+      <span class="ham-qbtn-icon">📂</span>Catalogue
+    </button>
+    <button class="ham-qbtn" id="ham-tab-playlists" onclick="closeHamMenu();showView('playlists')">
+      <span class="ham-qbtn-icon">🎵</span>Playlists
+    </button>
+    <button class="ham-qbtn" id="ham-tab-favoris" onclick="closeHamMenu();showView('favoris')">
+      <span class="ham-qbtn-icon">♥</span>Favoris<span id="fav-count-nav" style="font-size:8px;color:var(--red);display:block;margin-top:1px"></span>
+    </button>
+  </div>
+
+  <!-- Découvrir -->
+  <div class="ham-section">Découvrir</div>
+  <a class="ham-item" href="nouveautes.html"><span class="ham-item-icon">⭐</span>Actu &amp; nouveautés</a>
+  <a class="ham-item" href="television.html"><span class="ham-item-icon">📺</span>Références Télévision</a>
   <a class="ham-item" href="carte-emotions.html"><span class="ham-item-icon">🗺️</span>Carte des émotions</a>
-  <a class="ham-item" href="briefing.html"><span class="ham-item-icon">📋</span>Briefing automatique</a>
-  <button class="ham-item" onclick="closeHamMenu();openVideoSync()"><span class="ham-item-icon">🎬</span>Sync vidéo live</button>
-  <button class="ham-item" onclick="closeHamMenu();openCompareModal()"><span class="ham-item-icon">⊞</span>Comparer des tracks</button>
-  <a class="ham-item" href="premiere.html"><span class="ham-item-icon">🎬</span>Extension Premiere Pro</a>
-  <a class="ham-item" href="service.html"><span class="ham-item-icon">🎯</span>Sélection sur mesure</a>
+  <a class="ham-item" href="briefing.html"><span class="ham-item-icon">📋</span>Briefing IA</a>
   <a class="ham-item" href="qui-sommes-nous.html"><span class="ham-item-icon">👥</span>Qui sommes-nous ?</a>
+
   <div class="ham-divider"></div>
+
+  <!-- Outils -->
+  <div class="ham-section">Outils</div>
+  <button class="ham-item" onclick="closeHamMenu();openCompareModal()"><span class="ham-item-icon">⊞</span>Comparer des tracks</button>
+  <button class="ham-item" onclick="closeHamMenu();openVideoSync()"><span class="ham-item-icon">🎬</span>Sync vidéo live</button>
+  <a class="ham-item" href="service.html"><span class="ham-item-icon">🎯</span>Sélection sur mesure</a>
+  <a class="ham-item" href="premiere.html"><span class="ham-item-icon">🔌</span>Extension Premiere Pro</a>
+
+  <div class="ham-divider"></div>
+
+  <!-- Compte -->
   <div class="ham-section">Compte</div>
   <a class="ham-item" href="login-monteurs.html"><span class="ham-item-icon">👤</span>Espace Client</a>
-  <a class="ham-item" href="Diapason.html"><span class="ham-item-icon">🎚️</span>Diapason — Cue Sheets</a>
+  <a class="ham-item" href="Diapason.html"><span class="ham-item-icon">🎚️</span>Cue Sheets SACEM</a>
   <a class="ham-item" href="inscription.html"><span class="ham-item-icon">✍️</span>Demande d'accès</a>
   <a class="ham-item" href="aide.html"><span class="ham-item-icon">❓</span>Aide</a>
+
   <div class="ham-divider"></div>
-  <a class="ham-item" href="mailto:vladimirstreiff@gmail.com"><span class="ham-item-icon">✉️</span>Contact</a>
-  <a class="ham-item" href="mentions-legales.html"><span class="ham-item-icon">⚖️</span>Mentions légales</a>
+
+  <a class="ham-item" href="mailto:vladimirstreiff@gmail.com" style="font-size:11.5px;color:var(--muted)"><span class="ham-item-icon">✉️</span>Contact</a>
+  <a class="ham-item" href="mentions-legales.html" style="font-size:11.5px;color:var(--muted)"><span class="ham-item-icon">⚖️</span>Mentions légales</a>
 </div>
 
 <div id="queue-panel">
