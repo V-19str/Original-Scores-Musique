@@ -8,7 +8,8 @@
 <style>
 :root{--red:#FF5500;--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#ffffff;--text2:#cccccc;--muted:#888;--border:rgba(255,255,255,0.12)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;display:flex;flex-direction:column;animation:pageIn 0.4s ease both}
 header{background:rgba(14,14,14,0.98);border-bottom:1px solid var(--border);padding:0 48px;height:68px;display:flex;align-items:center;justify-content:space-between}
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
 .logo-mark{background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;padding:5px 9px;border-radius:3px}

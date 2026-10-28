@@ -24,6 +24,9 @@
 <meta name="twitter:title" content="OSM – Bibliothèque de musiques originales pour le cinéma et la télévision">
 <meta name="twitter:description" content="Plus de 2 500 musiques originales en licence pour vos productions audiovisuelles.">
 <meta name="twitter:image" content="https://osm-music.fr/osm_linkedin_banner.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <script>
 (function(){const t=localStorage.getItem('osm-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
@@ -92,6 +95,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.1) 100%)}
 .hero-content{position:relative;z-index:2;padding:0 64px 72px;animation:fadeUp 1s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes marqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:6px;color:var(--red);text-transform:uppercase;margin-bottom:20px;animation:fadeUp 1s 0.2s ease both}
 .hero-title{font-size:clamp(44px,7vw,100px);font-weight:900;letter-spacing:-3px;line-height:0.92;margin-bottom:22px;animation:fadeUp 1s 0.3s ease both}
 .hero-title span{color:var(--red)}
@@ -428,6 +433,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 #bg-speaker.visible{display:flex;animation:fadeUp 0.4s ease}
 #bg-speaker:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(255,85,0,0.6)}
 #bg-speaker.muted{background:var(--bg3);color:var(--muted);box-shadow:none}
+#scroll-top{display:none;position:fixed;bottom:92px;right:28px;width:40px;height:40px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:16px;cursor:pointer;z-index:390;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.2);transition:all 0.2s;font-family:'Montserrat',sans-serif}
+#scroll-top.visible{display:flex;animation:fadeUp 0.3s ease}
+#scroll-top:hover{background:var(--red);color:#fff;border-color:var(--red);transform:translateY(-2px)}
 .wf-bar{display:flex;align-items:center;gap:8px;width:100%}
 #wf-canvas{flex:1;height:50px;display:block;cursor:pointer;border-radius:2px}
 #waveform-container{position:absolute;visibility:hidden;width:1px;height:1px;overflow:hidden;pointer-events:none}
@@ -550,6 +558,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .pp-banner-btn:hover{opacity:0.88;transform:translateY(-1px)}
 .pp-banner-sep{color:rgba(255,255,255,0.2);font-size:13px}
 @media(max-width:700px){.pp-banner{padding:14px 16px;gap:12px}.pp-banner-sep{display:none}}
+/* CHANNELS MARQUEE */
+.channels-strip{overflow:hidden;background:#0c0c0d;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;user-select:none}
+.channels-track{display:flex;width:max-content;animation:marqueeScroll 28s linear infinite}
+.channels-strip:hover .channels-track{animation-play-state:paused}
+.ch-chip{display:inline-flex;align-items:center;gap:8px;padding:5px 22px;margin:0 4px;border-radius:3px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.55);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;transition:color 0.2s,background 0.2s}
+.ch-chip:hover{color:#fff;background:rgba(255,85,0,0.15);border-color:rgba(255,85,0,0.3)}
 /* SERVICES STRIP */
 .services-strip{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 48px}
 .services-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
@@ -890,6 +904,13 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
       </div>
     </div>
     <div class="hero-scroll"><div class="hero-scroll-line"></div>SCROLL</div>
+  </div>
+  <!-- CHANNELS MARQUEE -->
+  <div class="channels-strip" aria-hidden="true">
+    <div class="channels-track">
+      <span class="ch-chip">TF1</span><span class="ch-chip">France 2</span><span class="ch-chip">France 3</span><span class="ch-chip">M6</span><span class="ch-chip">ARTE</span><span class="ch-chip">Canal+</span><span class="ch-chip">RMC Découverte</span><span class="ch-chip">TMC</span><span class="ch-chip">TFX</span><span class="ch-chip">W9</span><span class="ch-chip">Ushuaïa TV</span><span class="ch-chip">C8</span><span class="ch-chip">France 5</span><span class="ch-chip">BFM TV</span><span class="ch-chip">LCI</span><span class="ch-chip">France 24</span><span class="ch-chip">TV5 Monde</span><span class="ch-chip">L'Équipe</span><span class="ch-chip">Planète+</span><span class="ch-chip">Téva</span>
+      <span class="ch-chip">TF1</span><span class="ch-chip">France 2</span><span class="ch-chip">France 3</span><span class="ch-chip">M6</span><span class="ch-chip">ARTE</span><span class="ch-chip">Canal+</span><span class="ch-chip">RMC Découverte</span><span class="ch-chip">TMC</span><span class="ch-chip">TFX</span><span class="ch-chip">W9</span><span class="ch-chip">Ushuaïa TV</span><span class="ch-chip">C8</span><span class="ch-chip">France 5</span><span class="ch-chip">BFM TV</span><span class="ch-chip">LCI</span><span class="ch-chip">France 24</span><span class="ch-chip">TV5 Monde</span><span class="ch-chip">L'Équipe</span><span class="ch-chip">Planète+</span><span class="ch-chip">Téva</span>
+    </div>
   </div>
   <!-- PREMIERE BANNER -->
   <div class="pp-banner">
@@ -1241,6 +1262,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   </div>
 </div>
 </div>
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Haut de page">↑</button>
 <input type="hidden" id="search" value="">
 <audio id="audio" crossorigin="anonymous"></audio>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
@@ -3024,6 +3046,9 @@ document.addEventListener('osm-lang-change', function () {
 <script defer src="assets/vendor/jspdf.umd.min.js"></script>
 <script defer src="assets/vendor/jspdf.plugin.autotable.min.js"></script>
 <script defer src="assets/cuesheet.js"></script>
+<script>
+(function(){const btn=document.getElementById('scroll-top');if(!btn)return;window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>400)},{passive:true});})();
+</script>
 
 </body>
 </html>
