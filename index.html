@@ -42,12 +42,12 @@ audio{display:none}
 
 
 /* HEADER */
-header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-
-.logo-name{font-size:13px;font-weight:600;letter-spacing:2px}
-.nav-tabs{display:flex;align-items:center;gap:2px}
-.nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.8px;padding:8px 12px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;position:relative;text-decoration:none}
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-header);backdrop-filter:blur(10px);padding:0 24px;height:60px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:0;border-bottom:1px solid var(--border)}
+.header-left{display:flex;align-items:center;gap:0}
+.logo{display:flex;align-items:center;gap:9px;cursor:pointer;padding:0 14px 0 4px;border-right:1px solid var(--border);margin-right:0}
+.logo-name{font-size:12px;font-weight:700;letter-spacing:1.5px;white-space:nowrap}
+.nav-tabs{display:flex;align-items:center;gap:0;padding-left:4px}
+.nav-tab{background:none;border:none;color:var(--muted);font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.8px;padding:8px 14px;cursor:pointer;border-radius:4px;transition:all 0.15s;text-transform:uppercase;position:relative;text-decoration:none;white-space:nowrap}
 .nav-tab:hover{color:var(--text);background:var(--bg3)}
 .nav-tab.active{color:var(--text)}
 
@@ -58,7 +58,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .ham-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
 .ham-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .ham-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-.ham-menu{position:fixed;top:64px;left:0;width:300px;background:var(--bg-deep);border-right:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:0 0 14px 0;z-index:99;padding:8px 0 16px;visibility:hidden;opacity:0;pointer-events:none;transform:translateX(-16px);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0.2s;max-height:calc(100vh - 64px);overflow-y:auto}
+.ham-menu{position:fixed;top:60px;left:0;width:300px;background:var(--bg-deep);border-right:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:0 0 14px 0;z-index:99;padding:8px 0 16px;visibility:hidden;opacity:0;pointer-events:none;transform:translateX(-16px);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0.2s;max-height:calc(100vh - 60px);overflow-y:auto}
 .ham-menu.open{visibility:visible;opacity:1;pointer-events:all;transform:translateX(0);transition:opacity 0.2s ease,transform 0.2s ease,visibility 0s 0s}
 /* Quick-nav row at top of hamburger */
 .ham-quicknav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px 14px 10px;border-bottom:1px solid var(--border);margin-bottom:4px}
@@ -76,7 +76,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .ham-item:hover .ham-item-icon{opacity:1}
 .ham-divider{height:1px;background:var(--border);margin:6px 14px}
 .nav-tab.active::after{content:'';position:absolute;bottom:-1px;left:16px;right:16px;height:2px;background:var(--red);border-radius:2px 2px 0 0}
-.header-right{display:flex;align-items:center;gap:10px}
+.header-right{display:flex;align-items:center;gap:8px;justify-content:flex-end}
 .search-wrap{position:relative}
 .search-wrap input{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:8px 14px 8px 32px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:12px;outline:none;width:240px;transition:all 0.2s}
 .search-wrap input:focus{border-color:#555;width:300px}
@@ -93,7 +93,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .btn-red:hover{background:#cc4400}
 
 /* VIEWS */
-.view{display:none;padding-top:64px}
+.view{display:none;padding-top:60px}
 .view.active{display:block}
 
 /* HERO */
@@ -320,7 +320,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .tag-pill{background:transparent;border:1px solid rgba(255,255,255,0.07);color:var(--muted);padding:4px 11px;font-size:11px;cursor:pointer;transition:all 0.15s;font-family:'Montserrat',sans-serif;border-radius:12px;white-space:nowrap}
 .tag-pill:hover{border-color:var(--red);color:var(--red)}
 .tag-pill.active{background:rgba(255,85,0,0.12);border-color:var(--red);color:#ff8844}
-.cz-bar{display:flex;align-items:center;gap:8px;padding:10px 48px;border-bottom:1px solid var(--border);background:var(--bg);flex-wrap:wrap;position:sticky;top:64px;z-index:50;transition:box-shadow 0.2s}
+.cz-bar{display:flex;align-items:center;gap:8px;padding:10px 48px;border-bottom:1px solid var(--border);background:var(--bg);flex-wrap:wrap;position:sticky;top:60px;z-index:50;transition:box-shadow 0.2s}
 .cz-wrap{position:relative}
 .cz-btn{display:flex;align-items:center;gap:5px;padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text2);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;white-space:nowrap}
 .cz-btn:hover{border-color:var(--red);color:var(--red)}
@@ -464,7 +464,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 /* QUEUE */
 .queue-badge{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:none;align-items:center;justify-content:center}
 .queue-badge.visible{display:flex}
-#queue-panel{position:fixed;right:0;top:64px;bottom:88px;width:280px;background:var(--bg-deep);border-left:1px solid var(--border);z-index:90;display:none;flex-direction:column}
+#queue-panel{position:fixed;right:0;top:60px;bottom:88px;width:280px;background:var(--bg-deep);border-left:1px solid var(--border);z-index:90;display:none;flex-direction:column}
 #queue-panel.visible{display:flex}
 .queue-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .queue-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
@@ -607,8 +607,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .rec-play-btn:hover{background:#ff7700}
 
 /* CAT SIDEBAR LAYOUT */
-.cat-layout{display:flex;align-items:flex-start;min-height:calc(100vh - 64px)}
-.cat-sidebar{width:240px;flex-shrink:0;border-right:1px solid var(--border);position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;background:var(--bg-deep)}
+.cat-layout{display:flex;align-items:flex-start;min-height:calc(100vh - 60px)}
+.cat-sidebar{width:240px;flex-shrink:0;border-right:1px solid var(--border);position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;background:var(--bg-deep)}
 .cat-sidebar::-webkit-scrollbar{width:3px}
 .cat-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .cat-main{flex:1;min-width:0}
@@ -643,7 +643,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .cat-reset-btn:hover{border-color:var(--red);color:var(--red)}
 .cat-mob-toggle{display:none;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-deep);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text2);cursor:pointer;border:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif;text-transform:uppercase;transition:color 0.15s}
 .cat-mob-toggle:hover{color:var(--red)}
-.cat-sidebar.mob-open{display:block;position:fixed;top:64px;left:0;width:260px;height:calc(100vh - 64px);z-index:50;box-shadow:4px 0 24px rgba(0,0,0,0.4)}
+.cat-sidebar.mob-open{display:block;position:fixed;top:60px;left:0;width:260px;height:calc(100vh - 60px);z-index:50;box-shadow:4px 0 24px rgba(0,0,0,0.4)}
 
 /* POP COLORS — stat cards per-index */
 .stat-card:nth-child(1) .stat-num{color:#FF5500}
@@ -815,32 +815,32 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 <div id="main">
 <header>
-  <div style="display:flex;align-items:center;gap:4px">
+  <!-- Zone gauche : hamburger + logo -->
+  <div class="header-left">
     <button class="ham-btn" id="ham-btn" onclick="toggleHamMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
     <div class="logo" onclick="closeHamMenu();showView('accueil')">
-      <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="flex-shrink:0">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="flex-shrink:0">
         <rect x="0"    y="7"  width="3.5" height="13" rx="1.5" fill="var(--red)"/>
         <rect x="5.5"  y="1"  width="3.5" height="19" rx="1.5" fill="var(--red)"/>
         <rect x="11"   y="4"  width="3.5" height="16" rx="1.5" fill="var(--red)"/>
         <rect x="16.5" y="9"  width="3.5" height="11" rx="1.5" fill="var(--red)"/>
       </svg>
-      <div class="logo-name" id="logo-full-name">Open Screen Music</div>
+      <div class="logo-name" id="logo-full-name">OSM</div>
     </div>
   </div>
+  <!-- Zone centre : 3 onglets principaux -->
   <div class="nav-tabs">
-    <button class="nav-tab active" id="tab-accueil" onclick="showView('accueil')">Accueil</button>
+    <button class="nav-tab active" id="tab-catalogue" onclick="showView('catalogue')">Catalogue</button>
     <button class="nav-tab" id="tab-playlists" onclick="showView('playlists')">Playlists</button>
-    <button class="nav-tab" id="tab-catalogue" onclick="showView('catalogue')">Catalogue</button>
-    <a class="nav-tab" href="nouveautes.html">Actu</a>
-    <a class="nav-tab" href="premiere.html">Premiere Pro</a>
-    <a class="nav-tab" href="qui-sommes-nous.html">Qui sommes-nous</a>
+    <button class="nav-tab" id="tab-favoris" onclick="showView('favoris')">Favoris <span id="fav-count-header" style="font-size:9px;color:var(--red)"></span></button>
   </div>
+  <!-- Zone droite : actions essentielles uniquement -->
   <div class="header-right">
-    <span data-osm-langpicker></span>
+    <!-- Theme picker (compact) -->
     <div class="theme-picker" id="theme-picker">
-      <button class="btn-nav btn-theme" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true">🎨</button>
+      <button class="btn-nav btn-theme" id="btn-theme" onclick="toggleThemeMenu(event)" title="Choisir un thème" aria-haspopup="true" style="padding:7px 10px;font-size:13px">🎨</button>
       <div class="theme-menu" id="theme-menu">
         <button class="theme-opt" data-theme="light" onclick="setTheme('light')"><span class="theme-sw" style="background:#f6f6f6"></span>Clair</button>
         <button class="theme-opt" data-theme="dark" onclick="setTheme('dark')"><span class="theme-sw" style="background:#141414"></span>Sombre</button>
@@ -848,12 +848,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
         <button class="theme-opt" data-theme="nuit" onclick="setTheme('nuit')"><span class="theme-sw" style="background:#0d1b2a"></span>Nuit bleue</button>
       </div>
     </div>
-    <div id="osm-auth-nav"><a class="btn-nav" href="login-monteurs.html">👤 Mon compte</a></div>
     <button class="btn-nav" onclick="toggleQueue()" style="position:relative">🎵 Ma liste <span class="queue-badge" id="queue-badge"></span></button>
-    <button class="btn-bell" onclick="openAlertesModal()" title="Alertes nouveautés">🔔</button>
-    <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">✉ Contact</a>
+    <a class="btn-nav btn-red" href="mailto:vladimirstreiff@gmail.com">Contact</a>
   </div>
 </header>
+<!-- auth + lang hidden in page, functional via hamburger -->
+<div style="display:none"><span data-osm-langpicker></span><div id="osm-auth-nav"><a href="login-monteurs.html">Mon compte</a></div></div>
 
 <!-- HAMBURGER MENU PANEL -->
 <div class="ham-menu" id="ham-menu">
@@ -2738,6 +2738,7 @@ function toggleFav(id){
 function updateFavNav(){
   const n=favorites.size;
   const el=document.getElementById('fav-count-nav');if(el)el.textContent=n>0?` (${n})`:'';
+  const eh=document.getElementById('fav-count-header');if(eh)eh.textContent=n>0?`(${n})`:'';
   const en=window.osmLang&&osmLang()==='en';
   const lbl=document.getElementById('fav-count-label');if(lbl)lbl.textContent=en?`${n} favorite${n>1?'s':''}`:`${n} favori${n>1?'s':''}`;
   const cnt=document.getElementById('fav-section-count');if(cnt)cnt.textContent=en?`${n} track${n>1?'s':''}`:`${n} morceau${n>1?'x':''}`;
