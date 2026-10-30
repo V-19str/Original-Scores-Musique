@@ -131,7 +131,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 
 /* HERO VIDEO YOUTUBE */
 .hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#000}
-.hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px));pointer-events:none;border:0}
+.hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px)) scale(1.15);pointer-events:none;border:0}
 .hero-video-cover{position:absolute;inset:0;z-index:1;background:#000;pointer-events:none;transition:opacity 0.8s ease}
 
 /* Mise en avant « L'automne » posée dans le hero, sous la recherche. */
@@ -1394,7 +1394,6 @@ const audio=document.getElementById('audio');
     {id:'_w8YqdGpahU', start:8},   // Crash cymbal 4000fps — macro pur
     {id:'AhW7Aao_eIc', start:5},   // Cymbal roll super slow-mo — macro pur
     {id:'35XBubr98N4', start:0},   // Cymbal slow-mo
-    {id:'cIResA6se9c', start:90},  // Cymatics — sable coloré sur fréquences sonores
   ];
   const v=HERO_VIDEOS[Math.floor(Math.random()*HERO_VIDEOS.length)];
   const src=`https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&loop=1&playlist=${v.id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=${v.start}&disablekb=1&vq=hd2160&hd=1&cc_load_policy=0&cc_lang_pref=none`;
