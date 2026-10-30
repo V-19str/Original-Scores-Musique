@@ -1389,9 +1389,17 @@ const audio=document.getElementById('audio');
 
 /* ── HERO VIDEO ALÉATOIRE ── */
 (function(){
-  const HERO_VIDEOS=['_w8YqdGpahU','kpoanOlb3-w','AhW7Aao_eIc','9SVickQdqGM','RBA9PbuhCw8','dk0eLFVj4Hc'];
-  const id=HERO_VIDEOS[Math.floor(Math.random()*HERO_VIDEOS.length)];
-  const src=`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=0&disablekb=1&vq=hd1080`;
+  // Slow motion drums / percussions en haute qualité — Slow Mo Guys + sélection cinématique
+  const HERO_VIDEOS=[
+    {id:'BjGHyQhYwHU', start:55},  // Paint Shockwaves on Drum – 10 000 FPS (Slow Mo Guys)
+    {id:'V3bAOhEwIws', start:25},  // Paint on a Drum in 4K Slow Mo (Slow Mo Guys)
+    {id:'1sAMJK385Vs', start:12},  // World's Largest Drum – 4K 1000fps
+    {id:'VFTotm7qWyw', start:0},   // Drums In Slow Motion
+    {id:'ow5CsQazPhY', start:0},   // Slow Motion Drums
+    {id:'dk0eLFVj4Hc', start:0},   // original
+  ];
+  const v=HERO_VIDEOS[Math.floor(Math.random()*HERO_VIDEOS.length)];
+  const src=`https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&loop=1&playlist=${v.id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=${v.start}&disablekb=1&vq=hd2160&hd=1`;
   document.getElementById('hero-yt-iframe').src=src;
 })();
 
