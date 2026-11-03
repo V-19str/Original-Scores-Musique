@@ -129,9 +129,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 .hero-scroll-line{width:1px;height:28px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.35))}
 
-/* HERO VIDEO YOUTUBE */
+/* HERO VIDEO */
 .hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#000}
 .hero-yt-iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,calc(-50% - 80px)) scale(1.15);pointer-events:none;border:0}
+.hero-mp4-video{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:110%;min-width:177.77vh;transform:translate(-50%,-50%) scale(1.1);pointer-events:none;object-fit:cover;display:none}
 .hero-video-cover{position:absolute;inset:0;z-index:1;background:#000;pointer-events:none;transition:opacity 0.8s ease}
 
 /* Mise en avant « L'automne » posée dans le hero, sous la recherche. */
@@ -922,6 +923,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
         allow="autoplay; encrypted-media"
         allowfullscreen>
       </iframe>
+      <video class="hero-mp4-video" id="hero-mp4-video" autoplay muted loop playsinline></video>
       <div class="hero-video-cover" id="hero-video-cover"></div>
     </div>
     <div class="hero-ov"></div>
@@ -1389,16 +1391,29 @@ const audio=document.getElementById('audio');
 
 /* ── HERO VIDEO ALÉATOIRE ── */
 (function(){
-  // Mix slow-motion : cymbales haute vitesse + cymatics colorés
-  const HERO_VIDEOS=[
-    {id:'RBA9PbuhCw8', start:3},   // Cymbal slow motion high-speed camera — macro pur
-    {id:'AhW7Aao_eIc', start:5},   // Cymbal roll super slow-mo — macro pur
-    {id:'35XBubr98N4', start:0},   // Cymbal slow-mo
-    {id:'APcBqk_UujA', start:4},   // Cymatics eau colorée haute vitesse — macro pur
+  const YT=[
+    {id:'RBA9PbuhCw8', start:3},
+    {id:'AhW7Aao_eIc', start:5},
+    {id:'35XBubr98N4', start:0},
+    {id:'APcBqk_UujA', start:4},
   ];
-  const v=HERO_VIDEOS[Math.floor(Math.random()*HERO_VIDEOS.length)];
-  const src=`https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&loop=1&playlist=${v.id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=${v.start}&disablekb=1&vq=hd2160&hd=1&cc_load_policy=0&cc_lang_pref=none`;
-  document.getElementById('hero-yt-iframe').src=src;
+  const MP4=[
+    'videos/hero1.mp4',
+    'videos/hero2.mp4',
+    'videos/hero3.mp4',
+    'videos/hero4.mp4',
+    'videos/hero5.mp4',
+  ];
+  const ALL=[...YT.map(v=>({type:'yt',v})),...MP4.map(s=>({type:'mp4',s}))];
+  const pick=ALL[Math.floor(Math.random()*ALL.length)];
+  if(pick.type==='yt'){
+    const v=pick.v;
+    document.getElementById('hero-yt-iframe').src=`https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&loop=1&playlist=${v.id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=${v.start}&disablekb=1&vq=hd2160&hd=1&cc_load_policy=0&cc_lang_pref=none`;
+  } else {
+    document.getElementById('hero-yt-iframe').style.display='none';
+    var vid=document.getElementById('hero-mp4-video');
+    vid.src=pick.s;vid.style.display='block';vid.play();
+  }
 })();
 
 /* ── WAVESURFER ── */
