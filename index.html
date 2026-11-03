@@ -1389,32 +1389,43 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 <script>
 const audio=document.getElementById('audio');
 
-/* ── HERO VIDEO ALÉATOIRE ── */
+/* ── HERO VIDEO SÉQUENTIEL ── */
 (function(){
   const YT=[
-    {id:'RBA9PbuhCw8', start:3},
-    {id:'AhW7Aao_eIc', start:5},
-    {id:'35XBubr98N4', start:0},
-    {id:'APcBqk_UujA', start:4},
+    {id:'RBA9PbuhCw8', start:3, dur:14},
+    {id:'AhW7Aao_eIc', start:5, dur:14},
+    {id:'35XBubr98N4', start:0, dur:14},
+    {id:'APcBqk_UujA', start:4, dur:14},
   ];
-  const MP4=[
-    'videos/hero1.mp4',
-    'videos/hero2.mp4',
-    'videos/hero3.mp4',
-    'videos/hero4.mp4',
-    'videos/hero5.mp4',
-    'videos/hero6.mp4',
-  ];
-  const ALL=[...YT.map(v=>({type:'yt',v})),...MP4.map(s=>({type:'mp4',s}))];
-  const pick=ALL[Math.floor(Math.random()*ALL.length)];
-  if(pick.type==='yt'){
-    const v=pick.v;
-    document.getElementById('hero-yt-iframe').src=`https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&loop=1&playlist=${v.id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start=${v.start}&disablekb=1&vq=hd2160&hd=1&cc_load_policy=0&cc_lang_pref=none`;
-  } else {
-    document.getElementById('hero-yt-iframe').style.display='none';
-    var vid=document.getElementById('hero-mp4-video');
-    vid.src=pick.s;vid.style.display='block';vid.play();
+  const MP4=['videos/hero1.mp4','videos/hero2.mp4','videos/hero3.mp4',
+             'videos/hero4.mp4','videos/hero5.mp4','videos/hero6.mp4'];
+  // entrelacement YT / MP4 pour varier l'ambiance
+  const ALL=[];
+  const n=Math.max(YT.length,MP4.length);
+  for(var i=0;i<n;i++){
+    if(i<MP4.length)ALL.push({type:'mp4',s:MP4[i]});
+    if(i<YT.length) ALL.push({type:'yt', v:YT[i]});
   }
+  const iframe=document.getElementById('hero-yt-iframe');
+  const vid=document.getElementById('hero-mp4-video');
+  var idx=Math.floor(Math.random()*ALL.length);
+  var ytTimer=null;
+  function next(){idx=(idx+1)%ALL.length;play();}
+  function play(){
+    var p=ALL[idx];
+    if(ytTimer){clearTimeout(ytTimer);ytTimer=null;}
+    if(p.type==='yt'){
+      vid.style.display='none';vid.pause();vid.src='';
+      iframe.style.display='block';
+      iframe.src='https://www.youtube.com/embed/'+p.v.id+'?autoplay=1&mute=1&loop=1&playlist='+p.v.id+'&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&start='+p.v.start+'&disablekb=1&vq=hd2160&hd=1&cc_load_policy=0&cc_lang_pref=none';
+      ytTimer=setTimeout(next,p.v.dur*1000);
+    }else{
+      iframe.style.display='none';iframe.src='';
+      vid.src=p.s;vid.style.display='block';vid.play();
+    }
+  }
+  vid.addEventListener('ended',next);
+  play();
 })();
 
 /* ── WAVESURFER ── */
