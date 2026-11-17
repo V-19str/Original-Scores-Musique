@@ -102,7 +102,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 @media(max-width:700px){.hero-bg{background-image:url('assets/ete-hero-mobile.webp'),linear-gradient(135deg,#1a0a00,#2d1808)}}
 @keyframes heroZoom{from{transform:scale(1.0)}to{transform:scale(1.07)}}
 .hero-waves{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
-.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.1) 100%)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.82) 45%,rgba(0,0,0,0.78) 100%)}
 .hero-content{position:relative;z-index:2;padding:0 64px 72px;animation:fadeUp 1s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
@@ -161,10 +161,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 .hero-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px;width:100%;max-width:880px}
 /* OSM LOGO HERO */
 .hero-osm-logo{margin-bottom:24px;display:flex;flex-direction:column;align-items:center;gap:14px;animation:fadeUp 1.2s 1.2s ease both}
-.hero-osm-name{font-size:clamp(11px,2vw,17px);font-weight:700;letter-spacing:clamp(8px,2vw,16px);color:rgba(255,255,255,0.88);text-transform:uppercase;animation:fadeUp 1s 1.8s ease both}
+.hero-osm-name{font-size:clamp(34px,6vw,76px);font-weight:800;letter-spacing:-1.5px;line-height:1.02;color:#fff;text-transform:none;margin-bottom:18px;animation:fadeUp 1s 1.8s ease both}
 .hero-osm-name span{color:var(--red)}
 /* TAGLINE */
-.hero-tagline{font-size:13px;font-weight:300;color:rgba(255,255,255,0.72);margin-bottom:32px;letter-spacing:1.5px;animation:fadeUp 1s 2.2s ease both}
+.hero-tagline{font-size:clamp(24px,3.4vw,44px);font-weight:700;line-height:1.15;color:#fff;margin-bottom:36px;letter-spacing:-0.5px;animation:fadeUp 1s 2.2s ease both}
 /* HERO SEARCH */
 .hero-search-wrap{width:100%;max-width:800px;animation:fadeUp 1s 2.5s ease both;position:relative}
 .hero-search-bar{display:flex;align-items:center;background:#fff;border-radius:50px;padding:7px 7px 7px 24px;box-shadow:0 8px 40px rgba(0,0,0,0.45);gap:12px;position:relative}
@@ -721,8 +721,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
   .nav-tabs{display:none}
   .header-right .btn-nav.btn-red{display:none}
   .hero-center{padding:16px 14px}
-  .hero-osm-name{font-size:8px;letter-spacing:3px}
-  .hero-tagline{font-size:11px;letter-spacing:0.8px;margin-bottom:20px}
+  .hero-osm-name{font-size:34px;letter-spacing:-1px}
+  .hero-tagline{font-size:24px;letter-spacing:-0.3px;margin-bottom:24px}
   .hero-search-bar{padding:5px 5px 5px 14px;gap:8px}
   .hero-search-field{font-size:12px;padding:8px 0}
   .hero-search-btn{padding:9px 14px;font-size:9px;letter-spacing:1px}
@@ -957,7 +957,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
     <canvas class="hero-waves" id="hero-waves" aria-hidden="true"></canvas>
     <div class="hero-center">
       <div class="hero-osm-logo">
-        <div class="hero-osm-name">OPEN &nbsp;<span>SCREEN</span>&nbsp; MUSIC</div>
       </div>
       <p class="hero-tagline">Musique originale pour l'image &nbsp;·&nbsp; Cinéma &nbsp;·&nbsp; Télévision &nbsp;·&nbsp; Publicité</p>
       <div class="hero-search-wrap">
@@ -3612,7 +3611,7 @@ document.addEventListener('osm-lang-change', function () {
 <script defer src="assets/vendor/jspdf.umd.min.js"></script>
 <script defer src="assets/vendor/jspdf.plugin.autotable.min.js"></script>
 <script defer src="assets/cuesheet.js"></script>
-<script defer src="assets/hero-waves.js"></script>
+<script defer src="assets/hero-waves.js?v=2"></script>
 <script>
 (function(){const btn=document.getElementById('scroll-top');if(!btn)return;window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>400)},{passive:true});})();
 </script>

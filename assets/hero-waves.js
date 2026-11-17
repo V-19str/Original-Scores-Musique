@@ -1,4 +1,4 @@
-/* Halo lumineux du hero : des ondes lumineuses qui se déforment autour du pointeur.
+/* Halo du hero : une bulle lumineuse unique qui se déforme vers le pointeur.
    Canvas 2D, rendu additif, sans dépendance. Se met en pause hors écran / onglet masqué. */
 (function(){
   var hero=document.querySelector('#view-accueil .hero')||document.querySelector('.hero');
@@ -8,11 +8,6 @@
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var W=0,H=0,dpr=1,running=false,visible=true,raf=0;
   var mouse={x:.5,y:.5,tx:.5,ty:.5,power:0,tpower:0};
-  var LINES=[
-    {y:.30,amp:.11,freq:1.3,speed:.35,hue:'255,85,0',  w:2.2},
-    {y:.55,amp:.14,freq:1.0,speed:-.28,hue:'229,57,53', w:2.6},
-    {y:.78,amp:.10,freq:1.6,speed:.42,hue:'255,150,40',w:1.8}
-  ];
   function resize(){
     var r=hero.getBoundingClientRect();
     dpr=Math.min(window.devicePixelRatio||1,2);
@@ -33,43 +28,37 @@
     raf=0;
     if(!running)return;
     t=t/1000;
-    // lissage du pointeur : l'onde « suit » avec de l'inertie
-    mouse.x+=(mouse.tx-mouse.x)*.08;
-    mouse.y+=(mouse.ty-mouse.y)*.08;
+    mouse.x+=(mouse.tx-mouse.x)*.06;
+    mouse.y+=(mouse.ty-mouse.y)*.06;
     mouse.power+=(mouse.tpower-mouse.power)*.05;
     ctx.clearRect(0,0,W,H);
-    ctx.globalCompositeOperation='lighter';
-    ctx.lineCap='round';ctx.lineJoin='round';
-    var step=Math.max(6,Math.round(W/160));
-    for(var li=0;li<LINES.length;li++){
-      var L=LINES[li];
-      var baseY=L.y*H;
-      // la ligne est attirée vers la hauteur du pointeur
-      var pull=mouse.power*.45;
-      var cy=baseY+(mouse.y*H-baseY)*pull*Math.exp(-Math.pow((L.y-mouse.y)*2.2,2));
-      var pts=[];
-      for(var x=-step;x<=W+step;x+=step){
-        var nx=x/W;
-        var d=nx-mouse.x;
-        var env=Math.exp(-d*d*9)*mouse.power;           // bosse gaussienne autour du pointeur
-        var f=L.freq*(1+env*1.6);                         // l'onde se resserre près du pointeur
-        var a=L.amp*H*(1+env*1.5);                        // et gonfle
-        var ph=t*L.speed*Math.PI*2+li*1.7+d*env*6;        // phase décalée = la forme « glisse »
-        var y=cy+Math.sin(nx*Math.PI*2*f+ph)*a
-                 +Math.sin(nx*Math.PI*2*f*2.3-ph*.7)*a*.22;
-        pts.push(x,y);
-      }
-      // halo large puis trait fin lumineux
-      var passes=[[L.w*14,.05],[L.w*6,.10],[L.w*2.4,.35],[L.w,.95]];
-      for(var p=0;p<passes.length;p++){
-        ctx.beginPath();
-        ctx.moveTo(pts[0],pts[1]);
-        for(var i=2;i<pts.length;i+=2)ctx.lineTo(pts[i],pts[i+1]);
-        ctx.strokeStyle='rgba('+L.hue+','+(passes[p][1]*(.75+.25*mouse.power))+')';
-        ctx.lineWidth=passes[p][0];
-        ctx.stroke();
-      }
+    // une seule bulle, centrée, qui se penche vers le pointeur
+    var base=Math.min(W,H)*(W<700?.40:.34);
+    var cx=W/2+(mouse.x-.5)*W*.10*mouse.power;
+    var cy=H*.46+(mouse.y-.5)*H*.10*mouse.power;
+    var N=120,pts=[];
+    for(var i=0;i<N;i++){
+      var a=i/N*Math.PI*2;
+      var da=Math.atan2(Math.sin(a-Math.atan2(mouse.y*H-cy,mouse.x*W-cx)),Math.cos(a-Math.atan2(mouse.y*H-cy,mouse.x*W-cx)));
+      var bulge=Math.exp(-da*da*2.2)*mouse.power*.09;   // gonfle côté pointeur
+      var r=base*(1+.018*Math.sin(a*2+t*.9)+.014*Math.sin(a*3-t*.7)+bulge+.012*Math.sin(t*.6));
+      pts.push(cx+Math.cos(a)*r,cy+Math.sin(a)*r);
     }
+    function path(){ctx.beginPath();ctx.moveTo(pts[0],pts[1]);for(var k=2;k<pts.length;k+=2)ctx.lineTo(pts[k],pts[k+1]);ctx.closePath();}
+    ctx.globalCompositeOperation='lighter';
+    var g=ctx.createLinearGradient(cx-base,cy-base,cx+base,cy+base);
+    g.addColorStop(0,'rgba(255,150,40,1)');g.addColorStop(.5,'rgba(255,85,0,1)');g.addColorStop(1,'rgba(229,57,53,1)');
+    // halo diffus, puis anneau net
+    var passes=[[base*.22,.05],[base*.10,.09],[base*.04,.22],[3,.95]];
+    for(var p=0;p<passes.length;p++){
+      path();ctx.strokeStyle=g;ctx.globalAlpha=Math.min(1,passes[p][1]*(.85+.3*mouse.power));
+      ctx.lineWidth=passes[p][0];ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    // léger reflet intérieur
+    var rg=ctx.createRadialGradient(cx,cy,base*.55,cx,cy,base);
+    rg.addColorStop(0,'rgba(255,85,0,0)');rg.addColorStop(1,'rgba(255,85,0,.10)');
+    path();ctx.fillStyle=rg;ctx.fill();
     ctx.globalCompositeOperation='source-over';
     raf=requestAnimationFrame(draw);
   }
