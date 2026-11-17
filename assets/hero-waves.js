@@ -1,7 +1,7 @@
 /* Halo lumineux du hero : des ondes lumineuses qui se déforment autour du pointeur.
    Canvas 2D, rendu additif, sans dépendance. Se met en pause hors écran / onglet masqué. */
 (function(){
-  var hero=document.querySelector('#view-accueil .hero');
+  var hero=document.querySelector('#view-accueil .hero')||document.querySelector('.hero');
   var cvs=document.getElementById('hero-waves');
   if(!hero||!cvs)return;
   var ctx=cvs.getContext('2d');

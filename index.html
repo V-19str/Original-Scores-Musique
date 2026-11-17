@@ -809,6 +809,32 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-heade
 /* ── Notification bell (header) ── */
 .btn-bell{background:none;border:1px solid var(--border);color:var(--text2);width:36px;height:36px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.15s;flex-shrink:0}
 .btn-bell:hover{border-color:#666;color:var(--text)}
+
+/* ── Mouvements au survol (inspirés de Parigo) ── */
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+  .srv-card{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .srv-card .srv-icon-bg{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease}
+  .srv-card:hover{transform:translateY(-6px)}
+  .srv-card:hover .srv-icon-bg{transform:scale(1.08) rotate(-3deg);box-shadow:0 10px 28px rgba(255,85,0,.22)}
+  .tl-card{transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s,background .3s}
+  .tl-card:hover{transform:translateY(-4px) scale(1.03);background:rgba(255,85,0,.08);border-color:rgba(255,85,0,.45);box-shadow:0 12px 30px rgba(255,85,0,.16)}
+  .tl-card .tl-img{transition:transform .3s ease,filter .3s ease}
+  .tl-card:hover .tl-img{transform:scale(1.05);filter:drop-shadow(0 8px 16px rgba(0,0,0,.3))}
+  .nav-tab,.btn-nav{transition:transform .2s ease,color .15s,background .15s,border-color .15s}
+  .nav-tab:hover,.btn-nav:hover{transform:translateY(-1px)}
+  .ham-item{transition:background .12s,color .12s,transform .2s ease}
+  .ham-item:hover{transform:translateX(3px)}
+  .ham-item:hover .ham-item-icon{transform:scale(1.15) rotate(-4deg)}
+  .ham-item-icon{transition:transform .2s ease,opacity .15s}
+  .track-title{transition:transform .2s ease,color .2s}
+  .track:hover .track-title{transform:translateX(3px)}
+}
+/* ── Recherche vivante : halo orange + bouton qui change de forme ── */
+.hero-search-bar{transition:box-shadow .35s ease,transform .35s cubic-bezier(.2,.8,.2,1)}
+.hero-search-bar:hover,.hero-search-bar:focus-within{box-shadow:0 8px 40px rgba(0,0,0,.45),0 0 0 2px rgba(255,85,0,.55),0 0 38px rgba(255,85,0,.38)}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){.hero-search-bar:hover,.hero-search-bar:focus-within{transform:translateY(-2px)}}
+.hero-search-btn{transition:opacity .2s,background .2s,border-radius .35s cubic-bezier(.2,.8,.2,1),letter-spacing .35s ease}
+.hero-search-bar:hover .hero-search-btn,.hero-search-bar:focus-within .hero-search-btn{border-radius:14px 40px 14px 40px;letter-spacing:2px}
 </style>
 </head>
 <body>
