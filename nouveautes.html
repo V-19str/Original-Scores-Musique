@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OSM – Nouveautés · L'Automne</title>
+<title>OSM – Nouveautés · Noël</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root{--red:#E50914;--bg:#141414;--bg2:#1f1f1f;--bg3:#2a2a2a;--bg4:#383838;--text:#fff;--text2:#d4d4d4;--muted:#999;--border:rgba(255,255,255,0.12)}
@@ -24,8 +24,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,
 
 /* HERO */
 .hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:flex-end;overflow:hidden;padding-top:64px}
-.hero-bg{position:absolute;inset:0;background:url('assets/automne-hero-desktop.webp') center/cover no-repeat,linear-gradient(135deg,#2d1a08,#4a2c10);animation:heroZoom 14s ease-in-out infinite alternate}
-@media(max-width:700px){.hero-bg{background-image:url('assets/automne-hero-mobile.webp'),linear-gradient(135deg,#2d1a08,#4a2c10)}}
+.hero-bg{position:absolute;inset:0;background:url('assets/noel-hero-desktop.webp') center/cover no-repeat,linear-gradient(135deg,#1a0d0a,#3a1810);animation:heroZoom 14s ease-in-out infinite alternate}
+@media(max-width:700px){.hero-bg{background-image:url('assets/noel-hero-mobile.webp'),linear-gradient(135deg,#1a0d0a,#3a1810)}}
 @keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.06)}}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.55) 50%,rgba(0,0,0,0.2) 100%)}
 .hero-content{position:relative;z-index:2;padding:0 72px 72px;max-width:900px;animation:fadeUp 1s .3s ease both}
@@ -156,9 +156,9 @@ footer a{color:#666;text-decoration:none}
   <div class="hero-bg"></div>
   <div class="hero-ov"></div>
   <div class="hero-content">
-    <div class="hero-badge"><span class="hero-badge-dot"></span>Sélection de saison — Automne 2026</div>
-    <h1 class="hero-title">L'<span>automne</span></h1>
-    <p class="hero-sub">La sélection OSM pour vos ambiances d'automne — mélancolie contemplative, folk acoustique, piano intimiste et orchestrations émotionnelles.</p>
+    <div class="hero-badge"><span class="hero-badge-dot"></span>Sélection de saison — Noël 2026</div>
+    <h1 class="hero-title">Noël<span>.</span></h1>
+    <p class="hero-sub">La sélection OSM pour vos ambiances de Noël et d'hiver — piano intimiste, romance, folk acoustique et morceaux de fêtes.</p>
     <div class="hero-cta">
       <button class="hero-btn hero-btn-red" onclick="playAll()">▶ Tout écouter</button>
       <button class="hero-btn hero-btn-ghost" onclick="scrollToTracks()">↓ Voir les morceaux</button>
@@ -166,23 +166,21 @@ footer a{color:#666;text-decoration:none}
   </div>
   <div class="hero-stats" id="hero-stats">
     <div class="hero-stat"><div class="hero-stat-num" id="stat-orch">—</div><div class="hero-stat-label">Piano</div></div>
-    <div class="hero-stat"><div class="hero-stat-num" id="stat-elec">—</div><div class="hero-stat-label">Folk · Acoustique</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="stat-elec">—</div><div class="hero-stat-label">Romance · Folk</div></div>
     <div class="hero-stat"><div class="hero-stat-num" id="stat-total">—</div><div class="hero-stat-label">Total</div></div>
   </div>
 </div>
 
 <div class="section" id="tracks-anchor">
-  <div class="section-eyebrow">Sélection Automne</div>
-  <h2 class="section-title">Mélancolie · Folk · Piano</h2>
-  <p class="section-sub">Des musiques intimistes et émotionnelles pour vos ambiances d'automne : piano contemplatif, folk acoustique chaleureux, mélancolie orchestrale et atmosphères poétiques pour documentaires, portraits et reportages de saison.</p>
+  <div class="section-eyebrow">Sélection Noël</div>
+  <h2 class="section-title">Piano · Romance · Folk</h2>
+  <p class="section-sub">Des musiques chaleureuses et intimistes pour vos images de Noël et d'hiver : piano doux, romance, folk acoustique et morceaux de fêtes pour films, publicités et vidéos de saison.</p>
 
   <div class="filter-bar">
     <button class="filter-pill active" onclick="setFilter('all',this)">Tous</button>
     <button class="filter-pill" onclick="setFilter('Piano',this)">Piano</button>
     <button class="filter-pill" onclick="setFilter('Folk Acoustique',this)">Folk Acoustique</button>
-    <button class="filter-pill" onclick="setFilter('Pop Acoustique',this)">Pop Acoustique</button>
-    <button class="filter-pill" onclick="setFilter('Mélancolie',this)">Mélancolie</button>
-    <button class="filter-pill" onclick="setFilter('Atmosphère',this)">Atmosphère</button>
+    <button class="filter-pill" onclick="setFilter('Romance',this)">Romance</button>
   </div>
 
   <div class="tracks-header">
@@ -239,20 +237,13 @@ footer a{color:#666;text-decoration:none}
 <audio id="audio"></audio>
 
 <script>
-/* Regle « Automne » — dupliquee depuis index.html (bloc SELECTION « L'AUTOMNE »).
-   Selectionne les morceaux aux ambiances contemplatives, melancoliques et folk,
-   caracteristiques des programmes de saison (documentaires, portraits, reportages).
-   Toute evolution doit etre reportee dans index.html, qui alimente le
-   compteur affiche dans le hero de l'accueil. */
-const RENTREE_PLAYLISTS = ['Piano','Folk Acoustique','Pop Acoustique','Mélancolie','Atmosphère'];
-const RENTREE_MOODS = ['mélancolique','nostalgique','contemplatif','doux','intimiste','poétique'];
-const RENTREE_EXCLUDED_PLAYLISTS = ['Action','Hard Rock','Suspense','Paranormal','Burlesque',
-  'Ludique','Reggae','Groovy','Électro','Pizzicato'];
-function isRentree(t){
+/* Regle « Noël » — playlists douces (Piano, Romance, Folk Acoustique)
+   + morceaux dont le titre ou les tags evoquent Noel / l'hiver. */
+const NOEL_PLAYLISTS = ['Piano','Romance','Folk Acoustique'];
+const NOEL_RE = /no[eë]l|christmas|xmas|jingle|sleigh|bells|santa|winter|snow|neige|hiver|carol|holiday|festive|merry|reindeer/i;
+function isNoel(t){
   const tags = t.tags || [];
-  if (RENTREE_EXCLUDED_PLAYLISTS.includes(t.playlist)) return false;
-  if (tags.includes('intense') || tags.includes('urgent') || tags.includes('énergique')) return false;
-  return RENTREE_PLAYLISTS.includes(t.playlist) && RENTREE_MOODS.some(m => tags.includes(m));
+  return NOEL_PLAYLISTS.includes(t.playlist) || NOEL_RE.test(t.title || '') || tags.some(x => NOEL_RE.test(x));
 }
 const PAGE_SIZE = 60;
 let allTracks = [], filteredTracks = [], currentFilter = 'all', currentIndex = -1;
@@ -265,13 +256,13 @@ fetch('./catalogue.json').then(r=>r.json()).then(data=>{
   // playlists, ce qui ferait diverger ce compteur de celui du hero d'accueil.
   const seen = new Set();
   allTracks = tracks.filter(t => {
-    if (t.playlist === 'samples' || !isRentree(t)) return false;
+    if (t.playlist === 'samples' || !isNoel(t)) return false;
     const k = (t.title || '').toLowerCase().trim();
     if (seen.has(k)) return false;
     seen.add(k); return true;
   });
   document.getElementById('stat-orch').textContent = allTracks.filter(t=>t.playlist==='Piano').length;
-  document.getElementById('stat-elec').textContent = allTracks.filter(t=>t.playlist==='Folk Acoustique'||t.playlist==='Pop Acoustique').length;
+  document.getElementById('stat-elec').textContent = allTracks.filter(t=>t.playlist==='Folk Acoustique'||t.playlist==='Romance').length;
   document.getElementById('stat-total').textContent = allTracks.length;
   applyFilter();
 }).catch(()=>{document.getElementById('track-list').innerHTML='<div class="loading">Erreur de chargement.</div>';});
@@ -355,19 +346,17 @@ function fmt(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.
   "Catalogue": "Catalog",
   "Nouveautés": "New Releases",
   "← Accueil": "← Home",
-  "Sélection de saison — Automne 2026": "Season Selection — Autumn 2026",
-  "automne": "Autumn",
+  "Sélection de saison — Noël 2026": "Season Selection — Christmas 2026",
   "Piano": "Piano",
   "Folk Acoustique": "Acoustic Folk",
-  "Pop Acoustique": "Acoustic Pop",
-  "Mélancolie": "Melancholy",
-  "Atmosphère": "Atmosphere",
-  "La sélection OSM pour vos ambiances d'automne — mélancolie contemplative, folk acoustique, piano intimiste et orchestrations émotionnelles.": "The OSM selection for your autumn moods — contemplative melancholy, acoustic folk, intimate piano and emotional orchestral scores.",
+  "Romance": "Romance",
+  "Romance · Folk": "Romance · Folk",
+  "La sélection OSM pour vos ambiances de Noël et d'hiver — piano intimiste, romance, folk acoustique et morceaux de fêtes.": "The OSM selection for your Christmas and winter moods — intimate piano, romance, acoustic folk and festive tracks.",
   "▶ Tout écouter": "▶ Play all",
   "↓ Voir les morceaux": "↓ View tracks",
-  "Sélection Automne": "Autumn Selection",
-  "Mélancolie · Folk · Piano": "Melancholy · Folk · Piano",
-  "Des musiques intimistes et émotionnelles pour vos ambiances d'automne : piano contemplatif, folk acoustique chaleureux, mélancolie orchestrale et atmosphères poétiques pour documentaires, portraits et reportages de saison.": "Intimate, emotional music for your autumn moods: contemplative piano, warm acoustic folk, orchestral melancholy and poetic atmospheres for documentaries, portraits and seasonal reports.",
+  "Sélection Noël": "Christmas Selection",
+  "Piano · Romance · Folk": "Piano · Romance · Folk",
+  "Des musiques chaleureuses et intimistes pour vos images de Noël et d'hiver : piano doux, romance, folk acoustique et morceaux de fêtes pour films, publicités et vidéos de saison.": "Warm, intimate music for your Christmas and winter visuals: gentle piano, romance, acoustic folk and festive tracks for films, ads and seasonal videos.",
   "Tous": "All",
   "Morceaux": "Tracks",
   "· · · Chargement": "· · · Loading",
