@@ -16,3 +16,7 @@ credits_seed.sql
 # et seed, a ne jamais publier. Regenerer avec build_sacem_data.py.
 sacem_data_source.json
 sacem_data_seed.sql
+
+.env
+*.env
+agent_osm/_select_50.py
