@@ -1851,7 +1851,9 @@ function showView(name){
 function renderPlaylists(){
   const counts={};
   allTracks.forEach(t=>{counts[t.playlistLabel]=(counts[t.playlistLabel]||0)+1;});
-  document.getElementById('themes-container').innerHTML=THEMES.map(theme=>`
+  // Les playlists sans titre (ex. « Divers » une fois classée) n'ont pas de carte.
+  const themesVisibles=THEMES.map(th=>({...th,playlists:th.playlists.filter(p=>counts[p.label]>0)})).filter(th=>th.playlists.length);
+  document.getElementById('themes-container').innerHTML=themesVisibles.map(theme=>`
     <div class="theme-group">
       <div class="theme-label">${theme.label}</div>
       <div class="pl-grid">${theme.playlists.map(p=>`
